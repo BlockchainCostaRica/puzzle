@@ -1,0 +1,11 @@
+<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="18" cy="18" r="18" fill="#666DE3"/>
+    <path d="M18 18V5L21.25 14.75L18 18Z" fill="white"/>
+    <path d="M14.75 14.75L18 18L21.25 14.75L18 5L14.75 14.75Z" stroke="white" stroke-linejoin="round"/>
+    <path d="M18 18L5 18L14.75 14.75L18 18Z" fill="white"/>
+    <path d="M14.75 21.25L18 18L14.75 14.75L5 18L14.75 21.25Z" stroke="white" stroke-linejoin="round"/>
+    <path d="M18 18L18 31L14.75 21.25L18 18Z" fill="white"/>
+    <path d="M21.25 21.25L18 18L14.75 21.25L18 31L21.25 21.25Z" stroke="white" stroke-linejoin="round"/>
+    <path d="M18 18L31 18L21.25 21.25L18 18Z" fill="white"/>
+    <path d="M21.25 14.75L18 18L21.25 21.25L31 18L21.25 14.75Z" stroke="white" stroke-linejoin="round"/>
+</svg>
