@@ -10,6 +10,7 @@ interface IProps {}
 const Root = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
 `;
 
 const Header: React.FC<IProps> = () => {
@@ -20,7 +21,7 @@ const Header: React.FC<IProps> = () => {
     setActive(!isActive);
   };
   return (
-    <>
+    <Root>
       <div className={isBanner ? "banner__top" : "banner__top--closed"}>
         <div className="banner__top-desc">
           Puzzle cashback rewards are live! 🎊
@@ -83,7 +84,7 @@ const Header: React.FC<IProps> = () => {
           </div>
         </div>
       </header>
-    </>
+    </Root>
   );
 };
 export default Header;

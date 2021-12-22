@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import styled from "@emotion/styled";
 import { observer } from "mobx-react-lite";
 import ReactNotification from "react-notifications-component";
-import { MultiSwapInterface } from "@src/old_components/MultiSwapInterface";
+import MultiSwapInterface from "@screens/MultiSwapInterface";
 import { LandingModule } from "@src/old_components/LandingModule";
 import { StakeModule } from "@src/old_components/StakeModule";
 import { AddLiquidityInterface } from "@src/old_components/AddLiquidityInterface";
