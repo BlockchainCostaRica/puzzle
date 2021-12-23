@@ -6,7 +6,7 @@ import { ReactComponent as SwapIcon } from "@src/assets/icons/swap.svg";
 import { ReactComponent as ArrowIcon } from "@src/assets/icons/arrowRightBorderless.svg";
 import { ReactComponent as InfoIcon } from "@src/assets/icons/info.svg";
 import { ReactComponent as ShowMoreIcon } from "@src/assets/icons/showMore.svg";
-import { Column, Row } from "@components/Flex";
+import { Row } from "@components/Flex";
 import Button from "@components/Button";
 import SwapDetailRow from "@components/SwapDetailRow";
 import Divider from "@src/components/Divider";
@@ -14,7 +14,7 @@ import Text from "@components/Text";
 import CashbackLabel from "@components/CashbackLabel";
 import Card from "@components/Card";
 import Details from "@screens/MultiSwapInterface/Details";
-import MaxButton from "@components/MaxButton";
+
 interface IProps {
   poolName: string;
 }

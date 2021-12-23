@@ -8,14 +8,18 @@ import { RootStore, storesContext } from "@stores";
 
 const mobxStore = new RootStore();
 
+//todo add ReactGA support
+// const trackingId = "G-W203LN8Q6R";
+// ReactGA.initialize(trackingId);
+// history.listen(({ location }) => {
+//   console.log(location.pathname + location.search);
+//   ReactGA.pageview(location.pathname + location.search);
+// });
+
 ReactDOM.render(
   <React.StrictMode>
     <storesContext.Provider value={mobxStore}>
-      <Router
-
-      // navigator={mobxStore.routerStore.history}
-      // location={mobxStore.routerStore.history.location}
-      >
+      <Router>
         <App />
       </Router>
     </storesContext.Provider>

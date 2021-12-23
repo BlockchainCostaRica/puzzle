@@ -28,80 +28,68 @@ const Body = styled(Column)`
   }
 `;
 
-const App: React.FC = () => {
-  const trackingId = "G-W203LN8Q6R";
+const App: React.FC = () => (
+  <Root>
+    <Header />
+    <Body>
+      <Routes>
+        <Route path="/" element={<LandingModule />} />
+        <Route
+          path="puzzle"
+          element={<MultiSwapInterface poolName="puzzle" />}
+        />
 
-  // ReactGA.initialize(trackingId);
-  // history.listen((location) => {
-  //   ReactGA.pageview(window.location.pathname + window.location.search);
-  // });
+        <Route path="defi" element={<MultiSwapInterface poolName="defi" />} />
+        <Route path="farms" element={<MultiSwapInterface poolName="farms" />} />
+        <Route
+          path="farms2/*"
+          element={<MultiSwapInterface poolName="farms2" />}
+        />
+        <Route path="stake" element={<StakeModule />} />
 
-  return (
-    <Root>
-      <Header />
-      <Body>
-        <Routes>
-          <Route path="/" element={<LandingModule />} />
-          <Route
-            path="puzzle"
-            element={<MultiSwapInterface poolName="puzzle" />}
-          />
+        <Route
+          path="farms/addLiquidity"
+          element={<AddLiquidityInterface poolName="farms" />}
+        />
+        <Route
+          path="farms2/addLiquidity"
+          element={<AddLiquidityInterface poolName="farms2" />}
+        />
+        <Route
+          path="defi/addLiquidity"
+          element={<AddLiquidityInterface poolName="defi" />}
+        />
 
-          <Route path="defi" element={<MultiSwapInterface poolName="defi" />} />
-          <Route
-            path="farms"
-            element={<MultiSwapInterface poolName="farms" />}
-          />
-          <Route
-            path="farms2/*"
-            element={<MultiSwapInterface poolName="farms2" />}
-          />
-          <Route path="stake" element={<StakeModule />} />
+        <Route
+          path="farms/addOneToken"
+          element={<AddOneTokenInterface poolName="farms" />}
+        />
+        <Route
+          path="farms2/addOneToken"
+          element={<AddOneTokenInterface poolName="farms2" />}
+        />
+        <Route
+          path="defi/addOneToken"
+          element={<AddOneTokenInterface poolName="defi" />}
+        />
 
-          <Route
-            path="farms/addLiquidity"
-            element={<AddLiquidityInterface poolName="farms" />}
-          />
-          <Route
-            path="farms2/addLiquidity"
-            element={<AddLiquidityInterface poolName="farms2" />}
-          />
-          <Route
-            path="defi/addLiquidity"
-            element={<AddLiquidityInterface poolName="defi" />}
-          />
-
-          <Route
-            path="farms/addOneToken"
-            element={<AddOneTokenInterface poolName="farms" />}
-          />
-          <Route
-            path="farms2/addOneToken"
-            element={<AddOneTokenInterface poolName="farms2" />}
-          />
-          <Route
-            path="defi/addOneToken"
-            element={<AddOneTokenInterface poolName="defi" />}
-          />
-
-          <Route
-            path="farms/invest"
-            element={<InvestToPoolInterface poolName="farms" />}
-          />
-          <Route
-            path="farms2/invest"
-            element={<InvestToPoolInterface poolName="farms2" />}
-          />
-          <Route
-            path="defi/invest"
-            element={<InvestToPoolInterface poolName="defi" />}
-          />
-        </Routes>
-      </Body>
-      {/*<Footer />*/}
-      <ReactNotification className="notificationWindow" />
-    </Root>
-  );
-};
+        <Route
+          path="farms/invest"
+          element={<InvestToPoolInterface poolName="farms" />}
+        />
+        <Route
+          path="farms2/invest"
+          element={<InvestToPoolInterface poolName="farms2" />}
+        />
+        <Route
+          path="defi/invest"
+          element={<InvestToPoolInterface poolName="defi" />}
+        />
+      </Routes>
+    </Body>
+    {/*<Footer />*/}
+    <ReactNotification className="notificationWindow" />
+  </Root>
+);
 
 export default observer(App);
