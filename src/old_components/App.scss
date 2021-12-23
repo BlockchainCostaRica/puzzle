@@ -570,7 +570,6 @@ span.logo {
     height: 24px;
     background: $color-primary-blue-100;
     border-radius: 6px;
-    flex: none;
     order: 2;
     flex-grow: 0;
     padding: 6px;
@@ -728,7 +727,6 @@ span.logo {
 .footer {
   min-height: 320px;
   background: $color-primary-blue-800;
-  flex: none;
   order: 5;
   flex-grow: 0;
   margin: 0px 0px;
@@ -1018,7 +1016,6 @@ span.logo {
       font-size: 14px;
       line-height: 24px;
       color: $color-primary-blue-650;
-      flex: none;
       order: 0;
       flex-grow: 0;
       margin: 24px 12px;

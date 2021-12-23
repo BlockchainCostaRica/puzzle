@@ -38,7 +38,7 @@ const RateText = styled.div`
 `;
 
 const MultiSwapInterface: React.FC<IProps> = () => {
-  const [token1, setToken1] = useState<BigNumber>(new BigNumber(100));
+  const [token1, setToken1] = useState<BigNumber>(new BigNumber(0));
   return (
     <Root>
       <Card>
@@ -46,7 +46,7 @@ const MultiSwapInterface: React.FC<IProps> = () => {
           value={token1}
           dollarValue={token1}
           onChange={(e) => setToken1(e.target.value)}
-          onMaxClick={() => console.log("хуй")}
+          // onMaxClick={() =>account.balance && (e) => setToken1(account.balance)}
         />
         <SizedBox height={16} />
         <Row alignItems="center" style={{ cursor: "pointer" }}>

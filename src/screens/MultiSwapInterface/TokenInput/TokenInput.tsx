@@ -10,7 +10,7 @@ interface IProps {
   value: BigNumber;
   dollarValue: BigNumber;
   onChange: (e: any) => void;
-  onMaxClick?: (e: any) => void;
+  onMaxClick?: () => void;
 }
 
 const Root = styled.div`

@@ -12,7 +12,6 @@ const Root = styled.div`
   font-size: 12px;
   line-height: 16px;
   color: #8082c5;
-  flex: none;
   order: 2;
   flex-grow: 0;
 `;
