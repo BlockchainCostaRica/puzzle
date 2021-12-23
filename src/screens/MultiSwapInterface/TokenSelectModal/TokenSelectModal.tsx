@@ -3,6 +3,7 @@ import React, { createRef } from "react";
 import useOnClickOutside from "@src/hooks/useOnClickOutside";
 import { ReactComponent as Close } from "@src/assets/icons/close.svg";
 import SearchInput from "@screens/MultiSwapInterface/SearchInput";
+import TokenInfo from "@screens/MultiSwapInterface/TokenSelectModal/TokenInfo";
 
 interface IProps {
   onClose: () => void;
@@ -47,7 +48,37 @@ const Header = styled.div`
 const Layout = styled.div`
   padding: 16px 16px 0 16px;
 `;
-const TokenSelectModal: React.FC<IProps> = ({ children, onClose }) => {
+
+const tokens = [
+  {
+    name: "Waves",
+    symbol: "Waves",
+    price: "200.00",
+    dollarPrice: "14,432.13",
+  },
+  {
+    name: "Puzzle Token",
+    symbol: "PUZZLE",
+    dollarPrice: "14,432.13",
+    price: "136.0123",
+    active: true,
+  },
+  {
+    symbol: "USDN",
+    name: "Neutrino USD",
+    dollarPrice: "14,432.13",
+    price: "",
+    active: true,
+  },
+  {
+    symbol: "SWOP",
+    name: "SWOPfi",
+    dollarPrice: "14,432.13",
+    price: "",
+    active: true,
+  },
+];
+const TokenSelectModal: React.FC<IProps> = ({ onClose }) => {
   const ref = createRef<HTMLDivElement>();
   useOnClickOutside(ref, onClose);
   return (
@@ -63,6 +94,9 @@ const TokenSelectModal: React.FC<IProps> = ({ children, onClose }) => {
             onClick={() => {}}
             placeholder="Search by name or ticker…"
           />
+          {tokens.map((t) => (
+            <TokenInfo key={t.name} {...t} />
+          ))}
         </Layout>
       </Root>
     </Background>
