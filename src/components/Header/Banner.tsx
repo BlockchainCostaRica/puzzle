@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as CloseIcon } from "@src/assets/icons/close.svg";
 interface IProps {

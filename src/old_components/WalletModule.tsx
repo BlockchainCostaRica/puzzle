@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { appTokens, downloadStates, PoolNames, poolsData } from "./Pools";
+import React from "react";
+import { appTokens, downloadStates } from "./Pools";
 import {
   Modal,
   ModalBody,
@@ -7,12 +7,7 @@ import {
   Popover,
   UncontrolledPopover,
 } from "reactstrap";
-import {
-  signerEmail,
-  signerWeb,
-  signerKeeper,
-  globalSigner,
-} from "./SignerHandler";
+import { globalSigner } from "./SignerHandler";
 import arrow from "./img/arrow-blue.svg";
 import balance from "./img/wallet-icon.svg";
 import mail from "./img/mail.svg";
@@ -51,26 +46,26 @@ export function calculateTokenPrice(tokenInfo: any, states: any) {
   );
 }
 
-function calculateTokenValue(tokenInfo: any, states: any) {
-  const tokenIn = tokenInfo["tokenId"];
-  const tokenOut = "DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p";
-  const poolData = states[tokenInfo.contractAddress];
-
-  const coef = 0.98;
-  const BalanceOut = poolData.get("global_" + tokenOut + "_balance");
-  const BalanceIn = poolData.get("global_" + tokenIn + "_balance");
-  const amountIn = tokenInfo.balance;
-  const scaleIn = poolData.get("static_" + tokenIn + "_scale");
-  const scaleOut = poolData.get("static_" + tokenOut + "_scale");
-  const weightIn = poolData.get("static_" + tokenIn + "_weight");
-  const weightOut = poolData.get("static_" + tokenOut + "_weight");
-
-  const amountOut =
-    (BalanceOut / scaleOut) *
-    (1 -
-      (BalanceIn / (BalanceIn + scaleIn * amountIn)) ** (weightIn / weightOut));
-  return Math.floor(amountOut * 2 * coef) / 2;
-}
+// function calculateTokenValue(tokenInfo: any, states: any) {
+//   const tokenIn = tokenInfo["tokenId"];
+//   const tokenOut = "DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p";
+//   const poolData = states[tokenInfo.contractAddress];
+//
+//   const coef = 0.98;
+//   const BalanceOut = poolData.get("global_" + tokenOut + "_balance");
+//   const BalanceIn = poolData.get("global_" + tokenIn + "_balance");
+//   const amountIn = tokenInfo.balance;
+//   const scaleIn = poolData.get("static_" + tokenIn + "_scale");
+//   const scaleOut = poolData.get("static_" + tokenOut + "_scale");
+//   const weightIn = poolData.get("static_" + tokenIn + "_weight");
+//   const weightOut = poolData.get("static_" + tokenOut + "_weight");
+//
+//   const amountOut =
+//     (BalanceOut / scaleOut) *
+//     (1 -
+//       (BalanceIn / (BalanceIn + scaleIn * amountIn)) ** (weightIn / weightOut));
+//   return Math.floor(amountOut * 2 * coef) / 2;
+// }
 
 export class WalletModule extends React.Component<IProps, IState> {
   constructor(props: any) {
@@ -136,9 +131,9 @@ export class WalletModule extends React.Component<IProps, IState> {
 
   valueFormat(n: number) {
     const s = String(Math.floor(n * 10 ** 2) / 10 ** 2);
-    if (s.split(".").length != 2) {
+    if (s.split(".").length !== 2) {
       return s + ".00";
-    } else if (s.split(".")[1].length == 1) {
+    } else if (s.split(".")[1].length === 1) {
       return s + "0";
     } else {
       return s;
@@ -192,7 +187,7 @@ export class WalletModule extends React.Component<IProps, IState> {
     return (
       <div className="tokenBalance">
         <div>
-          <img src={item.logo} className="smallLogo" />
+          <img src={item.logo} className="smallLogo" alt="smallLogo" />
           <span className="tokenBalance-balance">
             {this.wavesFormat(item.balance)}
           </span>
@@ -223,7 +218,9 @@ export class WalletModule extends React.Component<IProps, IState> {
       <div className="wallet-module">
         <button
           className={
-            this.state.status == "authed" ? "open wallet-widget" : "non-visible"
+            this.state.status === "authed"
+              ? "open wallet-widget"
+              : "non-visible"
           }
           onClick={(e) => e.currentTarget.focus()}
           id="PortfolioFocus"
@@ -238,7 +235,7 @@ export class WalletModule extends React.Component<IProps, IState> {
         </button>
         <button
           className={
-            this.state.status == "authed"
+            this.state.status === "authed"
               ? "button secondary medium address"
               : "non-visible"
           }
@@ -266,6 +263,7 @@ export class WalletModule extends React.Component<IProps, IState> {
             <a
               href={`https://wavesexplorer.com/tx/${this.state.address}`}
               target="_blank"
+              rel="noreferrer"
             >
               View in Waves Explorer
             </a>

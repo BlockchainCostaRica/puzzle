@@ -108,7 +108,7 @@ const Header: React.FC<IProps> = () => {
       <TopMenu>
         <Row alignItems="center" crossAxisSize="max">
           <Link to="/">
-            <img className="logo" src={puzzleLogo} />
+            <img className="logo" src={puzzleLogo} alt="logo" />
           </Link>
           <Desktop>
             <SizedBox width={54} />
