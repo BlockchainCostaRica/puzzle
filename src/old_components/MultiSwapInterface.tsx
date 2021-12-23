@@ -543,9 +543,7 @@ export class MultiSwapInterface extends React.Component<IProps, IState> {
                     </div>
                     <img src={puzzleBannerIllustration} alt="" />
                   </div>
-                ) : (
-                  <div></div>
-                )}
+                ) : null}
               </div>
             </div>
             <div className="pool-data">

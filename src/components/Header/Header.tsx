@@ -81,11 +81,11 @@ const Desktop = styled.div`
 `;
 
 const menuItems = [
-  { name: "Farms Pool 1", link: "/farms" },
-  { name: "Farms Pool 2", link: "/farms2" },
-  { name: "DeFi Pool", link: "/defi" },
-  { name: "Race Pool", link: "/race" },
-  { name: "Puzzle Pool", link: "/puzzle" },
+  { name: "Farms 1", link: "/farms" },
+  { name: "Farms 2", link: "/farms2" },
+  { name: "DeFi", link: "/defi" },
+  { name: "Race", link: "/race" },
+  { name: "Puzzle", link: "/puzzle" },
 ];
 
 const Header: React.FC<IProps> = () => {
