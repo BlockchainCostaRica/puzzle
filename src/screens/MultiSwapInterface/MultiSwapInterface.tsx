@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useState } from "react";
 import SizedBox from "@components/SizedBox";
 import TokenInput from "@screens/MultiSwapInterface/TokenInput";
 import { ReactComponent as SwapIcon } from "@src/assets/icons/swap.svg";
@@ -14,6 +14,7 @@ import Text from "@components/Text";
 import CashbackLabel from "@components/CashbackLabel";
 import Card from "@components/Card";
 import Details from "@screens/MultiSwapInterface/Details";
+import BigNumber from "bignumber.js";
 
 interface IProps {
   poolName: string;
@@ -37,10 +38,16 @@ const RateText = styled.div`
 `;
 
 const MultiSwapInterface: React.FC<IProps> = () => {
+  const [token1, setToken1] = useState<BigNumber>(new BigNumber(0));
   return (
     <Root>
       <Card>
-        <TokenInput />
+        <TokenInput
+          value={token1}
+          dollarValue={token1}
+          onChange={(e) => setToken1(e.target.value)}
+          // onMaxClick={() =>account.balance && (e) => setToken1(account.balance)}
+        />
         <SizedBox height={16} />
         <Row alignItems="center" style={{ cursor: "pointer" }}>
           <SwapIcon />
@@ -49,7 +56,11 @@ const MultiSwapInterface: React.FC<IProps> = () => {
           <SizedBox width={16} />
         </Row>
         <SizedBox height={16} />
-        <TokenInput />
+        <TokenInput
+          value={token1}
+          dollarValue={token1}
+          onChange={(e) => setToken1(e.target.value)}
+        />
         <SizedBox height={24} />
         <Button disabled>Insufficient WAVES balance</Button>
         <SizedBox height={16} />
