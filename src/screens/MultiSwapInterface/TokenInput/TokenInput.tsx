@@ -1,16 +1,26 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useState } from "react";
 import TokenSelect from "@screens/MultiSwapInterface/TokenInput/TokenSelect";
 import MaxButton from "@components/MaxButton";
+import BigNumber from "bignumber.js";
+import TokenSelectModal from "@screens/MultiSwapInterface/TokenSelectModal/TokenSelectModal";
+import DollarEquivalent from "@components/DollarEquivalent";
 
-interface IProps {}
+interface IProps {
+  value: BigNumber;
+  dollarValue: BigNumber;
+  onChange: (e: any) => void;
+  onMaxClick?: (e: any) => void;
+}
 
 const Root = styled.div`
   display: flex;
   flex-direction: column;
+
   & > :first-of-type {
     margin-bottom: 8px;
   }
+
   @media (min-width: 560px) {
     flex-direction: row;
     & > :first-of-type {
@@ -32,14 +42,35 @@ const InputContainer = styled.div`
   width: 100%;
   position: relative;
 `;
-
-const TokenInput: React.FC<IProps> = () => {
+const Input = styled.input`
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 24px;
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+`;
+const TokenInput: React.FC<IProps> = ({
+  value,
+  onChange,
+  onMaxClick,
+  dollarValue,
+}) => {
+  const [openModal, setOpenModal] = useState<boolean>(false);
   return (
     <Root>
-      <TokenSelect />
+      <TokenSelect onArrowClick={() => setOpenModal(!openModal)} />
       <InputContainer>
-        <MaxButton style={{ position: "absolute", left: 16 }} />
+        {onMaxClick && <MaxButton onClick={onMaxClick} />}
+        <Input value={value.toString()} onChange={onChange} type="number" />
+        <DollarEquivalent price={dollarValue.toString()} />
       </InputContainer>
+      {openModal && (
+        <TokenSelectModal onClose={() => setOpenModal(!openModal)} />
+      )}
     </Root>
   );
 };
