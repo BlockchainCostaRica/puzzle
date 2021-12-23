@@ -15,6 +15,7 @@ import CashbackLabel from "@components/CashbackLabel";
 import Card from "@components/Card";
 import Details from "@screens/MultiSwapInterface/Details";
 import BigNumber from "bignumber.js";
+import Tooltip from "@components/Tooltip";
 
 interface IProps {
   poolName: string;
@@ -88,7 +89,9 @@ const MultiSwapInterface: React.FC<IProps> = () => {
             justifyContent="flex-end"
           >
             75.32 PUZZLE&nbsp;
-            <InfoIcon />
+            <Tooltip content="Объемный текст в котором подробно рассказано о происходящем на экране">
+              <InfoIcon />
+            </Tooltip>
           </Row>
         </SwapDetailRow>
         <Divider />
