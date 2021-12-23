@@ -300,3 +300,8 @@ export const poolConfigs: Record<POOL_NAMES, IPoolConfig> = {
     ],
   },
 };
+
+export const NODE_URL_MAP = {
+  W: "https://wavesducks.wavesnodes.com",
+  T: "https://nodes-testnet.wavesnodes.com",
+};

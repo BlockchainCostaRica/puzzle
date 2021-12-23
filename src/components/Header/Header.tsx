@@ -46,16 +46,16 @@ const TopMenu = styled.header`
   }
 `;
 
-const MenuItem = styled(Link)<{ active: boolean }>`
+const MenuItem = styled(Link)<{ selected?: boolean }>`
   display: flex;
   align-items: center;
   font-weight: 500;
   font-size: 16px;
   line-height: 24px;
-  color: ${({ active }) => (active ? "#363870" : "#8082c5")};
+  color: ${({ selected }) => (selected ? "#363870" : "#8082c5")};
   box-sizing: border-box;
   border-bottom: 4px solid
-    ${({ active }) => (active ? "#7075e9" : "transparent")};
+    ${({ selected }) => (selected ? "#7075e9" : "transparent")};
   height: 100%;
   margin: 0 12px;
   &:hover {
@@ -113,7 +113,11 @@ const Header: React.FC<IProps> = () => {
           <Desktop>
             <SizedBox width={54} />
             {menuItems.map(({ name, link }, key) => (
-              <MenuItem active={link === location.pathname} to={link} key={key}>
+              <MenuItem
+                selected={link === location.pathname}
+                to={link}
+                key={key}
+              >
                 {name}
               </MenuItem>
             ))}
