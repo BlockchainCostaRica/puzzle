@@ -3,7 +3,10 @@ import React from "react";
 import SizedBox from "@components/SizedBox";
 import { Row, Column } from "@src/components/Flex";
 import { ReactComponent as ArrowDownIcon } from "@src/assets/icons/arrowDown.svg";
-interface IProps {}
+
+interface IProps {
+  onArrowClick: () => void;
+}
 
 const Root = styled.div`
   display: flex;
@@ -36,7 +39,7 @@ const TokenIcon = styled.img`
   color: transparent;
 `;
 
-const TokenSelect: React.FC<IProps> = () => {
+const TokenSelect: React.FC<IProps> = ({ onArrowClick }) => {
   return (
     <Root>
       <Row alignItems="center">
@@ -47,7 +50,7 @@ const TokenSelect: React.FC<IProps> = () => {
           <Balance>200.00</Balance>
         </Column>
       </Row>
-      <ArrowDownIcon />
+      <ArrowDownIcon onClick={onArrowClick} />
     </Root>
   );
 };

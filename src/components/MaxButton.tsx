@@ -16,6 +16,7 @@ const Root = styled.button`
   padding: 0 8px;
   box-shadow: none;
   background: transparent;
+  margin-right: 10px;
 `;
 
 const MaxButton: React.FC<IProps> = ({ ...rest }) => {
