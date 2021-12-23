@@ -1,9 +1,13 @@
 body {
     margin: 0;
-    font-family: "Poppins", sans-serif;
+    font-family: "Roboto", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: #0B0B0D;
+    background: #fff;
+}
+
+body.noscroll {
+    overflow-y: hidden;
 }
 
 #root {
@@ -15,19 +19,14 @@ body {
 }
 
 @font-face {
-    font-family: 'Poppins';
-    src: local('Poppins'), url(assets/fonts/Poppins-Regular.ttf) format('truetype');
+    font-family: 'Roboto';
+    font-weight: normal;
+    src: local('Roboto'), url(assets/fonts/Roboto-Regular.ttf) format('truetype');
 }
 
 @font-face {
-    font-family: 'Poppins';
-    src: local('Poppins'), url(assets/fonts/Poppins-Medium.ttf) format('truetype');
+    font-family: 'Roboto';
+    src: local('Roboto'), url(assets/fonts/Roboto-Medium.ttf) format('truetype');
     font-weight: 500;
-}
-
-@font-face {
-    font-family: 'Poppins';
-    src: local('Poppins'), url(assets/fonts/Poppins-SemiBold.ttf) format('truetype');
-    font-weight: 600;
 }
 
