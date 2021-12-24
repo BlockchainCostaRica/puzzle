@@ -31,11 +31,11 @@ const Root = styled.div`
   }
 `;
 
-const SearchInput: React.FC<IProps> = ({ value, onChange }) => {
+const SearchInput: React.FC<IProps> = ({ value, onChange, placeholder }) => {
   return (
     <Root>
       <SearchIcon />
-      <input onChange={onChange} value={value} />
+      <input onChange={onChange} value={value} placeholder={placeholder} />
     </Root>
   );
 };

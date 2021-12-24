@@ -18,7 +18,7 @@ interface IProps {
 }
 
 const TokenSelectModal: React.FC<IProps> = ({ onClose, tokens, onSelect }) => {
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState<string>("");
   const [filteredTokens, setFilteredTokens] = useState<ITokenConfig[]>(tokens);
 
   const handleSearch = (event: any) => {

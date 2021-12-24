@@ -59,6 +59,16 @@ const Input = styled.input`
   background: transparent;
   outline: none;
   width: 100%;
+
+  ::-webkit-outer-spin-button,
+  ::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  [type="number"] {
+    -moz-appearance: textfield;
+  }
 `;
 const TokenInput: React.FC<IProps> = (props) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -73,6 +83,7 @@ const TokenInput: React.FC<IProps> = (props) => {
       <InputContainer>
         {props.onMaxClick && <MaxButton onClick={props.onMaxClick} />}
         <Input
+          step=".00001"
           type="number"
           value={props.amount.toString()}
           onChange={handleChangeAmount}
