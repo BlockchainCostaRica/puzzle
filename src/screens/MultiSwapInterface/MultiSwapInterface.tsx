@@ -3,7 +3,7 @@ import React from "react";
 import SizedBox from "@components/SizedBox";
 import TokenInput from "@screens/MultiSwapInterface/TokenInput";
 import { ReactComponent as InfoIcon } from "@src/assets/icons/info.svg";
-import { Row } from "@components/Flex";
+import { Column, Row } from "@components/Flex";
 import Button from "@components/Button";
 import SwapDetailRow from "@components/SwapDetailRow";
 import Divider from "@src/components/Divider";
@@ -19,6 +19,7 @@ import { POOL_ID } from "@src/constants";
 import { Observer } from "mobx-react-lite";
 import BigNumber from "bignumber.js";
 import SwitchTokensButton from "@screens/MultiSwapInterface/SwitchTokensButton";
+import Text from "@components/Text";
 
 interface IProps {
   poolId: POOL_ID;
@@ -83,7 +84,7 @@ const MultiSwapInterfaceImpl: React.FC = () => {
                 justifyContent="flex-end"
               >
                 {vm.minimumToReceive} {vm.token1?.symbol}&nbsp;
-                <Tooltip content="Объемный текст в котором подробно рассказано о происходящем на экране">
+                <Tooltip content={<TooltipInfo />}>
                   <InfoIcon />
                 </Tooltip>
               </Row>
@@ -110,3 +111,17 @@ const MultiSwapInterface: React.FC<IProps> = ({ poolId }) => (
   </MultiSwapVMProvider>
 );
 export default MultiSwapInterface;
+
+const TooltipInfo = () => (
+  <Column>
+    <Text>
+      Protocol fee (0.8%): <span style={{ color: "#8082C5" }}>80 USDN</span>
+    </Text>
+    <Text>
+      LP fee (1.2%): <span style={{ color: "#8082C5" }}>120 USDN</span>
+    </Text>
+    <Text>
+      Price impact: <span style={{ color: "#8082C5" }}>0.02%</span>
+    </Text>
+  </Column>
+);
