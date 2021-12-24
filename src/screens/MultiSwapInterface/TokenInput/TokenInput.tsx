@@ -50,9 +50,6 @@ const InputContainer = styled.div`
   position: relative;
 `;
 const Input = styled.input`
-  font-family: Roboto;
-  font-style: normal;
-  font-weight: normal;
   font-size: 20px;
   line-height: 24px;
   border: none;

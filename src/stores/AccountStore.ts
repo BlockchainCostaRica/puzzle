@@ -4,6 +4,7 @@ import { ProviderWeb } from "@waves.exchange/provider-web";
 import { ProviderCloud } from "@waves.exchange/provider-cloud";
 import { ProviderKeeper } from "@waves/provider-keeper";
 import { NODE_URL_MAP } from "@src/constants";
+import { action, makeAutoObservable } from "mobx";
 
 export interface IAsset {
   assetId: string;
@@ -29,16 +30,29 @@ const defaultAssets = {
 };
 
 class AccountStore {
-  public rootStore: RootStore;
+  public readonly rootStore: RootStore;
+
   public assets: Record<string, IAsset> = defaultAssets;
-  public scripted = false;
-  public network: INetwork | null = null;
+  @action.bound setAssets = (assets: Record<string, IAsset>) =>
+    (this.assets = assets);
+
   public address: string | null = null;
+  @action.bound setAddress = (address: string | null) =>
+    (this.address = address);
+
   public loginType: LOGIN_TYPE | null = null;
+  @action.bound setLoginType = (loginType: LOGIN_TYPE | null) =>
+    (this.loginType = loginType);
+
   public signer: Signer | null = null;
+  @action.bound setSigner = (signer: Signer | null) => (this.signer = signer);
+
+  // public scripted = false;
+  // public network: INetwork | null = null;
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
+    makeAutoObservable(this);
     // autorun(() => this.address && this.updateAccountAssets(this.address));
   }
 
@@ -46,34 +60,33 @@ class AccountStore {
     return this.assets || this.address;
   }
 
-  get fee() {
-    return this.scripted ? "0.009" : "0.005";
-  }
+  // get fee() {
+  //   return this.scripted ? "0.009" : "0.005";
+  // }
 
   login = async (loginType: LOGIN_TYPE) => {
     this.loginType = loginType;
 
     switch (loginType) {
       case LOGIN_TYPE.KEEPER:
-        this.signer = new Signer();
+        this.setSigner(new Signer());
         const authData = { data: "you know what is the main reason" };
-        await this.signer.setProvider(new ProviderKeeper(authData));
+        await this.signer?.setProvider(new ProviderKeeper(authData));
         break;
       case LOGIN_TYPE.SIGNER_EMAIL:
-        this.signer = new Signer();
-        await this.signer.setProvider(new ProviderCloud());
+        this.setSigner(new Signer());
+        await this.signer?.setProvider(new ProviderCloud());
         break;
       case LOGIN_TYPE.SIGNER_SEED:
-        this.signer = new Signer({ NODE_URL: NODE_URL_MAP["W"] });
+        this.setSigner(new Signer({ NODE_URL: NODE_URL_MAP["W"] }));
         const provider = new ProviderWeb("https://waves.exchange/signer/");
-        await this.signer.setProvider(provider);
+        await this.signer?.setProvider(provider);
         break;
       default:
         return;
     }
     const loginData = await this.signer?.login();
-    console.log(loginData);
-
+    this.setAddress(loginData?.address ?? null);
     // localStorage.setItem("authMethod", loginType);
     // console.log("initialized with ", loginType);
   };

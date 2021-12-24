@@ -8,7 +8,7 @@ import keeper from "@src/assets/icons/keeper.svg";
 
 interface IProps {
   onClose: () => void;
-  onSelect: (loginType: LOGIN_TYPE) => void;
+  onLogin: (loginType: LOGIN_TYPE) => void;
 }
 
 const loginTypes = [
@@ -28,11 +28,15 @@ const loginTypes = [
     type: LOGIN_TYPE.KEEPER,
   },
 ];
-const LoginModal: React.FC<IProps> = ({ onClose, onSelect }) => {
+const LoginModal: React.FC<IProps> = ({ onClose, onLogin }) => {
+  const handleLogin = (loginType: LOGIN_TYPE) => () => {
+    onClose();
+    onLogin(loginType);
+  };
   return (
     <Dialog style={{ maxWidth: 360 }} onClose={onClose} title="Connect wallet">
       {loginTypes.map((t) => (
-        <LoginType {...t} key={t.type} onClick={() => onSelect(t.type)} />
+        <LoginType {...t} key={t.type} onClick={handleLogin(t.type)} />
       ))}
     </Dialog>
   );

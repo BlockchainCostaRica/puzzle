@@ -12,9 +12,6 @@ const Root = styled.div`
   border-radius: 12px;
   display: flex;
   padding: 12px;
-  font-family: Roboto;
-  font-style: normal;
-  font-weight: normal;
   font-size: 16px;
   line-height: 24px;
 

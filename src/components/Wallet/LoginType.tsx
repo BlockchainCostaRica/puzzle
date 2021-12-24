@@ -27,9 +27,9 @@ const Icon = styled.img`
   flex-direction: column;
 `;
 
-const LoginType: React.FC<IProps> = ({ title, icon, type }) => {
+const LoginType: React.FC<IProps> = ({ title, icon, type, ...rest }) => {
   return (
-    <Root>
+    <Root {...rest}>
       <Text size="medium" weight={500}>
         {title}
       </Text>
