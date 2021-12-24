@@ -47,7 +47,7 @@ const TokenSelect: React.FC<IProps> = ({ token, ...rest }) => {
         <TokenIcon src={token?.logo} />
         <SizedBox width={8} />
         <Column justifyContent="center">
-          <TokenName>${token?.symbol}</TokenName>
+          <TokenName>{token?.symbol}</TokenName>
           <Balance>–</Balance>
         </Column>
       </Row>
