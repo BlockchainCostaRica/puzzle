@@ -68,8 +68,8 @@ const MultiSwapInterfaceImpl: React.FC = () => {
             <TokenInput
               tokens={vm.pool?.tokens ?? []}
               amount={vm.amount1}
-              assetId={vm.assetId0}
-              setAssetId={vm.setAssetId0}
+              assetId={vm.assetId1}
+              setAssetId={vm.setAssetId1}
             />
             <SizedBox height={24} />
             <Button disabled>Insufficient WAVES balance</Button>

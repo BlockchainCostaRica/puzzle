@@ -1,11 +1,11 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { HTMLAttributes } from "react";
 import { Column, Row } from "@src/components/Flex";
 import SizedBox from "@components/SizedBox";
 import { ITokenConfig } from "@src/constants";
 import Text from "@components/Text";
 
-interface IProps {
+interface IProps extends HTMLAttributes<HTMLDivElement> {
   token: ITokenConfig;
 }
 
@@ -16,6 +16,7 @@ const Root = styled.div`
   box-sizing: border-box;
   width: 100%;
   margin: 8px 0;
+  cursor: pointer;
 `;
 const DefaultIcon = styled.div`
   width: 40px;
@@ -48,9 +49,9 @@ const Amount = styled.div`
   display: flex;
   flex-direction: column;
 `;
-const TokenInfo: React.FC<IProps> = ({ token }) => {
+const TokenInfo: React.FC<IProps> = ({ token, ...rest }) => {
   return (
-    <Root>
+    <Root {...rest}>
       <Row>
         {token.logo ? <Icon src={token.logo} /> : <DefaultIcon />}
         <SizedBox width={8} />

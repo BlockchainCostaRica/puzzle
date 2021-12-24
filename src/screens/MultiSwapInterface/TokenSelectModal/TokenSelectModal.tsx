@@ -11,11 +11,18 @@ import { ITokenConfig } from "@src/constants";
 interface IProps {
   onClose: () => void;
   tokens: ITokenConfig[];
+  onSelect: (assetId: string) => void;
 }
 
-const TokenSelectModal: React.FC<IProps> = ({ onClose, tokens }) => {
+const TokenSelectModal: React.FC<IProps> = ({ onClose, tokens, onSelect }) => {
   const ref = createRef<HTMLDivElement>();
   useOnClickOutside(ref, onClose);
+
+  const handleTokenSelect = (assetId: string) => {
+    onSelect(assetId);
+    onClose();
+  };
+
   return (
     <Dialog style={{ maxWidth: 360 }} onClose={onClose} title="Select a token">
       <SearchInput
@@ -30,7 +37,11 @@ const TokenSelectModal: React.FC<IProps> = ({ onClose, tokens }) => {
           style={{ maxHeight: 352, paddingRight: 16 }}
         >
           {tokens.map((t) => (
-            <TokenInfo key={t.assetId} token={t} />
+            <TokenInfo
+              onClick={() => handleTokenSelect(t.assetId)}
+              key={t.assetId}
+              token={t}
+            />
           ))}
           <SizedBox height={16} width={16} />
         </Column>

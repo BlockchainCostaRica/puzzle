@@ -66,7 +66,10 @@ const TokenInput: React.FC<IProps> = (props) => {
     props.setAmount && props.setAmount(new BigNumber(e.target.value));
   return (
     <Root>
-      <TokenSelect onClick={() => setOpenModal(!openModal)} />
+      <TokenSelect
+        token={props.tokens.find(({ assetId }) => assetId === props.assetId)}
+        onClick={() => setOpenModal(!openModal)}
+      />
       <InputContainer>
         {props.onMaxClick && <MaxButton onClick={props.onMaxClick} />}
         <Input
@@ -81,6 +84,7 @@ const TokenInput: React.FC<IProps> = (props) => {
       </InputContainer>
       {openModal && (
         <TokenSelectModal
+          onSelect={props.setAssetId}
           tokens={props.tokens}
           onClose={() => setOpenModal(!openModal)}
         />
