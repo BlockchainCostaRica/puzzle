@@ -7,6 +7,7 @@ import {
 } from "@src/constants";
 import axios from "axios";
 import { makeAutoObservable } from "mobx";
+import BigNumber from "bignumber.js";
 
 interface IData {
   key: string;
@@ -21,6 +22,8 @@ class Pool implements IPoolConfig {
   public readonly defaultAssetId0: string;
   public readonly defaultAssetId1: string;
   public readonly tokens: Array<ITokenConfig> = [];
+  public globalVolume: string = "–";
+  public globalLiquidity: string = "–";
   public balances: Record<string, number> = {};
   public id: POOL_ID;
 
@@ -40,7 +43,7 @@ class Pool implements IPoolConfig {
   }
 
   syncBalances = async () => {
-    const globalAttributesUrl = `${NODE_URL_MAP["W"]}/addresses/data/${this.contractAddress}?matches=global_(.*)_balance`;
+    const globalAttributesUrl = `${NODE_URL_MAP["W"]}/addresses/data/${this.contractAddress}?matches=global_(.*)`;
     const { data }: { data: IData[] } = await axios.get(globalAttributesUrl);
     this.balances = data.reduce<Record<string, number>>(
       (acc, { key, value }) => {
@@ -50,6 +53,15 @@ class Pool implements IPoolConfig {
       },
       {}
     );
+    const globalVolumeValue = data.find(
+      ({ key }) => key === "global_volume"
+    )!.value;
+    if (globalVolumeValue != null) {
+      this.globalVolume = new BigNumber(globalVolumeValue)
+        .div(1e6)
+        .toFormat(2)
+        .toString();
+    }
   };
 
   // updateTokens = async () => {

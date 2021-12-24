@@ -5,7 +5,10 @@ import { Column, Row } from "@components/Flex";
 import Text from "@components/Text";
 import Button from "@components/Button";
 
-interface IProps {}
+interface IProps {
+  volume: string;
+  liquidity: string;
+}
 
 const Root = styled(Card)`
   display: flex;
@@ -24,7 +27,7 @@ const Root = styled(Card)`
   }
 `;
 
-const Details: React.FC<IProps> = () => {
+const Details: React.FC<IProps> = ({ volume, liquidity }) => {
   return (
     <Root>
       <Row alignItems="center">
@@ -32,13 +35,13 @@ const Details: React.FC<IProps> = () => {
           <Text type="secondary" size="small">
             Total liquidity
           </Text>
-          <Text>$ 3,141,083.65</Text>
+          <Text>$ {liquidity}</Text>
         </Column>
         <Column crossAxisSize="max">
           <Text type="secondary" size="small">
             24H volume
           </Text>
-          <Text>$ 589,177.02</Text>
+          <Text>$ {volume}</Text>
         </Column>
       </Row>
       <Button className="button" kind="secondary">

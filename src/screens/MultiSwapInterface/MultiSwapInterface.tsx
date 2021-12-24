@@ -94,7 +94,10 @@ const MultiSwapInterfaceImpl: React.FC = () => {
             </SwapDetailRow>
           </Card>
           <SizedBox height={16} />
-          <Details />
+          <Details
+            volume={vm.pool!.globalVolume}
+            liquidity={vm.pool!.globalLiquidity}
+          />
         </Root>
       )}
     </Observer>

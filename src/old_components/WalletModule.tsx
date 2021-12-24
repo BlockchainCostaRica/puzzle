@@ -185,7 +185,7 @@ export class WalletModule extends React.Component<IProps, IState> {
     const item = this.state.balances[tokenId];
 
     return (
-      <div className="tokenBalance">
+      <div className="tokenBalance" key={tokenId}>
         <div>
           <img src={item.logo} className="smallLogo" alt="smallLogo" />
           <span className="tokenBalance-balance">
