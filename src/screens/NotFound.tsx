@@ -14,7 +14,7 @@ const Root = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  height: 70vh;
   width: 100%;
 `;
 const Img = styled.img`
