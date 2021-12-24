@@ -1,16 +1,12 @@
 import styled from "@emotion/styled";
 import React from "react";
-import DollarEquivalent from "@components/DollarEquivalent";
 import { Column, Row } from "@src/components/Flex";
 import SizedBox from "@components/SizedBox";
+import { ITokenConfig } from "@src/constants";
+import Text from "@components/Text";
 
 interface IProps {
-  icon?: string;
-  name: string;
-  symbol: string;
-  price: string;
-  dollarPrice: string;
-  active?: boolean;
+  token: ITokenConfig;
 }
 
 const Root = styled.div`
@@ -52,26 +48,22 @@ const Amount = styled.div`
   display: flex;
   flex-direction: column;
 `;
-const TokenInfo: React.FC<IProps> = ({
-  icon,
-  name,
-  symbol,
-  price,
-  dollarPrice,
-}) => {
+const TokenInfo: React.FC<IProps> = ({ token }) => {
   return (
     <Root>
-      <Row style={{ flex: 1 }}>
-        {icon ? <Icon src={icon} /> : <DefaultIcon />}
+      <Row>
+        {token.logo ? <Icon src={token.logo} /> : <DefaultIcon />}
         <SizedBox width={8} />
         <Column>
-          <Name>{name}</Name>
-          <Symbol>{symbol}</Symbol>
+          <Name>{token.name}</Name>
+          <Symbol>{token.symbol}</Symbol>
         </Column>
       </Row>
-      <Column style={{ flex: 1 }} alignItems="flex-end">
-        <Amount>{price}</Amount>
-        <DollarEquivalent price={dollarPrice} />
+      <Column alignItems="flex-end">
+        <Amount>–</Amount>
+        <Text type="secondary" size="small">
+          –
+        </Text>
       </Column>
     </Root>
   );

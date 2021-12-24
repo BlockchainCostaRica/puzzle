@@ -2,7 +2,7 @@ import {
   IPoolConfig,
   ITokenConfig,
   NODE_URL_MAP,
-  POOL_NAMES,
+  POOL_ID,
   poolConfigs,
 } from "@src/constants";
 import axios from "axios";
@@ -18,15 +18,21 @@ class Pool implements IPoolConfig {
   public readonly contractAddress: string;
   public readonly baseTokenId: string;
   public readonly name: string;
-  public readonly tokens: Array<ITokenConfig>;
+  public readonly defaultAssetId0: string;
+  public readonly defaultAssetId1: string;
+  public readonly tokens: Array<ITokenConfig> = [];
   public balances: Record<string, number> = {};
+  public id: POOL_ID;
 
-  constructor(name: POOL_NAMES) {
-    const config = poolConfigs[name];
+  constructor(id: POOL_ID) {
+    const config = poolConfigs[id];
+    this.id = id;
     this.contractAddress = config.contractAddress;
     this.baseTokenId = config.baseTokenId;
     this.name = config.name;
     this.tokens = config.tokens;
+    this.defaultAssetId0 = config.defaultAssetId0;
+    this.defaultAssetId1 = config.defaultAssetId1;
 
     this.syncBalances().then();
     setInterval(this.syncBalances, 5000);

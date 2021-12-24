@@ -1,4 +1,3 @@
-import styled from "@emotion/styled";
 import React from "react";
 import RcDialog from "rc-dialog";
 import "rc-dialog/assets/index.css";

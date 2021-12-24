@@ -4,12 +4,19 @@ import TokenSelect from "@screens/MultiSwapInterface/TokenInput/TokenSelect";
 import MaxButton from "@components/MaxButton";
 import BigNumber from "bignumber.js";
 import TokenSelectModal from "@screens/MultiSwapInterface/TokenSelectModal/TokenSelectModal";
-import DollarEquivalent from "@components/DollarEquivalent";
+import { ITokenConfig } from "@src/constants";
+import Text from "@components/Text";
 
 interface IProps {
-  value: BigNumber;
-  dollarValue: BigNumber;
-  onChange: (e: any) => void;
+  tokens: ITokenConfig[];
+
+  assetId: string;
+  setAssetId: (assetId: string) => void;
+
+  amount: BigNumber;
+  setAmount?: (amount: BigNumber) => void;
+
+  dollarValue?: BigNumber;
   onMaxClick?: () => void;
 }
 
@@ -53,23 +60,30 @@ const Input = styled.input`
   outline: none;
   width: 100%;
 `;
-const TokenInput: React.FC<IProps> = ({
-  value,
-  onChange,
-  onMaxClick,
-  dollarValue,
-}) => {
+const TokenInput: React.FC<IProps> = (props) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) =>
+    props.setAmount && props.setAmount(new BigNumber(e.target.value));
   return (
     <Root>
       <TokenSelect onClick={() => setOpenModal(!openModal)} />
       <InputContainer>
-        {onMaxClick && <MaxButton onClick={onMaxClick} />}
-        <Input value={value.toString()} onChange={onChange} type="number" />
-        <DollarEquivalent price={dollarValue.toString()} />
+        {props.onMaxClick && <MaxButton onClick={props.onMaxClick} />}
+        <Input
+          type="number"
+          value={props.amount.toString()}
+          onChange={handleChangeAmount}
+          readOnly={!props.setAmount}
+        />
+        <Text type="secondary" size="small">
+          {props.dollarValue ? `$ ${props.dollarValue.toString()}}` : null}
+        </Text>
       </InputContainer>
       {openModal && (
-        <TokenSelectModal onClose={() => setOpenModal(!openModal)} />
+        <TokenSelectModal
+          tokens={props.tokens}
+          onClose={() => setOpenModal(!openModal)}
+        />
       )}
     </Root>
   );

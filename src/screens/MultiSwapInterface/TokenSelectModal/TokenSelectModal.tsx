@@ -6,181 +6,14 @@ import Dialog from "@components/Dialog";
 import Scrollbar from "@src/Scrollbar";
 import { Column } from "@src/components/Flex";
 import SizedBox from "@components/SizedBox";
+import { ITokenConfig } from "@src/constants";
 
 interface IProps {
   onClose: () => void;
+  tokens: ITokenConfig[];
 }
 
-const tokens = [
-  {
-    name: "Waves",
-    symbol: "Waves",
-    price: "200.00",
-    dollarPrice: "14,432.13",
-  },
-  {
-    name: "Puzzle Token",
-    symbol: "PUZZLE",
-    dollarPrice: "14,432.13",
-    price: "136.0123",
-    active: true,
-  },
-  {
-    symbol: "USDN",
-    name: "Neutrino USD",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-  {
-    symbol: "SWOP",
-    name: "SWOPfi",
-    dollarPrice: "14,432.13",
-    price: "",
-    active: true,
-  },
-];
-const TokenSelectModal: React.FC<IProps> = ({ onClose }) => {
+const TokenSelectModal: React.FC<IProps> = ({ onClose, tokens }) => {
   const ref = createRef<HTMLDivElement>();
   useOnClickOutside(ref, onClose);
   return (
@@ -197,7 +30,7 @@ const TokenSelectModal: React.FC<IProps> = ({ onClose }) => {
           style={{ maxHeight: 352, paddingRight: 16 }}
         >
           {tokens.map((t) => (
-            <TokenInfo key={t.name} {...t} />
+            <TokenInfo key={t.assetId} token={t} />
           ))}
           <SizedBox height={16} width={16} />
         </Column>
