@@ -3,8 +3,11 @@ import React, { HTMLAttributes } from "react";
 import SizedBox from "@components/SizedBox";
 import { Row, Column } from "@src/components/Flex";
 import { ReactComponent as ArrowDownIcon } from "@src/assets/icons/arrowDown.svg";
+import { ITokenConfig } from "@src/constants";
 
-interface IProps extends HTMLAttributes<HTMLDivElement> {}
+interface IProps extends HTMLAttributes<HTMLDivElement> {
+  token?: ITokenConfig;
+}
 
 const Root = styled.div`
   display: flex;
@@ -37,15 +40,15 @@ const TokenIcon = styled.img`
   color: transparent;
 `;
 
-const TokenSelect: React.FC<IProps> = ({ ...rest }) => {
+const TokenSelect: React.FC<IProps> = ({ token, ...rest }) => {
   return (
     <Root {...rest}>
       <Row alignItems="center">
-        <TokenIcon src="https://s2.coinmarketcap.com/static/img/coins/200x200/1274.png" />
+        <TokenIcon src={token?.logo} />
         <SizedBox width={8} />
         <Column justifyContent="center">
-          <TokenName>WAVES</TokenName>
-          <Balance>200.00</Balance>
+          <TokenName>${token?.symbol}</TokenName>
+          <Balance>–</Balance>
         </Column>
       </Row>
       <ArrowDownIcon />

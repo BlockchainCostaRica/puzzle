@@ -13,9 +13,10 @@ import Text from "@components/Text";
 interface IProps {
   onClose: () => void;
   tokens: ITokenConfig[];
+  onSelect: (assetId: string) => void;
 }
 
-const TokenSelectModal: React.FC<IProps> = ({ onClose, tokens }) => {
+const TokenSelectModal: React.FC<IProps> = ({ onClose, tokens, onSelect }) => {
   const [searchValue, setSearchValue] = useState("");
   const [debouncedState, setDebouncedState] = useState("");
   const [filteredTokens, setFilteredTokens] = useState<
@@ -40,6 +41,12 @@ const TokenSelectModal: React.FC<IProps> = ({ onClose, tokens }) => {
   );
   const ref = createRef<HTMLDivElement>();
   useOnClickOutside(ref, onClose);
+
+  const handleTokenSelect = (assetId: string) => {
+    onSelect(assetId);
+    onClose();
+  };
+
   return (
     <Dialog style={{ maxWidth: 360 }} onClose={onClose} title="Select a token">
       <SearchInput
@@ -54,7 +61,9 @@ const TokenSelectModal: React.FC<IProps> = ({ onClose, tokens }) => {
           style={{ maxHeight: 352, paddingRight: 16 }}
         >
           {filteredTokens && filteredTokens.length > 0 ? (
-            filteredTokens.map((t) => <TokenInfo key={t.assetId} token={t} />)
+            filteredTokens.map((t) => <TokenInfo   onClick={() => handleTokenSelect(t.assetId)}
+                                                   key={t.assetId}
+                                                   token={t}/>)
           ) : (
             <Text>No tokens found</Text>
           )}
