@@ -10,6 +10,7 @@ import { ITokenConfig } from "@src/constants";
 import _ from "lodash";
 import { observer } from "mobx-react-lite";
 import Text from "@components/Text";
+
 interface IProps {
   onClose: () => void;
   tokens: ITokenConfig[];
@@ -18,10 +19,7 @@ interface IProps {
 
 const TokenSelectModal: React.FC<IProps> = ({ onClose, tokens, onSelect }) => {
   const [searchValue, setSearchValue] = useState("");
-  const [debouncedState, setDebouncedState] = useState("");
-  const [filteredTokens, setFilteredTokens] = useState<
-    ITokenConfig[] | undefined
-  >(tokens);
+  const [filteredTokens, setFilteredTokens] = useState<ITokenConfig[]>(tokens);
 
   const handleSearch = (event: any) => {
     setSearchValue(event.target.value);
@@ -29,7 +27,6 @@ const TokenSelectModal: React.FC<IProps> = ({ onClose, tokens, onSelect }) => {
   };
   const debounce = useCallback(
     _.debounce((_searchVal: string) => {
-      setDebouncedState(_searchVal);
       const filter = tokens.filter(
         (v) =>
           v.symbol.toLowerCase().includes(_searchVal.toLowerCase()) ||
@@ -61,9 +58,13 @@ const TokenSelectModal: React.FC<IProps> = ({ onClose, tokens, onSelect }) => {
           style={{ maxHeight: 352, paddingRight: 16 }}
         >
           {filteredTokens && filteredTokens.length > 0 ? (
-            filteredTokens.map((t) => <TokenInfo   onClick={() => handleTokenSelect(t.assetId)}
-                                                   key={t.assetId}
-                                                   token={t}/>)
+            filteredTokens.map((t) => (
+              <TokenInfo
+                onClick={() => handleTokenSelect(t.assetId)}
+                key={t.assetId}
+                token={t}
+              />
+            ))
           ) : (
             <Text>No tokens found</Text>
           )}

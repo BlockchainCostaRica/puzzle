@@ -1,12 +1,12 @@
 import React, { useMemo } from "react";
 import { useVM } from "@src/hooks/useVM";
 import { action, makeAutoObservable } from "mobx";
-import { ITokenConfig, POOL_ID } from "@src/constants";
+import { POOL_ID } from "@src/constants";
 import { RootStore, useStores } from "@stores";
 import BigNumber from "bignumber.js";
 
 const SLIPPAGE = 0.95; //if puzzle slippage = 0
-const CASHBACK_PERCENT = 0.004;
+// const CASHBACK_PERCENT = 0.004;
 const ctx = React.createContext<MultiSwapVM | null>(null);
 
 export const MultiSwapVMProvider: React.FC<{ poolId: POOL_ID }> = ({
@@ -14,7 +14,10 @@ export const MultiSwapVMProvider: React.FC<{ poolId: POOL_ID }> = ({
   children,
 }) => {
   const rootStore = useStores();
-  const store = useMemo(() => new MultiSwapVM(rootStore, poolId), [poolId]);
+  const store = useMemo(
+    () => new MultiSwapVM(rootStore, poolId),
+    [rootStore, poolId]
+  );
   return <ctx.Provider value={store}>{children}</ctx.Provider>;
 };
 
