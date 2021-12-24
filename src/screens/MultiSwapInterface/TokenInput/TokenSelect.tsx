@@ -1,12 +1,10 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { HTMLAttributes } from "react";
 import SizedBox from "@components/SizedBox";
 import { Row, Column } from "@src/components/Flex";
 import { ReactComponent as ArrowDownIcon } from "@src/assets/icons/arrowDown.svg";
 
-interface IProps {
-  onArrowClick: () => void;
-}
+interface IProps extends HTMLAttributes<HTMLDivElement> {}
 
 const Root = styled.div`
   display: flex;
@@ -39,9 +37,9 @@ const TokenIcon = styled.img`
   color: transparent;
 `;
 
-const TokenSelect: React.FC<IProps> = ({ onArrowClick }) => {
+const TokenSelect: React.FC<IProps> = ({ ...rest }) => {
   return (
-    <Root>
+    <Root {...rest}>
       <Row alignItems="center">
         <TokenIcon src="https://s2.coinmarketcap.com/static/img/coins/200x200/1274.png" />
         <SizedBox width={8} />
@@ -50,7 +48,7 @@ const TokenSelect: React.FC<IProps> = ({ onArrowClick }) => {
           <Balance>200.00</Balance>
         </Column>
       </Row>
-      <ArrowDownIcon onClick={onArrowClick} />
+      <ArrowDownIcon />
     </Root>
   );
 };

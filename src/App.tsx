@@ -11,6 +11,8 @@ import { AddOneTokenInterface } from "@src/old_components/AddOneTokenInterface";
 import { InvestToPoolInterface } from "@src/old_components/InvestToPoolInterface";
 import Header from "@components/Header/Header";
 import { Column } from "@components/Flex";
+import Dialog from "@components/Dialog";
+import { POOL_NAMES } from "@src/constants";
 
 const Root = styled(Column)`
   width: 100%;
@@ -34,17 +36,25 @@ const App: React.FC = () => (
     <Body>
       <Routes>
         <Route path="/" element={<LandingModule />} />
+
         <Route
           path="puzzle"
-          element={<MultiSwapInterface poolName="puzzle" />}
+          element={<MultiSwapInterface poolName={POOL_NAMES.puzzle} />}
         />
 
-        <Route path="defi" element={<MultiSwapInterface poolName="defi" />} />
-        <Route path="farms" element={<MultiSwapInterface poolName="farms" />} />
         <Route
-          path="farms2/*"
-          element={<MultiSwapInterface poolName="farms2" />}
+          path="defi"
+          element={<MultiSwapInterface poolName={POOL_NAMES.defi} />}
         />
+        <Route
+          path="farms"
+          element={<MultiSwapInterface poolName={POOL_NAMES.farmsPool1} />}
+        />
+        <Route
+          path="farms2"
+          element={<MultiSwapInterface poolName={POOL_NAMES.farmsPool2} />}
+        />
+
         <Route path="stake" element={<StakeModule />} />
 
         <Route

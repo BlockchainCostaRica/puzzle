@@ -62,7 +62,7 @@ const TokenInput: React.FC<IProps> = ({
   const [openModal, setOpenModal] = useState<boolean>(false);
   return (
     <Root>
-      <TokenSelect onArrowClick={() => setOpenModal(!openModal)} />
+      <TokenSelect onClick={() => setOpenModal(!openModal)} />
       <InputContainer>
         {onMaxClick && <MaxButton onClick={onMaxClick} />}
         <Input value={value.toString()} onChange={onChange} type="number" />

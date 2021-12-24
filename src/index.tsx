@@ -5,6 +5,7 @@ import App from "./App";
 import { BrowserRouter as Router } from "react-router-dom";
 import "normalize.css";
 import { RootStore, storesContext } from "@stores";
+import "react-perfect-scrollbar/dist/css/styles.css";
 
 const mobxStore = new RootStore();
 

@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import React from "react";
 import DollarEquivalent from "@components/DollarEquivalent";
-import { Column } from "@src/components/Flex";
-import { Row } from "reactstrap";
+import { Column, Row } from "@src/components/Flex";
+import SizedBox from "@components/SizedBox";
 
 interface IProps {
   icon?: string;
@@ -15,8 +15,10 @@ interface IProps {
 
 const Root = styled.div`
   display: flex;
-  //flex-direction: row;
-  //justify-content: space-between;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  width: 100%;
   margin: 8px 0;
 `;
 const DefaultIcon = styled.div`
@@ -59,14 +61,15 @@ const TokenInfo: React.FC<IProps> = ({
 }) => {
   return (
     <Root>
-      <Row>
+      <Row style={{ flex: 1 }}>
         {icon ? <Icon src={icon} /> : <DefaultIcon />}
+        <SizedBox width={8} />
         <Column>
           <Name>{name}</Name>
           <Symbol>{symbol}</Symbol>
         </Column>
       </Row>
-      <Column alignItems="flex-end">
+      <Column style={{ flex: 1 }} alignItems="flex-end">
         <Amount>{price}</Amount>
         <DollarEquivalent price={dollarPrice} />
       </Column>
