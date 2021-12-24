@@ -25,6 +25,7 @@ const TokenSelectModal: React.FC<IProps> = ({ onClose, tokens, onSelect }) => {
     setSearchValue(event.target.value);
     debounce(event.target.value);
   };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounce = useCallback(
     _.debounce((_searchVal: string) => {
       const filter = tokens.filter(

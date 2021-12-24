@@ -7,8 +7,8 @@ import closeIcon from "@src/assets/icons/close.svg";
 import Banner from "./Banner";
 import { Column, Row } from "@components/Flex";
 import MobileMenu from "@components/Header/MobileMenu";
-import { WalletModule } from "@src/old_components/WalletModule";
 import SizedBox from "@components/SizedBox";
+import Wallet from "@components/Wallet/Wallet";
 
 interface IProps {}
 
@@ -132,7 +132,8 @@ const Header: React.FC<IProps> = () => {
           />
         </Mobile>
         <Desktop>
-          <WalletModule />
+          <Wallet />
+          {/*<WalletModule />*/}
         </Desktop>
       </TopMenu>
     </Root>

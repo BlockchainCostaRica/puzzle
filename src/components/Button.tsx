@@ -1,15 +1,18 @@
 import styled from "@emotion/styled";
 
 type TButtonType = "primary" | "secondary";
+type TButtonSize = "medium" | "large";
 
-const Button = styled.button<{ kind?: TButtonType }>`
+const Button = styled.button<{
+  kind?: TButtonType;
+  size?: TButtonSize;
+  fixed?: boolean;
+}>`
   margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 24px;
   box-sizing: border-box;
-  height: 56px;
   background: ${({ kind }) => (kind === "secondary" ? "#fff" : "#7075e9")};
   border: 1px solid
     ${({ kind }) => (kind === "secondary" ? "#F1F2FE" : "#7075e9")};
@@ -19,12 +22,25 @@ const Button = styled.button<{ kind?: TButtonType }>`
   font-size: 16px;
   line-height: 24px;
   color: ${({ kind }) => (kind === "secondary" ? "#363870" : "#ffffff")};
-  width: 100%;
+  width: ${({ fixed }) => (fixed ? "100%" : "fit-content")};
+
+  ${({ size }) =>
+    (() => {
+      switch (size) {
+        case "medium":
+          return "padding: 0 20px; height: 40px;";
+        case "large":
+          return "padding: 0 24px; height: 56px;";
+        default:
+          return "padding: 0 24px; height: 56px;";
+      }
+    })()}
   :hover {
     background: ${({ kind }) => (kind === "secondary" ? "#F1F2FE" : "#6563dd")};
     border: 1px solid
       ${({ kind }) => (kind === "secondary" ? "#F1F2FE" : "#6563dd")};
   }
+
   :disabled {
     opacity: ${({ kind }) => (kind === "secondary" ? 0.4 : 1)};
     background: ${({ kind }) => (kind === "secondary" ? "#fff" : "#c6c9f4")};

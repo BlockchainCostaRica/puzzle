@@ -6,7 +6,7 @@ import {
   poolConfigs,
 } from "@src/constants";
 import axios from "axios";
-import { makeAutoObservable } from "mobx";
+import { action, makeAutoObservable } from "mobx";
 import BigNumber from "bignumber.js";
 
 interface IData {
@@ -22,10 +22,19 @@ class Pool implements IPoolConfig {
   public readonly defaultAssetId0: string;
   public readonly defaultAssetId1: string;
   public readonly tokens: Array<ITokenConfig> = [];
+  public readonly id: POOL_ID;
+
   public globalVolume: string = "–";
+  @action.bound setGlobalVolume = (value: string) =>
+    (this.globalVolume = value);
+
   public globalLiquidity: string = "–";
+  @action.bound setGlobalLiquidity = (value: string) =>
+    (this.globalLiquidity = value);
+
   public balances: Record<string, number> = {};
-  public id: POOL_ID;
+  @action.bound setBalances = (value: Record<string, number>) =>
+    (this.balances = value);
 
   constructor(id: POOL_ID) {
     const config = poolConfigs[id];
@@ -45,7 +54,7 @@ class Pool implements IPoolConfig {
   syncBalances = async () => {
     const globalAttributesUrl = `${NODE_URL_MAP["W"]}/addresses/data/${this.contractAddress}?matches=global_(.*)`;
     const { data }: { data: IData[] } = await axios.get(globalAttributesUrl);
-    this.balances = data.reduce<Record<string, number>>(
+    const balances = data.reduce<Record<string, number>>(
       (acc, { key, value }) => {
         const regexp = new RegExp("global_(.*)_balance");
         regexp.test(key) && (acc[key.match(regexp)![1]] = value);
@@ -53,14 +62,16 @@ class Pool implements IPoolConfig {
       },
       {}
     );
+    this.setBalances(balances);
 
     // Math.floor(this.state.data.get("global_volume") / 1000000);
     const globalVolumeValue = data.find((v) => v.key === "global_volume");
     if (globalVolumeValue?.value != null) {
-      this.globalVolume = new BigNumber(globalVolumeValue.value)
+      const globalVolume = new BigNumber(globalVolumeValue.value)
         .div(1e6)
         .toFormat(2)
         .toString();
+      this.setGlobalVolume(globalVolume);
     }
 
     //global_USDN_balance / (static_USDN_weight/100)
@@ -68,11 +79,12 @@ class Pool implements IPoolConfig {
     const usdnToken = this.tokens.find((t) => t.assetId === usdnAssetId);
     const usdnBalance = this.balances[usdnAssetId];
     if (usdnToken != null && usdnBalance != null) {
-      this.globalLiquidity = new BigNumber(usdnBalance)
+      const globalLiquidity = new BigNumber(usdnBalance)
         .div(usdnToken.shareAmount)
         .div(1e6)
         .toFormat(2)
         .toString();
+      this.setGlobalVolume(globalLiquidity);
     }
   };
 

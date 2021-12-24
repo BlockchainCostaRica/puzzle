@@ -2,8 +2,8 @@ import styled from "@emotion/styled";
 import React from "react";
 import SizedBox from "@components/SizedBox";
 import LinkGroup from "@components/LinkGroup";
-import { WalletModule } from "@src/old_components/WalletModule";
 import Divider from "@components/Divider";
+import Wallet from "@components/Wallet/Wallet";
 
 interface IProps {
   bannerClosed: boolean;
@@ -52,7 +52,8 @@ const MobileMenu: React.FC<IProps> = ({ bannerClosed }) => {
         <SizedBox height={24} />
         <Divider />
         <SizedBox height={24} />
-        <WalletModule />
+        {/*<WalletModule />*/}
+        <Wallet />
         <SizedBox height={24} />
       </Root>
     </Popover>

@@ -5,7 +5,6 @@ import { Column, Row } from "@components/Flex";
 import Text from "@components/Text";
 import Button from "@components/Button";
 import { Link } from "react-router-dom";
-import { ROUTES } from "@src/App";
 import { POOL_ID } from "@src/constants";
 
 interface IProps {

@@ -58,7 +58,9 @@ const MultiSwapInterfaceImpl: React.FC = () => {
               setAssetId={vm.setAssetId1}
             />
             <SizedBox height={24} />
-            <Button disabled>Insufficient WAVES balance</Button>
+            <Button disabled fixed>
+              Insufficient WAVES balance
+            </Button>
             <SizedBox height={16} />
             {/*<SwapDetailRow title="Route">*/}
             {/*  <Row*/}
