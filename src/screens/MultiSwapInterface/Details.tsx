@@ -4,10 +4,14 @@ import Card from "@components/Card";
 import { Column, Row } from "@components/Flex";
 import Text from "@components/Text";
 import Button from "@components/Button";
+import { Link } from "react-router-dom";
+import { ROUTES } from "@src/App";
+import { POOL_ID } from "@src/constants";
 
 interface IProps {
   volume: string;
   liquidity: string;
+  poolId: POOL_ID;
 }
 
 const Root = styled(Card)`
@@ -27,7 +31,7 @@ const Root = styled(Card)`
   }
 `;
 
-const Details: React.FC<IProps> = ({ volume, liquidity }) => {
+const Details: React.FC<IProps> = ({ volume, liquidity, poolId }) => {
   return (
     <Root>
       <Row alignItems="center">
@@ -44,9 +48,18 @@ const Details: React.FC<IProps> = ({ volume, liquidity }) => {
           <Text>$ {volume}</Text>
         </Column>
       </Row>
-      <Button className="button" kind="secondary">
-        Invest
-      </Button>
+      <Link to={"addLiquidity"}>
+        <Button className="button" kind="secondary">
+          Invest
+        </Button>
+      </Link>
+      {/*{poolId in ROUTES.addLiquidity && (*/}
+      {/*  <Link to={(ROUTES.addLiquidity as any)[poolId] ?? "/"}>*/}
+      {/*    <Button className="button" kind="secondary">*/}
+      {/*      Invest*/}
+      {/*    </Button>*/}
+      {/*  </Link>*/}
+      {/*)}*/}
     </Root>
   );
 };

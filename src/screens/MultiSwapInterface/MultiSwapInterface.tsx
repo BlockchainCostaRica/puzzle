@@ -96,6 +96,7 @@ const MultiSwapInterfaceImpl: React.FC = () => {
           </Card>
           <SizedBox height={16} />
           <Details
+            poolId={vm.poolId}
             volume={vm.pool!.globalVolume}
             liquidity={vm.pool!.globalLiquidity}
           />

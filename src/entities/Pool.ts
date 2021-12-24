@@ -53,11 +53,23 @@ class Pool implements IPoolConfig {
       },
       {}
     );
-    const globalVolumeValue = data.find(
-      ({ key }) => key === "global_volume"
-    )!.value;
-    if (globalVolumeValue != null) {
-      this.globalVolume = new BigNumber(globalVolumeValue)
+
+    // Math.floor(this.state.data.get("global_volume") / 1000000);
+    const globalVolumeValue = data.find((v) => v.key === "global_volume");
+    if (globalVolumeValue?.value != null) {
+      this.globalVolume = new BigNumber(globalVolumeValue.value)
+        .div(1e6)
+        .toFormat(2)
+        .toString();
+    }
+
+    //global_USDN_balance / (static_USDN_weight/100)
+    const usdnAssetId = "DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p";
+    const usdnToken = this.tokens.find((t) => t.assetId === usdnAssetId);
+    const usdnBalance = this.balances[usdnAssetId];
+    if (usdnToken != null && usdnBalance != null) {
+      this.globalLiquidity = new BigNumber(usdnBalance)
+        .div(usdnToken.shareAmount)
         .div(1e6)
         .toFormat(2)
         .toString();

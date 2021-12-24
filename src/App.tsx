@@ -12,6 +12,7 @@ import { InvestToPoolInterface } from "@src/old_components/InvestToPoolInterface
 import Header from "@components/Header/Header";
 import { Column } from "@components/Flex";
 import { POOL_ID } from "@src/constants";
+import NotFound from "@screens/NotFound";
 
 const Root = styled(Column)`
   width: 100%;
@@ -29,6 +30,22 @@ const Body = styled(Column)`
   }
 `;
 
+export const ROUTES = {
+  ROOT: "/",
+  STAKE: "/stake",
+  pools: {
+    farms: POOL_ID.farmsPool1,
+    farms2: POOL_ID.farmsPool2,
+    defi: POOL_ID.defi,
+    puzzle: POOL_ID.puzzle,
+  },
+  addLiquidity: {
+    farms: `${POOL_ID.farmsPool1}/addLiquidity`,
+    farms2: `${POOL_ID.farmsPool2}/addLiquidity`,
+    defi: `${POOL_ID.defi}/addLiquidity`,
+  },
+};
+
 const App: React.FC = () => (
   <Root>
     <Header />
@@ -37,36 +54,36 @@ const App: React.FC = () => (
         <Route path="/" element={<LandingModule />} />
 
         <Route
-          path="puzzle"
+          path={ROUTES.pools[POOL_ID.puzzle]}
           element={<MultiSwapInterface poolId={POOL_ID.puzzle} />}
         />
 
         <Route
-          path="defi"
+          path={ROUTES.pools[POOL_ID.defi]}
           element={<MultiSwapInterface poolId={POOL_ID.defi} />}
         />
         <Route
-          path="farms"
+          path={ROUTES.pools[POOL_ID.farmsPool1]}
           element={<MultiSwapInterface poolId={POOL_ID.farmsPool1} />}
         />
         <Route
-          path="farms2"
+          path={ROUTES.pools[POOL_ID.farmsPool2]}
           element={<MultiSwapInterface poolId={POOL_ID.farmsPool2} />}
         />
 
         <Route path="stake" element={<StakeModule />} />
 
         <Route
-          path="farms/addLiquidity"
-          element={<AddLiquidityInterface poolName="farms" />}
+          path={ROUTES.addLiquidity[POOL_ID.farmsPool1]}
+          element={<AddLiquidityInterface poolName={POOL_ID.farmsPool1} />}
         />
         <Route
-          path="farms2/addLiquidity"
-          element={<AddLiquidityInterface poolName="farms2" />}
+          path={ROUTES.addLiquidity[POOL_ID.farmsPool2]}
+          element={<AddLiquidityInterface poolName={POOL_ID.farmsPool2} />}
         />
         <Route
-          path="defi/addLiquidity"
-          element={<AddLiquidityInterface poolName="defi" />}
+          path={ROUTES.addLiquidity[POOL_ID.defi]}
+          element={<AddLiquidityInterface poolName={POOL_ID.defi} />}
         />
 
         <Route
@@ -94,6 +111,7 @@ const App: React.FC = () => (
           path="defi/invest"
           element={<InvestToPoolInterface poolName="defi" />}
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Body>
     {/*<Footer />*/}
