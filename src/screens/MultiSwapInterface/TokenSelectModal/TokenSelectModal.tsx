@@ -3,7 +3,7 @@ import useOnClickOutside from "@src/hooks/useOnClickOutside";
 import SearchInput from "@screens/MultiSwapInterface/SearchInput";
 import TokenInfo from "@screens/MultiSwapInterface/TokenSelectModal/TokenInfo";
 import Dialog from "@components/Dialog";
-import Scrollbar from "@src/Scrollbar";
+import Scrollbar from "@src/components/Scrollbar";
 import { Column } from "@src/components/Flex";
 import SizedBox from "@components/SizedBox";
 import { ITokenConfig } from "@src/constants";
