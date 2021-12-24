@@ -77,11 +77,13 @@
     "prompts": "2.4.0",
     "rc-dialog": "^8.6.0",
     "react": "^17.0.2",
+    "react-alert": "^7.0.3",
     "react-app-polyfill": "^2.0.0",
     "react-dev-utils": "^11.0.3",
     "react-dom": "^17.0.2",
     "react-ga": "^3.3.0",
     "react-notifications-component": "^3.1.0",
+    "react-popper-tooltip": "^4.3.1",
     "react-perfect-scrollbar": "^1.5.8",
     "react-refresh": "^0.8.3",
     "react-router-dom": "^6.0.2",
@@ -186,6 +188,7 @@
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
+    "@types/react-alert": "^5.2.1",
     "@types/react-notifications-component": "^3.1.1",
     "sass": "^1.43.4"
   }
