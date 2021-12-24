@@ -1,4 +1,4 @@
-import React, { createRef } from "react";
+import React, { createRef, useCallback, useState } from "react";
 import useOnClickOutside from "@src/hooks/useOnClickOutside";
 import SearchInput from "@screens/MultiSwapInterface/SearchInput";
 import TokenInfo from "@screens/MultiSwapInterface/TokenSelectModal/TokenInfo";
@@ -7,20 +7,44 @@ import Scrollbar from "@src/Scrollbar";
 import { Column } from "@src/components/Flex";
 import SizedBox from "@components/SizedBox";
 import { ITokenConfig } from "@src/constants";
-
+import _ from "lodash";
+import { observer } from "mobx-react-lite";
+import Text from "@components/Text";
 interface IProps {
   onClose: () => void;
   tokens: ITokenConfig[];
 }
 
 const TokenSelectModal: React.FC<IProps> = ({ onClose, tokens }) => {
+  const [searchValue, setSearchValue] = useState("");
+  const [debouncedState, setDebouncedState] = useState("");
+  const [filteredTokens, setFilteredTokens] = useState<
+    ITokenConfig[] | undefined
+  >(tokens);
+
+  const handleSearch = (event: any) => {
+    setSearchValue(event.target.value);
+    debounce(event.target.value);
+  };
+  const debounce = useCallback(
+    _.debounce((_searchVal: string) => {
+      setDebouncedState(_searchVal);
+      const filter = tokens.filter(
+        (v) =>
+          v.symbol.toLowerCase().includes(_searchVal.toLowerCase()) ||
+          v.name.toLowerCase().includes(_searchVal.toLowerCase())
+      );
+      setFilteredTokens(filter);
+    }, 100),
+    []
+  );
   const ref = createRef<HTMLDivElement>();
   useOnClickOutside(ref, onClose);
   return (
     <Dialog style={{ maxWidth: 360 }} onClose={onClose} title="Select a token">
       <SearchInput
-        value=""
-        onClick={() => {}}
+        value={searchValue}
+        onChange={handleSearch}
         placeholder="Search by name or ticker…"
       />
       <SizedBox height={16} />
@@ -29,13 +53,15 @@ const TokenSelectModal: React.FC<IProps> = ({ onClose, tokens }) => {
           crossAxisSize="max"
           style={{ maxHeight: 352, paddingRight: 16 }}
         >
-          {tokens.map((t) => (
-            <TokenInfo key={t.assetId} token={t} />
-          ))}
+          {filteredTokens && filteredTokens.length > 0 ? (
+            filteredTokens.map((t) => <TokenInfo key={t.assetId} token={t} />)
+          ) : (
+            <Text>No tokens found</Text>
+          )}
           <SizedBox height={16} width={16} />
         </Column>
       </Scrollbar>
     </Dialog>
   );
 };
-export default TokenSelectModal;
+export default observer(TokenSelectModal);

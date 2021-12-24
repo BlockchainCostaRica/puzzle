@@ -4,7 +4,7 @@ import { ReactComponent as SearchIcon } from "@src/assets/icons/search.svg";
 
 interface IProps extends HTMLAttributes<HTMLInputElement> {
   value?: string;
-  onChange?: () => void;
+  onChange?: (e: any) => void;
 }
 
 const Root = styled.div`
@@ -12,7 +12,6 @@ const Root = styled.div`
   border-radius: 12px;
   display: flex;
   padding: 12px;
-  //flex-direction: column;
   font-family: Roboto;
   font-style: normal;
   font-weight: normal;
@@ -32,11 +31,11 @@ const Root = styled.div`
   }
 `;
 
-const SearchInput: React.FC<IProps> = ({ value, onChange, ...rest }) => {
+const SearchInput: React.FC<IProps> = ({ value, onChange }) => {
   return (
     <Root>
       <SearchIcon />
-      <input {...rest} />
+      <input onChange={onChange} value={value} />
     </Root>
   );
 };
