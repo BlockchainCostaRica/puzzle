@@ -21,6 +21,8 @@ import {
 } from "@screens/MultiSwapInterface/MultiScreenVM";
 import { POOL_ID } from "@src/constants";
 import { Observer } from "mobx-react-lite";
+import BigNumber from "bignumber.js";
+import SwitchTokensButton from "@screens/MultiSwapInterface/SwitchTokensButton";
 
 interface IProps {
   poolId: POOL_ID;
@@ -37,12 +39,6 @@ const Root = styled.div`
   min-height: 100%;
 `;
 
-const RateText = styled.div`
-  font-size: 14px;
-  line-height: 20px;
-  color: #363870;
-`;
-
 const MultiSwapInterfaceImpl: React.FC = () => {
   const vm = useMultiSwapVM();
   return (
@@ -57,47 +53,40 @@ const MultiSwapInterfaceImpl: React.FC = () => {
               assetId={vm.assetId0}
               setAssetId={vm.setAssetId0}
             />
-            <SizedBox height={16} />
-            <Row alignItems="center" style={{ cursor: "pointer" }}>
-              <SwapIcon />
-              <SizedBox width={16} />
-              <RateText>1 WAVES = 0.76 PUZZLE</RateText>
-              <SizedBox width={16} />
-            </Row>
-            <SizedBox height={16} />
+            <SwitchTokensButton onClick={vm.switchTokens} />
             <TokenInput
               tokens={vm.pool?.tokens ?? []}
-              amount={vm.amount1}
+              amount={new BigNumber(vm.amount1)}
               assetId={vm.assetId1}
               setAssetId={vm.setAssetId1}
             />
             <SizedBox height={24} />
             <Button disabled>Insufficient WAVES balance</Button>
             <SizedBox height={16} />
-            <SwapDetailRow title="Route">
-              <Row
-                alignItems="center"
-                mainAxisSize="fit-content"
-                justifyContent="flex-end"
-              >
-                <Text>WAVES</Text>&nbsp;
-                <ArrowIcon />
-                &nbsp;
-                <Text>USDN</Text>&nbsp;
-                <ArrowIcon />
-                &nbsp;
-                <Text>PUZZLE</Text>&nbsp;
-                <ShowMoreIcon />
-              </Row>
-            </SwapDetailRow>
-            <Divider />
+            {/*<SwapDetailRow title="Route">*/}
+            {/*  <Row*/}
+            {/*    alignItems="center"*/}
+            {/*    mainAxisSize="fit-content"*/}
+            {/*    justifyContent="flex-end"*/}
+            {/*  >*/}
+            {/*    <Text>WAVES</Text>&nbsp;*/}
+            {/*    <ArrowIcon />*/}
+            {/*    &nbsp;*/}
+            {/*    <Text>USDN</Text>&nbsp;*/}
+            {/*    <ArrowIcon />*/}
+            {/*    &nbsp;*/}
+            {/*    <Text>PUZZLE</Text>&nbsp;*/}
+            {/*    <ShowMoreIcon />*/}
+            {/*  </Row>*/}
+            {/*</SwapDetailRow>*/}
+            {/*<Divider />*/}
             <SwapDetailRow title="Minimum to receive">
               <Row
                 alignItems="center"
                 mainAxisSize="fit-content"
                 justifyContent="flex-end"
               >
-                75.32 PUZZLE&nbsp;
+                {vm.minimumToReceive} {vm.token1?.symbol}&nbsp;
                 <Tooltip content="Объемный текст в котором подробно рассказано о происходящем на экране">
                   <InfoIcon />
                 </Tooltip>
