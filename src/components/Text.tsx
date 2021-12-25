@@ -20,7 +20,7 @@ const Text = styled.div<{
         case "medium":
           return "font-size: 14px; line-height: 20px;";
         case "large":
-          return "font-size: 14px; line-height: 20px;";
+          return "font-size: 32px;line-height: 40px;";
         default:
           return "font-size: 16px; line-height: 24px;";
       }
