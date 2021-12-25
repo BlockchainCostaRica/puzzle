@@ -4,7 +4,7 @@ import { ProviderWeb } from "@waves.exchange/provider-web";
 import { ProviderCloud } from "@waves.exchange/provider-cloud";
 import { ProviderKeeper } from "@waves/provider-keeper";
 import { NODE_URL_MAP } from "@src/constants";
-import { action, autorun, makeAutoObservable } from "mobx";
+import { action, makeAutoObservable } from "mobx";
 import axios from "axios";
 import { IIssueParams } from "@waves/waves-transactions";
 
