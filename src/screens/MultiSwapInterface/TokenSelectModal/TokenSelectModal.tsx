@@ -53,16 +53,17 @@ const TokenSelectModal: React.FC<IProps> = ({
     onClose();
   };
 
-  const amounts = tokens.reduce<Record<string, string>>((acc, { assetId }) => {
-    const asset = balances.find((b) => b.assetId === assetId);
-    acc[assetId] =
-      asset?.balance != null
-        ? new BigNumber(asset.balance)
-            .div(Math.pow(10, asset.decimals ?? 8))
-            .toFormat(2)
-        : "0.00";
-    return acc;
-  }, {});
+  const amounts = tokens.reduce<Record<string, BigNumber>>(
+    (acc, { assetId }) => {
+      const asset = balances.find((b) => b.assetId === assetId);
+      acc[assetId] =
+        asset?.balance != null
+          ? new BigNumber(asset.balance).div(Math.pow(10, asset.decimals ?? 8))
+          : new BigNumber(0);
+      return acc;
+    },
+    {}
+  );
 
   return (
     <Dialog
@@ -83,14 +84,21 @@ const TokenSelectModal: React.FC<IProps> = ({
           style={{ maxHeight: 352, paddingRight: 16 }}
         >
           {filteredTokens && filteredTokens.length > 0 ? (
-            filteredTokens.map((t) => (
-              <TokenInfo
-                amount={amounts[t.assetId]}
-                onClick={() => handleTokenSelect(t.assetId)}
-                key={t.assetId}
-                token={t}
-              />
-            ))
+            filteredTokens
+              .slice()
+              .sort((a, b) => {
+                const amountA = amounts[a.assetId];
+                const amountB = amounts[b.assetId];
+                return amountA.lt(amountB) ? 1 : -1;
+              })
+              .map((t) => (
+                <TokenInfo
+                  amount={amounts[t.assetId].toFormat(2)}
+                  onClick={() => handleTokenSelect(t.assetId)}
+                  key={t.assetId}
+                  token={t}
+                />
+              ))
           ) : (
             <Text>No tokens found</Text>
           )}
