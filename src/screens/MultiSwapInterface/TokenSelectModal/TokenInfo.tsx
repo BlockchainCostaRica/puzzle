@@ -7,6 +7,8 @@ import Text from "@components/Text";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   token: ITokenConfig;
+  amount?: string;
+  dollarValue?: string;
 }
 
 const Root = styled.div`
@@ -49,7 +51,12 @@ const Amount = styled.div`
   display: flex;
   flex-direction: column;
 `;
-const TokenInfo: React.FC<IProps> = ({ token, ...rest }) => {
+const TokenInfo: React.FC<IProps> = ({
+  token,
+  amount,
+  dollarValue,
+  ...rest
+}) => {
   return (
     <Root {...rest}>
       <Row>
@@ -61,9 +68,9 @@ const TokenInfo: React.FC<IProps> = ({ token, ...rest }) => {
         </Column>
       </Row>
       <Column alignItems="flex-end">
-        <Amount>–</Amount>
+        <Amount>{amount ?? "–"}</Amount>
         <Text type="secondary" size="small">
-          –
+          {dollarValue ? `$ ${dollarValue}` : "–"}
         </Text>
       </Column>
     </Root>

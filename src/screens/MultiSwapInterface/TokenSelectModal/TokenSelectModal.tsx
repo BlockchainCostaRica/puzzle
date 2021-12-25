@@ -10,14 +10,22 @@ import { ITokenConfig } from "@src/constants";
 import _ from "lodash";
 import { observer } from "mobx-react-lite";
 import Text from "@components/Text";
+import { IAssetBalance } from "@stores/AccountStore";
+import BigNumber from "bignumber.js";
 
 interface IProps {
   onClose: () => void;
   tokens: ITokenConfig[];
+  balances: IAssetBalance[];
   onSelect: (assetId: string) => void;
 }
 
-const TokenSelectModal: React.FC<IProps> = ({ onClose, tokens, onSelect }) => {
+const TokenSelectModal: React.FC<IProps> = ({
+  onClose,
+  tokens,
+  balances,
+  onSelect,
+}) => {
   const [searchValue, setSearchValue] = useState<string>("");
   const [filteredTokens, setFilteredTokens] = useState<ITokenConfig[]>(tokens);
 
@@ -45,8 +53,24 @@ const TokenSelectModal: React.FC<IProps> = ({ onClose, tokens, onSelect }) => {
     onClose();
   };
 
+  const amounts = tokens.reduce<Record<string, string>>((acc, { assetId }) => {
+    const asset = balances.find((b) => b.assetId === assetId);
+    acc[assetId] =
+      asset?.balance != null
+        ? new BigNumber(asset.balance)
+            .div(Math.pow(10, asset.decimals ?? 8))
+            .toFormat(2)
+        : "0.00";
+    return acc;
+  }, {});
+
   return (
-    <Dialog style={{ maxWidth: 360 }} onClose={onClose} title="Select a token">
+    <Dialog
+      style={{ maxWidth: 360 }}
+      bodyStyle={{ minHeight: 440 }}
+      onClose={onClose}
+      title="Select a token"
+    >
       <SearchInput
         value={searchValue}
         onChange={handleSearch}
@@ -61,6 +85,7 @@ const TokenSelectModal: React.FC<IProps> = ({ onClose, tokens, onSelect }) => {
           {filteredTokens && filteredTokens.length > 0 ? (
             filteredTokens.map((t) => (
               <TokenInfo
+                amount={amounts[t.assetId]}
                 onClick={() => handleTokenSelect(t.assetId)}
                 key={t.assetId}
                 token={t}

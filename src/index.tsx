@@ -6,8 +6,20 @@ import { BrowserRouter as Router } from "react-router-dom";
 import "normalize.css";
 import { RootStore, storesContext } from "@stores";
 import "react-perfect-scrollbar/dist/css/styles.css";
+import { loadState, saveState } from "@src/utils/localStorage";
+import { autorun } from "mobx";
 
-const mobxStore = new RootStore();
+const initState = loadState();
+
+const mobxStore = new RootStore(initState);
+autorun(
+  () => {
+    console.dir(mobxStore);
+    saveState(mobxStore.serialize());
+  },
+  { delay: 1000 }
+);
+
 //todo add ReactGA support
 // const trackingId = "G-W203LN8Q6R";
 // ReactGA.initialize(trackingId);

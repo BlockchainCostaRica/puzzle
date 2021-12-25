@@ -6,9 +6,12 @@ import BigNumber from "bignumber.js";
 import TokenSelectModal from "@screens/MultiSwapInterface/TokenSelectModal/TokenSelectModal";
 import { ITokenConfig } from "@src/constants";
 import Text from "@components/Text";
+import { IAssetBalance } from "@stores/AccountStore";
+import { observer } from "mobx-react-lite";
 
 interface IProps {
   tokens: ITokenConfig[];
+  balances?: IAssetBalance[];
 
   assetId: string;
   setAssetId: (assetId: string) => void;
@@ -16,7 +19,6 @@ interface IProps {
   amount: BigNumber;
   setAmount?: (amount: BigNumber) => void;
 
-  dollarValue?: BigNumber;
   onMaxClick?: () => void;
 }
 
@@ -71,27 +73,40 @@ const TokenInput: React.FC<IProps> = (props) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) =>
     props.setAmount && props.setAmount(new BigNumber(e.target.value));
+
+  const assetBalance = props.balances?.find(
+    ({ assetId }) => assetId === props.assetId
+  );
+
+  const balance = assetBalance?.balance
+    ? new BigNumber(assetBalance.balance)
+        .div(Math.pow(10, assetBalance.decimals))
+        .toFormat(2)
+    : "–";
+
   return (
     <Root>
       <TokenSelect
         token={props.tokens.find(({ assetId }) => assetId === props.assetId)}
         onClick={() => setOpenModal(!openModal)}
+        balance={balance}
       />
       <InputContainer>
         {props.onMaxClick && <MaxButton onClick={props.onMaxClick} />}
         <Input
-          step=".00001"
           type="number"
           value={props.amount.toString()}
           onChange={handleChangeAmount}
           readOnly={!props.setAmount}
         />
         <Text type="secondary" size="small">
-          {props.dollarValue ? `$ ${props.dollarValue.toString()}}` : null}
+          –
+          {/*{props.dollarValue ? `$ ${props.dollarValue.toString()}}` : null}*/}
         </Text>
       </InputContainer>
       {openModal && (
         <TokenSelectModal
+          balances={props.balances ?? []}
           onSelect={props.setAssetId}
           tokens={props.tokens}
           onClose={() => setOpenModal(!openModal)}
@@ -100,4 +115,4 @@ const TokenInput: React.FC<IProps> = (props) => {
     </Root>
   );
 };
-export default TokenInput;
+export default observer(TokenInput);

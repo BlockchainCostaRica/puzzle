@@ -30,7 +30,7 @@ const Root = styled(Card)`
   }
 `;
 
-const Details: React.FC<IProps> = ({ volume, liquidity, poolId }) => {
+const Details: React.FC<IProps> = ({ volume, liquidity }) => {
   return (
     <Root>
       <Row alignItems="center">
@@ -52,13 +52,6 @@ const Details: React.FC<IProps> = ({ volume, liquidity, poolId }) => {
           Invest
         </Button>
       </Link>
-      {/*{poolId in ROUTES.addLiquidity && (*/}
-      {/*  <Link to={(ROUTES.addLiquidity as any)[poolId] ?? "/"}>*/}
-      {/*    <Button className="button" kind="secondary">*/}
-      {/*      Invest*/}
-      {/*    </Button>*/}
-      {/*  </Link>*/}
-      {/*)}*/}
     </Root>
   );
 };

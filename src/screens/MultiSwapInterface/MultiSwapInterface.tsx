@@ -16,10 +16,11 @@ import {
   useMultiSwapVM,
 } from "@screens/MultiSwapInterface/MultiScreenVM";
 import { POOL_ID } from "@src/constants";
-import { Observer } from "mobx-react-lite";
+import { Observer, useObserver } from "mobx-react-lite";
 import BigNumber from "bignumber.js";
 import SwitchTokensButton from "@screens/MultiSwapInterface/SwitchTokensButton";
 import Text from "@components/Text";
+import { useStores } from "@stores";
 
 interface IProps {
   poolId: POOL_ID;
@@ -38,6 +39,12 @@ const Root = styled.div`
 
 const MultiSwapInterfaceImpl: React.FC = () => {
   const vm = useMultiSwapVM();
+  const { accountStore } = useStores();
+  const balances = useObserver(() =>
+    accountStore.assetBalances.filter(({ assetId }) =>
+      vm.pool?.tokens.some((t) => t.assetId === assetId)
+    )
+  );
   return (
     <Observer>
       {() => (
@@ -49,6 +56,7 @@ const MultiSwapInterfaceImpl: React.FC = () => {
               setAmount={vm.setAmount0}
               assetId={vm.assetId0}
               setAssetId={vm.setAssetId0}
+              balances={balances}
             />
             <SwitchTokensButton onClick={vm.switchTokens} />
             <TokenInput
@@ -56,6 +64,7 @@ const MultiSwapInterfaceImpl: React.FC = () => {
               amount={new BigNumber(vm.amount1)}
               assetId={vm.assetId1}
               setAssetId={vm.setAssetId1}
+              balances={balances}
             />
             <SizedBox height={24} />
             <Button disabled fixed>

@@ -69,8 +69,7 @@ class Pool implements IPoolConfig {
     if (globalVolumeValue?.value != null) {
       const globalVolume = new BigNumber(globalVolumeValue.value)
         .div(1e6)
-        .toFormat(2)
-        .toString();
+        .toFormat(2);
       this.setGlobalVolume(globalVolume);
     }
 
@@ -82,9 +81,8 @@ class Pool implements IPoolConfig {
       const globalLiquidity = new BigNumber(usdnBalance)
         .div(usdnToken.shareAmount)
         .div(1e6)
-        .toFormat(2)
-        .toString();
-      this.setGlobalVolume(globalLiquidity);
+        .toFormat(2);
+      this.setGlobalLiquidity(globalLiquidity);
     }
   };
 

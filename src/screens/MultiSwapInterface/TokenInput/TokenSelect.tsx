@@ -7,6 +7,7 @@ import { ITokenConfig } from "@src/constants";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   token?: ITokenConfig;
+  balance?: string;
 }
 
 const Root = styled.div`
@@ -40,7 +41,7 @@ const TokenIcon = styled.img`
   color: transparent;
 `;
 
-const TokenSelect: React.FC<IProps> = ({ token, ...rest }) => {
+const TokenSelect: React.FC<IProps> = ({ token, balance, ...rest }) => {
   return (
     <Root {...rest}>
       <Row alignItems="center">
@@ -48,7 +49,7 @@ const TokenSelect: React.FC<IProps> = ({ token, ...rest }) => {
         <SizedBox width={8} />
         <Column justifyContent="center">
           <TokenName>{token?.symbol}</TokenName>
-          <Balance>–</Balance>
+          <Balance>{balance ?? "–"}</Balance>
         </Column>
       </Row>
       <ArrowDownIcon />
