@@ -4,6 +4,7 @@ import {
   NODE_URL_MAP,
   POOL_ID,
   poolConfigs,
+  tokens,
 } from "@src/constants";
 import axios from "axios";
 import { action, makeAutoObservable } from "mobx";
@@ -21,7 +22,7 @@ class Pool implements IPoolConfig {
   public readonly name: string;
   public readonly defaultAssetId0: string;
   public readonly defaultAssetId1: string;
-  public readonly tokens: Array<ITokenConfig> = [];
+  public readonly tokens: Array<ITokenConfig & { shareAmount: number }> = [];
   public readonly id: POOL_ID;
 
   public globalVolume: string = "–";
@@ -32,9 +33,9 @@ class Pool implements IPoolConfig {
   @action.bound setGlobalLiquidity = (value: string) =>
     (this.globalLiquidity = value);
 
-  public balances: Record<string, number> = {};
-  @action.bound setBalances = (value: Record<string, number>) =>
-    (this.balances = value);
+  public liquidity: Record<string, number> = {};
+  @action.bound private setLiquidity = (value: Record<string, number>) =>
+    (this.liquidity = value);
 
   constructor(id: POOL_ID) {
     const config = poolConfigs[id];
@@ -46,12 +47,12 @@ class Pool implements IPoolConfig {
     this.defaultAssetId0 = config.defaultAssetId0;
     this.defaultAssetId1 = config.defaultAssetId1;
 
-    this.syncBalances().then();
-    setInterval(this.syncBalances, 5000);
+    this.syncLiquidity().then();
+    setInterval(this.syncLiquidity, 5000);
     makeAutoObservable(this);
   }
 
-  syncBalances = async () => {
+  @action.bound private syncLiquidity = async () => {
     const globalAttributesUrl = `${NODE_URL_MAP["W"]}/addresses/data/${this.contractAddress}?matches=global_(.*)`;
     const { data }: { data: IData[] } = await axios.get(globalAttributesUrl);
     const balances = data.reduce<Record<string, number>>(
@@ -62,7 +63,7 @@ class Pool implements IPoolConfig {
       },
       {}
     );
-    this.setBalances(balances);
+    this.setLiquidity(balances);
 
     // Math.floor(this.state.data.get("global_volume") / 1000000);
     const globalVolumeValue = data.find((v) => v.key === "global_volume");
@@ -73,13 +74,13 @@ class Pool implements IPoolConfig {
       this.setGlobalVolume(globalVolume);
     }
 
-    //global_USDN_balance / (static_USDN_weight/100)
-    const usdnAssetId = "DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p";
-    const usdnToken = this.tokens.find((t) => t.assetId === usdnAssetId);
-    const usdnBalance = this.balances[usdnAssetId];
-    if (usdnToken != null && usdnBalance != null) {
-      const globalLiquidity = new BigNumber(usdnBalance)
-        .div(usdnToken.shareAmount)
+    const usdnLiquidity = this.liquidity[tokens.USDN.assetId];
+    const shareAmount = this.tokens.find(
+      (t) => t.assetId === tokens.USDN.assetId
+    )?.shareAmount;
+    if (usdnLiquidity != null && shareAmount != null) {
+      const globalLiquidity = new BigNumber(usdnLiquidity)
+        .div(shareAmount)
         .div(1e6)
         .toFormat(2);
       this.setGlobalLiquidity(globalLiquidity);

@@ -3,25 +3,21 @@ import { Signer } from "@waves/signer";
 import { ProviderWeb } from "@waves.exchange/provider-web";
 import { ProviderCloud } from "@waves.exchange/provider-cloud";
 import { ProviderKeeper } from "@waves/provider-keeper";
-import { NODE_URL_MAP } from "@src/constants";
+import { ITokenConfig, NODE_URL_MAP, tokens } from "@src/constants";
 import { action, makeAutoObservable } from "mobx";
 import axios from "axios";
 import { IIssueParams } from "@waves/waves-transactions";
 
-export interface IAssetBalance {
-  assetId: string;
-  name: string;
-  description?: string;
-  decimals: number;
+export interface IAssetBalance extends ITokenConfig {
   balance?: number;
 }
 
-export interface INetwork {
-  code: string;
-  server: string;
-  clientOrigin?: string;
-  matcher?: string;
-}
+// export interface INetwork {
+//   code: string;
+//   server: string;
+//   clientOrigin?: string;
+//   matcher?: string;
+// }
 
 export enum LOGIN_TYPE {
   SIGNER_SEED = "SIGNER_SEED",
@@ -41,7 +37,7 @@ export interface ISerializedAccountStore {
 interface IBalancesResponse {
   address: string;
   balances: Array<{
-    issueTransaction: IIssueParams;
+    issueTransaction?: IIssueParams;
     balance: number;
     quantity: number;
     assetId: string;
@@ -129,16 +125,15 @@ class AccountStore {
   updateAccountAssets = async () => {
     if (this.address == null) return;
     const requestUrl = `${NODE_URL_MAP["W"]}/assets/balance/${this.address}`;
-    const { data }: { data: IBalancesResponse } = await axios.get(requestUrl);
-    const assetBalances = data.balances.map(
-      ({ balance, assetId, issueTransaction }) => ({
-        balance,
-        assetId,
-        decimals: issueTransaction.decimals ?? 8,
-        description: issueTransaction.description,
-        name: issueTransaction.name,
-      })
-    );
+    const { data }: { data: IBalancesResponse } = await axios.post(requestUrl, {
+      ids: Object.values(tokens).map(({ assetId }) => assetId),
+    });
+    const assetBalances = data.balances.map(({ balance, assetId }) => {
+      const asset: ITokenConfig = Object.values(tokens).find(
+        (t) => t.assetId === assetId
+      )!;
+      return { balance, ...asset };
+    });
     this.setAssetBalances(assetBalances);
 
     //   assetDetails.data.forEach((assetDetails: any) => {

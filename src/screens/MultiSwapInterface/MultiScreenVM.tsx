@@ -35,8 +35,8 @@ class MultiSwapVM {
 
   amount0: BigNumber = new BigNumber(0);
   @action.bound setAmount0 = (amount: BigNumber) => (this.amount0 = amount);
-  get poolBalanceOfToken0() {
-    return this.pool?.balances[this.assetId0];
+  get liquidityOfToken0() {
+    return this.pool?.liquidity[this.assetId0];
   }
 
   assetId1: string = this.pool?.defaultAssetId1!;
@@ -44,8 +44,8 @@ class MultiSwapVM {
   get token1() {
     return this.pool?.tokens.find(({ assetId }) => assetId === this.assetId1);
   }
-  get poolBalanceOfToken1() {
-    return this.pool?.balances[this.assetId1];
+  get liquidityOfToken1() {
+    return this.pool?.liquidity[this.assetId1];
   }
 
   switchTokens = () => {
@@ -56,10 +56,10 @@ class MultiSwapVM {
 
   get amount1() {
     return (
-      (this.poolBalanceOfToken1! / this.token1!.decimals) *
+      (this.liquidityOfToken1! / this.token1!.decimals) *
       (1 -
-        (this.poolBalanceOfToken0! /
-          (this.poolBalanceOfToken0! +
+        (this.liquidityOfToken0! /
+          (this.liquidityOfToken0! +
             this.token0!.decimals * this.amount0.toNumber())) **
           (this.token0!.shareAmount / this.token1!.shareAmount))
     );
