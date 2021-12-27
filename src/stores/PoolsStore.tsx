@@ -28,6 +28,8 @@ export default class PoolsStore {
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
-    this.pools = Object.values(POOL_ID).map((id) => new Pool(id));
+    this.pools = Object.values(POOL_ID).map(
+      (id) => new Pool(id, this.rootStore.accountStore.chainId)
+    );
   }
 }

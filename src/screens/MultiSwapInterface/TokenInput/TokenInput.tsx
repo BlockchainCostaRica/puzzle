@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import TokenSelect from "@screens/MultiSwapInterface/TokenInput/TokenSelect";
 import MaxButton from "@components/MaxButton";
 import BigNumber from "bignumber.js";
@@ -7,7 +7,6 @@ import TokenSelectModal from "@screens/MultiSwapInterface/TokenSelectModal/Token
 import Text from "@components/Text";
 import { observer } from "mobx-react-lite";
 import Balance from "@src/entities/Balance";
-import _ from "lodash";
 
 interface IProps {
   balances: Balance[];
@@ -74,23 +73,24 @@ const Input = styled.input`
   }
 `;
 const TokenInput: React.FC<IProps> = (props) => {
-  const [value, setValue] = useState<string>(props.amount.toString());
+  // console.log(props.amount.toString());
+  // const [value, setValue] = useState<string>(props.amount.toString());
   const [openModal, setOpenModal] = useState<boolean>(false);
   const selectedAssetBalance = props.balances?.find(
     ({ assetId }) => assetId === props.assetId
   );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debounce = useCallback(
-    _.debounce((_searchVal: string) => {
-      props.setAmount && props.setAmount(new BigNumber(_searchVal));
-    }, 300),
-    []
-  );
+  // const debounce = useCallback(
+  //   _.debounce(() => {
+  //     props.setAmount && props.setAmount(new BigNumber(value));
+  //   }, 100),
+  //   [props]
+  // );
 
   const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-    debounce(e.target.value);
+    props.setAmount && props.setAmount(new BigNumber(e.target.value));
+    // debounce(e.target.value);
   };
 
   return (
@@ -104,7 +104,7 @@ const TokenInput: React.FC<IProps> = (props) => {
         {props.onMaxClick && <MaxButton onClick={props.onMaxClick} />}
         <Input
           type="number"
-          value={value}
+          value={props.amount.toString()}
           onChange={handleChangeAmount}
           readOnly={!props.setAmount}
           placeholder="0.00"

@@ -4,6 +4,7 @@ import {
   NODE_URL_MAP,
   POOL_ID,
   poolConfigs,
+  TChainId,
   tokens,
 } from "@src/constants";
 import axios from "axios";
@@ -17,6 +18,7 @@ interface IData {
 }
 
 class Pool implements IPoolConfig {
+  public readonly chainId: TChainId;
   public readonly contractAddress: string;
   public readonly baseTokenId: string;
   public readonly name: string;
@@ -37,7 +39,7 @@ class Pool implements IPoolConfig {
   @action.bound private setLiquidity = (value: Record<string, number>) =>
     (this.liquidity = value);
 
-  constructor(id: POOL_ID) {
+  constructor(id: POOL_ID, chainId: TChainId) {
     const config = poolConfigs[id];
     this.id = id;
     this.contractAddress = config.contractAddress;
@@ -46,6 +48,7 @@ class Pool implements IPoolConfig {
     this.tokens = config.tokens;
     this.defaultAssetId0 = config.defaultAssetId0;
     this.defaultAssetId1 = config.defaultAssetId1;
+    this.chainId = chainId;
 
     this.syncLiquidity().then();
     setInterval(this.syncLiquidity, 5000);
@@ -53,7 +56,9 @@ class Pool implements IPoolConfig {
   }
 
   @action.bound private syncLiquidity = async () => {
-    const globalAttributesUrl = `${NODE_URL_MAP["W"]}/addresses/data/${this.contractAddress}?matches=global_(.*)`;
+    const globalAttributesUrl = `${NODE_URL_MAP[this.chainId]}/addresses/data/${
+      this.contractAddress
+    }?matches=global_(.*)`;
     const { data }: { data: IData[] } = await axios.get(globalAttributesUrl);
     const balances = data.reduce<Record<string, number>>(
       (acc, { key, value }) => {

@@ -5,6 +5,8 @@ import LoginType from "./LoginType";
 import seed from "@src/assets/icons/seed.svg";
 import email from "@src/assets/icons/email.svg";
 import keeper from "@src/assets/icons/keeper.svg";
+import { observer } from "mobx-react-lite";
+import { useStores } from "@stores";
 
 interface IProps {
   onClose: () => void;
@@ -33,12 +35,16 @@ const LoginModal: React.FC<IProps> = ({ onClose, onLogin }) => {
     onClose();
     onLogin(loginType);
   };
+  const { accountStore } = useStores();
+  const isKeeperDisabled = !accountStore.isWavesKeeperInstalled;
   return (
     <Dialog style={{ maxWidth: 360 }} onClose={onClose} title="Connect wallet">
-      {loginTypes.map((t) => (
-        <LoginType {...t} key={t.type} onClick={handleLogin(t.type)} />
-      ))}
+      {loginTypes.map((t) =>
+        t.type === LOGIN_TYPE.KEEPER && isKeeperDisabled ? null : (
+          <LoginType {...t} key={t.type} onClick={handleLogin(t.type)} />
+        )
+      )}
     </Dialog>
   );
 };
-export default LoginModal;
+export default observer(LoginModal);

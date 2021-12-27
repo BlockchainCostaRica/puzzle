@@ -4,11 +4,12 @@ import { ProviderWeb } from "@waves.exchange/provider-web";
 import { ProviderCloud } from "@waves.exchange/provider-cloud";
 import { ProviderKeeper } from "@waves/provider-keeper";
 import { ITokenConfig, NODE_URL_MAP, tokens } from "@src/constants";
-import { action, makeAutoObservable } from "mobx";
+import { action, autorun, makeAutoObservable } from "mobx";
 import BigNumber from "bignumber.js";
 import Balance from "@src/entities/Balance";
 import { errorMessage } from "@src/old_components/AuthInterface";
 import axios from "axios";
+import { getCurrentBrowser } from "@src/utils/getCurrentBrowser";
 
 export enum LOGIN_TYPE {
   SIGNER_SEED = "SIGNER_SEED",
@@ -32,6 +33,10 @@ export interface ISerializedAccountStore {
 
 class AccountStore {
   public readonly rootStore: RootStore;
+
+  chainId: "W" | "T" = "W";
+
+  isWavesKeeperInstalled = false;
 
   wallModalOpened: boolean = false;
   @action.bound setWallModalOpened = (state: boolean) =>
@@ -58,13 +63,22 @@ class AccountStore {
   constructor(rootStore: RootStore, initState?: ISerializedAccountStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
-    this.login(localStorage.getItem("authMethod") as any).then();
+    if (this.isBrowserSupportsWavesKeeper) {
+      this.setupWavesKeeper();
+    }
+    this.login(localStorage.getItem("authMethod") as any)
+      .then(this.updateAccountAssets)
+      .catch((e) => alert(e.toString()));
     // if (initState) {
     //   this.setAddress(initState.address);
     //   this.setLoginType(initState.loginType);
     // }
-    this.updateAccountAssets().then();
     setInterval(this.updateAccountAssets, 5000);
+  }
+
+  get isBrowserSupportsWavesKeeper(): boolean {
+    const browser = getCurrentBrowser();
+    return ["chrome", "firefox", "opera", "edge"].includes(browser);
   }
 
   // get fee() {
@@ -73,7 +87,6 @@ class AccountStore {
 
   login = async (loginType: LOGIN_TYPE) => {
     this.loginType = loginType;
-
     switch (loginType) {
       case LOGIN_TYPE.KEEPER:
         this.setSigner(new Signer());
@@ -85,7 +98,7 @@ class AccountStore {
         await this.signer?.setProvider(new ProviderCloud());
         break;
       case LOGIN_TYPE.SIGNER_SEED:
-        this.setSigner(new Signer({ NODE_URL: NODE_URL_MAP["W"] }));
+        this.setSigner(new Signer({ NODE_URL: NODE_URL_MAP[this.chainId] }));
         const provider = new ProviderWeb("https://waves.exchange/signer/");
         await this.signer?.setProvider(provider);
         break;
@@ -94,7 +107,7 @@ class AccountStore {
     }
     const loginData = await this.signer?.login();
     this.setAddress(loginData?.address ?? null);
-    // localStorage.setItem("authMethod", loginType);
+    localStorage.setItem("authMethod", loginType);
   };
 
   logout() {
@@ -105,6 +118,25 @@ class AccountStore {
     // localStorage.removeItem("userBalances");
     // window.location.reload();
   }
+
+  setupWavesKeeper = () => {
+    let attemptsCount = 0;
+
+    autorun(
+      (reaction) => {
+        if (attemptsCount === 2) {
+          reaction.dispose();
+          alert("keeper is not installed");
+        } else if (window["WavesKeeper"]) {
+          reaction.dispose();
+          this.isWavesKeeperInstalled = true;
+        } else {
+          attemptsCount += 1;
+        }
+      },
+      { scheduler: (run) => setInterval(run, 1000) }
+    );
+  };
 
   serialize = (): ISerializedAccountStore => ({
     address: this.address,
@@ -117,8 +149,12 @@ class AccountStore {
       return;
     }
     const ids = Object.values(tokens).map(({ assetId }) => assetId);
-    const assetsUrl = `${NODE_URL_MAP["W"]}/assets/balance/${this.address}`;
-    const wavesUrl = `${NODE_URL_MAP["W"]}/addresses/balance/details/${this.address}`;
+    const assetsUrl = `${NODE_URL_MAP[this.chainId]}/assets/balance/${
+      this.address
+    }`;
+    const wavesUrl = `${NODE_URL_MAP[this.chainId]}/addresses/balance/details/${
+      this.address
+    }`;
     const data = (
       await Promise.all([
         axios.post(assetsUrl, { ids }).then(({ data }) => data),

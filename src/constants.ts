@@ -1,4 +1,3 @@
-import duxplorerLogo from "@src/assets/tokens/duxplorer-logo.png";
 import mathLogo from "@src/assets/tokens/math-logo.png";
 import turtleLogo from "@src/assets/tokens/turtle-logo.png";
 import eggseggsLogo from "@src/assets/tokens/eggseggs-logo.jpeg";
@@ -7,7 +6,6 @@ import fomoLogo from "@src/assets/tokens/fomo-logo.jpeg";
 import mundoLogo from "@src/assets/tokens/mundo-logo.jpeg";
 import eggPointLogo from "@src/assets/tokens/eggpoint-logo.jpeg";
 import eggLogo from "@src/assets/tokens/EGG.svg";
-import usdnLogo from "@src/assets/tokens/usdn-logo.svg";
 import endoLogo from "@src/assets/tokens/endo-logo.jpeg";
 import marvinLogo from "@src/assets/tokens/marvin-logo.jpeg";
 import eggmoonLogo from "@src/assets/tokens/ido-logo.jpeg";
@@ -15,14 +13,16 @@ import streetLogo from "@src/assets/tokens/street-logo.svg";
 import kolkhozLogo from "@src/assets/tokens/kolkhoz-logo.jpeg";
 import cartelLogo from "@src/assets/tokens/cartel-logo.png";
 import cguLogo from "@src/assets/tokens/cgu-logo.png";
-import wavesLogo from "@src/assets/tokens/waves.png";
 import swopLogo from "@src/assets/tokens/SWOP.svg";
 import viresLogo from "@src/assets/tokens/VIRES.svg";
 import nsbtLogo from "@src/assets/tokens/nsbt-logo.svg";
 import ennoLogo from "@src/assets/tokens/enno-logo.svg";
 import signLogo from "@src/assets/tokens/sign-logo.svg";
-import puzzleLogo from "@src/assets/tokens/PUZZLE.svg";
+import duxplorerLogo from "@src/assets/tokens/duxplorer-logo.png";
 import usdtLogo from "@src/assets/tokens/USDT.svg";
+import puzzleLogo from "@src/assets/tokens/PUZZLE.svg";
+import wavesLogo from "@src/assets/tokens/waves.png";
+import usdnLogo from "@src/assets/tokens/usdn-logo.svg";
 
 export enum POOL_ID {
   farmsPool1 = "farms",
@@ -315,7 +315,84 @@ export const poolConfigs: Record<POOL_ID, IPoolConfig> = {
   },
 };
 
-export const NODE_URL_MAP = {
+export type TChainId = "W" | "T";
+
+export const NODE_URL_MAP: Record<TChainId, string> = {
   W: "https://wavesducks.wavesnodes.com",
   T: "https://nodes-testnet.wavesnodes.com",
 };
+
+// export const tokens: Record<string, ITokenConfig> = {
+//   PUZZLE: {
+//     assetId: "ddqVbZyTz88iWpyw1tFdsxwVKb1nnivJThi37eYEE8e",
+//     name: "PUZZLE token",
+//     symbol: "PUZZLE",
+//     decimals: 1e8,
+//     logo: puzzleLogo,
+//   },
+//   USDN: {
+//     assetId: "5fKHyu9mSxCwBcu5Ujfx1p5Uvf8kjicNsVi2gQw1zqdL",
+//     name: "USDN token",
+//     symbol: "USDN",
+//     decimals: 1e6,
+//     logo: usdnLogo,
+//   },
+//   WAVES: {
+//     assetId: "WAVES",
+//     name: "WAVES token",
+//     symbol: "WAVES",
+//     decimals: 100000000,
+//     logo: wavesLogo,
+//   },
+// };
+//
+// export const poolConfigs: Record<POOL_ID, IPoolConfig> = {
+//   [POOL_ID.farmsPool1]: {
+//     contractAddress: "3MwvyoYUQzKNQvLL24b3WyoD4EAfBxgTANQ",
+//     baseTokenId: "",
+//     name: "Farms 1",
+//     defaultAssetId0: tokens.PUZZLE.assetId,
+//     defaultAssetId1: tokens.USDN.assetId,
+//     tokens: [
+//       { ...tokens.PUZZLE, shareAmount: 0.2 },
+//       { ...tokens.USDN, shareAmount: 0.4 },
+//       { ...tokens.WAVES, shareAmount: 0.4 },
+//     ],
+//   },
+//   [POOL_ID.farmsPool2]: {
+//     contractAddress: "3MwvyoYUQzKNQvLL24b3WyoD4EAfBxgTANQ",
+//     baseTokenId: "",
+//     name: "Farms 2",
+//     defaultAssetId0: tokens.PUZZLE.assetId,
+//     defaultAssetId1: tokens.USDN.assetId,
+//     tokens: [
+//       { ...tokens.PUZZLE, shareAmount: 0.2 },
+//       { ...tokens.USDN, shareAmount: 0.4 },
+//       { ...tokens.WAVES, shareAmount: 0.4 },
+//     ],
+//   },
+//   [POOL_ID.defi]: {
+//     contractAddress: "3MwvyoYUQzKNQvLL24b3WyoD4EAfBxgTANQ",
+//     baseTokenId: "",
+//     name: "Defi",
+//     defaultAssetId0: tokens.PUZZLE.assetId,
+//     defaultAssetId1: tokens.USDN.assetId,
+//     tokens: [
+//       { ...tokens.PUZZLE, shareAmount: 0.2 },
+//       { ...tokens.USDN, shareAmount: 0.4 },
+//       { ...tokens.WAVES, shareAmount: 0.4 },
+//     ],
+//   },
+//   [POOL_ID.puzzle]: {
+//     contractAddress: "3MwvyoYUQzKNQvLL24b3WyoD4EAfBxgTANQ",
+//     baseTokenId: "",
+//     name: "Puzzle",
+//     defaultAssetId0: tokens.PUZZLE.assetId,
+//     defaultAssetId1: tokens.USDN.assetId,
+//     tokens: [
+//       { ...tokens.PUZZLE, shareAmount: 0.2 },
+//       { ...tokens.USDN, shareAmount: 0.4 },
+//       { ...tokens.WAVES, shareAmount: 0.4 },
+//     ],
+//   },
+// };

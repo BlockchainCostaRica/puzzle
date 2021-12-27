@@ -35,7 +35,11 @@ const SwapButton: React.FC<IProps> = () => {
         </Button>
       );
     case amount0 != null || token0 != null || amount1 != null || token1 != null:
-      return <Button fixed>Swap</Button>;
+      return (
+        <Button onClick={vm.swap} fixed>
+          Swap
+        </Button>
+      );
     default:
       return (
         <Button disabled fixed>

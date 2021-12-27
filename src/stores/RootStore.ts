@@ -15,10 +15,10 @@ export default class RootStore {
   public notificationStore: NotificationStore;
 
   constructor(initState?: ISerializedRootStore) {
-    this.settingsStore = new SettingsStore(this);
-    this.poolsStore = new PoolsStore(this);
-    this.accountStore = new AccountStore(this, initState?.accountStore);
     this.notificationStore = new NotificationStore(this);
+    this.accountStore = new AccountStore(this, initState?.accountStore);
+    this.poolsStore = new PoolsStore(this);
+    this.settingsStore = new SettingsStore(this);
     makeAutoObservable(this);
   }
 
