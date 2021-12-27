@@ -11,7 +11,7 @@ import { AddOneTokenInterface } from "@src/old_components/AddOneTokenInterface";
 import { InvestToPoolInterface } from "@src/old_components/InvestToPoolInterface";
 import Header from "@components/Header/Header";
 import { Column } from "@components/Flex";
-import { POOL_ID } from "@src/constants";
+import { POOL_ID, ROUTES } from "@src/constants";
 import NotFound from "@screens/NotFound";
 
 const Root = styled(Column)`
@@ -29,22 +29,6 @@ const Body = styled(Column)`
     margin-top: 56px;
   }
 `;
-
-export const ROUTES = {
-  ROOT: "/",
-  STAKE: "/stake",
-  pools: {
-    farms: POOL_ID.farmsPool1,
-    farms2: POOL_ID.farmsPool2,
-    defi: POOL_ID.defi,
-    puzzle: POOL_ID.puzzle,
-  },
-  addLiquidity: {
-    farms: `${POOL_ID.farmsPool1}/addLiquidity`,
-    farms2: `${POOL_ID.farmsPool2}/addLiquidity`,
-    defi: `${POOL_ID.defi}/addLiquidity`,
-  },
-};
 
 const App: React.FC = () => (
   <Root>

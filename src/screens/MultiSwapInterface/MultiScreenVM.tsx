@@ -62,7 +62,7 @@ class MultiSwapVM {
 
   get rate() {
     return (
-      this.pool?.currentPrice(this.assetId0, this.assetId1)?.toFormat(8) ?? "–"
+      this.pool?.currentPrice(this.assetId0, this.assetId1)?.toFormat(4) ?? "–"
     );
   }
 
@@ -89,13 +89,23 @@ class MultiSwapVM {
   }
 
   get amount1() {
+    if (
+      this.liquidityOfToken0 == null ||
+      this.liquidityOfToken1 == null ||
+      this.token1 == null ||
+      this.token0 == null
+    )
+      return 0;
     return (
-      (this.liquidityOfToken1! / this.token1!.decimals) *
-      (1 -
-        (this.liquidityOfToken0! /
-          (this.liquidityOfToken0! +
-            this.token0!.decimals * this.amount0.toNumber())) **
-          (this.token0!.shareAmount / this.token1!.shareAmount))
+      Math.floor(
+        (this.liquidityOfToken1 / this.token1.decimals) *
+          (1 -
+            (this.liquidityOfToken0 /
+              (this.liquidityOfToken0 +
+                this.token0.decimals * this.amount0.toNumber())) **
+              (this.token0.shareAmount / this.token1.shareAmount)) *
+          this.token1.decimals
+      ) / this.token1.decimals
     );
   }
   get minimumToReceive() {

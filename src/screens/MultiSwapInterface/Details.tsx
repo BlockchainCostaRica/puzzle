@@ -5,7 +5,8 @@ import { Column, Row } from "@components/Flex";
 import Text from "@components/Text";
 import Button from "@components/Button";
 import { Link } from "react-router-dom";
-import { POOL_ID } from "@src/constants";
+import { POOL_ID, ROUTES } from "@src/constants";
+import { useMultiSwapVM } from "@screens/MultiSwapInterface/MultiScreenVM";
 
 interface IProps {
   volume: string;
@@ -32,6 +33,7 @@ const Root = styled(Card)`
 `;
 
 const Details: React.FC<IProps> = ({ volume, liquidity }) => {
+  const vm = useMultiSwapVM();
   return (
     <Root>
       <Row alignItems="center">
@@ -48,11 +50,13 @@ const Details: React.FC<IProps> = ({ volume, liquidity }) => {
           <Text>$ {volume}</Text>
         </Column>
       </Row>
-      <Link to={"addLiquidity"}>
-        <Button className="button" kind="secondary">
-          Invest
-        </Button>
-      </Link>
+      {Object.keys(ROUTES.addLiquidity).find((v) => v === vm.pool?.id) && (
+        <Link to={"addLiquidity"}>
+          <Button className="button" kind="secondary">
+            Invest
+          </Button>
+        </Link>
+      )}
     </Root>
   );
 };

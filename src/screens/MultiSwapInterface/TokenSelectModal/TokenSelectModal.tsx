@@ -47,12 +47,15 @@ const TokenSelectModal: React.FC<IProps> = ({
     onSelect(assetId);
     onClose();
   };
-
-  const filteredTokens = balances.filter(
-    (v) =>
+  const filteredTokens = balances.filter((v) => {
+    if (!v || !v.symbol || !v.name) {
+      return false;
+    }
+    return (
       v.symbol.toLowerCase().includes(searchValue.toLowerCase()) ||
       v.name.toLowerCase().includes(searchValue.toLowerCase())
-  );
+    );
+  });
 
   return (
     <Dialog

@@ -3,7 +3,7 @@ import React from "react";
 import SizedBox from "@components/SizedBox";
 import TokenInput from "@screens/MultiSwapInterface/TokenInput";
 import { ReactComponent as InfoIcon } from "@src/assets/icons/info.svg";
-import { Column, Row } from "@components/Flex";
+import { Row } from "@components/Flex";
 import SwapDetailRow from "@components/SwapDetailRow";
 import Divider from "@src/components/Divider";
 import CashbackLabel from "@components/CashbackLabel";
@@ -20,6 +20,7 @@ import BigNumber from "bignumber.js";
 import SwitchTokensButton from "@screens/MultiSwapInterface/SwitchTokensButton";
 import Text from "@components/Text";
 import SwapButton from "@screens/MultiSwapInterface/SwapButton";
+import TooltipFeeInfo from "@screens/MultiSwapInterface/TooltipFeeInfo";
 
 interface IProps {
   poolId: POOL_ID;
@@ -88,12 +89,19 @@ const MultiSwapInterfaceImpl: React.FC = () => {
                 <Text>
                   {vm.minimumToReceive ?? "0"} {vm.token1?.symbol}&nbsp;
                 </Text>
-                <Tooltip
-                  content={<TooltipInfo />}
-                  config={{ placement: "top", trigger: "click" }}
-                >
-                  <InfoIcon />
-                </Tooltip>
+                {vm.token0 && !vm.amount0.isNaN() && (
+                  <Tooltip
+                    content={
+                      <TooltipFeeInfo
+                        symbol={vm.token0.symbol}
+                        amount={vm.amount0}
+                      />
+                    }
+                    config={{ placement: "top", trigger: "click" }}
+                  >
+                    <InfoIcon />
+                  </Tooltip>
+                )}
               </Row>
             </SwapDetailRow>
             {vm.cashback && (
@@ -123,17 +131,3 @@ const MultiSwapInterface: React.FC<IProps> = ({ poolId }) => (
   </MultiSwapVMProvider>
 );
 export default MultiSwapInterface;
-
-const TooltipInfo = () => (
-  <Column>
-    <Text>
-      Protocol fee (0.8%): <span style={{ color: "#8082C5" }}>80 USDN</span>
-    </Text>
-    <Text>
-      LP fee (1.2%): <span style={{ color: "#8082C5" }}>120 USDN</span>
-    </Text>
-    <Text>
-      Price impact: <span style={{ color: "#8082C5" }}>0.02%</span>
-    </Text>
-  </Column>
-);

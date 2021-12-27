@@ -92,17 +92,21 @@ const Header: React.FC<IProps> = () => {
   const [mobileMenuOpened, setMobileMenuOpened] = useState(false);
   const [bannerClosed, setBannerClosed] = useState(false);
   const location = useLocation();
-  const toggleMenu = () => {
-    document.body.classList.toggle("noscroll");
-    setMobileMenuOpened((prev) => !prev);
+  const toggleMenu = (state: boolean) => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    document.body.classList.toggle("noscroll", state);
+    setMobileMenuOpened(state);
   };
+
   return (
     <Root>
-      {mobileMenuOpened && (
-        <Mobile>
-          <MobileMenu {...{ bannerClosed }} />
-        </Mobile>
-      )}
+      <Mobile>
+        <MobileMenu
+          opened={mobileMenuOpened}
+          onClose={() => toggleMenu(false)}
+          {...{ bannerClosed }}
+        />
+      </Mobile>
       <Banner closed={bannerClosed} setClosed={setBannerClosed} />
 
       <TopMenu>
@@ -125,7 +129,7 @@ const Header: React.FC<IProps> = () => {
         </Row>
         <Mobile>
           <img
-            onClick={toggleMenu}
+            onClick={() => toggleMenu(!mobileMenuOpened)}
             className="icon"
             src={mobileMenuOpened ? closeIcon : mobileMenuIcon}
             alt="menuControl"

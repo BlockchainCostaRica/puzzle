@@ -48,6 +48,22 @@ export interface IPoolConfig {
   tokens: Array<ITokenConfig & { shareAmount: number }>;
 }
 
+export const ROUTES = {
+  ROOT: "/",
+  STAKE: "/stake",
+  pools: {
+    farms: POOL_ID.farmsPool1,
+    farms2: POOL_ID.farmsPool2,
+    defi: POOL_ID.defi,
+    puzzle: POOL_ID.puzzle,
+  },
+  addLiquidity: {
+    farms: `${POOL_ID.farmsPool1}/addLiquidity`,
+    farms2: `${POOL_ID.farmsPool2}/addLiquidity`,
+    defi: `${POOL_ID.defi}/addLiquidity`,
+  },
+};
+
 export const tokens: Record<string, ITokenConfig> = {
   DUXPLORER: {
     assetId: "EfdcPXw7o7rrrPWmMBr2sa66Dk95n56622ngujbaGhye",
@@ -240,7 +256,7 @@ export const poolConfigs: Record<POOL_ID, IPoolConfig> = {
       { ...tokens.MATH, shareAmount: 0.1 },
       { ...tokens.TURTLE, shareAmount: 0.1 },
       { ...tokens.EGGSEGGS, shareAmount: 0.1 },
-      { ...tokens.PESOLATIN, shareAmount: 0.1 },
+      { ...tokens.PESOLATINO, shareAmount: 0.1 },
       { ...tokens.FOMO, shareAmount: 0.1 },
       { ...tokens.MUNDO, shareAmount: 0.1 },
       { ...tokens.EGGPOINT, shareAmount: 0.1 },
