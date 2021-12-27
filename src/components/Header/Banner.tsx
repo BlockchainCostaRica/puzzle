@@ -48,6 +48,9 @@ const StyledLink = styled(Link)`
   font-weight: 500;
   color: #fff;
   padding: 0;
+  :hover {
+    color: #c6c9f4;
+  }
 `;
 
 const Banner: React.FC<IProps> = ({ closed, setClosed }) => {
