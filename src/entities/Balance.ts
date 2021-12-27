@@ -34,11 +34,11 @@ class Balance implements IAssetBalance {
       : "–";
   }
 
-  gt = (b: Balance) => {
-    if (this.usdnEquivalent == null && b.usdnEquivalent == null) return 0;
-    if (this.usdnEquivalent == null && b.usdnEquivalent != null) return 1;
-    if (this.usdnEquivalent == null && b.usdnEquivalent == null) return -1;
-    return this.usdnEquivalent!.lt(b.usdnEquivalent!) ? 1 : -1;
-  };
+  // gt = (b: Balance) => {
+  //   if (this.usdnEquivalent == null && b.usdnEquivalent == null) return 0;
+  //   if (this.usdnEquivalent == null && b.usdnEquivalent != null) return 1;
+  //   if (this.usdnEquivalent == null && b.usdnEquivalent == null) return -1;
+  //   return this.usdnEquivalent!.lt(b.usdnEquivalent!) ? 1 : -1;
+  // };
 }
 export default Balance;

@@ -145,7 +145,12 @@ class AccountStore {
           ...asset,
         });
       })
-      .sort((a, b) => (a.gt(b) ? -1 : 1));
+      .sort((a, b) => {
+        if (a.usdnEquivalent == null && b.usdnEquivalent == null) return 0;
+        if (a.usdnEquivalent == null && b.usdnEquivalent != null) return 1;
+        if (a.usdnEquivalent == null && b.usdnEquivalent == null) return -1;
+        return a.usdnEquivalent!.lt(b.usdnEquivalent!) ? 1 : -1;
+      });
     this.setAssetBalances(assetBalances);
   };
 
