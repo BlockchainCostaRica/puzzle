@@ -133,7 +133,6 @@ const Header: React.FC<IProps> = () => {
         </Mobile>
         <Desktop>
           <Wallet />
-          {/*<WalletModule />*/}
         </Desktop>
       </TopMenu>
     </Root>

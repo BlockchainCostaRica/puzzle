@@ -25,7 +25,7 @@ const Body = styled(Column)`
   max-width: 1440px;
   //padding: 0 48px;
   //box-sizing: border-box;
-  @media (min-width: 1050px) {
+  @media (min-width: 880px) {
     margin-top: 56px;
   }
 `;

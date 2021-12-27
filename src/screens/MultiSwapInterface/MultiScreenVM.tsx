@@ -7,7 +7,7 @@ import BigNumber from "bignumber.js";
 import Balance from "@src/entities/Balance";
 import { errorMessage } from "@src/old_components/AuthInterface";
 
-const SLIPPAGE = 0.95; //if puzzle slippage = 0
+const SLIPPAGE = 0.98; //if puzzle slippage = 0
 const CASHBACK_PERCENT = 0.004;
 const ctx = React.createContext<MultiSwapVM | null>(null);
 

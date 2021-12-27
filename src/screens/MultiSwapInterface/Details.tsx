@@ -22,9 +22,10 @@ const Root = styled(Card)`
     padding: 22px 32px;
   }
   .button {
+    width: 100%;
     margin-top: 12px;
+    height: 40px;
     @media (min-width: 560px) {
-      height: 40px;
       max-width: 120px;
     }
   }
