@@ -41,11 +41,11 @@ class AccountStore {
   @action.bound setAssetBalances = (assetBalances: Balance[]) =>
     (this.assetBalances = assetBalances);
 
-  public address: string | null = "3P6Ksahs71SiKQgQ4qaZuFAVhqncdi2nvJQ";
+  public address: string | null = null;
   @action.bound setAddress = (address: string | null) =>
     (this.address = address);
 
-  public loginType: LOGIN_TYPE | null = LOGIN_TYPE.KEEPER;
+  public loginType: LOGIN_TYPE | null = null;
   @action.bound setLoginType = (loginType: LOGIN_TYPE | null) =>
     (this.loginType = loginType);
 

@@ -33,6 +33,11 @@ const Path = styled(Link)`
   font-size: 16px;
   line-height: 24px;
   color: #7075e9;
+
+  margin-left: 32px;
+  &:first-of-type {
+    margin-left: 0;
+  }
 `;
 const NotFound: React.FC<IProps> = () => {
   return (
@@ -43,12 +48,11 @@ const NotFound: React.FC<IProps> = () => {
         But there are many other useful pages
       </Text>
       <SizedBox height={32} />
-      <Row justifyContent="center">
+      <Row justifyContent="center" className="nav-links">
         {paths.map((i, index) => (
-          <>
-            {index !== 0 && <SizedBox width={32} />}
-            <Path to={i.link}>{i.title}</Path>
-          </>
+          <Path to={i.link} key={index}>
+            {i.title}
+          </Path>
         ))}
       </Row>
     </Root>
