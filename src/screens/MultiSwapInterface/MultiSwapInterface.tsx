@@ -4,7 +4,6 @@ import SizedBox from "@components/SizedBox";
 import TokenInput from "@screens/MultiSwapInterface/TokenInput";
 import { ReactComponent as InfoIcon } from "@src/assets/icons/info.svg";
 import { Column, Row } from "@components/Flex";
-import Button from "@components/Button";
 import SwapDetailRow from "@components/SwapDetailRow";
 import Divider from "@src/components/Divider";
 import CashbackLabel from "@components/CashbackLabel";
@@ -16,11 +15,11 @@ import {
   useMultiSwapVM,
 } from "@screens/MultiSwapInterface/MultiScreenVM";
 import { POOL_ID } from "@src/constants";
-import { Observer, useObserver } from "mobx-react-lite";
+import { Observer } from "mobx-react-lite";
 import BigNumber from "bignumber.js";
 import SwitchTokensButton from "@screens/MultiSwapInterface/SwitchTokensButton";
 import Text from "@components/Text";
-import { useStores } from "@stores";
+import SwapButton from "@screens/MultiSwapInterface/SwapButton";
 
 interface IProps {
   poolId: POOL_ID;
@@ -39,37 +38,28 @@ const Root = styled.div`
 
 const MultiSwapInterfaceImpl: React.FC = () => {
   const vm = useMultiSwapVM();
-  const { accountStore } = useStores();
-  const balances = useObserver(() =>
-    accountStore.assetBalances.filter(({ assetId }) =>
-      vm.pool?.tokens.some((t) => t.assetId === assetId)
-    )
-  );
   return (
     <Observer>
       {() => (
         <Root>
           <Card>
             <TokenInput
-              tokens={vm.pool?.tokens ?? []}
               amount={vm.amount0}
               setAmount={vm.setAmount0}
               assetId={vm.assetId0}
               setAssetId={vm.setAssetId0}
-              balances={balances}
+              balances={vm.balances ?? []}
+              onMaxClick={vm.amount0MaxClickFunc}
             />
-            <SwitchTokensButton onClick={vm.switchTokens} />
+            <SwitchTokensButton />
             <TokenInput
-              tokens={vm.pool?.tokens ?? []}
               amount={new BigNumber(vm.amount1)}
               assetId={vm.assetId1}
               setAssetId={vm.setAssetId1}
-              balances={balances}
+              balances={vm.balances ?? []}
             />
             <SizedBox height={24} />
-            <Button disabled fixed>
-              Insufficient WAVES balance
-            </Button>
+            <SwapButton />
             <SizedBox height={16} />
             {/*<SwapDetailRow title="Route">*/}
             {/*  <Row*/}
@@ -94,16 +84,25 @@ const MultiSwapInterfaceImpl: React.FC = () => {
                 mainAxisSize="fit-content"
                 justifyContent="flex-end"
               >
-                {vm.minimumToReceive} {vm.token1?.symbol}&nbsp;
-                <Tooltip content={<TooltipInfo />}>
+                <Text>
+                  {vm.minimumToReceive ?? "0"} {vm.token1?.symbol}&nbsp;
+                </Text>
+                <Tooltip
+                  content={<TooltipInfo />}
+                  config={{ placement: "top", trigger: "click" }}
+                >
                   <InfoIcon />
                 </Tooltip>
               </Row>
             </SwapDetailRow>
-            <Divider />
-            <SwapDetailRow style={{ marginBottom: 0 }} title="Cashback">
-              <CashbackLabel>0.26</CashbackLabel>
-            </SwapDetailRow>
+            {vm.cashback && (
+              <>
+                <Divider />
+                <SwapDetailRow style={{ marginBottom: 0 }} title="Cashback">
+                  <CashbackLabel>{vm.cashback}</CashbackLabel>
+                </SwapDetailRow>
+              </>
+            )}
           </Card>
           <SizedBox height={16} />
           <Details

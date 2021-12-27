@@ -1,10 +1,11 @@
 import styled from "@emotion/styled";
 import React from "react";
-import { TriggerType, usePopperTooltip } from "react-popper-tooltip";
+import { usePopperTooltip } from "react-popper-tooltip";
+import { Config } from "react-popper-tooltip/dist/types";
 
 interface IProps {
-  trigger?: TriggerType;
   content: string | JSX.Element;
+  config?: Config;
 }
 
 const Root = styled.div`
@@ -18,13 +19,9 @@ const Root = styled.div`
   box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.06),
     0px 16px 28px rgba(0, 0, 0, 0.07);
 `;
-const Tooltip: React.FC<IProps> = ({
-  children,
-  content,
-  trigger = "click",
-}) => {
+const Tooltip: React.FC<IProps> = ({ children, content, config }) => {
   const { getTooltipProps, setTooltipRef, setTriggerRef, visible } =
-    usePopperTooltip({ trigger, placement: "top" });
+    usePopperTooltip({ ...config });
   return (
     <div>
       <div ref={setTriggerRef} style={{ cursor: "pointer" }}>

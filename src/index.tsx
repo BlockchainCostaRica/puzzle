@@ -5,9 +5,10 @@ import App from "./App";
 import { BrowserRouter as Router } from "react-router-dom";
 import "normalize.css";
 import { RootStore, storesContext } from "@stores";
-import "react-perfect-scrollbar/dist/css/styles.css";
 import { loadState, saveState } from "@src/utils/localStorage";
 import { autorun } from "mobx";
+import "react-perfect-scrollbar/dist/css/styles.css";
+import "rc-notification/assets/index.css";
 
 const initState = loadState();
 

@@ -87,6 +87,31 @@ class Pool implements IPoolConfig {
     }
   };
 
+  currentPrice = (
+    assetId0: string,
+    assetId1: string,
+    coefficient = 0.98
+  ): BigNumber | null => {
+    if (this.tokens == null) return null;
+    const asset0 = this.tokens.find(({ assetId }) => assetId === assetId0);
+    const asset1 = this.tokens.find(({ assetId }) => assetId === assetId1);
+    if (asset0?.shareAmount == null || asset1?.shareAmount == null) return null;
+    const liquidity0 = this.liquidity[assetId0];
+    const liquidity1 = this.liquidity[assetId1];
+    if (liquidity0 == null || liquidity1 == null) return null;
+    //(Balance Out / Weight Out) / (Balance In / Weight In)
+
+    const bottomValue = new BigNumber(liquidity0)
+      .div(asset0!.decimals)
+      .div(asset0!.shareAmount);
+
+    const topValue = new BigNumber(liquidity1)
+      .div(asset1!.decimals)
+      .div(asset1!.shareAmount);
+
+    return topValue.div(bottomValue).times(coefficient);
+  };
+
   // updateTokens = async () => {
   //   const staticAttributesUrl = `https://wavesducks.wavesnodes.com/addresses/data/${this.contractAddress}?matches=static_(.*)`;
   //   const { data }: { data: IData[] } = await axios.get(staticAttributesUrl);

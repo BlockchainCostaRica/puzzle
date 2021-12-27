@@ -1,7 +1,8 @@
 import { RootStore } from "./index";
 import { makeAutoObservable } from "mobx";
 import Pool from "@src/entities/Pool";
-import { ITokenConfig, POOL_ID } from "@src/constants";
+import { POOL_ID, tokens } from "@src/constants";
+import BigNumber from "bignumber.js";
 
 export default class PoolsStore {
   public rootStore: RootStore;
@@ -16,25 +17,12 @@ export default class PoolsStore {
     );
   }
 
-  get tokens(): Array<ITokenConfig & { shareAmount: number }> {
-    return this.pools.reduce<Array<ITokenConfig & { shareAmount: number }>>(
-      (acc, pool) => ({ ...acc, ...pool.tokens }),
-      []
+  usdtRate = (assetId: string, coefficient = 0.98): BigNumber | null => {
+    const pool = this.pools.find(({ tokens }) =>
+      tokens.some((t) => t.assetId === assetId)
     );
-  }
-
-  currentPrice = (assetId0: string, assetId1: string, coefficient = 0.98) => {
-    const asset0 = this.tokens.find(({ assetId }) => assetId === assetId0);
-    const asset1 = this.tokens.find(({ assetId }) => assetId === assetId1);
-    const liquidity0 = this.liquidity[assetId0];
-    const liquidity1 = this.liquidity[assetId1];
-    return [asset0, asset1, liquidity0, liquidity1].every((v) => v != null)
-      ? Math.round(
-          (coefficient *
-            (1e4 * (liquidity0 / asset0!.shareAmount / asset0!.decimals))) /
-            (1e4 * (liquidity1 / asset1!.shareAmount / asset1!.decimals))
-        ) / 1e4
-      : 0;
+    if (pool == null) return null;
+    return pool.currentPrice(assetId, tokens.USDN.assetId, coefficient);
   };
 
   constructor(rootStore: RootStore) {

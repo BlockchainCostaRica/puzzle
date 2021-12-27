@@ -5,19 +5,10 @@ import { ProviderCloud } from "@waves.exchange/provider-cloud";
 import { ProviderKeeper } from "@waves/provider-keeper";
 import { ITokenConfig, NODE_URL_MAP, tokens } from "@src/constants";
 import { action, makeAutoObservable } from "mobx";
+import BigNumber from "bignumber.js";
+import Balance from "@src/entities/Balance";
+import { errorMessage } from "@src/old_components/AuthInterface";
 import axios from "axios";
-import { IIssueParams } from "@waves/waves-transactions";
-
-export interface IAssetBalance extends ITokenConfig {
-  balance?: number;
-}
-
-// export interface INetwork {
-//   code: string;
-//   server: string;
-//   clientOrigin?: string;
-//   matcher?: string;
-// }
 
 export enum LOGIN_TYPE {
   SIGNER_SEED = "SIGNER_SEED",
@@ -25,45 +16,41 @@ export enum LOGIN_TYPE {
   KEEPER = "KEEPER",
 }
 
-// const defaultAssets: IAsset[] = [
-//   { name: "WAVES", assetId: "WAVES", decimals: 8 },
-// ];
-//
+export interface IInvokeTxParams {
+  dApp: string;
+  payment: Array<{ assetId: string; amount: string }>;
+  call: {
+    function: string;
+    args: Array<{ type: "integer" | "string"; value: string }>;
+  };
+}
+
 export interface ISerializedAccountStore {
   address: string | null;
   loginType: LOGIN_TYPE | null;
 }
 
-interface IBalancesResponse {
-  address: string;
-  balances: Array<{
-    issueTransaction?: IIssueParams;
-    balance: number;
-    quantity: number;
-    assetId: string;
-  }>;
-}
-
 class AccountStore {
   public readonly rootStore: RootStore;
 
-  public assetBalances: IAssetBalance[] = [];
-  @action.bound setAssetBalances = (assetBalances: IAssetBalance[]) =>
+  wallModalOpened: boolean = false;
+  @action.bound setWallModalOpened = (state: boolean) =>
+    (this.wallModalOpened = state);
+
+  public assetBalances: Balance[] = [];
+  @action.bound setAssetBalances = (assetBalances: Balance[]) =>
     (this.assetBalances = assetBalances);
 
-  public address: string | null = null;
+  public address: string | null = "3P6Ksahs71SiKQgQ4qaZuFAVhqncdi2nvJQ";
   @action.bound setAddress = (address: string | null) =>
     (this.address = address);
 
-  public loginType: LOGIN_TYPE | null = null;
+  public loginType: LOGIN_TYPE | null = LOGIN_TYPE.KEEPER;
   @action.bound setLoginType = (loginType: LOGIN_TYPE | null) =>
     (this.loginType = loginType);
 
   public signer: Signer | null = null;
   @action.bound setSigner = (signer: Signer | null) => (this.signer = signer);
-
-  getAssetBalanceById = (assetId: string) =>
-    this.assetBalances.find((asset) => assetId === asset.assetId);
 
   // public scripted = false;
   // public network: INetwork | null = null;
@@ -71,11 +58,11 @@ class AccountStore {
   constructor(rootStore: RootStore, initState?: ISerializedAccountStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
-    // this.login(localStorage.getItem("authMethod") as any).then();
-    if (initState) {
-      this.setAddress(initState.address);
-      this.setLoginType(initState.loginType);
-    }
+    this.login(localStorage.getItem("authMethod") as any).then();
+    // if (initState) {
+    //   this.setAddress(initState.address);
+    //   this.setLoginType(initState.loginType);
+    // }
     this.updateAccountAssets().then();
     setInterval(this.updateAccountAssets, 5000);
   }
@@ -107,14 +94,16 @@ class AccountStore {
     }
     const loginData = await this.signer?.login();
     this.setAddress(loginData?.address ?? null);
-    localStorage.setItem("authMethod", loginType);
+    // localStorage.setItem("authMethod", loginType);
   };
 
   logout() {
-    localStorage.removeItem("authMethod");
+    this.setAddress(null);
+    this.setLoginType(null);
+    // localStorage.removeItem("authMethod");
     // localStorage.removeItem("userAddress");
     // localStorage.removeItem("userBalances");
-    window.location.reload();
+    // window.location.reload();
   }
 
   serialize = (): ISerializedAccountStore => ({
@@ -123,46 +112,80 @@ class AccountStore {
   });
 
   updateAccountAssets = async () => {
-    if (this.address == null) return;
-    const requestUrl = `${NODE_URL_MAP["W"]}/assets/balance/${this.address}`;
-    const { data }: { data: IBalancesResponse } = await axios.post(requestUrl, {
-      ids: Object.values(tokens).map(({ assetId }) => assetId),
-    });
-    const assetBalances = data.balances.map(({ balance, assetId }) => {
-      const asset: ITokenConfig = Object.values(tokens).find(
-        (t) => t.assetId === assetId
-      )!;
-      return { balance, ...asset };
-    });
+    if (this.address == null) {
+      this.setAssetBalances([]);
+      return;
+    }
+    const ids = Object.values(tokens).map(({ assetId }) => assetId);
+    const assetsUrl = `${NODE_URL_MAP["W"]}/assets/balance/${this.address}`;
+    const wavesUrl = `${NODE_URL_MAP["W"]}/addresses/balance/details/${this.address}`;
+    const data = (
+      await Promise.all([
+        axios.post(assetsUrl, { ids }).then(({ data }) => data),
+        axios.get(wavesUrl).then(({ data }) => ({
+          balances: [{ balance: data.regular, assetId: "WAVES" }],
+        })),
+      ])
+    ).reduce<{ assetId: string; balance: number }[]>(
+      (acc, { balances }) => [...acc, ...balances],
+      []
+    );
+    const assetBalances = data
+      .map(({ balance: numberBalance, assetId }) => {
+        const balance = new BigNumber(numberBalance ?? 0);
+        const asset: ITokenConfig = Object.values(tokens).find(
+          (t) => t.assetId === assetId
+        )!;
+        const rate = this.rootStore.poolsStore.usdtRate(assetId, 1);
+        return new Balance({
+          balance,
+          usdnEquivalent: rate
+            ? rate.times(balance.div(asset.decimals))
+            : undefined,
+          ...asset,
+        });
+      })
+      .sort((a, b) => (a.gt(b) ? -1 : 1));
     this.setAssetBalances(assetBalances);
+  };
 
-    //   assetDetails.data.forEach((assetDetails: any) => {
-    //     assets.balances
-    //       .filter((x) => x.assetId === assetDetails.assetId)
-    //       .forEach((x) => {
-    //         x.issueTransaction = {
-    //           name: assetDetails.name,
-    //           decimals: assetDetails.decimals,
-    //         };
-    //       });
-    //   });
-    // }
-    //
-    // if (
-    //   "balances" in assets &&
-    //   !assets.balances.some((x) => x.issueTransaction === null)
-    // ) {
-    //   this.rootStore.accountStore.assets = {
-    //     WAVES: { name: "WAVES", assetId: "WAVES", decimals: 8 },
-    //     ...assets.balances.reduce(
-    //       (acc, { assetId, issueTransaction: { name, decimals } }) => ({
-    //         ...acc,
-    //         [assetId]: { assetId, name, decimals },
-    //       }),
-    //       {}
-    //     ),
-    //   };
-    // }
+  public invoke = async (txParams: IInvokeTxParams) =>
+    this.loginType === LOGIN_TYPE.KEEPER
+      ? this.invokeWithKeeper(txParams)
+      : this.invokeWithSigner(txParams);
+
+  private invokeWithSigner = async (txParams: IInvokeTxParams) => {
+    if (this.signer == null) {
+      errorMessage("You need login firstly");
+      return;
+    }
+    const ttx = this.signer.invoke({
+      dApp: txParams.dApp,
+      fee: 500000,
+      payment: txParams.payment,
+      call: txParams.call,
+    });
+    const tx = await ttx.broadcast();
+    console.log(tx);
+    return tx;
+    // .then((tx: any) => handleExchangePromise(tx))
+    // .catch((error: any) => handleExchangeError(error));
+  };
+
+  private invokeWithKeeper = async (txParams: IInvokeTxParams) => {
+    const tx = await window.WavesKeeper.signAndPublishTransaction({
+      type: 16,
+      data: {
+        fee: { assetId: "WAVES", amount: 500000 },
+        dApp: txParams.dApp,
+        call: txParams.call,
+        payment: txParams.payment,
+      },
+    });
+    console.log(tx);
+    return tx;
+    // .then((tx: any) => handleExchangePromise(tx))
+    // .catch((error: any) => handleExchangeError(error));
   };
 }
 

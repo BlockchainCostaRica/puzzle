@@ -4,14 +4,12 @@ import TokenSelect from "@screens/MultiSwapInterface/TokenInput/TokenSelect";
 import MaxButton from "@components/MaxButton";
 import BigNumber from "bignumber.js";
 import TokenSelectModal from "@screens/MultiSwapInterface/TokenSelectModal/TokenSelectModal";
-import { ITokenConfig } from "@src/constants";
 import Text from "@components/Text";
-import { IAssetBalance } from "@stores/AccountStore";
 import { observer } from "mobx-react-lite";
+import Balance from "@src/entities/Balance";
 
 interface IProps {
-  tokens: ITokenConfig[];
-  balances?: IAssetBalance[];
+  balances: Balance[];
 
   assetId: string;
   setAssetId: (assetId: string) => void;
@@ -58,7 +56,7 @@ const Input = styled.input`
   background: transparent;
   outline: none;
   width: 100%;
-
+  color: #363870;
   ::-webkit-outer-spin-button,
   ::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -68,28 +66,25 @@ const Input = styled.input`
   [type="number"] {
     -moz-appearance: textfield;
   }
+  ::placeholder {
+    color: #8082c5;
+  }
 `;
 const TokenInput: React.FC<IProps> = (props) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) =>
     props.setAmount && props.setAmount(new BigNumber(e.target.value));
 
-  const assetBalance = props.balances?.find(
+  const selectedAssetBalance = props.balances?.find(
     ({ assetId }) => assetId === props.assetId
   );
-
-  const balance = assetBalance?.balance
-    ? new BigNumber(assetBalance.balance)
-        .div(Math.pow(10, assetBalance.decimals))
-        .toFormat(2)
-    : "–";
 
   return (
     <Root>
       <TokenSelect
-        token={props.tokens.find(({ assetId }) => assetId === props.assetId)}
+        token={props.balances.find(({ assetId }) => assetId === props.assetId)}
         onClick={() => setOpenModal(!openModal)}
-        balance={balance}
+        balance={selectedAssetBalance?.formatBalance}
       />
       <InputContainer>
         {props.onMaxClick && <MaxButton onClick={props.onMaxClick} />}
@@ -98,17 +93,16 @@ const TokenInput: React.FC<IProps> = (props) => {
           value={props.amount.toString()}
           onChange={handleChangeAmount}
           readOnly={!props.setAmount}
+          placeholder="0.00"
         />
-        <Text type="secondary" size="small">
-          –
-          {/*{props.dollarValue ? `$ ${props.dollarValue.toString()}}` : null}*/}
+        <Text style={{ whiteSpace: "nowrap" }} type="secondary" size="small">
+          {selectedAssetBalance?.formatUsdnEquivalent}
         </Text>
       </InputContainer>
       {openModal && (
         <TokenSelectModal
-          balances={props.balances ?? []}
           onSelect={props.setAssetId}
-          tokens={props.tokens}
+          balances={props.balances}
           onClose={() => setOpenModal(!openModal)}
         />
       )}

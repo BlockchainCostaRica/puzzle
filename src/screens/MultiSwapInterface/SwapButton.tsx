@@ -1,0 +1,47 @@
+import React from "react";
+import { useStores } from "@stores";
+import Button from "@components/Button";
+import { observer } from "mobx-react-lite";
+import { useMultiSwapVM } from "@screens/MultiSwapInterface/MultiScreenVM";
+
+interface IProps {}
+
+const SwapButton: React.FC<IProps> = () => {
+  const { accountStore } = useStores();
+  const vm = useMultiSwapVM();
+  const { amount0, balance0, token0, amount1, token1 } = vm;
+  switch (true) {
+    case accountStore.address == null:
+      return (
+        <Button onClick={() => accountStore.setWallModalOpened(true)} fixed>
+          Connect wallet
+        </Button>
+      );
+
+    case amount0 == null ||
+      token0 == null ||
+      amount1 == null ||
+      token1 == null ||
+      amount0.eq(0):
+      return (
+        <Button disabled fixed>
+          Enter an amount
+        </Button>
+      );
+    case amount0!.times(token0!.decimals).gt(balance0!):
+      return (
+        <Button disabled fixed>
+          Insufficient {`${vm.token0?.name ?? ""} `}balance
+        </Button>
+      );
+    case amount0 != null || token0 != null || amount1 != null || token1 != null:
+      return <Button fixed>Swap</Button>;
+    default:
+      return (
+        <Button disabled fixed>
+          Swap
+        </Button>
+      );
+  }
+};
+export default observer(SwapButton);

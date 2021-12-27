@@ -3,6 +3,7 @@ import React, { HTMLAttributes, useState } from "react";
 import { ReactComponent as SwapIcon } from "@src/assets/icons/swap.svg";
 import SizedBox from "@components/SizedBox";
 import Text from "@components/Text";
+import { useMultiSwapVM } from "@screens/MultiSwapInterface/MultiScreenVM";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -18,8 +19,9 @@ const Root = styled.div`
 
 const SwitchTokensButton: React.FC<IProps> = ({ ...rest }) => {
   const [switched, setSwitched] = useState(false);
-  const handleSwitch = (e: React.MouseEvent<HTMLDivElement>) => {
-    rest.onClick && rest.onClick(e);
+  const vm = useMultiSwapVM();
+  const handleSwitch = () => {
+    vm.switchTokens();
     setSwitched((v) => !v);
   };
   return (
@@ -29,7 +31,9 @@ const SwitchTokensButton: React.FC<IProps> = ({ ...rest }) => {
         style={{ transform: switched ? "rotate(360deg)" : "rotate(0)" }}
       />
       <SizedBox width={16} />
-      <Text>1 WAVES = 0.76 PUZZLE</Text>
+      <Text>
+        1 {vm.token0?.symbol} = {vm.rate} {vm.token1?.symbol}
+      </Text>
       <SizedBox width={16} />
     </Root>
   );

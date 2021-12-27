@@ -11,12 +11,6 @@ export default class SettingsStore {
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
-
-    this.language = navigator.language.includes("ru")
-      ? Language.RU
-      : Language.EN;
     makeAutoObservable(this);
   }
-
-  language: Language = Language.RU;
 }

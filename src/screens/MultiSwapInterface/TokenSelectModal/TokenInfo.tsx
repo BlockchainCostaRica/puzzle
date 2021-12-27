@@ -2,13 +2,11 @@ import styled from "@emotion/styled";
 import React, { HTMLAttributes } from "react";
 import { Column, Row } from "@src/components/Flex";
 import SizedBox from "@components/SizedBox";
-import { ITokenConfig } from "@src/constants";
 import Text from "@components/Text";
+import Balance from "@src/entities/Balance";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
-  token: ITokenConfig;
-  amount?: string;
-  dollarValue?: string;
+  token: Balance;
 }
 
 const Root = styled.div`
@@ -47,16 +45,7 @@ const Symbol = styled.div`
   color: #8082c5;
   text-transform: uppercase;
 `;
-const Amount = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-const TokenInfo: React.FC<IProps> = ({
-  token,
-  amount,
-  dollarValue,
-  ...rest
-}) => {
+const TokenInfo: React.FC<IProps> = ({ token, ...rest }) => {
   return (
     <Root {...rest}>
       <Row>
@@ -68,9 +57,9 @@ const TokenInfo: React.FC<IProps> = ({
         </Column>
       </Row>
       <Column alignItems="flex-end">
-        <Amount>{amount ?? "–"}</Amount>
-        <Text type="secondary" size="small">
-          {dollarValue ? `$ ${dollarValue}` : "–"}
+        <Text style={{ whiteSpace: "nowrap" }}>{token.formatBalance}</Text>
+        <Text style={{ whiteSpace: "nowrap" }} type="secondary" size="small">
+          {token.formatUsdnEquivalent}
         </Text>
       </Column>
     </Root>

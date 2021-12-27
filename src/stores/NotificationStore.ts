@@ -58,7 +58,6 @@ class NotificationStore {
   }
 
   notify(content: string | JSX.Element, opts: TNotifyOptions = {}) {
-    console.log(opts);
     if (opts.key) {
       this._instance.removeNotice(opts.key);
     }

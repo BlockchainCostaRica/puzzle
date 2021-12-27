@@ -6,28 +6,24 @@ import Dialog from "@components/Dialog";
 import Scrollbar from "@src/components/Scrollbar";
 import { Column } from "@src/components/Flex";
 import SizedBox from "@components/SizedBox";
-import { ITokenConfig } from "@src/constants";
 import _ from "lodash";
 import { observer } from "mobx-react-lite";
 import Text from "@components/Text";
-import { IAssetBalance } from "@stores/AccountStore";
-import BigNumber from "bignumber.js";
+import Balance from "@src/entities/Balance";
 
 interface IProps {
   onClose: () => void;
-  tokens: ITokenConfig[];
-  balances: IAssetBalance[];
+  balances: Balance[];
   onSelect: (assetId: string) => void;
 }
 
 const TokenSelectModal: React.FC<IProps> = ({
   onClose,
-  tokens,
   balances,
   onSelect,
 }) => {
   const [searchValue, setSearchValue] = useState<string>("");
-  const [filteredTokens, setFilteredTokens] = useState<ITokenConfig[]>(tokens);
+  const [filteredTokens, setFilteredTokens] = useState<Balance[]>(balances);
 
   const handleSearch = (event: any) => {
     setSearchValue(event.target.value);
@@ -36,7 +32,7 @@ const TokenSelectModal: React.FC<IProps> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounce = useCallback(
     _.debounce((_searchVal: string) => {
-      const filter = tokens.filter(
+      const filter = balances.filter(
         (v) =>
           v.symbol.toLowerCase().includes(_searchVal.toLowerCase()) ||
           v.name.toLowerCase().includes(_searchVal.toLowerCase())
@@ -52,18 +48,6 @@ const TokenSelectModal: React.FC<IProps> = ({
     onSelect(assetId);
     onClose();
   };
-
-  const amounts = tokens.reduce<Record<string, BigNumber>>(
-    (acc, { assetId }) => {
-      const asset = balances.find((b) => b.assetId === assetId);
-      acc[assetId] =
-        asset?.balance != null
-          ? new BigNumber(asset.balance).div(Math.pow(10, asset.decimals ?? 8))
-          : new BigNumber(0);
-      return acc;
-    },
-    {}
-  );
 
   return (
     <Dialog
@@ -84,21 +68,13 @@ const TokenSelectModal: React.FC<IProps> = ({
           style={{ maxHeight: 352, paddingRight: 16 }}
         >
           {filteredTokens && filteredTokens.length > 0 ? (
-            filteredTokens
-              .slice()
-              .sort((a, b) => {
-                const amountA = amounts[a.assetId];
-                const amountB = amounts[b.assetId];
-                return amountA.lt(amountB) ? 1 : -1;
-              })
-              .map((t) => (
-                <TokenInfo
-                  amount={amounts[t.assetId].toFormat(2)}
-                  onClick={() => handleTokenSelect(t.assetId)}
-                  key={t.assetId}
-                  token={t}
-                />
-              ))
+            filteredTokens.map((t) => (
+              <TokenInfo
+                onClick={() => handleTokenSelect(t.assetId)}
+                key={t.assetId}
+                token={t}
+              />
+            ))
           ) : (
             <Text>No tokens found</Text>
           )}
