@@ -52,7 +52,9 @@ class MultiSwapVM {
   }
 
   assetId1: string = this.pool?.defaultAssetId1!;
+
   @action.bound setAssetId1 = (assetId: string) => (this.assetId1 = assetId);
+
   get token1() {
     return this.pool?.tokens.find(({ assetId }) => assetId === this.assetId1);
   }

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import TokenSelect from "@screens/MultiSwapInterface/TokenInput/TokenSelect";
 import MaxButton from "@components/MaxButton";
 import BigNumber from "bignumber.js";
@@ -7,6 +7,7 @@ import TokenSelectModal from "@screens/MultiSwapInterface/TokenSelectModal/Token
 import Text from "@components/Text";
 import { observer } from "mobx-react-lite";
 import Balance from "@src/entities/Balance";
+import _ from "lodash";
 
 interface IProps {
   balances: Balance[];
@@ -57,6 +58,7 @@ const Input = styled.input`
   outline: none;
   width: 100%;
   color: #363870;
+
   ::-webkit-outer-spin-button,
   ::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -66,18 +68,30 @@ const Input = styled.input`
   [type="number"] {
     -moz-appearance: textfield;
   }
+
   ::placeholder {
     color: #8082c5;
   }
 `;
 const TokenInput: React.FC<IProps> = (props) => {
+  const [value, setValue] = useState<string>(props.amount.toString());
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) =>
-    props.setAmount && props.setAmount(new BigNumber(e.target.value));
-
   const selectedAssetBalance = props.balances?.find(
     ({ assetId }) => assetId === props.assetId
   );
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debounce = useCallback(
+    _.debounce((_searchVal: string) => {
+      props.setAmount && props.setAmount(new BigNumber(_searchVal));
+    }, 300),
+    []
+  );
+
+  const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+    debounce(e.target.value);
+  };
 
   return (
     <Root>
@@ -90,7 +104,7 @@ const TokenInput: React.FC<IProps> = (props) => {
         {props.onMaxClick && <MaxButton onClick={props.onMaxClick} />}
         <Input
           type="number"
-          value={props.amount.toString()}
+          value={value}
           onChange={handleChangeAmount}
           readOnly={!props.setAmount}
           placeholder="0.00"
