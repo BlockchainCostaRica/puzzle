@@ -1,6 +1,6 @@
 import {
   IPoolConfig,
-  ITokenConfig,
+  IToken,
   NODE_URL_MAP,
   POOL_ID,
   poolConfigs,
@@ -24,7 +24,7 @@ class Pool implements IPoolConfig {
   public readonly name: string;
   public readonly defaultAssetId0: string;
   public readonly defaultAssetId1: string;
-  public readonly tokens: Array<ITokenConfig & { shareAmount: number }> = [];
+  public readonly tokens: Array<IToken & { shareAmount: number }> = [];
   public readonly id: POOL_ID;
 
   public globalVolume: string = "–";

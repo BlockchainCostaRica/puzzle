@@ -37,38 +37,25 @@ const App: React.FC = () => (
       <Routes>
         <Route path="/" element={<LandingModule />} />
 
-        <Route
-          path={ROUTES.pools[POOL_ID.puzzle]}
-          element={<MultiSwapInterface poolId={POOL_ID.puzzle} />}
-        />
+        {/*swap routes*/}
+        {Object.entries(ROUTES.pools).map(([poolId, path]) => (
+          <Route
+            key={path}
+            path={path}
+            element={<MultiSwapInterface poolId={poolId as POOL_ID} />}
+          />
+        ))}
 
-        <Route
-          path={ROUTES.pools[POOL_ID.defi]}
-          element={<MultiSwapInterface poolId={POOL_ID.defi} />}
-        />
-        <Route
-          path={ROUTES.pools[POOL_ID.farmsPool1]}
-          element={<MultiSwapInterface poolId={POOL_ID.farmsPool1} />}
-        />
-        <Route
-          path={ROUTES.pools[POOL_ID.farmsPool2]}
-          element={<MultiSwapInterface poolId={POOL_ID.farmsPool2} />}
-        />
+        {/*add liquidity routes*/}
+        {Object.entries(ROUTES.addLiquidity).map(([poolId, path]) => (
+          <Route
+            key={path}
+            path={path}
+            element={<AddLiquidityInterface poolName={poolId as POOL_ID} />}
+          />
+        ))}
 
         <Route path="stake" element={<StakeModule />} />
-
-        <Route
-          path={ROUTES.addLiquidity[POOL_ID.farmsPool1]}
-          element={<AddLiquidityInterface poolName={POOL_ID.farmsPool1} />}
-        />
-        <Route
-          path={ROUTES.addLiquidity[POOL_ID.farmsPool2]}
-          element={<AddLiquidityInterface poolName={POOL_ID.farmsPool2} />}
-        />
-        <Route
-          path={ROUTES.addLiquidity[POOL_ID.defi]}
-          element={<AddLiquidityInterface poolName={POOL_ID.defi} />}
-        />
 
         <Route
           path="farms/addOneToken"

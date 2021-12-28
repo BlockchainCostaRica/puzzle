@@ -3,7 +3,7 @@ import { Signer } from "@waves/signer";
 import { ProviderWeb } from "@waves.exchange/provider-web";
 import { ProviderCloud } from "@waves.exchange/provider-cloud";
 import { ProviderKeeper } from "@waves/provider-keeper";
-import { ITokenConfig, NODE_URL_MAP, tokens } from "@src/constants";
+import { IToken, NODE_URL_MAP, tokens } from "@src/constants";
 import { action, autorun, makeAutoObservable } from "mobx";
 import BigNumber from "bignumber.js";
 import Balance from "@src/entities/Balance";
@@ -66,13 +66,13 @@ class AccountStore {
     if (this.isBrowserSupportsWavesKeeper) {
       this.setupWavesKeeper();
     }
-    this.login(localStorage.getItem("authMethod") as any)
-      .then(this.updateAccountAssets)
-      .catch((e) => alert(e.toString()));
-    // if (initState) {
-    //   this.setAddress(initState.address);
-    //   this.setLoginType(initState.loginType);
-    // }
+    // this.login(localStorage.getItem("authMethod") as any)
+    //   .then(this.updateAccountAssets)
+    //   .catch((e) => alert(e.toString()));
+    if (initState) {
+      this.setAddress(initState.address);
+      this.setLoginType(initState.loginType);
+    }
     setInterval(this.updateAccountAssets, 5000);
   }
 
@@ -169,7 +169,7 @@ class AccountStore {
     const assetBalances = data
       .map(({ balance: numberBalance, assetId }) => {
         const balance = new BigNumber(numberBalance ?? 0);
-        const asset: ITokenConfig = Object.values(tokens).find(
+        const asset: Omit<IToken, "logo"> = Object.values(tokens).find(
           (t) => t.assetId === assetId
         )!;
         const rate = this.rootStore.poolsStore.usdtRate(assetId, 1);
