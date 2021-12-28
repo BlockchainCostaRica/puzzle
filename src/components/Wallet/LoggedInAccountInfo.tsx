@@ -13,8 +13,8 @@ import Scrollbar from "@components/Scrollbar";
 import Divider from "../Divider";
 import copy from "copy-to-clipboard";
 import { successMessage } from "@src/old_components/AuthInterface";
-import BigNumber from "bignumber.js";
 import { observer } from "mobx-react-lite";
+import BN from "@src/utils/BN";
 
 interface IProps {}
 
@@ -137,7 +137,7 @@ const LoggedInAccountInfo: React.FC<IProps> = () => {
             {accountStore.assetBalances
               .reduce(
                 (acc, { usdnEquivalent }) => acc.plus(usdnEquivalent ?? 0),
-                new BigNumber(0)
+                BN.ZERO
               )
               .toFormat(2)}
           </Text>

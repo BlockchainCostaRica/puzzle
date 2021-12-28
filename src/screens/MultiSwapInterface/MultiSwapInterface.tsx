@@ -16,11 +16,11 @@ import {
 } from "@screens/MultiSwapInterface/MultiScreenVM";
 import { POOL_ID } from "@src/constants";
 import { Observer } from "mobx-react-lite";
-import BigNumber from "bignumber.js";
 import SwitchTokensButton from "@screens/MultiSwapInterface/SwitchTokensButton";
 import Text from "@components/Text";
 import SwapButton from "@screens/MultiSwapInterface/SwapButton";
 import TooltipFeeInfo from "@screens/MultiSwapInterface/TooltipFeeInfo";
+import BN from "@src/utils/BN";
 
 interface IProps {
   poolId: POOL_ID;
@@ -55,7 +55,7 @@ const MultiSwapInterfaceImpl: React.FC = () => {
             />
             <SwitchTokensButton />
             <TokenInput
-              amount={new BigNumber(vm.amount1)}
+              amount={new BN(vm.amount1)}
               assetId={vm.assetId1}
               setAssetId={vm.setAssetId1}
               balances={vm.balances ?? []}

@@ -9,7 +9,7 @@ import {
 } from "@src/constants";
 import axios from "axios";
 import { action, makeAutoObservable } from "mobx";
-import BigNumber from "bignumber.js";
+import BN from "@src/utils/BN";
 
 interface IData {
   key: string;
@@ -73,9 +73,7 @@ class Pool implements IPoolConfig {
     // Math.floor(this.state.data.get("global_volume") / 1000000);
     const globalVolumeValue = data.find((v) => v.key === "global_volume");
     if (globalVolumeValue?.value != null) {
-      const globalVolume = new BigNumber(globalVolumeValue.value)
-        .div(1e6)
-        .toFormat(2);
+      const globalVolume = new BN(globalVolumeValue.value).div(1e6).toFormat(2);
       this.setGlobalVolume(globalVolume);
     }
 
@@ -84,7 +82,7 @@ class Pool implements IPoolConfig {
       (t) => t.assetId === tokens.USDN.assetId
     )?.shareAmount;
     if (usdnLiquidity != null && shareAmount != null) {
-      const globalLiquidity = new BigNumber(usdnLiquidity)
+      const globalLiquidity = new BN(usdnLiquidity)
         .div(shareAmount)
         .div(1e6)
         .toFormat(2);
@@ -96,7 +94,7 @@ class Pool implements IPoolConfig {
     assetId0: string,
     assetId1: string,
     coefficient = 0.98
-  ): BigNumber | null => {
+  ): BN | null => {
     if (this.tokens == null) return null;
     const asset0 = this.tokens.find(({ assetId }) => assetId === assetId0);
     const asset1 = this.tokens.find(({ assetId }) => assetId === assetId1);
@@ -106,11 +104,11 @@ class Pool implements IPoolConfig {
     if (liquidity0 == null || liquidity1 == null) return null;
     //(Balance Out / Weight Out) / (Balance In / Weight In)
 
-    const bottomValue = new BigNumber(liquidity0)
+    const bottomValue = new BN(liquidity0)
       .div(asset0!.decimals)
       .div(asset0!.shareAmount);
 
-    const topValue = new BigNumber(liquidity1)
+    const topValue = new BN(liquidity1)
       .div(asset1!.decimals)
       .div(asset1!.shareAmount);
 

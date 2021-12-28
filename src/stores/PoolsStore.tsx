@@ -2,7 +2,7 @@ import { RootStore } from "./index";
 import { makeAutoObservable } from "mobx";
 import Pool from "@src/entities/Pool";
 import { POOL_ID, tokens } from "@src/constants";
-import BigNumber from "bignumber.js";
+import BN from "@src/utils/BN";
 
 export default class PoolsStore {
   public rootStore: RootStore;
@@ -17,7 +17,7 @@ export default class PoolsStore {
     );
   }
 
-  usdtRate = (assetId: string, coefficient = 0.98): BigNumber | null => {
+  usdtRate = (assetId: string, coefficient = 0.98): BN | null => {
     const pool = this.pools.find(({ tokens }) =>
       tokens.some((t) => t.assetId === assetId)
     );

@@ -2,11 +2,12 @@ import styled from "@emotion/styled";
 import React, { useState } from "react";
 import TokenSelect from "@screens/MultiSwapInterface/TokenInput/TokenSelect";
 import MaxButton from "@components/MaxButton";
-import BigNumber from "bignumber.js";
 import TokenSelectModal from "@screens/MultiSwapInterface/TokenSelectModal/TokenSelectModal";
 import Text from "@components/Text";
 import { observer } from "mobx-react-lite";
 import Balance from "@src/entities/Balance";
+import BN from "@src/utils/BN";
+import BigNumberInput from "@components/BigNumberInput";
 
 interface IProps {
   balances: Balance[];
@@ -14,8 +15,8 @@ interface IProps {
   assetId: string;
   setAssetId: (assetId: string) => void;
 
-  amount: BigNumber;
-  setAmount?: (amount: BigNumber) => void;
+  amount: BN;
+  setAmount?: (amount: BN) => void;
 
   onMaxClick?: () => void;
 }
@@ -73,25 +74,13 @@ const Input = styled.input`
   }
 `;
 const TokenInput: React.FC<IProps> = (props) => {
-  // console.log(props.amount.toString());
-  // const [value, setValue] = useState<string>(props.amount.toString());
   const [openModal, setOpenModal] = useState<boolean>(false);
   const selectedAssetBalance = props.balances?.find(
     ({ assetId }) => assetId === props.assetId
   );
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // const debounce = useCallback(
-  //   _.debounce(() => {
-  //     props.setAmount && props.setAmount(new BigNumber(value));
-  //   }, 100),
-  //   [props]
-  // );
-
-  const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
-    props.setAmount && props.setAmount(new BigNumber(e.target.value));
-    // debounce(e.target.value);
-  };
+  const handleChangeAmount = (value: BN) =>
+    props.setAmount && props.setAmount(value);
 
   return (
     <Root>
@@ -102,13 +91,19 @@ const TokenInput: React.FC<IProps> = (props) => {
       />
       <InputContainer>
         {props.onMaxClick && <MaxButton onClick={props.onMaxClick} />}
-        <Input
-          type="number"
-          value={props.amount.toString()}
+        <BigNumberInput
+          renderInput={() => <Input />}
+          decimals={1e8}
+          value={props.amount}
           onChange={handleChangeAmount}
-          readOnly={!props.setAmount}
-          placeholder="0.00"
         />
+        {/*<Input*/}
+        {/*  type="number"*/}
+        {/*  value={props.amount.toString()}*/}
+        {/*  onChange={handleChangeAmount}*/}
+        {/*  readOnly={!props.setAmount}*/}
+        {/*  placeholder="0.00"*/}
+        {/*/>*/}
         <Text style={{ whiteSpace: "nowrap" }} type="secondary" size="small">
           {selectedAssetBalance?.formatUsdnEquivalent}
         </Text>

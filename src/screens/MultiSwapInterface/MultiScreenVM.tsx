@@ -3,9 +3,9 @@ import { useVM } from "@src/hooks/useVM";
 import { action, makeAutoObservable } from "mobx";
 import { POOL_ID, tokens } from "@src/constants";
 import { RootStore, useStores } from "@stores";
-import BigNumber from "bignumber.js";
 import Balance from "@src/entities/Balance";
 import { errorMessage } from "@src/old_components/AuthInterface";
+import BN from "@src/utils/BN";
 
 const SLIPPAGE = 0.98; //if puzzle slippage = 0
 const CASHBACK_PERCENT = 0.004;
@@ -45,8 +45,8 @@ class MultiSwapVM {
       : undefined;
   }
 
-  amount0: BigNumber = new BigNumber(0);
-  @action.bound setAmount0 = (amount: BigNumber) => (this.amount0 = amount);
+  amount0: BN = BN.ZERO;
+  @action.bound setAmount0 = (amount: BN) => (this.amount0 = amount);
   get liquidityOfToken0() {
     return this.pool?.liquidity[this.assetId0];
   }

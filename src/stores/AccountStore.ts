@@ -5,11 +5,11 @@ import { ProviderCloud } from "@waves.exchange/provider-cloud";
 import { ProviderKeeper } from "@waves/provider-keeper";
 import { IToken, NODE_URL_MAP, tokens } from "@src/constants";
 import { action, autorun, makeAutoObservable } from "mobx";
-import BigNumber from "bignumber.js";
 import Balance from "@src/entities/Balance";
 import { errorMessage } from "@src/old_components/AuthInterface";
 import axios from "axios";
 import { getCurrentBrowser } from "@src/utils/getCurrentBrowser";
+import BN from "@src/utils/BN";
 
 export enum LOGIN_TYPE {
   SIGNER_SEED = "SIGNER_SEED",
@@ -168,7 +168,7 @@ class AccountStore {
     );
     const assetBalances = data
       .map(({ balance: numberBalance, assetId }) => {
-        const balance = new BigNumber(numberBalance ?? 0);
+        const balance = new BN(numberBalance ?? 0);
         const asset: Omit<IToken, "logo"> = Object.values(tokens).find(
           (t) => t.assetId === assetId
         )!;
