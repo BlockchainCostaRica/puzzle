@@ -3,10 +3,10 @@ import React, { HTMLAttributes } from "react";
 import SizedBox from "@components/SizedBox";
 import { Row, Column } from "@src/components/Flex";
 import { ReactComponent as ArrowDownIcon } from "@src/assets/icons/arrowDown.svg";
-import { ITokenConfig } from "@src/constants";
+import { IToken } from "@src/constants";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
-  token?: ITokenConfig;
+  token?: IToken;
   balance?: string;
 }
 

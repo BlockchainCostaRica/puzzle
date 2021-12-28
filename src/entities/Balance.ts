@@ -1,9 +1,11 @@
-import { ITokenConfig } from "@src/constants";
+import { IToken } from "@src/constants";
 import BigNumber from "bignumber.js";
+import tokenLogos from "@src/assets/tokens/tokenLogos";
 
-export interface IAssetBalance extends ITokenConfig {
+export interface IAssetBalance extends Omit<IToken, "logo"> {
   balance?: BigNumber;
   usdnEquivalent?: BigNumber;
+  logo?: string;
 }
 
 class Balance implements IAssetBalance {
@@ -11,7 +13,7 @@ class Balance implements IAssetBalance {
   public readonly name: string;
   public readonly symbol: string;
   public readonly decimals: number;
-  public readonly logo: string;
+  private readonly _logo?: string;
   public readonly balance?: BigNumber;
   public readonly usdnEquivalent?: BigNumber;
 
@@ -20,9 +22,13 @@ class Balance implements IAssetBalance {
     this.assetId = props.assetId;
     this.symbol = props.symbol;
     this.decimals = props.decimals;
-    this.logo = props.logo;
+    this._logo = props.logo;
     this.balance = props.balance;
     this.usdnEquivalent = props.usdnEquivalent;
+  }
+
+  get logo() {
+    return this._logo ?? (tokenLogos as any)[this.symbol] ?? tokenLogos.WAVES;
   }
 
   get formatBalance() {
