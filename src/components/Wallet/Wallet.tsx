@@ -24,6 +24,7 @@ const Wallet: React.FC<IProps> = () => {
       {address == null ? (
         <Button
           size="medium"
+          fixed
           onClick={() => accountStore.setWallModalOpened(true)}
         >
           Connect wallet

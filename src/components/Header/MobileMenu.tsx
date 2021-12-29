@@ -53,24 +53,20 @@ const MobileMenu: React.FC<IProps> = ({ bannerClosed, opened, onClose }) => {
     <Root {...{ bannerClosed, opened }}>
       <div className="menu-body">
         <Divider />
-        <Scrollbar style={{ marginRight: 16 }}>
+        <Scrollbar style={{ margin: 24 }}>
           <Column crossAxisSize="max" style={{ maxHeight: "50vh" }}>
-            <SizedBox width={1} height={24} />
             <LinkGroup
               onClick={onClose}
-              style={{ marginLeft: 24 }}
               title="Pools"
               links={poolsMenu}
             />
             <SizedBox height={24} />
             <LinkGroup
-              style={{ marginLeft: 24 }}
               title="Tools"
               links={toolsMenu}
             />
             <SizedBox height={24} />
             <LinkGroup
-              style={{ marginLeft: 24 }}
               title="Community"
               links={communityMenu}
             />
@@ -78,7 +74,6 @@ const MobileMenu: React.FC<IProps> = ({ bannerClosed, opened, onClose }) => {
             <Divider />
             <SizedBox height={24} />
             <Wallet />
-            <SizedBox width={1} height={24} />
           </Column>
         </Scrollbar>
       </div>
