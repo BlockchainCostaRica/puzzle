@@ -5,13 +5,15 @@ import { Column, Row } from "@components/Flex";
 import Text from "@components/Text";
 import Button from "@components/Button";
 import { Link } from "react-router-dom";
-import { POOL_ID, ROUTES } from "@src/constants";
+import { TPoolId } from "@src/constants";
 import { useMultiSwapVM } from "@screens/MultiSwapInterface/MultiScreenVM";
+import { useStores } from "@stores";
+import { observer } from "mobx-react-lite";
 
 interface IProps {
   volume: string;
   liquidity: string;
-  poolId: POOL_ID;
+  poolId: TPoolId;
 }
 
 const Root = styled(Card)`
@@ -34,6 +36,8 @@ const Root = styled(Card)`
 
 const Details: React.FC<IProps> = ({ volume, liquidity }) => {
   const vm = useMultiSwapVM();
+  const { accountStore } = useStores();
+  const { ROUTES } = accountStore;
   return (
     <Root>
       <Row alignItems="center">
@@ -60,4 +64,4 @@ const Details: React.FC<IProps> = ({ volume, liquidity }) => {
     </Root>
   );
 };
-export default Details;
+export default observer(Details);

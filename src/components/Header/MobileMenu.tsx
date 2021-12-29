@@ -4,9 +4,10 @@ import SizedBox from "@components/SizedBox";
 import LinkGroup from "@components/LinkGroup";
 import Divider from "@components/Divider";
 import Wallet from "@components/Wallet/Wallet";
-import { ROUTES } from "@src/constants";
 import Scrollbar from "@components/Scrollbar";
 import { Column } from "../Flex";
+import { observer } from "mobx-react-lite";
+import { useStores } from "@stores";
 
 interface IProps {
   onClose: () => void;
@@ -32,11 +33,6 @@ const Root = styled.div<{ bannerClosed: boolean; opened: boolean }>`
   }
 `;
 
-const poolsMenu = Object.entries(ROUTES.pools).map(([name, link]) => ({
-  name,
-  link,
-}));
-
 const toolsMenu = [
   { name: "Puzzle Explorer", link: "https://puzzlescan.com/", outer: true },
   { name: "Notifications bot", link: "https://t.me/puzzle_swap", outer: true },
@@ -49,6 +45,13 @@ const communityMenu = [
 ];
 
 const MobileMenu: React.FC<IProps> = ({ bannerClosed, opened, onClose }) => {
+  const { accountStore } = useStores();
+  const poolsMenu = Object.entries(accountStore.ROUTES.pools).map(
+    ([name, link]) => ({
+      name,
+      link,
+    })
+  );
   return (
     <Root {...{ bannerClosed, opened }}>
       <div className="menu-body">
@@ -70,4 +73,4 @@ const MobileMenu: React.FC<IProps> = ({ bannerClosed, opened, onClose }) => {
     </Root>
   );
 };
-export default MobileMenu;
+export default observer(MobileMenu);

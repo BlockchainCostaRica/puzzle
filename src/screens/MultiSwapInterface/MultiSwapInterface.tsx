@@ -14,7 +14,7 @@ import {
   MultiSwapVMProvider,
   useMultiSwapVM,
 } from "@screens/MultiSwapInterface/MultiScreenVM";
-import { POOL_ID } from "@src/constants";
+import { TPoolId } from "@src/constants";
 import { Observer } from "mobx-react-lite";
 import SwitchTokensButton from "@screens/MultiSwapInterface/SwitchTokensButton";
 import Text from "@components/Text";
@@ -23,7 +23,7 @@ import TooltipFeeInfo from "@screens/MultiSwapInterface/TooltipFeeInfo";
 import BN from "@src/utils/BN";
 
 interface IProps {
-  poolId: POOL_ID;
+  poolId: TPoolId;
 }
 
 const Root = styled.div`
