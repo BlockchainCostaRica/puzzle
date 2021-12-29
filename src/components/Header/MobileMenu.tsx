@@ -47,8 +47,8 @@ const communityMenu = [
 const MobileMenu: React.FC<IProps> = ({ bannerClosed, opened, onClose }) => {
   const { accountStore } = useStores();
   const poolsMenu = Object.entries(accountStore.ROUTES.pools).map(
-    ([name, link]) => ({
-      name,
+    ([id, link]) => ({
+      name: (accountStore.POOL_CONFIG as any)[id].name,
       link,
     })
   );
