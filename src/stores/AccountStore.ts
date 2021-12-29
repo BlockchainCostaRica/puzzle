@@ -6,7 +6,10 @@ import { ProviderKeeper } from "@waves/provider-keeper";
 import { IToken, NODE_URL_MAP, tokens } from "@src/constants";
 import { action, autorun, makeAutoObservable } from "mobx";
 import Balance from "@src/entities/Balance";
-import { errorMessage } from "@src/old_components/AuthInterface";
+import {
+  errorMessage,
+  successMessage,
+} from "@src/old_components/AuthInterface";
 import axios from "axios";
 import { getCurrentBrowser } from "@src/utils/getCurrentBrowser";
 import BN from "@src/utils/BN";
@@ -126,7 +129,8 @@ class AccountStore {
       (reaction) => {
         if (attemptsCount === 2) {
           reaction.dispose();
-          alert("keeper is not installed");
+          errorMessage("Waves Keeper is not installed");
+          // alert("keeper is not installed");
         } else if (window["WavesKeeper"]) {
           reaction.dispose();
           this.isWavesKeeperInstalled = true;

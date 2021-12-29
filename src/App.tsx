@@ -13,6 +13,7 @@ import Header from "@components/Header/Header";
 import { Column } from "@components/Flex";
 import { POOL_ID, ROUTES } from "@src/constants";
 import NotFound from "@screens/NotFound";
+import Landing from "@screens/Landing";
 
 const Root = styled(Column)`
   width: 100%;
@@ -35,7 +36,8 @@ const App: React.FC = () => (
     <Header />
     <Body>
       <Routes>
-        <Route path="/" element={<LandingModule />} />
+        {/*<Route path="/" element={<LandingModule />} />*/}
+        <Route path="/" element={<Landing />} />
 
         {/*swap routes*/}
         {Object.entries(ROUTES.pools).map(([poolId, path]) => (
