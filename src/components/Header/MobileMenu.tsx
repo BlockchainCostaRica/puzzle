@@ -55,21 +55,11 @@ const MobileMenu: React.FC<IProps> = ({ bannerClosed, opened, onClose }) => {
         <Divider />
         <Scrollbar style={{ margin: 24 }}>
           <Column crossAxisSize="max" style={{ maxHeight: "50vh" }}>
-            <LinkGroup
-              onClick={onClose}
-              title="Pools"
-              links={poolsMenu}
-            />
+            <LinkGroup onClick={onClose} title="Pools" links={poolsMenu} />
             <SizedBox height={24} />
-            <LinkGroup
-              title="Tools"
-              links={toolsMenu}
-            />
+            <LinkGroup title="Tools" links={toolsMenu} />
             <SizedBox height={24} />
-            <LinkGroup
-              title="Community"
-              links={communityMenu}
-            />
+            <LinkGroup title="Community" links={communityMenu} />
             <SizedBox height={24} />
             <Divider />
             <SizedBox height={24} />
