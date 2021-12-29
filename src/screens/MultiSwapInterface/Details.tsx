@@ -7,12 +7,7 @@ import Button from "@components/Button";
 import { Link } from "react-router-dom";
 import { POOL_ID, ROUTES } from "@src/constants";
 import { useMultiSwapVM } from "@screens/MultiSwapInterface/MultiScreenVM";
-
-interface IProps {
-  volume: string;
-  liquidity: string;
-  poolId: POOL_ID;
-}
+import { observer } from "mobx-react-lite";
 
 const Root = styled(Card)`
   display: flex;
@@ -32,8 +27,10 @@ const Root = styled(Card)`
   }
 `;
 
-const Details: React.FC<IProps> = ({ volume, liquidity }) => {
+const Details: React.FC = () => {
   const vm = useMultiSwapVM();
+  if (vm.pool == null) return null;
+  const { globalLiquidity, globalVolume, id } = vm.pool;
   return (
     <Root>
       <Row alignItems="center">
@@ -41,14 +38,16 @@ const Details: React.FC<IProps> = ({ volume, liquidity }) => {
           <Text type="secondary" size="small">
             Total liquidity
           </Text>
-          <Text>$ {liquidity}</Text>
+          <Text>$ {globalLiquidity}</Text>
         </Column>
-        <Column crossAxisSize="max">
-          <Text type="secondary" size="small">
-            24H volume
-          </Text>
-          <Text>$ {volume}</Text>
-        </Column>
+        {id !== POOL_ID.puzzle && (
+          <Column crossAxisSize="max">
+            <Text type="secondary" size="small">
+              Total volume
+            </Text>
+            {globalVolume ? <Text>$ {globalVolume}</Text> : <div />}
+          </Column>
+        )}
       </Row>
       {Object.keys(ROUTES.addLiquidity).find((v) => v === vm.pool?.id) && (
         <Link to={"addLiquidity"}>
@@ -60,4 +59,4 @@ const Details: React.FC<IProps> = ({ volume, liquidity }) => {
     </Root>
   );
 };
-export default Details;
+export default observer(Details);

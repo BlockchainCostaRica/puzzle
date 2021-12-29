@@ -2,7 +2,8 @@ import tokens from "./tokens.json";
 import tokenLogos from "@src/assets/tokens/tokenLogos";
 
 export { tokens };
-export const SLIPPAGE = 0.98; //if puzzle slippage = 0
+export const SLIPPAGE = 0.97; //if puzzle slippage = 0
+export const TRADE_FEE = 0.98;
 export const CASHBACK_PERCENT = 0.004;
 
 export enum POOL_ID {

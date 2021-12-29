@@ -32,7 +32,8 @@ const SwitchTokensButton: React.FC<IProps> = ({ ...rest }) => {
       />
       <SizedBox width={16} />
       <Text>
-        1 {vm.token0?.symbol} = ~ {vm.rate} {vm.token1?.symbol}
+        1 {vm.token0?.symbol} = ~ {vm.rate?.toFormat(4) ?? "–"}{" "}
+        {vm.token1?.symbol}
       </Text>
       <SizedBox width={16} />
     </Root>
