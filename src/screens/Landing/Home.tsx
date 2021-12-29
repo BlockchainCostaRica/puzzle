@@ -1,32 +1,62 @@
 import styled from "@emotion/styled";
 import React from "react";
-import Layout from "./Layout";
 import img from "@src/assets/landing/home-img.png";
 import trade from "@src/assets/landing/tradeIcon.svg";
 import liquidity from "@src/assets/landing/liquidityIcon.svg";
-import { Row, Column } from "@src/components/Flex";
+import { Column, Row } from "@src/components/Flex";
+import Button from "@components/Button";
 
 interface IProps {}
 
-const Root = styled(Layout)`
+const Wrapper = styled(Column)`
+  align-items: center;
+  background: #ffffff;
+  width: 100%;
+`;
+
+const Root = styled.div`
   display: flex;
   flex-direction: column;
-  background: #ffffff;
-  padding-top: 56px;
-  padding-bottom: 56px;
+  padding: 56px 16px 102px 16px;
+  box-sizing: border-box;
+  max-width: 1440px;
   @media (min-width: 880px) {
     align-items: center;
     justify-content: center;
     flex-direction: row;
-    padding: 100px 50px;
+    padding: 72px 20px;
+  }
+
+  .header-img {
+    width: 100%;
+    height: auto;
+    margin-left: -16px;
+    @media (min-width: 880px) {
+      margin-left: 40px;
+      width: 50%;
+    }
   }
 `;
+
+const TitleWrapper = styled(Column)`
+  align-items: center;
+  text-align: left;
+  width: 100%;
+  @media (min-width: 880px) {
+    max-width: 560px;
+  }
+  //mainAxisSize="stretch"
+  //style={{ maxWidth: 560 }}
+  //  alignItems="center"
+`;
+
 const Title = styled.div`
   font-weight: 500;
   font-size: 32px;
   line-height: 40px;
   color: #363870;
   padding-bottom: 16px;
+  width: 100%;
   @media (min-width: 880px) {
     font-size: 48px;
     line-height: 56px;
@@ -37,67 +67,55 @@ const Subtitle = styled.div`
   line-height: 24px;
   color: #8082c5;
   padding-bottom: 8px;
+  .dark {
+    color: #363870;
+  }
 `;
 const BtnContainer = styled(Row)`
   padding: 40px 0;
   justify-content: center;
   @media (min-width: 880px) {
+    button {
+      max-width: 144px;
+    }
     justify-content: start;
   }
 `;
-const Btn = styled.div<{ def?: boolean }>`
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 24px;
-  display: flex;
-  padding: 16px 40px;
-  justify-content: center;
-  align-items: center;
-  width: 50%;
-  @media (min-width: 880px) {
-    max-width: 144px;
-  }
-  background: ${({ def }) => (def ? "#7075E9" : "transparent")};
-  color: ${({ def }) => (def ? "#ffffff" : "#363870")};
-  border: ${({ def }) => !def && "1px solid #F1F2FE"};
-  border-radius: 12px;
-  cursor: pointer;
-`;
+
 const Icon = styled.img`
   height: 24px;
   width: 24px;
   margin-right: 8px;
 `;
-const Image = styled.img`
-  width: 100%;
-  height: auto;
-  padding-bottom: 46px;
-  @media (min-width: 880px) {
-    width: 50%;
-  }
-`;
+
 const Home: React.FC<IProps> = () => {
   return (
-    <Root>
-      <Column mainAxisSize="stretch" crossAxisSize="max">
-        <Title>Decentralized exchange of a newer generation</Title>
-        <Row>
-          <Icon src={trade} alt="trade" />
-          <Subtitle>Trade tokens in multiple mega pools</Subtitle>
-        </Row>
-        <Row>
-          <Icon src={liquidity} alt="liquidity" />
-          <Subtitle>Provide liquidity with up to X% APY</Subtitle>
-        </Row>
-        <BtnContainer>
-          <Btn def style={{ marginRight: 8 }}>
-            Invest
-          </Btn>
-          <Btn>Trade</Btn>
-        </BtnContainer>
-      </Column>
-      <Image src={img} />
-    </Root>
+    <Wrapper>
+      <Root>
+        <TitleWrapper>
+          <Title>Decentralized exchange of a newer generation</Title>
+          <Row>
+            <Icon src={trade} alt="trade" />
+            <Subtitle>Trade tokens in multiple mega pools</Subtitle>
+          </Row>
+          <Row>
+            <Icon src={liquidity} alt="liquidity" />
+            <Subtitle style={{ paddingBottom: 0 }}>
+              Provide liquidity with<span className="dark"> up to X% APY</span>
+            </Subtitle>
+          </Row>
+          <BtnContainer>
+            <Button fixed style={{ marginRight: 8 }}>
+              Invest
+            </Button>
+            <Button kind="secondary" fixed>
+              Trade
+            </Button>
+          </BtnContainer>
+        </TitleWrapper>
+        <img className="header-img" src={img} alt="puzzle" />
+      </Root>
+    </Wrapper>
   );
 };
 export default Home;

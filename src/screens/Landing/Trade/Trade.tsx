@@ -1,10 +1,9 @@
 import styled from "@emotion/styled";
 import React from "react";
-import Layout from "@screens/Landing/Layout";
 
 interface IProps {}
 
-const Root = styled(Layout)`
+const Root = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -6,10 +6,7 @@ import { ProviderKeeper } from "@waves/provider-keeper";
 import { IToken, NODE_URL_MAP, tokens } from "@src/constants";
 import { action, autorun, makeAutoObservable } from "mobx";
 import Balance from "@src/entities/Balance";
-import {
-  errorMessage,
-  successMessage,
-} from "@src/old_components/AuthInterface";
+import { errorMessage } from "@src/old_components/AuthInterface";
 import axios from "axios";
 import { getCurrentBrowser } from "@src/utils/getCurrentBrowser";
 import BN from "@src/utils/BN";
