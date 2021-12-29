@@ -5,9 +5,11 @@ import { Column, Row } from "@components/Flex";
 import Text from "@components/Text";
 import Button from "@components/Button";
 import { Link } from "react-router-dom";
-import { POOL_ID, ROUTES } from "@src/constants";
+import { TPoolId } from "@src/constants";
 import { useMultiSwapVM } from "@screens/MultiSwapInterface/MultiScreenVM";
+
 import { observer } from "mobx-react-lite";
+
 
 const Root = styled(Card)`
   display: flex;
@@ -29,8 +31,13 @@ const Root = styled(Card)`
 
 const Details: React.FC = () => {
   const vm = useMultiSwapVM();
+
   if (vm.pool == null) return null;
   const { globalLiquidity, globalVolume, id } = vm.pool;
+
+  const { accountStore } = useStores();
+  const { ROUTES } = accountStore;
+
   return (
     <Root>
       <Row alignItems="center">

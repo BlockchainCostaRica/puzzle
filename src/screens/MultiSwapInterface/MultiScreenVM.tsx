@@ -1,13 +1,7 @@
 import React, { useMemo } from "react";
 import { useVM } from "@src/hooks/useVM";
 import { action, makeAutoObservable } from "mobx";
-import {
-  CASHBACK_PERCENT,
-  POOL_ID,
-  SLIPPAGE,
-  tokens,
-  TRADE_FEE,
-} from "@src/constants";
+import { CASHBACK_PERCENT, TPoolId, SLIPPAGE, TRADE_FEE } from "@src/constants";
 import { RootStore, useStores } from "@stores";
 import Balance from "@src/entities/Balance";
 import { errorMessage } from "@src/old_components/AuthInterface";
@@ -15,7 +9,7 @@ import BN from "@src/utils/BN";
 
 const ctx = React.createContext<MultiSwapVM | null>(null);
 
-export const MultiSwapVMProvider: React.FC<{ poolId: POOL_ID }> = ({
+export const MultiSwapVMProvider: React.FC<{ poolId: TPoolId }> = ({
   poolId,
   children,
 }) => {
@@ -30,7 +24,7 @@ export const MultiSwapVMProvider: React.FC<{ poolId: POOL_ID }> = ({
 export const useMultiSwapVM = () => useVM(ctx);
 
 class MultiSwapVM {
-  constructor(private rootStore: RootStore, public readonly poolId: POOL_ID) {
+  constructor(private rootStore: RootStore, public readonly poolId: TPoolId) {
     makeAutoObservable(this);
   }
 
@@ -199,8 +193,9 @@ class MultiSwapVM {
   };
 
   get cashback() {
-    const { poolsStore } = this.rootStore;
-    const puzzlePrice = poolsStore.usdnRate(tokens.PUZZLE.assetId, 1);
+    const { poolsStore, accountStore } = this.rootStore;
+    const puzzleAssetId = accountStore.TOKENS.PUZZLE.assetId;
+    const puzzlePrice = poolsStore.usdnRate(puzzleAssetId, 1);
     const token0Price = poolsStore.usdnRate(this.assetId0, 1);
     if (puzzlePrice == null || token0Price == null) return null;
 
@@ -211,7 +206,10 @@ class MultiSwapVM {
       .div(puzzlePrice);
     return cashbackAmount.isNaN()
       ? null
-      : BN.formatUnits(cashbackAmount, tokens.PUZZLE.decimals).toFormat(4);
+      : BN.formatUnits(
+          cashbackAmount,
+          this.rootStore.accountStore.TOKENS.PUZZLE.decimals
+        ).toFormat(4);
   }
 
   get pool() {

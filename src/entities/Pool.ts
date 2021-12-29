@@ -2,11 +2,9 @@ import {
   IPoolConfig,
   IToken,
   NODE_URL_MAP,
-  POOL_ID,
-  poolConfigs,
   SLIPPAGE,
   TChainId,
-  tokens,
+  TPoolId,
 } from "@src/constants";
 import axios from "axios";
 import { action, makeAutoObservable } from "mobx";
@@ -18,6 +16,12 @@ interface IData {
   value: number;
 }
 
+interface IPoolCreationParams {
+  id: TPoolId;
+  chainId: TChainId;
+  config: IPoolConfig;
+}
+
 class Pool implements IPoolConfig {
   public readonly chainId: TChainId;
   public readonly contractAddress: string;
@@ -26,7 +30,7 @@ class Pool implements IPoolConfig {
   public readonly defaultAssetId0: string;
   public readonly defaultAssetId1: string;
   public readonly tokens: Array<IToken & { shareAmount: number }> = [];
-  public readonly id: POOL_ID;
+  public readonly id: TPoolId;
 
   public getAssetById = (assetId: string) =>
     this.tokens.find((t) => assetId === t.assetId);
@@ -43,16 +47,15 @@ class Pool implements IPoolConfig {
   @action.bound private setLiquidity = (value: Record<string, BN>) =>
     (this.liquidity = value);
 
-  constructor(id: POOL_ID, chainId: TChainId) {
-    const config = poolConfigs[id];
-    this.id = id;
-    this.contractAddress = config.contractAddress;
-    this.baseTokenId = config.baseTokenId;
-    this.name = config.name;
-    this.tokens = config.tokens;
-    this.defaultAssetId0 = config.defaultAssetId0;
-    this.defaultAssetId1 = config.defaultAssetId1;
-    this.chainId = chainId;
+  constructor(params: IPoolCreationParams) {
+    this.id = params.id;
+    this.contractAddress = params.config.contractAddress;
+    this.baseTokenId = params.config.baseTokenId;
+    this.name = params.config.name;
+    this.tokens = params.config.tokens;
+    this.defaultAssetId0 = params.config.defaultAssetId0;
+    this.defaultAssetId1 = params.config.defaultAssetId1;
+    this.chainId = params.chainId;
 
     this.syncLiquidity().then();
     setInterval(this.syncLiquidity, 5000);
@@ -77,14 +80,11 @@ class Pool implements IPoolConfig {
       const globalVolume = new BN(globalVolumeValue.value).div(1e6).toFormat(2);
       this.setGlobalVolume(globalVolume);
     }
-
-    const usdnLiquidity = this.liquidity[tokens.USDN.assetId];
-    const shareAmount = this.tokens.find(
-      (t) => t.assetId === tokens.USDN.assetId
-    )?.shareAmount;
-    if (usdnLiquidity != null && shareAmount != null) {
+    const usdnAsset = this.tokens.find(({ symbol }) => symbol === "USDN")!;
+    const usdnLiquidity = this.liquidity[usdnAsset.assetId];
+    if (usdnLiquidity != null && usdnAsset.shareAmount != null) {
       const globalLiquidity = new BN(usdnLiquidity)
-        .div(shareAmount)
+        .div(usdnAsset.shareAmount)
         .div(1e6)
         .toFormat(2);
       this.setGlobalLiquidity(globalLiquidity);
@@ -126,4 +126,5 @@ class Pool implements IPoolConfig {
   //   }, [] as Array<{ id: string; decimals: number; weight: number }>);
   // };
 }
+
 export default Pool;
