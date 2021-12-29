@@ -4,6 +4,7 @@ import {
   NODE_URL_MAP,
   POOL_ID,
   poolConfigs,
+  SLIPPAGE,
   TChainId,
   tokens,
 } from "@src/constants";
@@ -27,6 +28,9 @@ class Pool implements IPoolConfig {
   public readonly tokens: Array<IToken & { shareAmount: number }> = [];
   public readonly id: POOL_ID;
 
+  public getAssetById = (assetId: string) =>
+    this.tokens.find((t) => assetId === t.assetId);
+
   public globalVolume: string = "–";
   @action.bound setGlobalVolume = (value: string) =>
     (this.globalVolume = value);
@@ -35,8 +39,8 @@ class Pool implements IPoolConfig {
   @action.bound setGlobalLiquidity = (value: string) =>
     (this.globalLiquidity = value);
 
-  public liquidity: Record<string, number> = {};
-  @action.bound private setLiquidity = (value: Record<string, number>) =>
+  public liquidity: Record<string, BN> = {};
+  @action.bound private setLiquidity = (value: Record<string, BN>) =>
     (this.liquidity = value);
 
   constructor(id: POOL_ID, chainId: TChainId) {
@@ -60,14 +64,11 @@ class Pool implements IPoolConfig {
       this.contractAddress
     }?matches=global_(.*)`;
     const { data }: { data: IData[] } = await axios.get(globalAttributesUrl);
-    const balances = data.reduce<Record<string, number>>(
-      (acc, { key, value }) => {
-        const regexp = new RegExp("global_(.*)_balance");
-        regexp.test(key) && (acc[key.match(regexp)![1]] = value);
-        return acc;
-      },
-      {}
-    );
+    const balances = data.reduce<Record<string, BN>>((acc, { key, value }) => {
+      const regexp = new RegExp("global_(.*)_balance");
+      regexp.test(key) && (acc[key.match(regexp)![1]] = new BN(value));
+      return acc;
+    }, {});
     this.setLiquidity(balances);
 
     // Math.floor(this.state.data.get("global_volume") / 1000000);
@@ -93,24 +94,21 @@ class Pool implements IPoolConfig {
   currentPrice = (
     assetId0: string,
     assetId1: string,
-    coefficient = 0.98
+    coefficient = SLIPPAGE
   ): BN | null => {
     if (this.tokens == null) return null;
-    const asset0 = this.tokens.find(({ assetId }) => assetId === assetId0);
-    const asset1 = this.tokens.find(({ assetId }) => assetId === assetId1);
+    const asset0 = this.getAssetById(assetId0);
+    const asset1 = this.getAssetById(assetId1);
     if (asset0?.shareAmount == null || asset1?.shareAmount == null) return null;
+    const { decimals: decimals0, shareAmount: shareAmount0 } = asset0;
+    const { decimals: decimals1, shareAmount: shareAmount1 } = asset1;
     const liquidity0 = this.liquidity[assetId0];
     const liquidity1 = this.liquidity[assetId1];
     if (liquidity0 == null || liquidity1 == null) return null;
     //(Balance Out / Weight Out) / (Balance In / Weight In)
 
-    const bottomValue = new BN(liquidity0)
-      .div(asset0!.decimals)
-      .div(asset0!.shareAmount);
-
-    const topValue = new BN(liquidity1)
-      .div(asset1!.decimals)
-      .div(asset1!.shareAmount);
+    const bottomValue = BN.formatUnits(liquidity0, decimals0).div(shareAmount0);
+    const topValue = BN.formatUnits(liquidity1, decimals1).div(shareAmount1);
 
     return topValue.div(bottomValue).times(coefficient);
   };

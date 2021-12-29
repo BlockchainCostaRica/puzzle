@@ -16,6 +16,7 @@ export interface IBigNumberInputProps {
   max?: string;
   min?: string;
   disabled?: boolean;
+  readOnly?: boolean;
 }
 
 const BigNumberInput: React.FC<IBigNumberInputProps> = ({
@@ -28,6 +29,7 @@ const BigNumberInput: React.FC<IBigNumberInputProps> = ({
   max,
   min,
   disabled,
+  readOnly,
   ...rest
 }) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -111,6 +113,7 @@ const BigNumberInput: React.FC<IBigNumberInputProps> = ({
     onChange: handleChange,
     type: "text",
     value: inputValue,
+    readOnly: readOnly,
     disabled,
   };
 

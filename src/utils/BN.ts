@@ -109,11 +109,11 @@ class BN extends BigNumber {
     return p.then((v) => new BN(v));
   }
 
-  static parseUnits(value: TValue, decimals = 18): BN {
+  static parseUnits(value: TValue, decimals = 8): BN {
     return new BN(10).pow(decimals).times(bigNumberify(value));
   }
 
-  static formatUnits(value: TValue, decimals = 18): BN {
+  static formatUnits(value: TValue, decimals = 8): BN {
     return new BN(value).div(new BN(10).pow(decimals));
   }
 

@@ -10,8 +10,8 @@ export default class PoolsStore {
 
   getPoolById = (id: POOL_ID) => this.pools.find((pool) => pool.id === id);
 
-  get liquidity(): Record<string, number> {
-    return this.pools.reduce<Record<string, number>>(
+  get liquidity(): Record<string, BN> {
+    return this.pools.reduce<Record<string, BN>>(
       (acc, pool) => ({ ...acc, ...pool.liquidity }),
       {}
     );

@@ -46,6 +46,7 @@ const MultiSwapInterfaceImpl: React.FC = () => {
         <Root>
           <Card>
             <TokenInput
+              decimals={vm.token0!.decimals}
               amount={vm.amount0}
               setAmount={vm.setAmount0}
               assetId={vm.assetId0}
@@ -55,6 +56,7 @@ const MultiSwapInterfaceImpl: React.FC = () => {
             />
             <SwitchTokensButton />
             <TokenInput
+              decimals={vm.token1!.decimals}
               amount={new BN(vm.amount1)}
               assetId={vm.assetId1}
               setAssetId={vm.setAssetId1}
@@ -87,7 +89,11 @@ const MultiSwapInterfaceImpl: React.FC = () => {
                 justifyContent="flex-end"
               >
                 <Text>
-                  {vm.minimumToReceive ?? "0"} {vm.token1?.symbol}&nbsp;
+                  {BN.formatUnits(
+                    vm.minimumToReceive,
+                    vm.token1?.decimals
+                  ).toFormat(2)}{" "}
+                  {vm.token1?.symbol}&nbsp;
                 </Text>
                 {vm.token0 && !vm.amount0.isNaN() && (
                   <Tooltip

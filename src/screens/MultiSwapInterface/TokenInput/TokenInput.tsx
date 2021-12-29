@@ -8,12 +8,15 @@ import { observer } from "mobx-react-lite";
 import Balance from "@src/entities/Balance";
 import BN from "@src/utils/BN";
 import BigNumberInput from "@components/BigNumberInput";
+import AmountInput from "@components/AmountInput";
 
 interface IProps {
   balances: Balance[];
 
   assetId: string;
   setAssetId: (assetId: string) => void;
+
+  decimals: number;
 
   amount: BN;
   setAmount?: (amount: BN) => void;
@@ -50,29 +53,6 @@ const InputContainer = styled.div`
   width: 100%;
   position: relative;
 `;
-const Input = styled.input`
-  font-size: 20px;
-  line-height: 24px;
-  border: none;
-  background: transparent;
-  outline: none;
-  width: 100%;
-  color: #363870;
-
-  ::-webkit-outer-spin-button,
-  ::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  [type="number"] {
-    -moz-appearance: textfield;
-  }
-
-  ::placeholder {
-    color: #8082c5;
-  }
-`;
 const TokenInput: React.FC<IProps> = (props) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const selectedAssetBalance = props.balances?.find(
@@ -92,18 +72,13 @@ const TokenInput: React.FC<IProps> = (props) => {
       <InputContainer>
         {props.onMaxClick && <MaxButton onClick={props.onMaxClick} />}
         <BigNumberInput
-          renderInput={() => <Input />}
-          decimals={1e8}
+          renderInput={(props, ref) => <AmountInput {...props} ref={ref} />}
+          decimals={props.decimals}
           value={props.amount}
           onChange={handleChangeAmount}
+          placeholder="0.00"
+          readOnly={!props.setAmount}
         />
-        {/*<Input*/}
-        {/*  type="number"*/}
-        {/*  value={props.amount.toString()}*/}
-        {/*  onChange={handleChangeAmount}*/}
-        {/*  readOnly={!props.setAmount}*/}
-        {/*  placeholder="0.00"*/}
-        {/*/>*/}
         <Text style={{ whiteSpace: "nowrap" }} type="secondary" size="small">
           {selectedAssetBalance?.formatUsdnEquivalent}
         </Text>
