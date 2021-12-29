@@ -17,6 +17,7 @@ import { errorMessage } from "@src/old_components/AuthInterface";
 import axios from "axios";
 import { getCurrentBrowser } from "@src/utils/getCurrentBrowser";
 import BN from "@src/utils/BN";
+import { waitForTx } from "@waves/waves-transactions";
 
 export enum LOGIN_TYPE {
   SIGNER_SEED = "SIGNER_SEED",
@@ -214,35 +215,39 @@ class AccountStore {
     const tx = await ttx.broadcast();
     console.log(tx);
     return tx;
-    // .then((tx: any) => handleExchangePromise(tx))
-    // .catch((error: any) => handleExchangeError(error));
   };
 
   private invokeWithKeeper = async (txParams: IInvokeTxParams) => {
+    const data = {
+      fee: { assetId: "WAVES", amount: 500000 },
+      dApp: txParams.dApp,
+      call: txParams.call,
+      payment: txParams.payment,
+    };
+    console.log(data);
     const tx = await window.WavesKeeper.signAndPublishTransaction({
       type: 16,
-      data: {
-        fee: { assetId: "WAVES", amount: 500000 },
-        dApp: txParams.dApp,
-        call: txParams.call,
-        payment: txParams.payment,
-      },
-    });
+      data,
+    } as any)
+      .then(console.log)
+      .catch(console.error);
+    // await waitForTx(tx, { apiBase: this.chainId });
     console.log(tx);
     return tx;
-    // .then((tx: any) => handleExchangePromise(tx))
-    // .catch((error: any) => handleExchangeError(error));
   };
 
   get TOKENS() {
     return TOKENS[this.chainId];
   }
+
   get POOL_ID() {
     return POOL_ID[this.chainId];
   }
+
   get ROUTES() {
     return ROUTES[this.chainId];
   }
+
   get POOL_CONFIG() {
     return POOL_CONFIG[this.chainId];
   }

@@ -127,7 +127,6 @@ class MultiSwapVM {
       .toFormat(2)} USDN`;
   }
 
-  //todo уточнить верно ли что мы в итоге 2 раза умножаем на SLIPPAGE
   get minimumToReceive(): BN {
     return this.amount1.times(SLIPPAGE);
   }
@@ -168,7 +167,7 @@ class MultiSwapVM {
       },
     });
   };
-  //todo уточнить правильно ли считается кешбек
+
   get cashback() {
     const { poolsStore } = this.rootStore;
     const puzzlePrice = poolsStore.usdtRate(
