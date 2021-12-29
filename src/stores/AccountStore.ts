@@ -5,11 +5,11 @@ import { ProviderCloud } from "@waves.exchange/provider-cloud";
 import { ProviderKeeper } from "@waves/provider-keeper";
 import { IToken, NODE_URL_MAP, tokens } from "@src/constants";
 import { action, autorun, makeAutoObservable } from "mobx";
-import BigNumber from "bignumber.js";
 import Balance from "@src/entities/Balance";
 import { errorMessage } from "@src/old_components/AuthInterface";
 import axios from "axios";
 import { getCurrentBrowser } from "@src/utils/getCurrentBrowser";
+import BN from "@src/utils/BN";
 
 export enum LOGIN_TYPE {
   SIGNER_SEED = "SIGNER_SEED",
@@ -168,18 +168,15 @@ class AccountStore {
     );
     const assetBalances = data
       .map(({ balance: numberBalance, assetId }) => {
-        const balance = new BigNumber(numberBalance ?? 0);
+        const balance = new BN(numberBalance ?? 0);
         const asset: Omit<IToken, "logo"> = Object.values(tokens).find(
           (t) => t.assetId === assetId
         )!;
-        const rate = this.rootStore.poolsStore.usdtRate(assetId, 1);
-        return new Balance({
-          balance,
-          usdnEquivalent: rate
-            ? rate.times(balance.div(asset.decimals))
-            : undefined,
-          ...asset,
-        });
+        const rate = this.rootStore.poolsStore.usdtRate(assetId, 1) ?? BN.ZERO;
+        const usdnEquivalent = rate
+          ? rate.times(BN.formatUnits(balance, asset.decimals))
+          : BN.ZERO;
+        return new Balance({ balance, usdnEquivalent, ...asset });
       })
       .sort((a, b) => {
         if (a.usdnEquivalent == null && b.usdnEquivalent == null) return 0;

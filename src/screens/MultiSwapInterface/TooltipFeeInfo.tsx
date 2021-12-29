@@ -1,10 +1,10 @@
 import React from "react";
 import { Column } from "@components/Flex";
 import Text from "@components/Text";
-import BigNumber from "bignumber.js";
+import BN from "@src/utils/BN";
 
 interface IProps {
-  amount: BigNumber;
+  amount: BN;
   symbol: string;
 }
 

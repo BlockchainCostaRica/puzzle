@@ -1,10 +1,10 @@
 import { IToken } from "@src/constants";
-import BigNumber from "bignumber.js";
 import tokenLogos from "@src/assets/tokens/tokenLogos";
+import BN from "@src/utils/BN";
 
 export interface IAssetBalance extends Omit<IToken, "logo"> {
-  balance?: BigNumber;
-  usdnEquivalent?: BigNumber;
+  balance?: BN;
+  usdnEquivalent?: BN;
   logo?: string;
 }
 
@@ -14,8 +14,8 @@ class Balance implements IAssetBalance {
   public readonly symbol: string;
   public readonly decimals: number;
   private readonly _logo?: string;
-  public readonly balance?: BigNumber;
-  public readonly usdnEquivalent?: BigNumber;
+  public readonly balance?: BN;
+  public readonly usdnEquivalent?: BN;
 
   constructor(props: IAssetBalance) {
     this.name = props.name;
@@ -32,7 +32,7 @@ class Balance implements IAssetBalance {
   }
 
   get formatBalance() {
-    return this.balance?.div(this.decimals).toFormat(2) ?? "–";
+    return BN.formatUnits(this.balance ?? 0, this.decimals).toFormat(2) ?? "–";
   }
   get formatUsdnEquivalent() {
     return this.usdnEquivalent

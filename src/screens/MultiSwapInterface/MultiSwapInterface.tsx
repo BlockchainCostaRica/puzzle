@@ -16,11 +16,11 @@ import {
 } from "@screens/MultiSwapInterface/MultiScreenVM";
 import { POOL_ID } from "@src/constants";
 import { Observer } from "mobx-react-lite";
-import BigNumber from "bignumber.js";
 import SwitchTokensButton from "@screens/MultiSwapInterface/SwitchTokensButton";
 import Text from "@components/Text";
 import SwapButton from "@screens/MultiSwapInterface/SwapButton";
 import TooltipFeeInfo from "@screens/MultiSwapInterface/TooltipFeeInfo";
+import BN from "@src/utils/BN";
 
 interface IProps {
   poolId: POOL_ID;
@@ -46,19 +46,23 @@ const MultiSwapInterfaceImpl: React.FC = () => {
         <Root>
           <Card>
             <TokenInput
+              decimals={vm.token0!.decimals}
               amount={vm.amount0}
               setAmount={vm.setAmount0}
               assetId={vm.assetId0}
               setAssetId={vm.setAssetId0}
               balances={vm.balances ?? []}
               onMaxClick={vm.amount0MaxClickFunc}
+              usdnEquivalent={vm.amount0UsdnEquivalent}
             />
             <SwitchTokensButton />
             <TokenInput
-              amount={new BigNumber(vm.amount1)}
+              decimals={vm.token1!.decimals}
+              amount={new BN(vm.amount1)}
               assetId={vm.assetId1}
               setAssetId={vm.setAssetId1}
               balances={vm.balances ?? []}
+              usdnEquivalent={vm.amount1UsdnEquivalent}
             />
             <SizedBox height={24} />
             <SwapButton />
@@ -87,7 +91,11 @@ const MultiSwapInterfaceImpl: React.FC = () => {
                 justifyContent="flex-end"
               >
                 <Text>
-                  {vm.minimumToReceive ?? "0"} {vm.token1?.symbol}&nbsp;
+                  {BN.formatUnits(
+                    vm.minimumToReceive,
+                    vm.token1?.decimals
+                  ).toFormat(2)}{" "}
+                  {vm.token1?.symbol}&nbsp;
                 </Text>
                 {vm.token0 && !vm.amount0.isNaN() && (
                   <Tooltip
