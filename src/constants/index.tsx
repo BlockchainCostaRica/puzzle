@@ -40,7 +40,10 @@ export const NODE_URL_MAP: Record<TChainId, string> = {
   T: "https://nodes-testnet.wavesnodes.com",
 };
 
-export const SLIPPAGE = 0.98; //if puzzle slippage = 0
+
+export const SLIPPAGE = 0.97; //if puzzle slippage = 0
+export const TRADE_FEE = 0.98;
+
 export const CASHBACK_PERCENT = 0.004;
 
 export interface IToken {
