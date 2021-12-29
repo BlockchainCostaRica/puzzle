@@ -185,7 +185,7 @@ class MultiSwapVM {
           { type: "string", value: this.token1.assetId },
           {
             type: "integer",
-            value: this.minimumToReceive.toString(),
+            value: this.minimumToReceive.toFixed(0).toString(),
           },
         ],
       },

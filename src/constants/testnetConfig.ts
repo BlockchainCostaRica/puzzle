@@ -24,8 +24,8 @@ export const TESTNET_POOL_CONFIG: Record<TESTNET_POOL_ID, IPoolConfig> = {
     contractAddress: "3MwvyoYUQzKNQvLL24b3WyoD4EAfBxgTANQ",
     baseTokenId: "",
     name: "Farms 1",
-    defaultAssetId0: testnetTokens.WAVES.assetId,
-    defaultAssetId1: testnetTokens.PUZZLE.assetId,
+    defaultAssetId0: testnetTokens.USDN.assetId,
+    defaultAssetId1: testnetTokens.WAVES.assetId,
     tokens: [
       { ...testnetTokens.PUZZLE, logo: tokenLogos.PUZZLE, shareAmount: 0.2 },
       { ...testnetTokens.USDN, logo: tokenLogos.USDN, shareAmount: 0.4 },

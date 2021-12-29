@@ -4,6 +4,7 @@ import { ProviderWeb } from "@waves.exchange/provider-web";
 import { ProviderCloud } from "@waves.exchange/provider-cloud";
 import { ProviderKeeper } from "@waves/provider-keeper";
 import {
+  EXPLORER_URL_MAP,
   IToken,
   NODE_URL_MAP,
   POOL_CONFIG,
@@ -13,11 +14,11 @@ import {
 } from "@src/constants";
 import { action, autorun, makeAutoObservable } from "mobx";
 import Balance from "@src/entities/Balance";
-import { errorMessage } from "@src/old_components/AuthInterface";
 import axios from "axios";
 import { getCurrentBrowser } from "@src/utils/getCurrentBrowser";
 import BN from "@src/utils/BN";
 import { waitForTx } from "@waves/waves-transactions";
+import { errorMessage, successMessage } from "@src/components/Notifications";
 
 export enum LOGIN_TYPE {
   SIGNER_SEED = "SIGNER_SEED",
@@ -42,7 +43,7 @@ export interface ISerializedAccountStore {
 class AccountStore {
   public readonly rootStore: RootStore;
 
-  chainId: "W" | "T" = "T";
+  chainId: "W" | "T" = "W";
 
   isWavesKeeperInstalled = false;
 
@@ -203,7 +204,7 @@ class AccountStore {
 
   private invokeWithSigner = async (txParams: IInvokeTxParams) => {
     if (this.signer == null) {
-      errorMessage("You need login firstly");
+      errorMessage({ message: "You need login firstly" });
       return;
     }
     const ttx = this.signer.invoke({
@@ -224,15 +225,25 @@ class AccountStore {
       call: txParams.call,
       payment: txParams.payment,
     };
-    console.log(data);
     const tx = await window.WavesKeeper.signAndPublishTransaction({
       type: 16,
       data,
-    } as any)
-      .then(console.log)
-      .catch(console.error);
-    // await waitForTx(tx, { apiBase: this.chainId });
-    console.log(tx);
+    } as any).catch(({ data: message }: any) => {
+      console.log(data);
+      errorMessage({ title: "Transaction is not completed", message });
+      return null;
+    });
+    if (tx === null) return null;
+
+    const txId = JSON.parse(tx).id;
+    await waitForTx(txId, {
+      apiBase: NODE_URL_MAP[this.chainId],
+    });
+
+    successMessage({
+      title: "Transaction is completed",
+      link: `${this.EXPLORER_LINK}/tx/${txId}`,
+    });
     return tx;
   };
 
@@ -250,6 +261,10 @@ class AccountStore {
 
   get POOL_CONFIG() {
     return POOL_CONFIG[this.chainId];
+  }
+
+  get EXPLORER_LINK() {
+    return EXPLORER_URL_MAP[this.chainId];
   }
 }
 

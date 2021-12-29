@@ -39,7 +39,10 @@ export const NODE_URL_MAP: Record<TChainId, string> = {
   W: "https://wavesducks.wavesnodes.com",
   T: "https://nodes-testnet.wavesnodes.com",
 };
-
+export const EXPLORER_URL_MAP: Record<TChainId, string> = {
+  W: "https://wavesexplorer.com/",
+  T: "https://testnet.wavesexplorer.com",
+};
 
 export const SLIPPAGE = 0.97; //if puzzle slippage = 0
 export const TRADE_FEE = 0.98;

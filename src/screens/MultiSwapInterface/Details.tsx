@@ -5,11 +5,11 @@ import { Column, Row } from "@components/Flex";
 import Text from "@components/Text";
 import Button from "@components/Button";
 import { Link } from "react-router-dom";
-import { TPoolId } from "@src/constants";
 import { useMultiSwapVM } from "@screens/MultiSwapInterface/MultiScreenVM";
 
 import { observer } from "mobx-react-lite";
-
+import { useStores } from "@stores";
+import { MAINNET_POOL_ID } from "@src/constants/mainnetConfig";
 
 const Root = styled(Card)`
   display: flex;
@@ -31,11 +31,11 @@ const Root = styled(Card)`
 
 const Details: React.FC = () => {
   const vm = useMultiSwapVM();
+  const { accountStore } = useStores();
 
   if (vm.pool == null) return null;
   const { globalLiquidity, globalVolume, id } = vm.pool;
 
-  const { accountStore } = useStores();
   const { ROUTES } = accountStore;
 
   return (
@@ -47,7 +47,7 @@ const Details: React.FC = () => {
           </Text>
           <Text>$ {globalLiquidity}</Text>
         </Column>
-        {id !== POOL_ID.puzzle && (
+        {id !== MAINNET_POOL_ID.puzzle && (
           <Column crossAxisSize="max">
             <Text type="secondary" size="small">
               Total volume
