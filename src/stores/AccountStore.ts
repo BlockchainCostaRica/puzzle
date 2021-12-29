@@ -172,14 +172,11 @@ class AccountStore {
         const asset: Omit<IToken, "logo"> = Object.values(tokens).find(
           (t) => t.assetId === assetId
         )!;
-        const rate = this.rootStore.poolsStore.usdtRate(assetId, 1);
-        return new Balance({
-          balance,
-          usdnEquivalent: rate
-            ? rate.times(balance.div(asset.decimals))
-            : undefined,
-          ...asset,
-        });
+        const rate = this.rootStore.poolsStore.usdtRate(assetId, 1) ?? BN.ZERO;
+        const usdnEquivalent = rate
+          ? rate.times(BN.formatUnits(balance, asset.decimals))
+          : BN.ZERO;
+        return new Balance({ balance, usdnEquivalent, ...asset });
       })
       .sort((a, b) => {
         if (a.usdnEquivalent == null && b.usdnEquivalent == null) return 0;

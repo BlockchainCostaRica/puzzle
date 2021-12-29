@@ -28,7 +28,7 @@ const SwapButton: React.FC<IProps> = () => {
           Enter an amount
         </Button>
       );
-    case amount0!.times(token0!.decimals).gt(balance0!):
+    case amount0!.gt(balance0!):
       return (
         <Button disabled fixed>
           Insufficient {`${vm.token0?.name ?? ""} `}balance

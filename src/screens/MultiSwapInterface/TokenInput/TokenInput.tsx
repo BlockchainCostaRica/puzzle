@@ -22,6 +22,7 @@ interface IProps {
   setAmount?: (amount: BN) => void;
 
   onMaxClick?: () => void;
+  usdnEquivalent?: string;
 }
 
 const Root = styled.div`
@@ -80,7 +81,7 @@ const TokenInput: React.FC<IProps> = (props) => {
           readOnly={!props.setAmount}
         />
         <Text style={{ whiteSpace: "nowrap" }} type="secondary" size="small">
-          {selectedAssetBalance?.formatUsdnEquivalent}
+          {props.usdnEquivalent}
         </Text>
       </InputContainer>
       {openModal && (

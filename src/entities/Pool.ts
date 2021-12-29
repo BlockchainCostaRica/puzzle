@@ -106,10 +106,8 @@ class Pool implements IPoolConfig {
     const liquidity1 = this.liquidity[assetId1];
     if (liquidity0 == null || liquidity1 == null) return null;
     //(Balance Out / Weight Out) / (Balance In / Weight In)
-
-    const bottomValue = BN.formatUnits(liquidity0, decimals0).div(shareAmount0);
     const topValue = BN.formatUnits(liquidity1, decimals1).div(shareAmount1);
-
+    const bottomValue = BN.formatUnits(liquidity0, decimals0).div(shareAmount0);
     return topValue.div(bottomValue).times(coefficient);
   };
 

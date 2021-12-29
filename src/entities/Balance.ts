@@ -32,7 +32,7 @@ class Balance implements IAssetBalance {
   }
 
   get formatBalance() {
-    return this.balance?.div(this.decimals).toFormat(2) ?? "–";
+    return BN.formatUnits(this.balance ?? 0, this.decimals).toFormat(2) ?? "–";
   }
   get formatUsdnEquivalent() {
     return this.usdnEquivalent

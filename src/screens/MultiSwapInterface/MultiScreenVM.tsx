@@ -40,14 +40,26 @@ class MultiSwapVM {
   }
 
   get amount0MaxClickFunc(): (() => void) | undefined {
-    return this.token0 != null && this.balance0 != null
-      ? () => this.setAmount0(this.balance0!.div(this.token0!.decimals))
+    const { token0, balance0 } = this;
+    return token0 != null && balance0 != null
+      ? () => this.setAmount0(balance0)
       : undefined;
   }
 
   amount0: BN = BN.ZERO;
   @action.bound setAmount0 = (amount: BN) => (this.amount0 = amount);
-
+  get amount0UsdnEquivalent(): string {
+    const { token0 } = this;
+    const usdtRate = this.rootStore.poolsStore.usdtRate(this.assetId0, 1);
+    if (token0 == null || usdtRate == null) return "–";
+    const result = usdtRate.times(
+      BN.formatUnits(this.amount0, token0.decimals)
+    );
+    if (!result.gt(0)) return "–";
+    return `~ ${usdtRate
+      .times(BN.formatUnits(this.amount0, token0.decimals))
+      .toFormat(2)} USDN`;
+  }
   get liquidityOfToken0() {
     return this.pool?.liquidity[this.assetId0];
   }
@@ -102,6 +114,19 @@ class MultiSwapVM {
       : BN.parseUnits(rate.times(unitAmount0), token1.decimals);
   }
 
+  get amount1UsdnEquivalent(): string {
+    const { token1 } = this;
+    const usdtRate = this.rootStore.poolsStore.usdtRate(this.assetId1, 1);
+    if (token1 == null || usdtRate == null) return "–";
+    const result = usdtRate.times(
+      BN.formatUnits(this.amount1, token1.decimals)
+    );
+    if (!result.gt(0)) return "–";
+    return `~ ${usdtRate
+      .times(BN.formatUnits(this.amount1, token1.decimals))
+      .toFormat(2)} USDN`;
+  }
+
   //todo уточнить верно ли что мы в итоге 2 раза умножаем на SLIPPAGE
   get minimumToReceive(): BN {
     return this.amount1.times(SLIPPAGE);
@@ -128,7 +153,7 @@ class MultiSwapVM {
       payment: [
         {
           assetId: this.token0.assetId,
-          amount: this.amount0.times(this.token0.decimals).toString(),
+          amount: this.amount0.toString(),
         },
       ],
       call: {

@@ -53,6 +53,7 @@ const MultiSwapInterfaceImpl: React.FC = () => {
               setAssetId={vm.setAssetId0}
               balances={vm.balances ?? []}
               onMaxClick={vm.amount0MaxClickFunc}
+              usdnEquivalent={vm.amount0UsdnEquivalent}
             />
             <SwitchTokensButton />
             <TokenInput
@@ -61,6 +62,7 @@ const MultiSwapInterfaceImpl: React.FC = () => {
               assetId={vm.assetId1}
               setAssetId={vm.setAssetId1}
               balances={vm.balances ?? []}
+              usdnEquivalent={vm.amount1UsdnEquivalent}
             />
             <SizedBox height={24} />
             <SwapButton />
