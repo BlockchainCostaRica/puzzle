@@ -9,6 +9,8 @@ import { Column, Row } from "@components/Flex";
 import MobileMenu from "@components/Header/MobileMenu";
 import SizedBox from "@components/SizedBox";
 import Wallet from "@components/Wallet/Wallet";
+import { observer } from "mobx-react-lite";
+import { useStores } from "@stores";
 
 interface IProps {}
 
@@ -80,15 +82,8 @@ const Desktop = styled.div`
   }
 `;
 
-const menuItems = [
-  { name: "Farms 1", link: "/farms" },
-  { name: "Farms 2", link: "/farms2" },
-  { name: "DeFi", link: "/defi" },
-  { name: "Race", link: "/race" },
-  { name: "Puzzle", link: "/puzzle" },
-];
-
 const Header: React.FC<IProps> = () => {
+  const { accountStore } = useStores();
   const [mobileMenuOpened, setMobileMenuOpened] = useState(false);
   const [bannerClosed, setBannerClosed] = useState(false);
   const location = useLocation();
@@ -97,6 +92,10 @@ const Header: React.FC<IProps> = () => {
     document.body.classList.toggle("noscroll", state);
     setMobileMenuOpened(state);
   };
+
+  const menuItems = Object.entries(accountStore.ROUTES.pools).map(
+    ([id, link]) => ({ name: (accountStore.POOL_CONFIG as any)[id].name, link })
+  );
 
   return (
     <Root>
@@ -142,4 +141,4 @@ const Header: React.FC<IProps> = () => {
     </Root>
   );
 };
-export default Header;
+export default observer(Header);

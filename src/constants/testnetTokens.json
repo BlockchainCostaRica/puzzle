@@ -1,0 +1,20 @@
+{
+  "USDN": {
+    "assetId": "ddqVbZyTz88iWpyw1tFdsxwVKb1nnivJThi37eYEE8e",
+    "name": "USDN token",
+    "symbol": "USDN",
+    "decimals": 6
+  },
+  "PUZZLE": {
+    "assetId": "5fKHyu9mSxCwBcu5Ujfx1p5Uvf8kjicNsVi2gQw1zqdL",
+    "name": "PUZZLE token",
+    "symbol": "PUZZLE",
+    "decimals": 8
+  },
+  "WAVES": {
+    "assetId": "WAVES",
+    "name": "WAVES token",
+    "symbol": "WAVES",
+    "decimals": 8
+  }
+}

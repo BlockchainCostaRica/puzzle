@@ -3,13 +3,22 @@ import { Signer } from "@waves/signer";
 import { ProviderWeb } from "@waves.exchange/provider-web";
 import { ProviderCloud } from "@waves.exchange/provider-cloud";
 import { ProviderKeeper } from "@waves/provider-keeper";
-import { IToken, NODE_URL_MAP, tokens } from "@src/constants";
+import {
+  EXPLORER_URL_MAP,
+  IToken,
+  NODE_URL_MAP,
+  POOL_CONFIG,
+  POOL_ID,
+  ROUTES,
+  TOKENS,
+} from "@src/constants";
 import { action, autorun, makeAutoObservable } from "mobx";
 import Balance from "@src/entities/Balance";
-import { errorMessage } from "@src/old_components/AuthInterface";
 import axios from "axios";
 import { getCurrentBrowser } from "@src/utils/getCurrentBrowser";
 import BN from "@src/utils/BN";
+import { waitForTx } from "@waves/waves-transactions";
+import { errorMessage, successMessage } from "@src/components/Notifications";
 
 export enum LOGIN_TYPE {
   SIGNER_SEED = "SIGNER_SEED",
@@ -148,6 +157,7 @@ class AccountStore {
       this.setAssetBalances([]);
       return;
     }
+    const tokens = this.TOKENS;
     const ids = Object.values(tokens).map(({ assetId }) => assetId);
     const assetsUrl = `${NODE_URL_MAP[this.chainId]}/assets/balance/${
       this.address
@@ -172,7 +182,7 @@ class AccountStore {
         const asset: Omit<IToken, "logo"> = Object.values(tokens).find(
           (t) => t.assetId === assetId
         )!;
-        const rate = this.rootStore.poolsStore.usdtRate(assetId, 1) ?? BN.ZERO;
+        const rate = this.rootStore.poolsStore.usdnRate(assetId, 1) ?? BN.ZERO;
         const usdnEquivalent = rate
           ? rate.times(BN.formatUnits(balance, asset.decimals))
           : BN.ZERO;
@@ -194,7 +204,7 @@ class AccountStore {
 
   private invokeWithSigner = async (txParams: IInvokeTxParams) => {
     if (this.signer == null) {
-      errorMessage("You need login firstly");
+      errorMessage({ message: "You need login firstly" });
       return;
     }
     const ttx = this.signer.invoke({
@@ -206,25 +216,56 @@ class AccountStore {
     const tx = await ttx.broadcast();
     console.log(tx);
     return tx;
-    // .then((tx: any) => handleExchangePromise(tx))
-    // .catch((error: any) => handleExchangeError(error));
   };
 
   private invokeWithKeeper = async (txParams: IInvokeTxParams) => {
+    const data = {
+      fee: { assetId: "WAVES", amount: 500000 },
+      dApp: txParams.dApp,
+      call: txParams.call,
+      payment: txParams.payment,
+    };
     const tx = await window.WavesKeeper.signAndPublishTransaction({
       type: 16,
-      data: {
-        fee: { assetId: "WAVES", amount: 500000 },
-        dApp: txParams.dApp,
-        call: txParams.call,
-        payment: txParams.payment,
-      },
+      data,
+    } as any).catch(({ data: message }: any) => {
+      console.log(data);
+      errorMessage({ title: "Transaction is not completed", message });
+      return null;
     });
-    console.log(tx);
+    if (tx === null) return null;
+
+    const txId = JSON.parse(tx).id;
+    await waitForTx(txId, {
+      apiBase: NODE_URL_MAP[this.chainId],
+    });
+
+    successMessage({
+      title: "Transaction is completed",
+      link: `${this.EXPLORER_LINK}/tx/${txId}`,
+    });
     return tx;
-    // .then((tx: any) => handleExchangePromise(tx))
-    // .catch((error: any) => handleExchangeError(error));
   };
+
+  get TOKENS() {
+    return TOKENS[this.chainId];
+  }
+
+  get POOL_ID() {
+    return POOL_ID[this.chainId];
+  }
+
+  get ROUTES() {
+    return ROUTES[this.chainId];
+  }
+
+  get POOL_CONFIG() {
+    return POOL_CONFIG[this.chainId];
+  }
+
+  get EXPLORER_LINK() {
+    return EXPLORER_URL_MAP[this.chainId];
+  }
 }
 
 export default AccountStore;
