@@ -61,7 +61,9 @@ const MenuItem = styled(Link)<{ selected?: boolean }>`
     ${({ selected }) => (selected ? "#7075e9" : "transparent")};
   height: 100%;
   margin: 0 12px;
+
   &:hover {
+    border-bottom: 4px solid #c6c9f4;
     color: #7075e9;
   }
 `;
@@ -97,7 +99,6 @@ const Header: React.FC<IProps> = () => {
   const menuItems = Object.entries(accountStore.ROUTES.pools).map(
     ([id, link]) => ({ name: (accountStore.POOL_CONFIG as any)[id].name, link })
   );
-
   return (
     <Root>
       <Mobile>
@@ -118,7 +119,7 @@ const Header: React.FC<IProps> = () => {
             <SizedBox width={54} />
             {menuItems.map(({ name, link }, key) => (
               <MenuItem
-                selected={link === location.pathname}
+                selected={`/${link}` === location.pathname}
                 to={link}
                 key={key}
               >

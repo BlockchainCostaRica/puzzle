@@ -19,6 +19,7 @@ import "./old_components/Landing.scss";
 import "./old_components/AddLiquidity.scss";
 import "./old_components/vovaStyles.css.scss";
 import { WalletModule } from "@src/old_components/WalletModule";
+
 const Root = styled(Column)`
   width: 100%;
   align-items: center;
@@ -27,64 +28,64 @@ const Root = styled(Column)`
 const App: React.FC = () => {
   const { accountStore } = useStores();
   const { ROUTES } = accountStore;
-  return (<Root>
-    <Header />
-    <Routes>
-      {/*<Route path="/" element={<LandingModule />} />*/}
-      <Route path="/" element={<Landing />} />
+  return (
+    <Root>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Landing />} />
 
-      {/*swap routes*/}
-      {Object.entries(ROUTES.pools).map(([poolId, path]) => (
+        {/*swap routes*/}
+        {Object.entries(ROUTES.pools).map(([poolId, path]) => (
+          <Route
+            key={path}
+            path={path}
+            element={<MultiSwapInterface poolId={poolId as TPoolId} />}
+          />
+        ))}
+
+        {/*add liquidity routes*/}
+        {Object.entries(ROUTES.addLiquidity).map(([poolId, path]) => (
+          <Route
+            key={path}
+            path={path}
+            element={<AddLiquidityInterface poolName={poolId} />}
+          />
+        ))}
+
+        <Route path="stake" element={<StakeModule />} />
+
         <Route
-          key={path}
-          path={path}
-          element={<MultiSwapInterface poolId={poolId as TPoolId} />}
+          path="farms/addOneToken"
+          element={<AddOneTokenInterface poolName="farms" />}
         />
-      ))}
-
-      {/*add liquidity routes*/}
-      {Object.entries(ROUTES.addLiquidity).map(([poolId, path]) => (
         <Route
-          key={path}
-          path={path}
-          element={<AddLiquidityInterface poolName={poolId } />}
+          path="farms2/addOneToken"
+          element={<AddOneTokenInterface poolName="farms2" />}
         />
-      ))}
+        <Route
+          path="defi/addOneToken"
+          element={<AddOneTokenInterface poolName="defi" />}
+        />
 
-      <Route path="stake" element={<StakeModule />} />
+        <Route
+          path="farms/invest"
+          element={<InvestToPoolInterface poolName="farms" />}
+        />
+        <Route
+          path="farms2/invest"
+          element={<InvestToPoolInterface poolName="farms2" />}
+        />
+        <Route
+          path="defi/invest"
+          element={<InvestToPoolInterface poolName="defi" />}
+        />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
 
-      <Route
-        path="farms/addOneToken"
-        element={<AddOneTokenInterface poolName="farms" />}
-      />
-      <Route
-        path="farms2/addOneToken"
-        element={<AddOneTokenInterface poolName="farms2" />}
-      />
-      <Route
-        path="defi/addOneToken"
-        element={<AddOneTokenInterface poolName="defi" />}
-      />
-
-      <Route
-        path="farms/invest"
-        element={<InvestToPoolInterface poolName="farms" />}
-      />
-      <Route
-        path="farms2/invest"
-        element={<InvestToPoolInterface poolName="farms2" />}
-      />
-      <Route
-        path="defi/invest"
-        element={<InvestToPoolInterface poolName="defi" />}
-      />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-
-      {/*<Footer />*/}
       <ReactNotification className="notificationWindow" />
       <WalletModule />
     </Root>
-);};
+  );
+};
 
 export default observer(App);

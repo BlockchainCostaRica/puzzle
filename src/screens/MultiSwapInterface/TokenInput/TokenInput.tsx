@@ -42,19 +42,31 @@ const Root = styled.div`
   }
 `;
 
-const InputContainer = styled.div`
+const InputContainer = styled.div<{
+  focused?: boolean;
+  invalid?: boolean;
+  readOnly?: boolean;
+}>`
+  background: ${({ focused }) => (focused ? "#fffff" : "#f1f2fe")};
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   padding: 16px;
   height: 56px;
-  background: #f1f2fe;
   border-radius: 12px;
   width: 100%;
   position: relative;
+  border: 1px solid
+    ${({ focused, readOnly }) => (focused && !readOnly ? "#7075E9" : "#f1f2fe")};
+
+  :hover {
+    border-color: ${({ readOnly, focused }) =>
+      !readOnly && !focused ? "#C6C9F4" : focused ?? "#7075E9"};
+  }
 `;
 const TokenInput: React.FC<IProps> = (props) => {
+  const [focused, setFocused] = useState(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const selectedAssetBalance = props.balances?.find(
     ({ assetId }) => assetId === props.assetId
@@ -62,7 +74,6 @@ const TokenInput: React.FC<IProps> = (props) => {
 
   const handleChangeAmount = (value: BN) =>
     props.setAmount && props.setAmount(value);
-
   return (
     <Root>
       <TokenSelect
@@ -70,10 +81,31 @@ const TokenInput: React.FC<IProps> = (props) => {
         onClick={() => setOpenModal(!openModal)}
         balance={selectedAssetBalance?.formatBalance}
       />
-      <InputContainer>
-        {props.onMaxClick && <MaxButton onClick={props.onMaxClick} />}
+      <InputContainer focused={focused} readOnly={!props.setAmount}>
+        {props.onMaxClick && (
+          <MaxButton
+            onClick={() => {
+              setFocused(true);
+              props.onMaxClick && props.onMaxClick();
+            }}
+          />
+        )}
         <BigNumberInput
-          renderInput={(props, ref) => <AmountInput {...props} ref={ref} />}
+          renderInput={(props, ref) => (
+            <AmountInput
+              {...props}
+              onFocus={(e) => {
+                props.onFocus && props.onFocus(e);
+                !props.readOnly && setFocused(true);
+              }}
+              onBlur={(e) => {
+                props.onBlur && props.onBlur(e);
+                setFocused(false);
+              }}
+              ref={ref}
+            />
+          )}
+          autofocus={focused}
           decimals={props.decimals}
           value={props.amount}
           onChange={handleChangeAmount}

@@ -28,14 +28,10 @@ const Root = styled.input`
 type TProps = React.InputHTMLAttributes<HTMLInputElement>;
 
 const AmountInput = React.forwardRef<HTMLInputElement, TProps>(
-  ({ onFocus, onWheel, ...props }, ref) => (
+  ({ onWheel, ...props }, ref) => (
     <Root
       ref={ref}
       type="number"
-      onFocus={(e) => {
-        e.target.select();
-        onFocus && onFocus(e);
-      }}
       onWheel={(e) => {
         e.target && (e.target as any).blur();
         onWheel && onWheel(e);

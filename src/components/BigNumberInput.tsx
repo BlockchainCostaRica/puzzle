@@ -113,7 +113,7 @@ const BigNumberInput: React.FC<IBigNumberInputProps> = ({
     onChange: handleChange,
     type: "text",
     value: inputValue,
-    readOnly: readOnly,
+    readOnly,
     disabled,
   };
 
