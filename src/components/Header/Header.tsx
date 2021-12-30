@@ -18,6 +18,7 @@ const Root = styled(Column)`
   width: 100%;
   background: #fff;
   align-items: center;
+  z-index: 2;
   box-shadow: 0px 8px 56px rgba(54, 56, 112, 0.16);
 `;
 

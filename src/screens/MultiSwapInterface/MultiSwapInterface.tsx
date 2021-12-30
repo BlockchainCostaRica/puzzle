@@ -21,6 +21,7 @@ import Text from "@components/Text";
 import SwapButton from "@screens/MultiSwapInterface/SwapButton";
 import TooltipFeeInfo from "@screens/MultiSwapInterface/TooltipFeeInfo";
 import BN from "@src/utils/BN";
+import Layout from "@components/Layout";
 
 interface IProps {
   poolId: TPoolId;
@@ -36,85 +37,98 @@ const Root = styled.div`
   min-width: 100%;
   min-height: 100%;
   margin-bottom: 24px;
+  margin-top: 40px;
+  @media (min-width: 880px) {
+    margin-top: 56px;
+  }
 `;
 
 const MultiSwapInterfaceImpl: React.FC = () => {
   const vm = useMultiSwapVM();
   return (
-    <Observer>
-      {() => (
-        <Root>
-          <Card>
-            <TokenInput
-              decimals={vm.token0!.decimals}
-              amount={vm.amount0}
-              setAmount={vm.setAmount0}
-              assetId={vm.assetId0}
-              setAssetId={vm.setAssetId0}
-              balances={vm.balances ?? []}
-              onMaxClick={vm.amount0MaxClickFunc}
-              usdnEquivalent={vm.amount0UsdnEquivalent}
-            />
-            <SwitchTokensButton />
-            <TokenInput
-              decimals={vm.token1!.decimals}
-              amount={new BN(vm.amount1)}
-              assetId={vm.assetId1}
-              setAssetId={vm.setAssetId1}
-              balances={vm.balances ?? []}
-              usdnEquivalent={vm.amount1UsdnEquivalent}
-            />
-            <SizedBox height={24} />
-            <SwapButton />
+    <Layout>
+      <Observer>
+        {() => (
+          <Root>
+            <Card>
+              <TokenInput
+                decimals={vm.token0!.decimals}
+                amount={vm.amount0}
+                setAmount={vm.setAmount0}
+                assetId={vm.assetId0}
+                setAssetId={vm.setAssetId0}
+                balances={vm.balances ?? []}
+                onMaxClick={vm.amount0MaxClickFunc}
+                usdnEquivalent={vm.amount0UsdnEquivalent}
+              />
+              <SwitchTokensButton />
+              <TokenInput
+                decimals={vm.token1!.decimals}
+                amount={new BN(vm.amount1)}
+                assetId={vm.assetId1}
+                setAssetId={vm.setAssetId1}
+                balances={vm.balances ?? []}
+                usdnEquivalent={vm.amount1UsdnEquivalent}
+              />
+              <SizedBox height={24} />
+              <SwapButton />
+              <SizedBox height={16} />
+              {/*<SwapDetailRow title="Route">*/}
+              {/*  <Row*/}
+              {/*    alignItems="center"*/}
+              {/*    mainAxisSize="fit-content"*/}
+              {/*    justifyContent="flex-end"*/}
+              {/*  >*/}
+              {/*    <Text>WAVES</Text>&nbsp;*/}
+              {/*    <ArrowIcon />*/}
+              {/*    &nbsp;*/}
+              {/*    <Text>USDN</Text>&nbsp;*/}
+              {/*    <ArrowIcon />*/}
+              {/*    &nbsp;*/}
+              {/*    <Text>PUZZLE</Text>&nbsp;*/}
+              {/*    <ShowMoreIcon />*/}
+              {/*  </Row>*/}
+              {/*</SwapDetailRow>*/}
+              {/*<Divider />*/}
+              <SwapDetailRow title="Price impact">
+                <Row
+                  alignItems="center"
+                  mainAxisSize="fit-content"
+                  justifyContent="flex-end"
+                >
+                  <Text>
+                    ~
+                    {vm.priceImpact}%&nbsp;
+                  </Text>
+                  {vm.token0 && !vm.amount0.isNaN() && (
+                    <Tooltip
+                      content={
+                        <TooltipFeeInfo/>}
+
+                      config={{ placement: "top", trigger: "click" }}
+                    >
+                      <InfoIcon />
+                    </Tooltip>
+                  )}
+                </Row>
+              </SwapDetailRow>
+              {vm.cashback && (
+                <>
+                  <Divider />
+                  <SwapDetailRow style={{ marginBottom: 0 }} title="Cashback">
+                    <CashbackLabel>{vm.cashback}</CashbackLabel>
+                  </SwapDetailRow>
+                </>
+              )}
+            </Card>
             <SizedBox height={16} />
-            {/*<SwapDetailRow title="Route">*/}
-            {/*  <Row*/}
-            {/*    alignItems="center"*/}
-            {/*    mainAxisSize="fit-content"*/}
-            {/*    justifyContent="flex-end"*/}
-            {/*  >*/}
-            {/*    <Text>WAVES</Text>&nbsp;*/}
-            {/*    <ArrowIcon />*/}
-            {/*    &nbsp;*/}
-            {/*    <Text>USDN</Text>&nbsp;*/}
-            {/*    <ArrowIcon />*/}
-            {/*    &nbsp;*/}
-            {/*    <Text>PUZZLE</Text>&nbsp;*/}
-            {/*    <ShowMoreIcon />*/}
-            {/*  </Row>*/}
-            {/*</SwapDetailRow>*/}
-            {/*<Divider />*/}
-            <SwapDetailRow title="Price impact">
-              <Row
-                alignItems="center"
-                mainAxisSize="fit-content"
-                justifyContent="flex-end"
-              >
-                <Text>~ {vm.priceImpact}%&nbsp;</Text>
-                {vm.token0 && !vm.amount0.isNaN() && (
-                  <Tooltip
-                    content={<TooltipFeeInfo />}
-                    config={{ placement: "top", trigger: "click" }}
-                  >
-                    <InfoIcon />
-                  </Tooltip>
-                )}
-              </Row>
-            </SwapDetailRow>
-            {vm.cashback && (
-              <>
-                <Divider />
-                <SwapDetailRow style={{ marginBottom: 0 }} title="Cashback">
-                  <CashbackLabel>{vm.cashback}</CashbackLabel>
-                </SwapDetailRow>
-              </>
-            )}
-          </Card>
-          <SizedBox height={16} />
-          <Details />
-        </Root>
-      )}
-    </Observer>
+            <Details
+
+            />
+          </Root>
+        )}
+      </Observer>
+    </Layout>
   );
 };
 

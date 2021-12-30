@@ -135,7 +135,8 @@ class AccountStore {
       (reaction) => {
         if (attemptsCount === 2) {
           reaction.dispose();
-          alert("keeper is not installed");
+          errorMessage({ message: "Waves Keeper is not installed" });
+          // alert("keeper is not installed");
         } else if (window["WavesKeeper"]) {
           reaction.dispose();
           this.isWavesKeeperInstalled = true;

@@ -1,17 +1,12 @@
-import styled from "@emotion/styled";
 import React from "react";
 import { Link } from "react-router-dom";
 import puzzleLogoFooter from "@src/old_components/img/puzzle-logo-footer.svg";
-import { globalSigner } from "@src/old_components/SignerHandler";
+import { useStores } from "@stores";
 
 interface IProps {}
 
-const Root = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
 const Footer: React.FC<IProps> = () => {
+  const { accountStore } = useStores();
   return (
     <footer className="footer">
       <div className="footer__lc">
@@ -56,7 +51,7 @@ const Footer: React.FC<IProps> = () => {
         <div className="footer__rc--column">
           <a
             className="landing__subtitle"
-            onClick={() => globalSigner.logout()}
+            onClick={() => accountStore.logout()}
           >
             Logout
           </a>
