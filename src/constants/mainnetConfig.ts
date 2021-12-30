@@ -87,7 +87,7 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
   [MAINNET_POOL_ID.defi]: {
     contractAddress: "3PDrYPF6izza2sXWffzTPF7e2Fcir2CMpki",
     baseTokenId: mainnetTokens.USDN.assetId,
-    name: "Waves DeFi",
+    name: "DeFi",
     defaultAssetId0: mainnetTokens.EGG.assetId,
     defaultAssetId1: mainnetTokens.USDN.assetId,
     tokens: [
@@ -106,7 +106,7 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
   [MAINNET_POOL_ID.race]: {
     contractAddress: "3PNK5ypnPJioLmLUzfK6ezpaePHLxZd6QLj",
     baseTokenId: mainnetTokens.USDN.assetId,
-    name: "MetaRace mega pool",
+    name: "Race",
     defaultAssetId0: mainnetTokens.RACE.assetId,
     defaultAssetId1: mainnetTokens.USDN.assetId,
     tokens: [
@@ -118,7 +118,7 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
   [MAINNET_POOL_ID.puzzle]: {
     contractAddress: "3PFDgzu1UtswAkCMxqqQjbTeHaX4cMab8Kh",
     baseTokenId: mainnetTokens.USDN.assetId,
-    name: "Puzzle Parent Pool",
+    name: "Puzzle",
     defaultAssetId0: mainnetTokens.PUZZLE.assetId,
     defaultAssetId1: mainnetTokens.USDN.assetId,
     tokens: [
