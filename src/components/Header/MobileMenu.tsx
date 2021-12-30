@@ -16,7 +16,7 @@ interface IProps {
 }
 
 const Root = styled.div<{ bannerClosed: boolean; opened: boolean }>`
-  z-index: 1;
+  z-index: 100;
   background: rgba(0, 0, 0, 0.4);
   position: absolute;
   top: ${({ bannerClosed }) => (bannerClosed ? 64 : 144)}px;

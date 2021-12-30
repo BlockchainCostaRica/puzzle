@@ -11,7 +11,7 @@ const Root = styled.div<{ closed: boolean }>`
   display: flex;
   flex-direction: column;
   width: 100%;
-  z-index: 101;
+  z-index: 102;
   @media (min-width: 880px) {
     flex-direction: row;
   }
