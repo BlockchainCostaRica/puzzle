@@ -58,7 +58,7 @@ class MultiSwapVM {
     if (!result.gt(0)) return "–";
     return `~ ${usdnRate
       .times(BN.formatUnits(this.amount0, token0.decimals))
-      .toFormat(2)} USDN`;
+      .toFormat(2)} $`;
   }
   get liquidityOfToken0() {
     return this.pool?.liquidity[this.assetId0];
@@ -148,7 +148,7 @@ class MultiSwapVM {
     if (!result.gt(0)) return "–";
     return `~ ${usdnRate
       .times(BN.formatUnits(this.amount1, token1.decimals))
-      .toFormat(2)} USDN`;
+      .toFormat(2)} $`;
   }
 
   get minimumToReceive(): BN {

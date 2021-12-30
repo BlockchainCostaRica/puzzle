@@ -85,6 +85,9 @@ const Desktop = styled.div`
   }
 `;
 
+const isRoutesEquals = (a: string, b: string) =>
+  a.replaceAll("/", "") === b.replaceAll("/", "");
+
 const Header: React.FC<IProps> = () => {
   const { accountStore } = useStores();
   const [mobileMenuOpened, setMobileMenuOpened] = useState(false);
@@ -119,7 +122,7 @@ const Header: React.FC<IProps> = () => {
             <SizedBox width={54} />
             {menuItems.map(({ name, link }, key) => (
               <MenuItem
-                selected={`/${link}` === location.pathname}
+                selected={isRoutesEquals(link, location.pathname)}
                 to={link}
                 key={key}
               >
