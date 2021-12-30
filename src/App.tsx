@@ -14,7 +14,11 @@ import { Column } from "@components/Flex";
 import NotFound from "@screens/NotFound";
 import { useStores } from "@stores";
 import { TPoolId } from "@src/constants";
-
+import "./old_components/App.scss";
+import "./old_components/Landing.scss";
+import "./old_components/AddLiquidity.scss";
+import "./old_components/vovaStyles.css.scss";
+import { WalletModule } from "@src/old_components/WalletModule";
 const Root = styled(Column)`
   width: 100%;
   align-items: center;
@@ -91,6 +95,7 @@ const App: React.FC = () => {
       </Body>
       {/*<Footer />*/}
       <ReactNotification className="notificationWindow" />
+      <WalletModule />
     </Root>
   );
 };

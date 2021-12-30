@@ -26,6 +26,7 @@ import usdtLogo from "./img/logos/USDT.svg";
 
 import { API_URL, IContractStateKey } from "./MultiSwapInterface";
 import axios from "axios";
+import tokenLogos from "@src/assets/tokens/tokenLogos";
 
 export enum PoolNames {
   street = "street",
@@ -34,6 +35,7 @@ export enum PoolNames {
   megapool2 = "farms2",
   defi = "defi",
   puzzle = "puzzle",
+  race = "race",
 }
 
 export const poolsData: any = {
@@ -263,6 +265,21 @@ export const poolsData: any = {
     contractAddress: "3PFDgzu1UtswAkCMxqqQjbTeHaX4cMab8Kh",
     baseTokenId: "DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p",
     name: "Puzzle Parent Pool",
+  },
+  [PoolNames.race]: {
+    tokenIds: [
+      "C1iWsKGqLwjHUndiQ7iXpdmPum9PeCDFfyXBdJJosDRS", // EGG
+      "D4TPjtzpsDEJFS1pUAkvh1tJJJMNWGcSrds9sveBoQka", // RACE
+      "DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p", // USDN
+    ],
+    tokenNames: ["EGG", "RACE", "USDN"],
+    tokenLogos: [eggLogo, tokenLogos.RACE, usdnLogo],
+    tokenShares: [0.4, 0.4, 0.2],
+    tokenDecimals: [10 ** 8, 10 ** 8, 10 ** 6],
+    contractAddress: "3PNK5ypnPJioLmLUzfK6ezpaePHLxZd6QLj",
+    layer2Address: "3PQSAdwsdyPVVpfBwjtgXboVXUZgeYHycWM",
+    baseTokenId: "DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p",
+    name: "MetaRace mega pool",
   },
 };
 
