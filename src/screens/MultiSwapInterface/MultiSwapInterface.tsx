@@ -96,15 +96,10 @@ const MultiSwapInterfaceImpl: React.FC = () => {
                   mainAxisSize="fit-content"
                   justifyContent="flex-end"
                 >
-                  <Text>
-                    ~
-                    {vm.priceImpact}%&nbsp;
-                  </Text>
+                  <Text>~{vm.priceImpact}%&nbsp;</Text>
                   {vm.token0 && !vm.amount0.isNaN() && (
                     <Tooltip
-                      content={
-                        <TooltipFeeInfo/>}
-
+                      content={<TooltipFeeInfo />}
                       config={{ placement: "top", trigger: "click" }}
                     >
                       <InfoIcon />
@@ -122,9 +117,7 @@ const MultiSwapInterfaceImpl: React.FC = () => {
               )}
             </Card>
             <SizedBox height={16} />
-            <Details
-
-            />
+            <Details />
           </Root>
         )}
       </Observer>

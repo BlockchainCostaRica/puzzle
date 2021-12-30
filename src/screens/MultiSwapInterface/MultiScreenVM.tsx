@@ -198,7 +198,7 @@ class MultiSwapVM {
     const puzzlePrice = poolsStore.usdnRate(puzzleAssetId, 1);
     const token0Price = poolsStore.usdnRate(this.assetId0, 1);
     if (puzzlePrice == null || token0Price == null || this.token0 == null) {
-      return BN.ZERO;
+      return null;
     }
 
     const cashbackAmount = this.amount0
