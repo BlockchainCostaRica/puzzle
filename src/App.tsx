@@ -32,9 +32,12 @@ const App: React.FC = () => {
     <Root>
       <Header />
       <Routes>
-        <Route path="/" element={<Landing />} />
+        {/* Landing */}
+        <Route path={ROUTES.ROOT} element={<Landing />} />
+        {/* Stake */}
+        <Route path={ROUTES.STAKE} element={<StakeModule />} />
 
-        {/*swap routes*/}
+        {/* Swap routes */}
         {Object.entries(ROUTES.pools).map(([poolId, path]) => (
           <Route
             key={path}
@@ -43,7 +46,7 @@ const App: React.FC = () => {
           />
         ))}
 
-        {/*add liquidity routes*/}
+        {/* Add liquidity routes */}
         {Object.entries(ROUTES.addLiquidity).map(([poolId, path]) => (
           <Route
             key={path}
@@ -52,33 +55,24 @@ const App: React.FC = () => {
           />
         ))}
 
-        <Route path="stake" element={<StakeModule />} />
+        {/* Add One Token routes */}
+        {Object.entries(ROUTES.addOneToken).map(([poolId, path]) => (
+          <Route
+            key={path}
+            path={path}
+            element={<AddOneTokenInterface poolName={poolId} />}
+          />
+        ))}
 
-        <Route
-          path="farms/addOneToken"
-          element={<AddOneTokenInterface poolName="farms" />}
-        />
-        <Route
-          path="farms2/addOneToken"
-          element={<AddOneTokenInterface poolName="farms2" />}
-        />
-        <Route
-          path="defi/addOneToken"
-          element={<AddOneTokenInterface poolName="defi" />}
-        />
+        {/* Invest routes */}
+        {Object.entries(ROUTES.invest).map(([poolId, path]) => (
+          <Route
+            key={path}
+            path={path}
+            element={<InvestToPoolInterface poolName={poolId} />}
+          />
+        ))}
 
-        <Route
-          path="farms/invest"
-          element={<InvestToPoolInterface poolName="farms" />}
-        />
-        <Route
-          path="farms2/invest"
-          element={<InvestToPoolInterface poolName="farms2" />}
-        />
-        <Route
-          path="defi/invest"
-          element={<InvestToPoolInterface poolName="defi" />}
-        />
         <Route path="*" element={<NotFound />} />
       </Routes>
 

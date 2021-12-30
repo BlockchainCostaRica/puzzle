@@ -341,7 +341,9 @@ export class InvestToPoolInterface extends React.Component<IProps, IState> {
                   Withdraw all
                 </button>
                 <button>
-                  <Link to="./addLiquidity">Deposit</Link>
+                  <Link to={`/${this.props.poolName}/addLiquidity`}>
+                    Deposit
+                  </Link>
                 </button>
               </div>
               {/*<div className="withdraw left-small">Withdraw as EGG <img className="comingSoon" src={comingSoon} alt=""/></div>*/}

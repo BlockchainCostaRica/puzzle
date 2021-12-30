@@ -13,7 +13,7 @@ const SwapButton: React.FC<IProps> = () => {
   switch (true) {
     case accountStore.address == null:
       return (
-        <Button onClick={() => accountStore.setWallModalOpened(true)} fixed>
+        <Button onClick={() => accountStore.setWalletModalOpened(true)} fixed>
           Connect wallet
         </Button>
       );

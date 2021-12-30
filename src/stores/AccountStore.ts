@@ -48,9 +48,9 @@ class AccountStore {
 
   isWavesKeeperInstalled = false;
 
-  wallModalOpened: boolean = false;
-  @action.bound setWallModalOpened = (state: boolean) =>
-    (this.wallModalOpened = state);
+  walletModalOpened: boolean = false;
+  @action.bound setWalletModalOpened = (state: boolean) =>
+    (this.walletModalOpened = state);
 
   public assetBalances: Balance[] = [];
   @action.bound setAssetBalances = (assetBalances: Balance[]) =>

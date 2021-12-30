@@ -237,7 +237,10 @@ export class AddOneTokenInterface extends React.Component<IProps, IState> {
 
         <div className="methodChoice">
           <div className="choice first">
-            <Link className="ignore-link" to="addLiquidity">
+            <Link
+              className="ignore-link"
+              to={`/${this.props.poolName}/addLiquidity`}
+            >
               Multiple tokens
             </Link>
           </div>
@@ -263,10 +266,10 @@ export class AddOneTokenInterface extends React.Component<IProps, IState> {
             <div className="buttonContainer">
               {this.state.auth ? (
                 <button className="withdraw">
-                  <Link to="invest">Change pool</Link>
+                  <Link to={`/${this.props.poolName}/invest`}>Change pool</Link>
                 </button>
               ) : (
-                <div></div>
+                <div />
               )}
             </div>
           </div>

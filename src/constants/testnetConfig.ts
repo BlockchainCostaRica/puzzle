@@ -1,26 +1,33 @@
 import testnetTokens from "./testnetTokens.json";
 import tokenLogos from "@src/assets/tokens/tokenLogos";
 import { IPoolConfig } from "@src/constants/index";
+import { MAINNET_POOL_ID } from "@src/constants/mainnetConfig";
 
 export { testnetTokens };
 
 export enum TESTNET_POOL_ID {
-  farmsPool = "farms",
+  farmsPool1 = "farms",
 }
 
 export const TESTNET_ROUTES = {
   ROOT: "/",
   STAKE: "/stake",
   pools: {
-    farms: TESTNET_POOL_ID.farmsPool,
+    farms: TESTNET_POOL_ID.farmsPool1,
   },
   addLiquidity: {
-    farms: `${TESTNET_POOL_ID.farmsPool}/addLiquidity`,
+    farms: `${TESTNET_POOL_ID.farmsPool1}/addLiquidity`,
+  },
+  addOneToken: {
+    farms: `${MAINNET_POOL_ID.farmsPool1}/addOneToken`,
+  },
+  invest: {
+    farms: `${MAINNET_POOL_ID.farmsPool1}/invest`,
   },
 };
 
 export const TESTNET_POOL_CONFIG: Record<TESTNET_POOL_ID, IPoolConfig> = {
-  [TESTNET_POOL_ID.farmsPool]: {
+  [TESTNET_POOL_ID.farmsPool1]: {
     contractAddress: "3MwvyoYUQzKNQvLL24b3WyoD4EAfBxgTANQ",
     baseTokenId: "",
     name: "Farms 1",

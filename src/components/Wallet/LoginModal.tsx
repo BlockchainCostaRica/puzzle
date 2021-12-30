@@ -11,6 +11,7 @@ import { useStores } from "@stores";
 interface IProps {
   onClose: () => void;
   onLogin: (loginType: LOGIN_TYPE) => void;
+  visible: boolean;
 }
 
 const loginTypes = [
@@ -30,15 +31,15 @@ const loginTypes = [
     type: LOGIN_TYPE.KEEPER,
   },
 ];
-const LoginModal: React.FC<IProps> = ({ onClose, onLogin }) => {
+const LoginModal: React.FC<IProps> = ({ onLogin, ...rest }) => {
   const handleLogin = (loginType: LOGIN_TYPE) => () => {
-    onClose();
+    rest.onClose();
     onLogin(loginType);
   };
   const { accountStore } = useStores();
   const isKeeperDisabled = !accountStore.isWavesKeeperInstalled;
   return (
-    <Dialog style={{ maxWidth: 360 }} onClose={onClose} title="Connect wallet">
+    <Dialog style={{ maxWidth: 360 }} title="Connect wallet" {...rest}>
       {loginTypes.map((t) =>
         t.type === LOGIN_TYPE.KEEPER && isKeeperDisabled ? null : (
           <LoginType {...t} key={t.type} onClick={handleLogin(t.type)} />

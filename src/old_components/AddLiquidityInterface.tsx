@@ -311,7 +311,6 @@ export class AddLiquidityInterface extends React.Component<IProps, IState> {
     const inputValue = e.target.value;
     this.setState({ percentage: inputValue });
   }
-
   render() {
     const totalIndexTokens =
       this.state.poolState.get("global_poolToken_amount") / 10 ** 8;
@@ -343,7 +342,10 @@ export class AddLiquidityInterface extends React.Component<IProps, IState> {
         <div className="methodChoice">
           <div className="choice chosen first">Multiple tokens</div>
           <div className="choice second">
-            <Link className="ignore-link" to="addOneToken">
+            <Link
+              className="ignore-link"
+              to={`/${this.props.poolName}/addOneToken`}
+            >
               With {baseTokenName} token
             </Link>
           </div>
@@ -367,9 +369,9 @@ export class AddLiquidityInterface extends React.Component<IProps, IState> {
             </div>
             <div className="buttonContainer">
               {this.state.auth ? (
-                <button className="withdraw">
-                  <Link to="invest">Manage</Link>
-                </button>
+                <Link to={`/${this.props.poolName}/invest`}>
+                  <button className="withdraw">Manage</button>
+                </Link>
               ) : (
                 <div></div>
               )}

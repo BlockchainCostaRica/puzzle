@@ -14,12 +14,14 @@ interface IProps {
   onClose: () => void;
   balances: Balance[];
   onSelect: (assetId: string) => void;
+  visible: boolean;
 }
 
 const TokenSelectModal: React.FC<IProps> = ({
   onClose,
   balances,
   onSelect,
+  visible,
 }) => {
   const [searchValue, setSearchValue] = useState<string>("");
   // const [filteredTokens, setFilteredTokens] = useState<Balance[]>(balances);
@@ -59,6 +61,7 @@ const TokenSelectModal: React.FC<IProps> = ({
 
   return (
     <Dialog
+      visible={visible}
       style={{ maxWidth: 360 }}
       bodyStyle={{ minHeight: 440 }}
       onClose={onClose}

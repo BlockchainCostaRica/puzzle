@@ -24,20 +24,19 @@ const Wallet: React.FC<IProps> = () => {
       {address == null ? (
         <Button
           size="medium"
+          onClick={() => accountStore.setWalletModalOpened(true)}
           fixed
-          onClick={() => accountStore.setWallModalOpened(true)}
         >
           Connect wallet
         </Button>
       ) : (
         <LoggedInAccountInfo />
       )}
-      {accountStore.wallModalOpened && (
-        <LoginModal
-          onLogin={(loginType) => accountStore.login(loginType)}
-          onClose={() => accountStore.setWallModalOpened(false)}
-        />
-      )}
+      <LoginModal
+        visible={accountStore.walletModalOpened}
+        onLogin={(loginType) => accountStore.login(loginType)}
+        onClose={() => accountStore.setWalletModalOpened(false)}
+      />
     </Root>
   );
 };

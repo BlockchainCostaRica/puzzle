@@ -57,6 +57,10 @@ const InputContainer = styled.div<{
   border-radius: 12px;
   width: 100%;
   position: relative;
+  cursor: ${({ readOnly }) => (readOnly ? "not-allowed" : "unset")};
+  input {
+    cursor: ${({ readOnly }) => (readOnly ? "not-allowed" : "unset")};
+  }
   border: 1px solid
     ${({ focused, readOnly }) => (focused && !readOnly ? "#7075E9" : "#f1f2fe")};
 
@@ -116,13 +120,12 @@ const TokenInput: React.FC<IProps> = (props) => {
           {props.usdnEquivalent}
         </Text>
       </InputContainer>
-      {openModal && (
-        <TokenSelectModal
-          onSelect={props.setAssetId}
-          balances={props.balances}
-          onClose={() => setOpenModal(!openModal)}
-        />
-      )}
+      <TokenSelectModal
+        visible={openModal}
+        onSelect={props.setAssetId}
+        balances={props.balances}
+        onClose={() => setOpenModal(!openModal)}
+      />
     </Root>
   );
 };

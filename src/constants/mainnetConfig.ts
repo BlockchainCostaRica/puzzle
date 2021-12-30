@@ -28,6 +28,18 @@ export const MAINNET_ROUTES = {
     race: `${MAINNET_POOL_ID.race}/addLiquidity`,
     defi: `${MAINNET_POOL_ID.defi}/addLiquidity`,
   },
+  addOneToken: {
+    farms: `${MAINNET_POOL_ID.farmsPool1}/addOneToken`,
+    farms2: `${MAINNET_POOL_ID.farmsPool2}/addOneToken`,
+    race: `${MAINNET_POOL_ID.race}/addOneToken`,
+    defi: `${MAINNET_POOL_ID.defi}/addOneToken`,
+  },
+  invest: {
+    farms: `${MAINNET_POOL_ID.farmsPool1}/invest`,
+    farms2: `${MAINNET_POOL_ID.farmsPool2}/invest`,
+    race: `${MAINNET_POOL_ID.race}/invest`,
+    defi: `${MAINNET_POOL_ID.defi}/invest`,
+  },
 };
 
 export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {

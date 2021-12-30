@@ -57,7 +57,7 @@ const Details: React.FC = () => {
         )}
       </Row>
       {Object.keys(ROUTES.addLiquidity).find((v) => v === vm.pool?.id) && (
-        <Link to={"addLiquidity"}>
+        <Link to="addLiquidity">
           <Button className="button" kind="secondary">
             Invest
           </Button>
