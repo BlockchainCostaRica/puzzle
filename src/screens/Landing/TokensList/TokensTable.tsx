@@ -6,7 +6,7 @@ import Text from "@components/Text";
 import TableRow from "@screens/Landing/TokensList/TableRow";
 import { observer } from "mobx-react-lite";
 import { useStores } from "@stores";
-import ShowMoreButton from "@screens/Landing/TokensList/ShowMoreButton";
+import ShowMoreButton from "./ShowMoreButton";
 
 interface IProps {}
 

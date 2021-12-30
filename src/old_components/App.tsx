@@ -8,7 +8,6 @@ import { createBrowserHistory } from "history";
 import ReactNotification from "react-notifications-component";
 import { Link, NavLink, Route, Routes } from "react-router-dom";
 import { MultiSwapInterface } from "./MultiSwapInterface";
-import { LandingModule } from "./LandingModule";
 import { WalletModule } from "./WalletModule";
 import puzzleLogo from "./img/puzzle-logo.svg";
 import puzzleLogoFooter from "./img/puzzle-logo-footer.svg";
@@ -118,7 +117,6 @@ const App = () => {
           path="/farms2"
           element={<MultiSwapInterface poolName="farms2" />}
         />
-        <Route path="/" element={<LandingModule />} />
         <Route path="/stake" element={<StakeModule />} />
 
         <Route
