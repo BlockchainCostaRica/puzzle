@@ -15,8 +15,12 @@ const Root = styled.div`
   justify-content: space-between;
   box-sizing: border-box;
   width: 100%;
-  margin: 8px 0;
   cursor: pointer;
+  padding: 10px 24px;
+
+  :hover {
+    background: #f1f2fe;
+  }
 `;
 const DefaultIcon = styled.div`
   width: 40px;

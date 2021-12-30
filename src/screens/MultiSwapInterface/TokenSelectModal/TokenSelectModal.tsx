@@ -69,12 +69,9 @@ const TokenSelectModal: React.FC<IProps> = ({
         onChange={handleSearch}
         placeholder="Search by name or ticker…"
       />
-      <SizedBox height={16} />
-      <Scrollbar style={{ marginRight: -16 }}>
-        <Column
-          crossAxisSize="max"
-          style={{ maxHeight: 352, paddingRight: 16 }}
-        >
+      <SizedBox height={30} />
+      <Scrollbar style={{ margin: -24 }}>
+        <Column crossAxisSize="max" style={{ maxHeight: 352 }}>
           {filteredTokens && filteredTokens.length > 0 ? (
             filteredTokens.map((t) => (
               <TokenInfo
@@ -84,7 +81,7 @@ const TokenSelectModal: React.FC<IProps> = ({
               />
             ))
           ) : (
-            <Text>No tokens found</Text>
+            <Text style={{ padding: "10px 24px" }}>No tokens found</Text>
           )}
           <SizedBox height={16} width={16} />
         </Column>

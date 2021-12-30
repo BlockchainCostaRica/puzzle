@@ -28,9 +28,12 @@ const SwitchTokensButton: React.FC<IProps> = ({ ...rest }) => {
     <Root {...rest} onClick={handleSwitch}>
       <SwapIcon
         className="icon"
-        style={{ transform: switched ? "rotate(360deg)" : "rotate(0)" }}
+        style={{
+          transform: switched ? "rotate(360deg)" : "rotate(0)",
+          margin: "0 8px",
+        }}
       />
-      <SizedBox width={16} />
+      <SizedBox width={8} />
       <Text>
         1 {vm.token0?.symbol} = ~ {vm.rate?.toFormat(4) ?? "–"}{" "}
         {vm.token1?.symbol}

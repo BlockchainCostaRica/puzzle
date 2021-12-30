@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { HTMLAttributes } from "react";
+import React, { HTMLAttributes, useState } from "react";
 import { ReactComponent as SearchIcon } from "@src/assets/icons/search.svg";
 
 interface IProps extends HTMLAttributes<HTMLInputElement> {
@@ -7,8 +7,14 @@ interface IProps extends HTMLAttributes<HTMLInputElement> {
   onChange?: (e: any) => void;
 }
 
-const Root = styled.div`
-  background: #f1f2fe;
+const Root = styled.div<{ focused?: boolean }>`
+  background: ${({ focused }) => (focused ? "#fffff" : "#f1f2fe")};
+  border: 1px solid ${({ focused }) => (focused ? "#7075E9" : "#f1f2fe")};
+
+  :hover {
+    border-color: ${({ focused }) => (!focused ? "#C6C9F4" : "#7075E9")};
+  }
+
   border-radius: 12px;
   display: flex;
   padding: 12px;
@@ -17,7 +23,7 @@ const Root = styled.div`
 
   input {
     width: 100%;
-    color: #8082c5;
+    color: ${({ focused }) => (focused ? "#363870" : "#8082c5")};
     outline: none;
     border: none;
     background-color: transparent;
@@ -29,10 +35,17 @@ const Root = styled.div`
 `;
 
 const SearchInput: React.FC<IProps> = ({ value, onChange, placeholder }) => {
+  const [focused, setFocused] = useState(false);
   return (
-    <Root>
+    <Root focused={focused}>
       <SearchIcon />
-      <input onChange={onChange} value={value} placeholder={placeholder} />
+      <input
+        onChange={onChange}
+        value={value}
+        placeholder={placeholder}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+      />
     </Root>
   );
 };
