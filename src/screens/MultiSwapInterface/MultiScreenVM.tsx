@@ -81,11 +81,12 @@ class MultiSwapVM {
   }
 
   get priceImpact() {
-    const topValue = this.rate;
+    const topValue = new BN(1).div(this.rate);
     const bottomValue = BN.formatUnits(this.amount1, this.token1?.decimals)
       .times(SLIPPAGE)
       .div(BN.formatUnits(this.amount0, this.token0?.decimals));
-    let priceImpact = topValue.div(bottomValue).minus(1).times(100);
+    let priceImpact = topValue.div(bottomValue).minus(1); //.times(100);
+
     if (priceImpact.isNaN()) priceImpact = BN.ZERO;
     if (priceImpact.gt(100)) priceImpact = new BN(100);
     return (priceImpact.isNaN() ? BN.ZERO : priceImpact).toFormat(4);
