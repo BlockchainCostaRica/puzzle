@@ -4,6 +4,8 @@ import invest from "@src/assets/landing/invest.png";
 import { Column, Row } from "@components/Flex";
 import Button from "@components/Button";
 import Text from "@components/Text";
+import { Link } from "react-router-dom";
+import { MAINNET_ROUTES } from "@src/constants/mainnetConfig";
 
 interface IProps {}
 
@@ -73,6 +75,7 @@ const Subtitle = styled.div`
 
   a {
     font-weight: 500;
+    color: #7075e9;
   }
 `;
 const BtnContainer = styled(Row)`
@@ -110,11 +113,19 @@ const Invest: React.FC<IProps> = () => {
               Earn passive income for staking your portfolio and exchange fees
               from puzzle volume at the same time.
               <br />
-              <a>Learn more on our Medium.</a>
+              <a
+                href="https://medium.com/@izhur27/what-is-puzzle-swap-1e4b4af4ed17"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Learn more on our Medium.
+              </a>
             </Subtitle>
           </Row>
           <BtnContainer>
-            <Button style={{ marginRight: 8 }}>Invest</Button>
+            <Link to={MAINNET_ROUTES.addLiquidity.farms}>
+              <Button style={{ marginRight: 8, width: 167 }}>Invest</Button>
+            </Link>
             {/*<Text type="secondary">Current total volume</Text>*/}
           </BtnContainer>
         </TitleWrapper>

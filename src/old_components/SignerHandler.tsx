@@ -88,7 +88,6 @@ export class GlobalSigner {
     balances.push(assetInfo);
 
     balances = balances.sort((x: any, y: any) => y.value - x.value);
-    console.log(balances);
 
     localStorage.setItem("userBalances", JSON.stringify(balances));
 
