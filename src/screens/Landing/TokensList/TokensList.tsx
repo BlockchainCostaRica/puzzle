@@ -3,6 +3,7 @@ import React from "react";
 import { Column } from "@components/Flex";
 import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
+import TokensTable from "@screens/Landing/TokensList/TokensTable";
 
 interface IProps {}
 
@@ -46,6 +47,7 @@ const TokensList: React.FC<IProps> = () => {
         <Text style={{ maxWidth: 560 }} weight={500} size="large">
           Trade the most performing tokens listed in Puzzle mega pools
         </Text>
+        <TokensTable />
       </Root>
     </Wrapper>
   );

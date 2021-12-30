@@ -1,5 +1,11 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React from "react";
+import { MAINNET_POOL_CONFIG } from "@src/constants/mainnetConfig";
+import { IToken } from "@src/constants";
+import Button from "@components/Button";
+import SizedBox from "@components/SizedBox";
+import { Row } from "@components/Flex";
+import Text from "@components/Text";
 
 interface IProps {}
 
@@ -14,27 +20,21 @@ const Root = styled.div`
 `;
 
 const Table = styled.table`
-  gap: 0;
-  font-family: Roboto, Poppins, sans-serif;
-  font-weight: 500;
-  font-size: 13px;
-  line-height: 15px;
   text-align: left;
   border-spacing: 0;
-  color: #4d5c76;
+  border: 1px solid #f1f2fe;
+  border-radius: 12px;
   border-collapse: collapse;
-
   th,
   td {
-    padding: 0 8px;
-    background: #f5f5f5;
-    height: 42px;
+    width: 250px;
+    padding: 0 24px;
+    height: 48px;
     box-sizing: border-box;
-    border: 1px solid #ebf0f6;
   }
 
   td {
-    height: 30px;
+    height: 64px;
     background: transparent;
   }
 `;
@@ -45,31 +45,54 @@ const TableScreen: React.FC<IProps> = () => {
       <Table>
         <thead>
           <tr>
-            <th>Id</th>
-            <th>Start date</th>
-            <th>Progress</th>
-            <th>Task type</th>
+            <th>
+              <Text type="secondary">Asset</Text>
+            </th>
+            <th>
+              <Text type="secondary">Price</Text>
+            </th>
+            <th />
           </tr>
         </thead>
         <tbody>
-          {/*{.map((v) => (*/}
-          {/*  <TableRow key={v.id} v={v} />*/}
-          {/*))}*/}
+          {Object.entries(MAINNET_POOL_CONFIG)
+            .reduce(
+              (acc, [id, { tokens }]) => [
+                ...acc,
+                ...tokens.map((t) => ({ ...t, poolId: id })),
+              ],
+              [] as Array<IToken & { poolId: string }>
+            )
+            .map((v) => (
+              <TableRow key={v.assetId} v={v} />
+            ))}
         </tbody>
       </Table>
     </Root>
   );
 };
 
-const TableRow: React.FC<{ v: any; level?: number }> = ({ v, level = 0 }) => {
-  const isParent = v.children && v.children.length > 0;
+const TableRow: React.FC<{ v: IToken & { poolId: string } }> = ({ v }) => {
   return (
     <>
-      <tr key={v.id}>
-        <td>Хуй</td>
-        <td>Пизда</td>
-        <td>Залупа</td>
-        <td>{v.taskType}</td>
+      <tr key={v.assetId}>
+        <td>
+          <Row alignItems="center">
+            <img
+              style={{ width: 24, height: 24, borderRadius: "50%" }}
+              src={v.logo}
+              alt={v.name}
+            />
+            <SizedBox width={8} />
+            <Text style={{ fontSize: 16 }}>{v.symbol}</Text>
+          </Row>
+        </td>
+        <td>$ 1000</td>
+        <td>
+          <Button style={{ height: 40 }} kind="secondary">
+            Trade
+          </Button>
+        </td>
       </tr>
     </>
   );
