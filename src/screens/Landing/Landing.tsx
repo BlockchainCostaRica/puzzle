@@ -3,6 +3,8 @@ import React from "react";
 import Home from "@screens/Landing/Home/Home";
 import About from "@screens/Landing/About/About";
 import TokensList from "@screens/Landing/TokensList";
+import Invest from "@screens/Landing/Invest";
+import Footer from "@components/Footer";
 
 const Root = styled.div`
   display: flex;
@@ -17,6 +19,8 @@ const Landing: React.FC = () => {
       <Home />
       <About />
       <TokensList />
+      <Invest />
+      <Footer />
     </Root>
   );
 };
