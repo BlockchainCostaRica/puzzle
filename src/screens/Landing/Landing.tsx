@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
 import React from "react";
-import Home from "@screens/Landing/Home";
-import About from "@screens/Landing/About";
+import Home from "@screens/Landing/Home/Home";
+import About from "@screens/Landing/About/About";
+import TokensList from "@screens/Landing/TokensList";
 
 const Root = styled.div`
   display: flex;
@@ -15,6 +16,7 @@ const Landing: React.FC = () => {
     <Root>
       <Home />
       <About />
+      <TokensList />
     </Root>
   );
 };

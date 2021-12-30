@@ -3,7 +3,7 @@ import React from "react";
 import img from "@src/assets/landing/home-img.png";
 import trade from "@src/assets/landing/tradeIcon.svg";
 import liquidity from "@src/assets/landing/liquidityIcon.svg";
-import { Column, Row } from "@src/components/Flex";
+import { Column, Row } from "@components/Flex";
 import Button from "@components/Button";
 
 interface IProps {}
@@ -22,7 +22,7 @@ const Root = styled.div`
   max-width: 1440px;
   @media (min-width: 880px) {
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     flex-direction: row;
     padding: 72px 20px;
   }
@@ -39,15 +39,11 @@ const Root = styled.div`
 `;
 
 const TitleWrapper = styled(Column)`
-  align-items: center;
   text-align: left;
   width: 100%;
   @media (min-width: 880px) {
     max-width: 560px;
   }
-  //mainAxisSize="stretch"
-  //style={{ maxWidth: 560 }}
-  //  alignItems="center"
 `;
 
 const Title = styled.div`
