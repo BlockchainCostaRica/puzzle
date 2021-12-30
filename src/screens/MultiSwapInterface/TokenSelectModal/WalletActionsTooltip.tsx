@@ -4,7 +4,7 @@ import { Column } from "@components/Flex";
 import Text from "@components/Text";
 import Divider from "@components/Divider";
 import copy from "copy-to-clipboard";
-import { successMessage } from "@src/old_components/AuthInterface";
+import { successMessage } from "@src/components/Notifications";
 import { observer } from "mobx-react-lite";
 import { useStores } from "@stores";
 
@@ -16,13 +16,16 @@ const Root = styled(Column)`
   .menu-item {
     padding: 10px 0;
     cursor: pointer;
+
     :first-of-type {
       padding-top: 0;
     }
+
     :last-of-type {
       padding-bottom: 0;
     }
   }
+
   .divider {
     margin: 0 -16px;
     width: calc(100% + 32px);
@@ -34,7 +37,7 @@ const WalletActionsTooltip: React.FC<IProps> = ({ address }) => {
 
   const handleCopyAddress = () => {
     address && copy(address);
-    successMessage("Your address was copied");
+    successMessage({ message: "Your address was copied" });
   };
   const handleLogout = () => accountStore.logout();
 
@@ -47,7 +50,7 @@ const WalletActionsTooltip: React.FC<IProps> = ({ address }) => {
         style={{ padding: "10px 0" }}
         rel="noopener noreferrer"
         target="_blank"
-        href={`https://wavesexplorer.com/address/${address}`}
+        href={`${accountStore.EXPLORER_LINK}/address/${address}`}
       >
         <Text>View in Waves Explorer</Text>
       </a>

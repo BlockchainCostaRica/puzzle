@@ -10,17 +10,20 @@ import { AddOneTokenInterface } from "@src/old_components/AddOneTokenInterface";
 import { InvestToPoolInterface } from "@src/old_components/InvestToPoolInterface";
 import Header from "@components/Header/Header";
 import { Column } from "@components/Flex";
-import { POOL_ID, ROUTES } from "@src/constants";
 import NotFound from "@screens/NotFound";
 import Landing from "@screens/Landing";
+import { useStores } from "@stores";
+import { TPoolId } from "@src/constants";
 
 const Root = styled(Column)`
   width: 100%;
   align-items: center;
 `;
 
-const App: React.FC = () => (
-  <Root>
+const App: React.FC = () => {
+  const { accountStore } = useStores();
+  const { ROUTES } = accountStore;
+  return (<Root>
     <Header />
     <Routes>
       {/*<Route path="/" element={<LandingModule />} />*/}
@@ -31,7 +34,7 @@ const App: React.FC = () => (
         <Route
           key={path}
           path={path}
-          element={<MultiSwapInterface poolId={poolId as POOL_ID} />}
+          element={<MultiSwapInterface poolId={poolId as TPoolId} />}
         />
       ))}
 
@@ -40,7 +43,7 @@ const App: React.FC = () => (
         <Route
           key={path}
           path={path}
-          element={<AddLiquidityInterface poolName={poolId as POOL_ID} />}
+          element={<AddLiquidityInterface poolName={poolId } />}
         />
       ))}
 
@@ -76,6 +79,6 @@ const App: React.FC = () => (
     {/*<Footer />*/}
     <ReactNotification className="notificationWindow" />
   </Root>
-);
+);};
 
 export default observer(App);

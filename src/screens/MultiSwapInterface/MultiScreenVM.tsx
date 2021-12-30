@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { useVM } from "@src/hooks/useVM";
 import { action, makeAutoObservable } from "mobx";
-import { CASHBACK_PERCENT, POOL_ID, SLIPPAGE, tokens } from "@src/constants";
+import { CASHBACK_PERCENT, TPoolId, SLIPPAGE, TRADE_FEE } from "@src/constants";
 import { RootStore, useStores } from "@stores";
 import Balance from "@src/entities/Balance";
 import { errorMessage } from "@src/old_components/AuthInterface";
@@ -9,7 +9,7 @@ import BN from "@src/utils/BN";
 
 const ctx = React.createContext<MultiSwapVM | null>(null);
 
-export const MultiSwapVMProvider: React.FC<{ poolId: POOL_ID }> = ({
+export const MultiSwapVMProvider: React.FC<{ poolId: TPoolId }> = ({
   poolId,
   children,
 }) => {
@@ -24,7 +24,7 @@ export const MultiSwapVMProvider: React.FC<{ poolId: POOL_ID }> = ({
 export const useMultiSwapVM = () => useVM(ctx);
 
 class MultiSwapVM {
-  constructor(private rootStore: RootStore, public readonly poolId: POOL_ID) {
+  constructor(private rootStore: RootStore, public readonly poolId: TPoolId) {
     makeAutoObservable(this);
   }
 
@@ -50,13 +50,13 @@ class MultiSwapVM {
   @action.bound setAmount0 = (amount: BN) => (this.amount0 = amount);
   get amount0UsdnEquivalent(): string {
     const { token0 } = this;
-    const usdtRate = this.rootStore.poolsStore.usdtRate(this.assetId0, 1);
-    if (token0 == null || usdtRate == null) return "–";
-    const result = usdtRate.times(
+    const usdnRate = this.rootStore.poolsStore.usdnRate(this.assetId0, 1);
+    if (token0 == null || usdnRate == null) return "–";
+    const result = usdnRate.times(
       BN.formatUnits(this.amount0, token0.decimals)
     );
     if (!result.gt(0)) return "–";
-    return `~ ${usdtRate
+    return `~ ${usdnRate
       .times(BN.formatUnits(this.amount0, token0.decimals))
       .toFormat(2)} USDN`;
   }
@@ -77,9 +77,18 @@ class MultiSwapVM {
   }
 
   get rate() {
-    return (
-      this.pool?.currentPrice(this.assetId0, this.assetId1)?.toFormat(4) ?? "–"
-    );
+    return this.pool?.currentPrice(this.assetId0, this.assetId1) ?? BN.ZERO;
+  }
+
+  get priceImpact() {
+    const topValue = this.rate;
+    const bottomValue = BN.formatUnits(this.amount1, this.token1?.decimals)
+      .times(SLIPPAGE)
+      .div(BN.formatUnits(this.amount0, this.token0?.decimals));
+    let priceImpact = topValue.div(bottomValue).minus(1).times(100);
+    if (priceImpact.isNaN()) priceImpact = BN.ZERO;
+    if (priceImpact.gt(100)) priceImpact = new BN(100);
+    return (priceImpact.isNaN() ? BN.ZERO : priceImpact).toFormat(4);
   }
 
   switchTokens = () => {
@@ -105,31 +114,45 @@ class MultiSwapVM {
   }
 
   get amount1() {
-    const { pool, token0, token1, amount0 } = this;
-    if (pool == null || token1 == null || token0 == null) return BN.ZERO;
-    const rate = pool.currentPrice(token0.assetId, token1.assetId);
-    const unitAmount0 = BN.formatUnits(amount0, token0.decimals);
-    return rate == null
-      ? BN.ZERO
-      : BN.parseUnits(rate.times(unitAmount0), token1.decimals);
+    const { liquidityOfToken0: l0, liquidityOfToken1: l1 } = this;
+    const { token1, token0, amount0 } = this;
+    if (l0 == null || l1 == null || token1 == null || token0 == null) {
+      return BN.ZERO;
+    }
+    const share0 = new BN(token0.shareAmount);
+    const share1 = new BN(token1.shareAmount);
+
+    try {
+      const leftPart = BN.formatUnits(l1, token1.decimals);
+
+      const power = share0.div(share1).toSignificant(8).toNumber();
+      const base = l0.div(l0.plus(amount0)).toNumber();
+      const rightPart = new BN(1).minus(Math.pow(base, power));
+
+      return BN.parseUnits(
+        leftPart.times(rightPart).times(SLIPPAGE),
+        token1.decimals
+      );
+    } catch (e) {
+      return BN.ZERO;
+    }
   }
 
   get amount1UsdnEquivalent(): string {
     const { token1 } = this;
-    const usdtRate = this.rootStore.poolsStore.usdtRate(this.assetId1, 1);
-    if (token1 == null || usdtRate == null) return "–";
-    const result = usdtRate.times(
+    const usdnRate = this.rootStore.poolsStore.usdnRate(this.assetId1, 1);
+    if (token1 == null || usdnRate == null) return "–";
+    const result = usdnRate.times(
       BN.formatUnits(this.amount1, token1.decimals)
     );
     if (!result.gt(0)) return "–";
-    return `~ ${usdtRate
+    return `~ ${usdnRate
       .times(BN.formatUnits(this.amount1, token1.decimals))
       .toFormat(2)} USDN`;
   }
 
-  //todo уточнить верно ли что мы в итоге 2 раза умножаем на SLIPPAGE
   get minimumToReceive(): BN {
-    return this.amount1.times(SLIPPAGE);
+    return this.amount1.times(TRADE_FEE);
   }
 
   swap = async () => {
@@ -162,17 +185,18 @@ class MultiSwapVM {
           { type: "string", value: this.token1.assetId },
           {
             type: "integer",
-            value: this.minimumToReceive.toString(),
+            value: this.minimumToReceive.toFixed(0).toString(),
           },
         ],
       },
     });
   };
-  //todo уточнить правильно ли считается кешбек
+
   get cashback() {
-    const { poolsStore } = this.rootStore;
-    const puzzlePrice = poolsStore.usdtRate(tokens.PUZZLE.assetId, 1);
-    const token0Price = poolsStore.usdtRate(this.assetId0, 1);
+    const { poolsStore, accountStore } = this.rootStore;
+    const puzzleAssetId = accountStore.TOKENS.PUZZLE.assetId;
+    const puzzlePrice = poolsStore.usdnRate(puzzleAssetId, 1);
+    const token0Price = poolsStore.usdnRate(this.assetId0, 1);
     if (puzzlePrice == null || token0Price == null) return null;
 
     const cashbackAmount = this.amount0
@@ -182,7 +206,10 @@ class MultiSwapVM {
       .div(puzzlePrice);
     return cashbackAmount.isNaN()
       ? null
-      : BN.formatUnits(cashbackAmount, tokens.PUZZLE.decimals).toFormat(4);
+      : BN.formatUnits(
+          cashbackAmount,
+          this.rootStore.accountStore.TOKENS.PUZZLE.decimals
+        ).toFormat(4);
   }
 
   get pool() {

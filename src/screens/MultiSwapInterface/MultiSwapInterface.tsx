@@ -14,7 +14,7 @@ import {
   MultiSwapVMProvider,
   useMultiSwapVM,
 } from "@screens/MultiSwapInterface/MultiScreenVM";
-import { POOL_ID } from "@src/constants";
+import { TPoolId } from "@src/constants";
 import { Observer } from "mobx-react-lite";
 import SwitchTokensButton from "@screens/MultiSwapInterface/SwitchTokensButton";
 import Text from "@components/Text";
@@ -24,7 +24,7 @@ import BN from "@src/utils/BN";
 import Layout from "@components/Layout";
 
 interface IProps {
-  poolId: POOL_ID;
+  poolId: TPoolId;
 }
 
 const Root = styled.div`
@@ -90,27 +90,21 @@ const MultiSwapInterfaceImpl: React.FC = () => {
               {/*  </Row>*/}
               {/*</SwapDetailRow>*/}
               {/*<Divider />*/}
-              <SwapDetailRow title="Minimum to receive">
+              <SwapDetailRow title="Price impact">
                 <Row
                   alignItems="center"
                   mainAxisSize="fit-content"
                   justifyContent="flex-end"
                 >
                   <Text>
-                    {BN.formatUnits(
-                      vm.minimumToReceive,
-                      vm.token1?.decimals
-                    ).toFormat(2)}{" "}
-                    {vm.token1?.symbol}&nbsp;
+                    ~
+                    {vm.priceImpact}%&nbsp;
                   </Text>
                   {vm.token0 && !vm.amount0.isNaN() && (
                     <Tooltip
                       content={
-                        <TooltipFeeInfo
-                          symbol={vm.token0.symbol}
-                          amount={vm.amount0}
-                        />
-                      }
+                        <TooltipFeeInfo/>}
+
                       config={{ placement: "top", trigger: "click" }}
                     >
                       <InfoIcon />
@@ -129,9 +123,7 @@ const MultiSwapInterfaceImpl: React.FC = () => {
             </Card>
             <SizedBox height={16} />
             <Details
-              poolId={vm.poolId}
-              volume={vm.pool!.globalVolume}
-              liquidity={vm.pool!.globalLiquidity}
+
             />
           </Root>
         )}
