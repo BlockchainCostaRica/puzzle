@@ -5,6 +5,8 @@ import trade from "@src/assets/landing/tradeIcon.svg";
 import liquidity from "@src/assets/landing/liquidityIcon.svg";
 import { Column, Row } from "@components/Flex";
 import Button from "@components/Button";
+import { Link } from "react-router-dom";
+import { MAINNET_POOL_ID } from "@src/constants/mainnetConfig";
 
 interface IProps {}
 
@@ -97,16 +99,16 @@ const Home: React.FC<IProps> = () => {
           <Row>
             <Icon src={liquidity} alt="liquidity" />
             <Subtitle style={{ paddingBottom: 0 }}>
-              Provide liquidity with<span className="dark"> up to X% APY</span>
+              Provide liquidity with
+              <span className="dark"> up to 150% APY</span>
             </Subtitle>
           </Row>
           <BtnContainer>
-            <Button fixed style={{ marginRight: 8 }}>
-              Invest
-            </Button>
-            <Button kind="secondary" fixed>
-              Trade
-            </Button>
+            <Link to={MAINNET_POOL_ID.defi}>
+              <Button fixed style={{ marginRight: 8, width: 167 }}>
+                Trade
+              </Button>
+            </Link>
           </BtnContainer>
         </TitleWrapper>
         <img className="header-img" src={img} alt="puzzle" />

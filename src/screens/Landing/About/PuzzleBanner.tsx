@@ -4,6 +4,8 @@ import { Column } from "@components/Flex";
 import Text from "@components/Text";
 import Button from "@components/Button";
 import puzzleToken from "@src/assets/landing/puzzleToken.svg";
+import { Link } from "react-router-dom";
+import { MAINNET_POOL_ID } from "@src/constants/mainnetConfig";
 
 interface IProps {}
 
@@ -63,7 +65,9 @@ const PuzzleBanner: React.FC<IProps> = () => {
           PUZZLE token <br />
           is released!
         </Title>
-        <TradeButton kind="secondary">Trade PUZZLE</TradeButton>
+        <Link to={MAINNET_POOL_ID.puzzle}>
+          <TradeButton kind="secondary">Trade PUZZLE</TradeButton>
+        </Link>
       </Column>
       <PuzzleTokenIcon src={puzzleToken} alt="puzzle" />
     </Root>

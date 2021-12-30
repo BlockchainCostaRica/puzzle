@@ -215,7 +215,7 @@ export class WalletModule extends React.Component<IProps, IState> {
 
   render() {
     return (
-      <div className="wallet-module">
+      <div className="wallet-module" style={{ height: 0, overflow: "hidden" }}>
         <button
           className={
             this.state.status === "authed"
