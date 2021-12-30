@@ -33,6 +33,11 @@ const Root = styled.div<{ bannerClosed: boolean; opened: boolean }>`
   }
 `;
 
+const WalletWrapper = styled.div`
+  padding: 24px;
+  border-top: 1px solid #f1f2fe;
+`;
+
 const toolsMenu = [
   { name: "Puzzle Explorer", link: "https://puzzlescan.com/", outer: true },
   { name: "Notifications bot", link: "https://t.me/puzzle_swap", outer: true },
@@ -56,19 +61,19 @@ const MobileMenu: React.FC<IProps> = ({ bannerClosed, opened, onClose }) => {
     <Root {...{ bannerClosed, opened }}>
       <div className="menu-body">
         <Divider />
-        <Scrollbar style={{ margin: 24 }}>
+        <Scrollbar style={{ margin: 24, marginBottom: 0 }}>
           <Column crossAxisSize="max" style={{ maxHeight: "50vh" }}>
             <LinkGroup onClick={onClose} title="Pools" links={poolsMenu} />
             <SizedBox height={24} />
             <LinkGroup title="Tools" links={toolsMenu} />
             <SizedBox height={24} />
             <LinkGroup title="Community" links={communityMenu} />
-            <SizedBox height={24} />
-            <Divider />
-            <SizedBox height={24} />
-            <Wallet />
+            <SizedBox height={24} width={1} />
           </Column>
         </Scrollbar>
+        <WalletWrapper>
+          <Wallet />
+        </WalletWrapper>
       </div>
     </Root>
   );

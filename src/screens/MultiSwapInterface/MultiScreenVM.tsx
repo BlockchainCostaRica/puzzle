@@ -197,7 +197,9 @@ class MultiSwapVM {
     const puzzleAssetId = accountStore.TOKENS.PUZZLE.assetId;
     const puzzlePrice = poolsStore.usdnRate(puzzleAssetId, 1);
     const token0Price = poolsStore.usdnRate(this.assetId0, 1);
-    if (puzzlePrice == null || token0Price == null) return null;
+    if (puzzlePrice == null || token0Price == null || this.token0 == null) {
+      return BN.ZERO;
+    }
 
     const cashbackAmount = this.amount0
       .times(token0Price)
@@ -206,10 +208,7 @@ class MultiSwapVM {
       .div(puzzlePrice);
     return cashbackAmount.isNaN()
       ? null
-      : BN.formatUnits(
-          cashbackAmount,
-          this.rootStore.accountStore.TOKENS.PUZZLE.decimals
-        ).toFormat(4);
+      : BN.formatUnits(cashbackAmount, this.token0?.decimals).toFormat(4);
   }
 
   get pool() {
