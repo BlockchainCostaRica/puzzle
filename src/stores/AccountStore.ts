@@ -5,6 +5,7 @@ import { ProviderCloud } from "@waves.exchange/provider-cloud";
 import { ProviderKeeper } from "@waves/provider-keeper";
 import {
   EXPLORER_URL_MAP,
+  IPoolConfig,
   IToken,
   NODE_URL_MAP,
   POOL_CONFIG,
@@ -260,7 +261,7 @@ class AccountStore {
     return ROUTES[this.chainId];
   }
 
-  get POOL_CONFIG() {
+  get POOL_CONFIG(): Record<string, IPoolConfig> {
     return POOL_CONFIG[this.chainId];
   }
 
