@@ -81,14 +81,18 @@ class MultiSwapVM {
   }
 
   get priceImpact() {
-    const topValue = new BN(1).div(this.rate);
-    const bottomValue = BN.formatUnits(this.amount1, this.token1?.decimals)
-      .times(SLIPPAGE)
-      .div(BN.formatUnits(this.amount0, this.token0?.decimals));
-    let priceImpact = topValue.div(bottomValue).minus(1); //.times(100);
+    //(Price(0,1) / (Amount0/Amount1)) * 100
+    const rate = this.rate;
+    if (this.token1 == null || this.token0 == null || rate.eq(BN.ZERO)) {
+      return null;
+    }
+    const amount0 = BN.formatUnits(this.amount0, this.token0!.decimals);
+    const amount1 = BN.formatUnits(this.amount1, this.token1!.decimals);
 
-    if (priceImpact.isNaN()) priceImpact = BN.ZERO;
-    if (priceImpact.gt(100)) priceImpact = new BN(100);
+    const priceImpact = amount0.div(amount1.times(rate)).times(100);
+    if (priceImpact.isNaN()) {
+      return null;
+    }
     return (priceImpact.isNaN() ? BN.ZERO : priceImpact).toFormat(4);
   }
 
@@ -194,6 +198,7 @@ class MultiSwapVM {
   };
 
   get cashback() {
+    // Amount0 * 0.004 * Price(0,USDN) / Price(PUZZLE/USDN)
     const { poolsStore, accountStore } = this.rootStore;
     const puzzleAssetId = accountStore.TOKENS.PUZZLE.assetId;
     const puzzlePrice = poolsStore.usdnRate(puzzleAssetId, 1);
