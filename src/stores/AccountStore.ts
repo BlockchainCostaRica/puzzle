@@ -76,13 +76,21 @@ class AccountStore {
     if (this.isBrowserSupportsWavesKeeper) {
       this.setupWavesKeeper();
     }
-    // this.login(localStorage.getItem("authMethod") as any)
-    //   .then(this.updateAccountAssets)
-    //   .catch((e) => alert(e.toString()));
     if (initState) {
-      this.setAddress(initState.address);
       this.setLoginType(initState.loginType);
+
+      initState.loginType === LOGIN_TYPE.KEEPER &&
+        this.setAddress(initState.address);
+
+      initState.loginType != null &&
+        this.login(initState.loginType)
+          .then(this.updateAccountAssets)
+          .catch(async (e) => {
+            await new Promise((r) => setTimeout(r, 100));
+            errorMessage({ message: e.toString() });
+          });
     }
+
     setInterval(this.updateAccountAssets, 5000);
   }
 
@@ -209,15 +217,28 @@ class AccountStore {
       errorMessage({ message: "You need login firstly" });
       return;
     }
-    const ttx = this.signer.invoke({
-      dApp: txParams.dApp,
-      fee: 500000,
-      payment: txParams.payment,
-      call: txParams.call,
-    });
-    const tx = await ttx.broadcast();
-    console.log(tx);
-    return tx;
+    try {
+      const ttx = this.signer.invoke({
+        dApp: txParams.dApp,
+        fee: 500000,
+        payment: txParams.payment,
+        call: txParams.call,
+      });
+
+      ttx.broadcast().then((tx: any) => {
+        successMessage({
+          title: "Transaction is completed",
+          link: `${this.EXPLORER_LINK}/tx/${tx.id}`,
+        });
+        return tx;
+      });
+    } catch (e: any) {
+      console.warn(e);
+      errorMessage({
+        title: "Transaction is not completed",
+        message: e,
+      });
+    }
   };
 
   private invokeWithKeeper = async (txParams: IInvokeTxParams) => {
@@ -231,7 +252,6 @@ class AccountStore {
       type: 16,
       data,
     } as any).catch(({ data: message }: any) => {
-      console.log(data);
       errorMessage({ title: "Transaction is not completed", message });
       return null;
     });

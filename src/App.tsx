@@ -23,6 +23,7 @@ import { WalletModule } from "@src/old_components/WalletModule";
 const Root = styled(Column)`
   width: 100%;
   align-items: center;
+  z-index: 101;
 `;
 
 const App: React.FC = () => {

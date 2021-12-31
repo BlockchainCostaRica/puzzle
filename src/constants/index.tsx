@@ -40,7 +40,7 @@ export const NODE_URL_MAP: Record<TChainId, string> = {
   T: "https://nodes-testnet.wavesnodes.com",
 };
 export const EXPLORER_URL_MAP: Record<TChainId, string> = {
-  W: "https://wavesexplorer.com/",
+  W: "https://wavesexplorer.com",
   T: "https://testnet.wavesexplorer.com",
 };
 

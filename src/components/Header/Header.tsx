@@ -18,7 +18,7 @@ const Root = styled(Column)`
   width: 100%;
   background: #fff;
   align-items: center;
-  z-index: 2;
+  z-index: 102;
   box-shadow: 0px 8px 56px rgba(54, 56, 112, 0.16);
 `;
 
@@ -30,7 +30,7 @@ const TopMenu = styled.header`
   height: 64px;
   padding: 0 16px;
   max-width: 1440px;
-  z-index: 101;
+  z-index: 102;
   @media (min-width: 880px) {
     height: 80px;
   }

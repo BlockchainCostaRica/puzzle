@@ -20,7 +20,9 @@ export const successMessage = (props: INotification) => {
     message: props.link ? (
       <NotificationInfo>
         You can view the details of it in&nbsp;
-        <a href={props.link}>Waves Explorer</a>
+        <a href={props.link} target="_blank" rel="noopener noreferrer">
+          Waves Explorer
+        </a>
       </NotificationInfo>
     ) : (
       props.message ?? ""
