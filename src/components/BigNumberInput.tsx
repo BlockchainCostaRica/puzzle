@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import BN from "@src/utils/BN";
-
+import { detect } from "detect-browser";
 export interface IBigNumberInputProps {
   className?: string;
   decimals: number;
@@ -18,6 +18,8 @@ export interface IBigNumberInputProps {
   disabled?: boolean;
   readOnly?: boolean;
 }
+
+const browser = detect();
 
 const BigNumberInput: React.FC<IBigNumberInputProps> = ({
   decimals,
@@ -41,12 +43,12 @@ const BigNumberInput: React.FC<IBigNumberInputProps> = ({
       return;
     }
 
-    const caret = inputRef.current.selectionStart;
+    // const caret = inputRef.current.selectionStart;
     _setInputValue(value);
 
-    window.requestAnimationFrame(() => {
-      inputRef.current && inputRef.current.setSelectionRange(caret, caret);
-    });
+    // window.requestAnimationFrame(() => {
+    //   inputRef.current && inputRef.current.setSelectionRange(caret, caret);
+    // });
   };
 
   // update current value

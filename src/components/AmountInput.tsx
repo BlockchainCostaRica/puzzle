@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
+import { log } from "util";
 
 const Root = styled.input`
   font-size: 20px;
@@ -30,6 +31,7 @@ type TProps = React.InputHTMLAttributes<HTMLInputElement>;
 const AmountInput = React.forwardRef<HTMLInputElement, TProps>(
   ({ onWheel, ...props }, ref) => (
     <Root
+      {...props}
       ref={ref}
       type="number"
       onWheel={(e) => {
