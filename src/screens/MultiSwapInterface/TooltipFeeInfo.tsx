@@ -8,7 +8,7 @@ import BN from "@src/utils/BN";
 const TooltipFeeInfo: React.FC = () => {
   const vm = useMultiSwapVM();
   const token1 = vm.token1!;
-  const amount = BN.formatUnits(vm.amount1);
+  const amount = BN.formatUnits(vm.amount1, token1.decimals);
   return (
     <Column>
       <Text>
