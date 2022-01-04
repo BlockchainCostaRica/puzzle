@@ -77,18 +77,18 @@ class AccountStore {
       this.setupWavesKeeper();
     }
     if (initState) {
-      this.setLoginType(initState.loginType);
-
-      initState.loginType === LOGIN_TYPE.KEEPER &&
+      if (initState.loginType === LOGIN_TYPE.KEEPER) {
+        this.setLoginType(initState.loginType);
         this.setAddress(initState.address);
+      }
 
-      initState.loginType != null &&
-        this.login(initState.loginType)
-          .then(this.updateAccountAssets)
-          .catch(async (e) => {
-            await new Promise((r) => setTimeout(r, 100));
-            errorMessage({ message: e.toString() });
-          });
+      // initState.loginType != null &&
+      //   this.login(initState.loginType)
+      //     .then(this.updateAccountAssets)
+      //     .catch(async (e) => {
+      //       await new Promise((r) => setTimeout(r, 100));
+      //       errorMessage({ message: e.toString() });
+      //     });
     }
 
     setInterval(this.updateAccountAssets, 5000);

@@ -81,7 +81,7 @@ class MultiSwapVM {
   }
 
   get priceImpact() {
-    //(Price(0,1) / (Amount0/Amount1)) * 100
+    //100 * (Price(0,1) / (Amount0/Amount1))
     const rate = this.rate;
     if (this.token1 == null || this.token0 == null || rate.eq(BN.ZERO)) {
       return null;
@@ -89,7 +89,8 @@ class MultiSwapVM {
     const amount0 = BN.formatUnits(this.amount0, this.token0!.decimals);
     const amount1 = BN.formatUnits(this.amount1, this.token1!.decimals);
 
-    let priceImpact = amount0.div(amount1.times(rate)).times(100);
+    // let priceImpact = amount0.div(amount1.times(rate)).times(100);
+    let priceImpact = new BN(100).times(rate.div(amount0.div(amount1)));
     if (priceImpact.gt(100)) priceImpact = new BN(100);
     return (priceImpact.isNaN() ? BN.ZERO : priceImpact).toFormat(4);
   }

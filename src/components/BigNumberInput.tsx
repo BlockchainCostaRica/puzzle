@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import BN from "@src/utils/BN";
-import { detect } from "detect-browser";
+
 export interface IBigNumberInputProps {
   className?: string;
   decimals: number;
@@ -19,7 +19,7 @@ export interface IBigNumberInputProps {
   readOnly?: boolean;
 }
 
-const browser = detect();
+// const browser = detect();
 
 const BigNumberInput: React.FC<IBigNumberInputProps> = ({
   decimals,

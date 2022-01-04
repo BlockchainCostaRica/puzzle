@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { log } from "util";
 
 const Root = styled.input`
   font-size: 20px;
