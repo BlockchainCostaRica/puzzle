@@ -89,10 +89,8 @@ class MultiSwapVM {
     const amount0 = BN.formatUnits(this.amount0, this.token0!.decimals);
     const amount1 = BN.formatUnits(this.amount1, this.token1!.decimals);
 
-    const priceImpact = amount0.div(amount1.times(rate)).times(100);
-    if (priceImpact.isNaN()) {
-      return null;
-    }
+    let priceImpact = amount0.div(amount1.times(rate)).times(100);
+    if (priceImpact.gt(100)) priceImpact = new BN(100);
     return (priceImpact.isNaN() ? BN.ZERO : priceImpact).toFormat(4);
   }
 
