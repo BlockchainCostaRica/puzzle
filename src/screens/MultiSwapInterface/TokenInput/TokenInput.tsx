@@ -58,9 +58,11 @@ const InputContainer = styled.div<{
   width: 100%;
   position: relative;
   cursor: ${({ readOnly }) => (readOnly ? "not-allowed" : "unset")};
+
   input {
     cursor: ${({ readOnly }) => (readOnly ? "not-allowed" : "unset")};
   }
+
   border: 1px solid
     ${({ focused, readOnly }) => (focused && !readOnly ? "#7075E9" : "#f1f2fe")};
 

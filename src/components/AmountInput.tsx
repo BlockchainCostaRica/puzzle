@@ -36,7 +36,8 @@ const AmountInput = React.forwardRef<HTMLInputElement, TProps>(
         e.target && (e.target as any).blur();
         onWheel && onWheel(e);
       }}
-      {...props}
+      onBlur={props.onBlur}
+      onFocus={props.onFocus}
     />
   )
 );
