@@ -56,8 +56,8 @@ const StyledLink = styled(Link)`
 const Banner: React.FC<IProps> = ({ closed, setClosed }) => {
   return (
     <Root closed={closed}>
-      Puzzle cashback rewards are live! 🎊&nbsp;
-      <StyledLink to="/puzzle">Buy PUZZLE</StyledLink>
+      Puzzle staking is live! 🎊&nbsp;
+      <StyledLink to="/stake">Stake PUZZLE</StyledLink>
       <CloseIcon className="close" onClick={() => setClosed(true)} />
     </Root>
   );

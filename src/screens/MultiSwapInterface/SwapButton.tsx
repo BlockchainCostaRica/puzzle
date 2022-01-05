@@ -34,6 +34,12 @@ const SwapButton: React.FC<IProps> = () => {
           Insufficient {`${vm.token0?.name ?? ""} `}balance
         </Button>
       );
+    case vm.priceImpact && vm.priceImpact.eq(100):
+      return (
+        <Button disabled fixed>
+          Price impact too high
+        </Button>
+      );
     case amount0 != null || token0 != null || amount1 != null || token1 != null:
       return (
         <Button onClick={vm.swap} fixed>

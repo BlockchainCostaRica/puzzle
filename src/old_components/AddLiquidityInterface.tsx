@@ -334,7 +334,7 @@ export class AddLiquidityInterface extends React.Component<IProps, IState> {
       <div className="addLiquidity">
         <div className="head">
           <h1>Deposit liquidity</h1>
-          <p className="landing__desc">
+          <p className="landing__desc" style={{ textAlign: "center" }}>
             Select the method of adding liquidity and enter the value
           </p>
         </div>

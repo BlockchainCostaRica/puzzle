@@ -461,6 +461,7 @@ a {
             }
 
             .landing__desc {
+                text-align: center;
                 max-width: 400px;
                 margin-bottom: 40px;
                 a {
@@ -512,6 +513,8 @@ a {
 }
 
 .ignore-link {
+    text-align: center;
+    width: 100%;
     display: inherit;
     text-decoration: none;
     color: inherit;

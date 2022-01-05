@@ -230,7 +230,7 @@ export class AddOneTokenInterface extends React.Component<IProps, IState> {
       <div className="addLiquidity">
         <div className="head">
           <h1>Deposit liquidity</h1>
-          <p className="desc">
+          <p className="landing__desc" style={{ textAlign: "center" }}>
             Select the method of adding liquidity and enter the value
           </p>
         </div>

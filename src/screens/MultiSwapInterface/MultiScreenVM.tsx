@@ -88,11 +88,11 @@ class MultiSwapVM {
     }
     const amount0 = BN.formatUnits(this.amount0, this.token0!.decimals);
     const amount1 = BN.formatUnits(this.amount1, this.token1!.decimals);
-
-    // let priceImpact = amount0.div(amount1.times(rate)).times(100);
-    let priceImpact = new BN(100).times(rate.div(amount0.div(amount1)));
+    //(amount0/(amount1*rate))*100
+    let priceImpact = amount0.times(rate).div(amount1).minus(1).times(100);
+    // let priceImpact = new BN(100).times(rate.div(amount0.div(amount1)));
     if (priceImpact.gt(100)) priceImpact = new BN(100);
-    return (priceImpact.isNaN() ? BN.ZERO : priceImpact).toFormat(4);
+    return priceImpact.isNaN() ? BN.ZERO : priceImpact;
   }
 
   switchTokens = () => {

@@ -96,7 +96,9 @@ const MultiSwapInterfaceImpl: React.FC = () => {
                   mainAxisSize="fit-content"
                   justifyContent="flex-end"
                 >
-                  {vm.priceImpact && <Text>~{vm.priceImpact}%&nbsp;</Text>}
+                  {vm.priceImpact && (
+                    <Text>~{vm.priceImpact.toFormat(4)}%&nbsp;</Text>
+                  )}
                   {vm.token0 && !vm.amount0.isNaN() && (
                     <Tooltip
                       content={<TooltipFeeInfo />}
