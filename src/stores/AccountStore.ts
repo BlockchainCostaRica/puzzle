@@ -73,6 +73,9 @@ class AccountStore {
   constructor(rootStore: RootStore, initState?: ISerializedAccountStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
+    if (this.isBrowserSupportsWavesKeeper) {
+      this.setupWavesKeeper();
+    }
     if (initState) {
       if (initState.loginType === LOGIN_TYPE.KEEPER) {
         this.setLoginType(initState.loginType);
@@ -133,6 +136,26 @@ class AccountStore {
     // localStorage.removeItem("userBalances");
     // window.location.reload();
   }
+
+  setupWavesKeeper = () => {
+    let attemptsCount = 0;
+
+    autorun(
+        (reaction) => {
+          if (attemptsCount === 2) {
+            reaction.dispose();
+            // errorMessage({ message: "Waves Keeper is not installed" });
+            // alert("keeper is not installed");
+          } else if (window["WavesKeeper"]) {
+            reaction.dispose();
+            this.isWavesKeeperInstalled = true;
+          } else {
+            attemptsCount += 1;
+          }
+        },
+        { scheduler: (run) => setInterval(run, 1000) }
+    );
+  };
 
   serialize = (): ISerializedAccountStore => ({
     address: this.address,
