@@ -125,7 +125,7 @@ class AccountStore {
     }
     const loginData = await this.signer?.login();
     this.setAddress(loginData?.address ?? null);
-    localStorage.setItem("authMethod", loginType);
+    // localStorage.setItem("authMethod", loginType);
   };
 
   logout() {
@@ -141,19 +141,19 @@ class AccountStore {
     let attemptsCount = 0;
 
     autorun(
-        (reaction) => {
-          if (attemptsCount === 2) {
-            reaction.dispose();
-            // errorMessage({ message: "Waves Keeper is not installed" });
-            // alert("keeper is not installed");
-          } else if (window["WavesKeeper"]) {
-            reaction.dispose();
-            this.isWavesKeeperInstalled = true;
-          } else {
-            attemptsCount += 1;
-          }
-        },
-        { scheduler: (run) => setInterval(run, 1000) }
+      (reaction) => {
+        if (attemptsCount === 2) {
+          reaction.dispose();
+          // errorMessage({ message: "Waves Keeper is not installed" });
+          // alert("keeper is not installed");
+        } else if (window["WavesKeeper"]) {
+          reaction.dispose();
+          this.isWavesKeeperInstalled = true;
+        } else {
+          attemptsCount += 1;
+        }
+      },
+      { scheduler: (run) => setInterval(run, 1000) }
     );
   };
 
