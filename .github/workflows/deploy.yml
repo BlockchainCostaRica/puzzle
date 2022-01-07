@@ -1,0 +1,18 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy_to_Heroku:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "puzzlefi"
+          heroku_email: "izhur27@gmail.com"
+          buildpack: "https://buildpack-registry.s3.amazonaws.com/buildpacks/mars/create-react-app.tgz"
