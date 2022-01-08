@@ -15,6 +15,7 @@ export enum MAINNET_POOL_ID {
 export const MAINNET_ROUTES = {
   ROOT: "/",
   STAKE: "/stake",
+  INVEST: "/invest",
   pools: {
     farms: MAINNET_POOL_ID.farmsPool1,
     farms2: MAINNET_POOL_ID.farmsPool2,

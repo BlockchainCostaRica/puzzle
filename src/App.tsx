@@ -19,6 +19,7 @@ import "./old_components/Landing.scss";
 import "./old_components/AddLiquidity.scss";
 import "./old_components/vovaStyles.css.scss";
 import { WalletModule } from "@src/old_components/WalletModule";
+import Invest from "@screens/Invest/Invest";
 
 const Root = styled(Column)`
   width: 100%;
@@ -66,6 +67,8 @@ const App: React.FC = () => {
         ))}
 
         {/* Invest routes */}
+        <Route path={ROUTES.INVEST} element={<Invest />} />
+
         {Object.entries(ROUTES.invest).map(([poolId, path]) => (
           <Route
             key={path}
