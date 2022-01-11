@@ -9,6 +9,7 @@ import {
 import axios from "axios";
 import { action, makeAutoObservable } from "mobx";
 import BN from "@src/utils/BN";
+import tokenLogos from "@src/assets/tokens/tokenLogos";
 
 interface IData {
   key: string;
@@ -31,6 +32,14 @@ class Pool implements IPoolConfig {
   public readonly defaultAssetId1: string;
   public readonly tokens: Array<IToken & { shareAmount: number }> = [];
   public readonly id: TPoolId;
+  private readonly _logo?: string;
+
+  public get logo() {
+    return this._logo ?? tokenLogos.UNKNOWN;
+  }
+  public get baseToken() {
+    return this.getAssetById(this.baseTokenId);
+  }
 
   public getAssetById = (assetId: string) =>
     this.tokens.find((t) => assetId === t.assetId);
@@ -52,6 +61,7 @@ class Pool implements IPoolConfig {
     this.contractAddress = params.config.contractAddress;
     this.baseTokenId = params.config.baseTokenId;
     this.name = params.config.name;
+    this._logo = params.config.logo;
     this.tokens = params.config.tokens;
     this.defaultAssetId0 = params.config.defaultAssetId0;
     this.defaultAssetId1 = params.config.defaultAssetId1;

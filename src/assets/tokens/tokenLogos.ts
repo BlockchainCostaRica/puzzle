@@ -24,6 +24,7 @@ import puzzleLogo from "@src/assets/tokens/PUZZLE.svg";
 import wavesLogo from "@src/assets/tokens/waves-logo.svg";
 import usdnLogo from "@src/assets/tokens/usdn-logo.svg";
 import raceLogo from "@src/assets/tokens/race-logo.svg";
+import unknownLogo from "@src/assets/tokens/unknown-logo.svg";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
@@ -53,4 +54,5 @@ export default {
   PUZZLE: puzzleLogo,
   USDT: usdtLogo,
   RACE: raceLogo,
+  UNKNOWN: unknownLogo,
 };
