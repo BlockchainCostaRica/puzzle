@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import React from "react";
 import Text from "@components/Text";
-import WhiteCard from "@screens/Pools/WhiteCard";
+import WhiteCard from "@screens/InvestToPoolInterface/WhiteCard";
 import SizedBox from "@components/SizedBox";
 
 interface IProps {}

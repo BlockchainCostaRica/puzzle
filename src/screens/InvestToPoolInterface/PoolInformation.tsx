@@ -3,9 +3,8 @@ import React from "react";
 import Text from "@components/Text";
 import { Column } from "@src/components/Flex";
 import SizedBox from "@components/SizedBox";
-import WhiteCard from "@screens/Pools/WhiteCard";
+import WhiteCard from "@screens/InvestToPoolInterface/WhiteCard";
 import { observer } from "mobx-react-lite";
-import { useStores } from "@stores";
 
 interface IProps {}
 
@@ -44,7 +43,7 @@ const infornation = [
   { text: "APY", value: "123.45 %" },
 ];
 const PoolInformation: React.FC<IProps> = () => {
-  const { accountStore } = useStores();
+  // const { accountStore } = useStores();
   return (
     <Root>
       <Text weight={500} type="secondary">

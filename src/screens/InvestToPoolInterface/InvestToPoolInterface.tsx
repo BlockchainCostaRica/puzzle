@@ -2,15 +2,18 @@ import styled from "@emotion/styled";
 import React from "react";
 import { Observer } from "mobx-react-lite";
 import Layout from "@components/Layout";
-import { PoolsVMProvider, usePoolsVM } from "@screens/Pools/PoolsScreenVM";
+import {
+  InvestToPoolInterfaceVMProvider,
+  useInvestToPoolInterfaceVM,
+} from "@screens/InvestToPoolInterface/InvestToPoolInterfaceVM";
 import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
-import PoolInformation from "@screens/Pools/PoolInformation";
-import YourLiquidity from "@screens/Pools/YourLiquidity";
+import PoolInformation from "@screens/InvestToPoolInterface/PoolInformation";
+import YourLiquidity from "@screens/InvestToPoolInterface/YourLiquidity";
 import { Column } from "@src/components/Flex";
-import FeesReturn from "@screens/Pools/FeesReturn";
-import PoolComposition from "@screens/Pools/PoolComposition";
-import RewardToClaim from "@screens/Pools/RewardToClaim";
+import FeesReturn from "@screens/InvestToPoolInterface/FeesReturn";
+import PoolComposition from "@screens/InvestToPoolInterface/PoolComposition";
+import RewardToClaim from "@screens/InvestToPoolInterface/RewardToClaim";
 
 interface IProps {
   poolId: string;
@@ -39,13 +42,13 @@ const Root = styled.div`
   }
 `;
 
-const TopBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  @media (min-width: 880px) {
-    flex-direction: row;
-  }
-`;
+// const TopBlock = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   @media (min-width: 880px) {
+//     flex-direction: row;
+//   }
+// `;
 const MainBlock = styled.div``;
 const RightBlockMobile = styled(Column)`
   @media (min-width: 880px) {
@@ -65,15 +68,15 @@ const Body = styled.div`
     column-gap: 40px;
   }
 `;
-const PoolsScreenImpl: React.FC = () => {
-  const vm = usePoolsVM();
+const InvestToPoolInterfaceImpl: React.FC = () => {
+  const vm = useInvestToPoolInterfaceVM();
   return (
     <Layout>
       <Observer>
         {() => (
           <Root>
             <Text weight={500} size="large">
-              Farms Pool 1
+              {vm.pool?.name}
             </Text>
             <SizedBox height={4} />
             <Text size="medium" type="secondary">
@@ -102,9 +105,9 @@ const PoolsScreenImpl: React.FC = () => {
   );
 };
 
-const PoolsScreenInterface: React.FC<IProps> = ({ poolId }) => (
-  <PoolsVMProvider poolId={poolId}>
-    <PoolsScreenImpl />
-  </PoolsVMProvider>
+const InvestToPoolInterface: React.FC<IProps> = ({ poolId }) => (
+  <InvestToPoolInterfaceVMProvider poolId={poolId}>
+    <InvestToPoolInterfaceImpl />
+  </InvestToPoolInterfaceVMProvider>
 );
-export default PoolsScreenInterface;
+export default InvestToPoolInterface;

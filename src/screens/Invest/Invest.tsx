@@ -10,6 +10,8 @@ import Tag from "@components/Tag";
 import { AdaptiveRow, Column, Row } from "@components/Flex";
 import { useStores } from "@stores";
 import PoolNotFound from "@screens/Invest/PoolNotFound";
+import { Link } from "react-router-dom";
+
 interface IProps {}
 
 const Root = styled.div`
@@ -55,6 +57,7 @@ const Grid = styled.div`
   }
 
   & .gridRow {
+    cursor: pointer;
     display: grid;
     grid-template-columns: 6fr 2fr 1fr;
     font-weight: normal;
@@ -88,10 +91,13 @@ const SharesContainer = styled(Row)`
 `;
 
 const Invest: React.FC<IProps> = () => {
-  const { poolsStore } = useStores();
+  const { poolsStore, accountStore } = useStores();
   const [searchValue, setSearchValue] = useState<string>("");
   const filteredPools = poolsStore.pools
     .slice()
+    .filter(({ id }) =>
+      Object.keys(accountStore.ROUTES.invest).some((key) => key === id)
+    )
     .filter(({ name, tokens }) =>
       searchValue
         ? [name, ...tokens.map(({ symbol }) => symbol)]
@@ -129,7 +135,11 @@ const Invest: React.FC<IProps> = () => {
                 <div>APY</div>
               </div>
               {filteredPools.map((pool, i) => (
-                <div className="gridRow" key={i}>
+                <Link
+                  to={`/${(accountStore.ROUTES.invest as any)[pool.id]}`}
+                  className="gridRow"
+                  key={i}
+                >
                   <Row>
                     <Icon src={pool.logo} alt="logo" />
                     <SizedBox width={8} />
@@ -170,7 +180,7 @@ const Invest: React.FC<IProps> = () => {
                     </Text>
                   </AdaptiveRow>
                   <Text style={{ whiteSpace: "nowrap" }}>– %</Text>
-                </div>
+                </Link>
               ))}
             </Grid>
           ) : (

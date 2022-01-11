@@ -3,9 +3,9 @@ import React from "react";
 import Text from "@components/Text";
 import Button from "@components/Button";
 import SizedBox from "@components/SizedBox";
-import WhiteCard from "@screens/Pools/WhiteCard";
+import WhiteCard from "@screens/InvestToPoolInterface/WhiteCard";
 import { useStores } from "@stores";
-import { Column, Row } from "@src/components/Flex";
+import { Column } from "@src/components/Flex";
 
 interface IProps {}
 

@@ -7,7 +7,7 @@ import MultiSwapInterface from "@screens/MultiSwapInterface";
 import { StakeModule } from "@src/old_components/StakeModule";
 import { AddLiquidityInterface } from "@src/old_components/AddLiquidityInterface";
 import { AddOneTokenInterface } from "@src/old_components/AddOneTokenInterface";
-import { InvestToPoolInterface } from "@src/old_components/InvestToPoolInterface";
+import InvestToPoolInterface from "@src/screens/InvestToPoolInterface";
 import Header from "@components/Header/Header";
 import { Column } from "@components/Flex";
 import NotFound from "@screens/NotFound";
@@ -20,7 +20,6 @@ import "./old_components/AddLiquidity.scss";
 import "./old_components/vovaStyles.css.scss";
 import { WalletModule } from "@src/old_components/WalletModule";
 import Invest from "@screens/Invest/Invest";
-import PoolsScreenInterface from "@screens/Pools/PoolsScreenInterface";
 
 const Root = styled(Column)`
   width: 100%;
@@ -74,15 +73,11 @@ const App: React.FC = () => {
           <Route
             key={path}
             path={path}
-            element={<InvestToPoolInterface poolName={poolId} />}
+            element={<InvestToPoolInterface poolId={poolId} />}
           />
         ))}
 
         <Route path="*" element={<NotFound />} />
-        <Route
-          path="/pools"
-          element={<PoolsScreenInterface poolId="poolid" />}
-        />
       </Routes>
 
       <ReactNotification className="notificationWindow" />
