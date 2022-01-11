@@ -20,6 +20,7 @@ import "./old_components/AddLiquidity.scss";
 import "./old_components/vovaStyles.css.scss";
 import { WalletModule } from "@src/old_components/WalletModule";
 import Invest from "@screens/Invest/Invest";
+import PoolsScreenInterface from "@screens/Pools/PoolsScreenInterface";
 
 const Root = styled(Column)`
   width: 100%;
@@ -78,6 +79,10 @@ const App: React.FC = () => {
         ))}
 
         <Route path="*" element={<NotFound />} />
+        <Route
+          path="/pools"
+          element={<PoolsScreenInterface poolId="poolid" />}
+        />
       </Routes>
 
       <ReactNotification className="notificationWindow" />
