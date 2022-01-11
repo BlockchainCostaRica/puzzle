@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 
 interface IProps {
   type?: "primary" | "default";
+  background?: string;
 }
 
 const Tag = styled.div<IProps>`
@@ -15,7 +16,8 @@ const Tag = styled.div<IProps>`
   font-size: 12px;
   line-height: 16px;
   color: ${({ type }) => (type === "primary" ? "#fff" : "#363870")};
-  background: ${({ type }) => (type === "primary" ? "#7075E9" : "#F1F2FE")};
+  background: ${({ type, background }) =>
+    type === "primary" ? "#7075E9" : background ?? "#F1F2FE"};
   max-width: fit-content;
   border: none;
 `;

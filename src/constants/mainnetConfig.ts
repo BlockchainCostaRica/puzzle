@@ -48,6 +48,7 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
     contractAddress: "3PPRHHF9JKvDLkAc3aHD3Kd5tRZp1CoqAJa",
     baseTokenId: mainnetTokens.EGG.assetId,
     name: "Farms 1",
+    logo: tokenLogos.EGG,
     defaultAssetId0: mainnetTokens.MATH.assetId,
     defaultAssetId1: mainnetTokens.USDN.assetId,
     tokens: [
@@ -83,6 +84,7 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
     contractAddress: "3PKYPKJPHZENAAwH9e7TF5edDgukNxxBt3M",
     baseTokenId: mainnetTokens.EGG.assetId,
     name: "Farms 2",
+    logo: tokenLogos.EGG,
     defaultAssetId0: mainnetTokens.MARVIN.assetId,
     defaultAssetId1: mainnetTokens.USDN.assetId,
     tokens: [
@@ -101,6 +103,7 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
     contractAddress: "3PDrYPF6izza2sXWffzTPF7e2Fcir2CMpki",
     baseTokenId: mainnetTokens.USDN.assetId,
     name: "DeFi",
+    logo: tokenLogos.WAVES,
     defaultAssetId0: mainnetTokens.EGG.assetId,
     defaultAssetId1: mainnetTokens.USDN.assetId,
     tokens: [
@@ -120,6 +123,7 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
     contractAddress: "3PNK5ypnPJioLmLUzfK6ezpaePHLxZd6QLj",
     baseTokenId: mainnetTokens.USDN.assetId,
     name: "Race",
+    logo: tokenLogos.RACE,
     defaultAssetId0: mainnetTokens.RACE.assetId,
     defaultAssetId1: mainnetTokens.USDN.assetId,
     tokens: [
@@ -132,6 +136,7 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
     contractAddress: "3PFDgzu1UtswAkCMxqqQjbTeHaX4cMab8Kh",
     baseTokenId: mainnetTokens.USDN.assetId,
     name: "Puzzle",
+    logo: tokenLogos.PUZZLE,
     defaultAssetId0: mainnetTokens.PUZZLE.assetId,
     defaultAssetId1: mainnetTokens.USDN.assetId,
     tokens: [

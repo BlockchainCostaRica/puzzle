@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 
 const Card = styled.div<{ maxWidth?: number }>`
+  display: flex;
+  flex-direction: column;
   max-width: ${({ maxWidth }) => `${maxWidth}px` ?? "100%"};
   width: 100%;
   background: #ffffff;

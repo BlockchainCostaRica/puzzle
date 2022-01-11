@@ -1,10 +1,10 @@
 import styled from "@emotion/styled";
-import React, { HTMLAttributes, useState } from "react";
+import React, { ChangeEvent, HTMLAttributes, useState } from "react";
 import { ReactComponent as SearchIcon } from "@src/assets/icons/search.svg";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   value?: string;
-  onChange?: (e: any) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Root = styled.div<{ focused?: boolean }>`
