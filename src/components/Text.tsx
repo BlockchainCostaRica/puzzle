@@ -8,8 +8,6 @@ const Text = styled.div<{
   weight?: 400 | 500;
   size?: TTextSize;
 }>`
-  font-size: 14px;
-  line-height: 20px;
   font-weight: ${({ weight }) => weight ?? 400};
   color: ${({ type }) => (type === "secondary" ? "#8082C5" : "#363870")};
   ${({ size }) =>

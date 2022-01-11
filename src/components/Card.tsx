@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
-const Card = styled.div`
-  max-width: 560px;
+const Card = styled.div<{ maxWidth?: number }>`
+  max-width: ${({ maxWidth }) => `${maxWidth}px` ?? "100%"};
   width: 100%;
   background: #ffffff;
   border: 1px solid #f1f2fe;
