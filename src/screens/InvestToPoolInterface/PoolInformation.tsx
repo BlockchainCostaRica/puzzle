@@ -37,12 +37,13 @@ const Info: React.FC<{ text: string; value: string }> = ({ text, value }) => (
     </Text>
   </Column>
 );
-
-const infornation = [
-  { text: "Pool value", value: "$ 999,999" },
-  { text: "Fees (30D)", value: "$ 1,234.00" },
-  { text: "APY", value: "123.45 %" },
-];
+const CCard = styled(Card)`
+  display: grid;
+  grid-template-columns: 1fr;
+  @media (min-width: 880px) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+`;
 const PoolInformation: React.FC<IProps> = () => {
   // const { accountStore } = useStores();
   return (
@@ -51,11 +52,11 @@ const PoolInformation: React.FC<IProps> = () => {
         Pool Information
       </Text>
       <SizedBox height={8} />
-      <Card>
-        {infornation.map((i) => (
-          <Info key={i.text} {...i} />
-        ))}
-      </Card>
+      <CCard>
+        <Info text="Pool value" value="$ 999,999" />
+        <Info text="Fees (30D)" value="$ 1,234.00" />
+        <Info text="APY" value="123.45 %" />
+      </CCard>
     </Root>
   );
 };

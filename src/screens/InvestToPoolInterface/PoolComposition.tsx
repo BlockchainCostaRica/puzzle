@@ -5,8 +5,6 @@ import Card from "@components/Card";
 import SizedBox from "@components/SizedBox";
 import GridTable from "@components/GridTable";
 import { AdaptiveRow, Column, Row } from "@components/Flex";
-import { Link } from "react-router-dom";
-import Tag from "@components/Tag";
 import { useInvestToPoolInterfaceVM } from "@screens/InvestToPoolInterface/InvestToPoolInterfaceVM";
 import { observer } from "mobx-react-lite";
 import { useStores } from "@stores";

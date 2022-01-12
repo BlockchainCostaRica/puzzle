@@ -34,7 +34,7 @@ const RewardToClaim: React.FC<IProps> = () => {
       <SizedBox height={8} />
       <Card paddingDesktop="24px 0" paddingMobile="16px 0">
         <Header>
-          <Column>
+          <Column crossAxisSize="max">
             <Text type="secondary">Total value</Text>
             <Text weight={500}>$ 100.00</Text>
           </Column>

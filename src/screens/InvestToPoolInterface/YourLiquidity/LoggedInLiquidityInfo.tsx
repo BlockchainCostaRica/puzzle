@@ -9,15 +9,15 @@ import Button from "@components/Button";
 interface IProps {}
 
 const Root = styled.div`
+  width: 100%;
   display: grid;
   column-gap: 8px;
   grid-template-columns: 1fr 1fr;
 `;
-
 const LoggedInLiquidityInfo: React.FC<IProps> = () => {
   return (
     <Root>
-      <Column>
+      <Column crossAxisSize="max">
         <Text type="secondary">Value</Text>
         <SizedBox height={4} />
         <Text
@@ -32,7 +32,7 @@ const LoggedInLiquidityInfo: React.FC<IProps> = () => {
           Withdraw
         </Button>
       </Column>
-      <Column>
+      <Column crossAxisSize="max">
         <Text type="secondary">Share of pool</Text>
         <SizedBox height={4} />
         <Text weight={500} size="large" style={{ lineHeight: "32px" }}>

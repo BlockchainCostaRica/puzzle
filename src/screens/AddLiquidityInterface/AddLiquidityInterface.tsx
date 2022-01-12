@@ -8,7 +8,6 @@ import SizedBox from "@components/SizedBox";
 import SwitchButtons from "@components/SwitchButtons";
 import Button from "@components/Button";
 import { InvestToPoolInterfaceVMProvider } from "@screens/InvestToPoolInterface/InvestToPoolInterfaceVM";
-import { useAddLiquidityInterfaceVM } from "@screens/AddLiquidityInterface/AddLiquidityInterfaceVM";
 
 interface IProps {
   poolId: string;
@@ -32,7 +31,6 @@ const Root = styled.div`
 `;
 
 const AddLiquidityInterfaceImpl = () => {
-  const vm = useAddLiquidityInterfaceVM();
   return (
     <Layout>
       <Observer>
