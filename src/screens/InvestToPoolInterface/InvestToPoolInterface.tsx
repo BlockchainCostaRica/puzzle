@@ -9,7 +9,7 @@ import {
 import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
 import PoolInformation from "@screens/InvestToPoolInterface/PoolInformation";
-import YourLiquidity from "@screens/InvestToPoolInterface/YourLiquidity";
+import YourLiquidity from "@screens/InvestToPoolInterface/YourLiquidity/YourLiquidity";
 import { Column } from "@src/components/Flex";
 import FeesReturn from "@screens/InvestToPoolInterface/FeesReturn";
 import PoolComposition from "@screens/InvestToPoolInterface/PoolComposition";
@@ -80,9 +80,8 @@ const InvestToPoolInterfaceImpl: React.FC = () => {
             </Text>
             <SizedBox height={4} />
             <Text size="medium" type="secondary">
-              Fixed swap fees: 0.1 %
+              Fixed swap fees: 2 %
             </Text>
-            <SizedBox height={24} />
             <Body>
               <MainBlock>
                 <RightBlockMobile>

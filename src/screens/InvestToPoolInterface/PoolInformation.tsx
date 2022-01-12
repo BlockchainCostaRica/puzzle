@@ -11,6 +11,7 @@ interface IProps {}
 const Root = styled.div`
   display: flex;
   flex-direction: column;
+  padding-top: 24px;
 `;
 const Card = styled(WhiteCard)`
   & > * {
