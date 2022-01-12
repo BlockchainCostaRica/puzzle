@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import React from "react";
 import Text from "@components/Text";
-import WhiteCard from "@screens/InvestToPoolInterface/WhiteCard";
+import Card from "@components/Card";
 import SizedBox from "@components/SizedBox";
 
 interface IProps {}
@@ -19,7 +19,7 @@ const TradesVolume: React.FC<IProps> = () => {
         Trades volume
       </Text>
       <SizedBox height={8} />
-      <WhiteCard style={{ height: 300 }} />
+      <Card style={{ height: 300 }} />
     </Root>
   );
 };

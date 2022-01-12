@@ -5,7 +5,7 @@ import { observer } from "mobx-react-lite";
 import ReactNotification from "react-notifications-component";
 import MultiSwapInterface from "@screens/MultiSwapInterface";
 import { StakeModule } from "@src/old_components/StakeModule";
-import { AddLiquidityInterface } from "@src/old_components/AddLiquidityInterface";
+import AddLiquidityInterface from "@src/screens/AddLiquidityInterface";
 import { AddOneTokenInterface } from "@src/old_components/AddOneTokenInterface";
 import InvestToPoolInterface from "@src/screens/InvestToPoolInterface";
 import Header from "@components/Header/Header";
@@ -19,7 +19,7 @@ import "./old_components/Landing.scss";
 import "./old_components/AddLiquidity.scss";
 import "./old_components/vovaStyles.css.scss";
 import { WalletModule } from "@src/old_components/WalletModule";
-import Invest from "@screens/Invest/Invest";
+import Invest from "@screens/Invest";
 
 const Root = styled(Column)`
   width: 100%;
@@ -48,15 +48,6 @@ const App: React.FC = () => {
           />
         ))}
 
-        {/* Add liquidity routes */}
-        {Object.entries(ROUTES.addLiquidity).map(([poolId, path]) => (
-          <Route
-            key={path}
-            path={path}
-            element={<AddLiquidityInterface poolName={poolId} />}
-          />
-        ))}
-
         {/* Add One Token routes */}
         {Object.entries(ROUTES.addOneToken).map(([poolId, path]) => (
           <Route
@@ -74,6 +65,15 @@ const App: React.FC = () => {
             key={path}
             path={path}
             element={<InvestToPoolInterface poolId={poolId} />}
+          />
+        ))}
+
+        {/* Add liquidity routes */}
+        {Object.entries(ROUTES.addLiquidity).map(([poolId, path]) => (
+          <Route
+            key={path}
+            path={path}
+            element={<AddLiquidityInterface poolId={poolId} />}
           />
         ))}
 

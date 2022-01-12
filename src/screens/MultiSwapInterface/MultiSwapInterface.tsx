@@ -50,7 +50,7 @@ const MultiSwapInterfaceImpl: React.FC = () => {
       <Observer>
         {() => (
           <Root>
-            <Card maxWidth={560}>
+            <Card paddingDesktop="32px" maxWidth={560}>
               <TokenInput
                 decimals={vm.token0!.decimals}
                 amount={vm.amount0}

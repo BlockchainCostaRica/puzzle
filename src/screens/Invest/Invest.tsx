@@ -11,6 +11,7 @@ import { AdaptiveRow, Column, Row } from "@components/Flex";
 import { useStores } from "@stores";
 import PoolNotFound from "@screens/Invest/PoolNotFound";
 import { Link } from "react-router-dom";
+import GridTable from "@components/GridTable";
 
 interface IProps {}
 
@@ -39,41 +40,6 @@ const Icon = styled.img`
   border: 1px solid #f1f2fe;
 `;
 
-const Grid = styled.div`
-  & .gridTitle {
-    display: grid;
-    grid-template-columns: 6fr 2fr 1fr;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 20px;
-    color: #8082c5;
-    padding: 14px 16px;
-    box-sizing: border-box;
-    border-bottom: 1px solid #f1f2fe;
-    margin-bottom: 8px;
-    @media (min-width: 880px) {
-      padding: 14px 24px;
-    }
-  }
-
-  & .gridRow {
-    cursor: pointer;
-    display: grid;
-    grid-template-columns: 6fr 2fr 1fr;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 20px;
-    color: #8082c5;
-    box-sizing: border-box;
-    margin: 0 16px;
-    padding: 16px 0;
-    border-bottom: 1px solid #f1f2fe;
-    @media (min-width: 880px) {
-      margin: 0 24px;
-    }
-  }
-`;
-
 const SharesContainer = styled(Row)`
   padding-top: 8px;
   flex-wrap: wrap;
@@ -82,10 +48,10 @@ const SharesContainer = styled(Row)`
     margin: 2px;
   }
   min-width: 125px;
-  @media (min-width: 400px) {
+  @media (min-width: 430px) {
     min-width: 210px;
   }
-  @media (min-width: 520px) {
+  @media (min-width: 580px) {
     min-width: 325px;
   }
 `;
@@ -108,11 +74,11 @@ const Invest: React.FC<IProps> = () => {
   return (
     <Layout>
       <Root>
-        <Text style={{ width: "100%" }} weight={500} size="large">
+        <Text weight={500} size="large">
           Invest in Puzzle Mega Pools
         </Text>
         <SizedBox height={4} />
-        <Text style={{ width: "100%" }} size="medium" type="secondary">
+        <Text size="medium" type="secondary">
           Select a pool to invest
         </Text>
         <SizedBox height={24} />
@@ -126,13 +92,16 @@ const Invest: React.FC<IProps> = () => {
         <SizedBox height={16} />
         <Card style={{ padding: 0, minHeight: 280, justifyContent: "center" }}>
           {filteredPools.length > 0 ? (
-            <Grid>
+            <GridTable mobileTemplate="3fr 1fr">
               <div className="gridTitle">
                 <div>Pool name</div>
                 <AdaptiveRow>
                   <div className="desktop">Pool value</div>
+                  <div className="mobile">APY</div>
                 </AdaptiveRow>
-                <div>APY</div>
+                <AdaptiveRow>
+                  <div className="desktop">APY</div>
+                </AdaptiveRow>
               </div>
               {filteredPools.map((pool, i) => (
                 <Link
@@ -145,7 +114,11 @@ const Invest: React.FC<IProps> = () => {
                     <SizedBox width={8} />
                     <Column crossAxisSize="max">
                       <Row alignItems="center">
-                        <Text style={{ whiteSpace: "nowrap" }} weight={500}>
+                        <Text
+                          fitContent
+                          style={{ whiteSpace: "nowrap" }}
+                          weight={500}
+                        >
                           {pool.name}
                         </Text>
                         <AdaptiveRow>
@@ -166,7 +139,10 @@ const Invest: React.FC<IProps> = () => {
                             pool.defaultAssetId0 === assetId ||
                             pool.defaultAssetId1 === assetId;
                           return (
-                            <Tag background={isDefault ? "#C6C9F4" : undefined}>
+                            <Tag
+                              key={assetId}
+                              background={isDefault ? "#C6C9F4" : undefined}
+                            >
                               {symbol} {shareAmount * 100} %
                             </Tag>
                           );
@@ -178,11 +154,18 @@ const Invest: React.FC<IProps> = () => {
                     <Text style={{ whiteSpace: "nowrap" }} className="desktop">
                       $ {pool.globalLiquidity}
                     </Text>
+                    <Text className="mobile" style={{ whiteSpace: "nowrap" }}>
+                      – %
+                    </Text>
                   </AdaptiveRow>
-                  <Text style={{ whiteSpace: "nowrap" }}>– %</Text>
+                  <AdaptiveRow>
+                    <Text className="desktop" style={{ whiteSpace: "nowrap" }}>
+                      – %
+                    </Text>
+                  </AdaptiveRow>
                 </Link>
               ))}
-            </Grid>
+            </GridTable>
           ) : (
             <PoolNotFound onClear={() => setSearchValue("")} />
           )}

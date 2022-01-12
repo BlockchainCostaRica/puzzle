@@ -7,9 +7,13 @@ const Text = styled.div<{
   type?: TTextType;
   weight?: 400 | 500;
   size?: TTextSize;
+  fitContent?: boolean;
+  nowrap?: boolean;
 }>`
+  width: ${({ fitContent }) => (fitContent ? "fit-content" : "100%")};
   font-weight: ${({ weight }) => weight ?? 400};
   color: ${({ type }) => (type === "secondary" ? "#8082C5" : "#363870")};
+  white-space: ${({ nowrap }) => (nowrap ? "nowrap" : "unset")};
   ${({ size }) =>
     (() => {
       switch (size) {

@@ -3,23 +3,23 @@ import { useVM } from "@src/hooks/useVM";
 import { makeAutoObservable } from "mobx";
 import { RootStore, useStores } from "@stores";
 
-const ctx = React.createContext<InvestToPoolInterfaceVM | null>(null);
+const ctx = React.createContext<AddLiquidityInterfaceVM | null>(null);
 
-export const InvestToPoolInterfaceVMProvider: React.FC<{ poolId: string }> = ({
+export const AddLiquidityInterfaceVMProvider: React.FC<{ poolId: string }> = ({
   poolId,
   children,
 }) => {
   const rootStore = useStores();
   const store = useMemo(
-    () => new InvestToPoolInterfaceVM(rootStore, poolId),
+    () => new AddLiquidityInterfaceVM(rootStore, poolId),
     [rootStore, poolId]
   );
   return <ctx.Provider value={store}>{children}</ctx.Provider>;
 };
 
-export const useInvestToPoolInterfaceVM = () => useVM(ctx);
+export const useAddLiquidityInterfaceVM = () => useVM(ctx);
 
-class InvestToPoolInterfaceVM {
+class AddLiquidityInterfaceVM {
   public poolId: string;
   public rootStore: RootStore;
   constructor(rootStore: RootStore, poolId: string) {
@@ -28,8 +28,6 @@ class InvestToPoolInterfaceVM {
     makeAutoObservable(this);
   }
   public get pool() {
-    return this.rootStore.poolsStore.pools.find(
-      ({ id }) => id === this.poolId
-    )!;
+    return this.rootStore.poolsStore.pools.find(({ id }) => id === this.poolId);
   }
 }

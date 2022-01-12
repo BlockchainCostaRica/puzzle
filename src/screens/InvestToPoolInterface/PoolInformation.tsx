@@ -3,7 +3,7 @@ import React from "react";
 import Text from "@components/Text";
 import { Column } from "@src/components/Flex";
 import SizedBox from "@components/SizedBox";
-import WhiteCard from "@screens/InvestToPoolInterface/WhiteCard";
+import _Card from "@components/Card";
 import { observer } from "mobx-react-lite";
 
 interface IProps {}
@@ -13,7 +13,7 @@ const Root = styled.div`
   flex-direction: column;
   padding-top: 24px;
 `;
-const Card = styled(WhiteCard)`
+const Card = styled(_Card)`
   & > * {
     text-overflow: ellipsis;
     padding-bottom: 16px;

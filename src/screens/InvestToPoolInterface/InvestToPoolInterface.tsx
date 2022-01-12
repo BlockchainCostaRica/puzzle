@@ -33,10 +33,6 @@ const Root = styled.div`
   margin-top: 40px;
   text-align: left;
 
-  div {
-    width: 100%;
-  }
-
   @media (min-width: 880px) {
     margin-top: 56px;
   }
@@ -49,19 +45,24 @@ const Root = styled.div`
 //     flex-direction: row;
 //   }
 // `;
-const MainBlock = styled.div``;
+const MainBlock = styled.div`
+  width: 100%;
+`;
 const RightBlockMobile = styled(Column)`
+  width: 100%;
   @media (min-width: 880px) {
     display: none;
   }
 `;
 const RightBlock = styled(Column)`
+  width: 100%;
   display: none;
   @media (min-width: 880px) {
     display: flex;
   }
 `;
 const Body = styled.div`
+  width: 100%;
   display: grid;
   @media (min-width: 880px) {
     grid-template-columns: 2fr 1fr;

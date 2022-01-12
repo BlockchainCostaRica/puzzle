@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import React from "react";
 import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
-import WhiteCard from "@screens/InvestToPoolInterface/WhiteCard";
+import Card from "@components/Card";
 import Button from "@components/Button";
 import { Column } from "@src/components/Flex";
 import Divider from "@src/components/Divider";
@@ -32,7 +32,7 @@ const RewardToClaim: React.FC<IProps> = () => {
         Reward to claim
       </Text>
       <SizedBox height={8} />
-      <WhiteCard style={{ padding: "24px 0" }}>
+      <Card paddingDesktop="24px 0" paddingMobile="16px 0">
         <Header>
           <Column>
             <Text type="secondary">Total value</Text>
@@ -44,7 +44,7 @@ const RewardToClaim: React.FC<IProps> = () => {
         <Column style={{ padding: "0 24px" }}>
           <Text weight={500}>Reward composition</Text>
         </Column>
-      </WhiteCard>
+      </Card>
     </Root>
   );
 };
