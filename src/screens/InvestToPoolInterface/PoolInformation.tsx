@@ -45,7 +45,7 @@ const CCard = styled(Card)`
   }
 `;
 const PoolInformation: React.FC<IProps> = () => {
-  // const { accountStore } = useStores();
+  // const vm = useInvestToPoolInterfaceVM();
   return (
     <Root>
       <Text weight={500} type="secondary">

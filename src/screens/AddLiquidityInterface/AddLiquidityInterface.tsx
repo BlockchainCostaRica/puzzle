@@ -36,11 +36,11 @@ const AddLiquidityInterfaceImpl = () => {
       <Observer>
         {() => (
           <Root>
-            <Text weight={500} size="large">
+            <Text fitContent weight={500} size="large">
               Deposit liquidity
             </Text>
             <SizedBox height={4} />
-            <Text size="medium" type="secondary">
+            <Text fitContent size="medium" type="secondary">
               Select a pool to invest
             </Text>
             <SizedBox height={24} />
