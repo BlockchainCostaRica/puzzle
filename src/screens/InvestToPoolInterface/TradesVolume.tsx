@@ -12,15 +12,15 @@ const Root = styled.div`
   padding-top: 24px;
 `;
 
-const FeesReturn: React.FC<IProps> = () => {
+const TradesVolume: React.FC<IProps> = () => {
   return (
     <Root>
       <Text weight={500} type="secondary">
-        Fees return
+        Trades volume
       </Text>
       <SizedBox height={8} />
       <WhiteCard style={{ height: 300 }} />
     </Root>
   );
 };
-export default FeesReturn;
+export default TradesVolume;

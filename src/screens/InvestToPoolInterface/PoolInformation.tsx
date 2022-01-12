@@ -40,7 +40,7 @@ const Info: React.FC<{ text: string; value: string }> = ({ text, value }) => (
 
 const infornation = [
   { text: "Pool value", value: "$ 999,999" },
-  { text: "Fees (24H)", value: "$ 1,234.00" },
+  { text: "Fees (30D)", value: "$ 1,234.00" },
   { text: "APY", value: "123.45 %" },
 ];
 const PoolInformation: React.FC<IProps> = () => {

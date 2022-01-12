@@ -11,7 +11,7 @@ import SizedBox from "@components/SizedBox";
 import PoolInformation from "@screens/InvestToPoolInterface/PoolInformation";
 import YourLiquidity from "@screens/InvestToPoolInterface/YourLiquidity/YourLiquidity";
 import { Column } from "@src/components/Flex";
-import FeesReturn from "@screens/InvestToPoolInterface/FeesReturn";
+import TradesVolume from "@screens/InvestToPoolInterface/TradesVolume";
 import PoolComposition from "@screens/InvestToPoolInterface/PoolComposition";
 import RewardToClaim from "@screens/InvestToPoolInterface/RewardToClaim";
 
@@ -89,7 +89,7 @@ const InvestToPoolInterfaceImpl: React.FC = () => {
                   <RewardToClaim />
                 </RightBlockMobile>
                 <PoolInformation />
-                <FeesReturn />
+                <TradesVolume />
                 <PoolComposition />
               </MainBlock>
               <RightBlock>
