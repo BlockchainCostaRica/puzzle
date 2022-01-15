@@ -1,17 +1,17 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import Layout from "@components/Layout";
 import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
 import SearchInput from "@components/SearchInput";
 import Card from "@components/Card";
-import Tag from "@components/Tag";
-import { AdaptiveRow, Column, Row } from "@components/Flex";
+import { AdaptiveRow } from "@components/Flex";
 import { useStores } from "@stores";
 import PoolNotFound from "@screens/Invest/PoolNotFound";
-import { Link } from "react-router-dom";
 import GridTable from "@components/GridTable";
+import axios from "axios";
+import InvestPoolRow from "@screens/Invest/InvestPoolRow";
 
 interface IProps {}
 
@@ -33,32 +33,18 @@ const Root = styled.div`
   }
 `;
 
-const Icon = styled.img`
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
-  border: 1px solid #f1f2fe;
-`;
+export type TStatsPoolItem = {
+  apy: number;
+  liquidity: number;
+  monthly_volume: number;
+};
 
-const SharesContainer = styled(Row)`
-  padding-top: 8px;
-  flex-wrap: wrap;
-  margin: -2px;
-  & > * {
-    margin: 2px;
-  }
-  min-width: 125px;
-  @media (min-width: 430px) {
-    min-width: 210px;
-  }
-  @media (min-width: 580px) {
-    min-width: 325px;
-  }
-`;
+type TStats = Record<string, TStatsPoolItem>;
 
 const Invest: React.FC<IProps> = () => {
   const { poolsStore, accountStore } = useStores();
   const [searchValue, setSearchValue] = useState<string>("");
+  const [stats, setStats] = useState<TStats | null>(null);
   const filteredPools = poolsStore.pools
     .slice()
     .filter(({ id }) =>
@@ -71,6 +57,15 @@ const Invest: React.FC<IProps> = () => {
             .some((v) => v.includes(searchValue.toLowerCase()))
         : true
     );
+
+  useEffect(() => {
+    stats == null &&
+      axios
+        .get("https://puzzleback.herokuapp.com/stats/pools")
+        .then(({ data }) => setStats(data))
+        .catch(() => console.error(`Cannot update stats of the pools`));
+  }, [stats]);
+
   return (
     <Layout>
       <Root>
@@ -96,7 +91,7 @@ const Invest: React.FC<IProps> = () => {
               <div className="gridTitle">
                 <div>Pool name</div>
                 <AdaptiveRow>
-                  <div className="desktop">Pool value</div>
+                  <div className="desktop">Liquidity</div>
                   <div className="mobile">APY</div>
                 </AdaptiveRow>
                 <AdaptiveRow>
@@ -104,66 +99,11 @@ const Invest: React.FC<IProps> = () => {
                 </AdaptiveRow>
               </div>
               {filteredPools.map((pool, i) => (
-                <Link
-                  to={`/${(accountStore.ROUTES.invest as any)[pool.id]}`}
-                  className="gridRow"
+                <InvestPoolRow
                   key={i}
-                >
-                  <Row>
-                    <Icon src={pool.logo} alt="logo" />
-                    <SizedBox width={8} />
-                    <Column crossAxisSize="max">
-                      <Row alignItems="center">
-                        <Text
-                          fitContent
-                          style={{ whiteSpace: "nowrap" }}
-                          weight={500}
-                        >
-                          {pool.name}
-                        </Text>
-                        <AdaptiveRow>
-                          {pool.baseToken && (
-                            <Tag
-                              style={{ marginLeft: 8 }}
-                              type="primary"
-                              className="desktop"
-                            >
-                              Provide {pool.baseToken.symbol} only
-                            </Tag>
-                          )}
-                        </AdaptiveRow>
-                      </Row>
-                      <SharesContainer>
-                        {pool.tokens.map(({ symbol, shareAmount, assetId }) => {
-                          const isDefault =
-                            pool.defaultAssetId0 === assetId ||
-                            pool.defaultAssetId1 === assetId;
-                          return (
-                            <Tag
-                              key={assetId}
-                              background={isDefault ? "#C6C9F4" : undefined}
-                            >
-                              {symbol} {shareAmount * 100} %
-                            </Tag>
-                          );
-                        })}
-                      </SharesContainer>
-                    </Column>
-                  </Row>
-                  <AdaptiveRow>
-                    <Text style={{ whiteSpace: "nowrap" }} className="desktop">
-                      $ {pool.globalLiquidity}
-                    </Text>
-                    <Text className="mobile" style={{ whiteSpace: "nowrap" }}>
-                      – %
-                    </Text>
-                  </AdaptiveRow>
-                  <AdaptiveRow>
-                    <Text className="desktop" style={{ whiteSpace: "nowrap" }}>
-                      – %
-                    </Text>
-                  </AdaptiveRow>
-                </Link>
+                  pool={pool}
+                  stats={stats ? stats[pool.id] : undefined}
+                />
               ))}
             </GridTable>
           ) : (

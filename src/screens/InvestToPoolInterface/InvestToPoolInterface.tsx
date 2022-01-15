@@ -81,7 +81,7 @@ const InvestToPoolInterfaceImpl: React.FC = () => {
             </Text>
             <SizedBox height={4} />
             <Text size="medium" type="secondary">
-              Fixed swap fees: 2 %
+              Fixed swap fees: 2.0 %
             </Text>
             <Body>
               <MainBlock>
