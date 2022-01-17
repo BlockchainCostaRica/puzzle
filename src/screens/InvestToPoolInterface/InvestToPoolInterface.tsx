@@ -28,7 +28,7 @@ const Root = styled.div`
   padding: 0 16px;
   width: 100%;
   min-height: 100%;
-  max-width: 1160px;
+  max-width: calc(1160px + 32px);
   margin-bottom: 24px;
   margin-top: 40px;
   text-align: left;
@@ -69,6 +69,7 @@ const Body = styled.div`
     column-gap: 40px;
   }
 `;
+
 const InvestToPoolInterfaceImpl: React.FC = () => {
   const vm = useInvestToPoolInterfaceVM();
   return (
@@ -81,7 +82,7 @@ const InvestToPoolInterfaceImpl: React.FC = () => {
             </Text>
             <SizedBox height={4} />
             <Text size="medium" type="secondary">
-              Fixed swap fees: 2.0 %
+              Fixed swap fees: <span style={{ color: "#363870" }}>2.0 %</span>
             </Text>
             <Body>
               <MainBlock>
