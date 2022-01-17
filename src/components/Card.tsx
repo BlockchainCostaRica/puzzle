@@ -4,9 +4,27 @@ const Card = styled.div<{
   maxWidth?: number;
   paddingDesktop?: string;
   paddingMobile?: string;
+  justifyContent?:
+    | "start"
+    | "flex-end"
+    | "space-around"
+    | "space-between"
+    | "center";
+  alignItems?:
+    | "start"
+    | "end"
+    | "center"
+    | "inherit"
+    | "unset"
+    | "flex-end"
+    | "flex-start"
+    | "baseline";
+  flexDirection?: "column" | "row";
 }>`
   display: flex;
-  flex-direction: column;
+  flex-direction: ${({ flexDirection }) => flexDirection ?? "column"};
+  justify-content: ${({ justifyContent }) => justifyContent ?? "default"};
+  align-items: ${({ alignItems }) => alignItems ?? "default"};
   max-width: ${({ maxWidth }) => `${maxWidth}px` ?? "100%"};
   width: 100%;
   background: #ffffff;
