@@ -43,7 +43,7 @@ const calcChartWidth = (screenWidth: number) => {
   }
 };
 
-const TradesVolumeChart: React.FC<IProps> = () => {
+const TradesVolume: React.FC<IProps> = () => {
   const vm = useInvestToPoolInterfaceVM();
   const { width: screenWidth } = useWindowSize();
   const chartWidth = screenWidth ? calcChartWidth(screenWidth) : 0;
@@ -94,4 +94,4 @@ const TradesVolumeChart: React.FC<IProps> = () => {
   );
 };
 
-export default observer(TradesVolumeChart);
+export default observer(TradesVolume);
