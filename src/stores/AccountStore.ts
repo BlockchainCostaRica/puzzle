@@ -47,6 +47,8 @@ class AccountStore {
   chainId: "W" | "T" = "W";
 
   isWavesKeeperInstalled = false;
+  @action.bound setWavesKeeperInstalled = (state: boolean) =>
+    (this.isWavesKeeperInstalled = state);
 
   walletModalOpened: boolean = false;
   @action.bound setWalletModalOpened = (state: boolean) =>
@@ -148,7 +150,7 @@ class AccountStore {
           // alert("keeper is not installed");
         } else if (window["WavesKeeper"]) {
           reaction.dispose();
-          this.isWavesKeeperInstalled = true;
+          this.setWavesKeeperInstalled(true);
         } else {
           attemptsCount += 1;
         }
