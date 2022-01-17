@@ -13,7 +13,6 @@ const Root = styled.div`
   flex-direction: column;
   padding-top: 24px;
 `;
-
 const TradesVolumeChart: React.FC<IProps> = () => {
   const vm = useInvestToPoolInterfaceVM();
   return (
@@ -22,8 +21,9 @@ const TradesVolumeChart: React.FC<IProps> = () => {
         Trades volume
       </Text>
       <SizedBox height={8} />
-      <Card></Card>
+      <Card style={{ maxHeight: 288 }}></Card>
     </Root>
   );
 };
+
 export default observer(TradesVolumeChart);

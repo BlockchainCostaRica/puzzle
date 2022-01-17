@@ -55,21 +55,12 @@ class InvestToPoolInterfaceVM {
       .get(`https://puzzleback.herokuapp.com/stats/${this.poolId}/30d`)
       .then(({ data }) => this.setStats(data));
 
-  public get poolStats(): {
-    apy: string;
-    monthlyVolume: string;
-    liquidity: string;
-  } {
-    if (this.stats == null)
-      return {
-        apy: "-",
-        monthlyVolume: "-",
-        liquidity: "-",
-      };
+  public get poolStats() {
+    const { apy, monthly_volume, liquidity } = this.stats ?? {};
     return {
-      apy: new BN(this.stats?.apy ?? "").toFormat(4).concat("%"),
-      monthlyVolume: new BN(this.stats?.monthly_volume ?? "").toFormat(1),
-      liquidity: new BN(this.stats?.liquidity ?? "").toFormat(4),
+      apy: apy ? new BN(apy).toFormat(4).concat("%") : "–",
+      monthlyVolume: monthly_volume ? new BN(monthly_volume).toFormat(1) : "–",
+      liquidity: liquidity ? new BN(liquidity).toFormat(4) : "–",
     };
   }
 }

@@ -7,7 +7,7 @@ import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
 import SwitchButtons from "@components/SwitchButtons";
 import Button from "@components/Button";
-import { InvestToPoolInterfaceVMProvider } from "@screens/InvestToPoolInterface/InvestToPoolInterfaceVM";
+import { AddLiquidityInterfaceVMProvider } from "./AddLiquidityInterfaceVM";
 
 interface IProps {
   poolId: string;
@@ -80,9 +80,9 @@ const AddLiquidityInterfaceImpl = () => {
 
 const AddLiquidityInterface: React.FC<IProps> = ({ poolId }) => {
   return (
-    <InvestToPoolInterfaceVMProvider poolId={poolId}>
+    <AddLiquidityInterfaceVMProvider poolId={poolId}>
       <AddLiquidityInterfaceImpl />
-    </InvestToPoolInterfaceVMProvider>
+    </AddLiquidityInterfaceVMProvider>
   );
 };
 
