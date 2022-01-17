@@ -1,13 +1,16 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useState } from "react";
 import Layout from "@components/Layout";
-import { observer, Observer } from "mobx-react-lite";
-import Card from "@components/Card";
+import { observer } from "mobx-react-lite";
 import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
 import SwitchButtons from "@components/SwitchButtons";
-import Button from "@components/Button";
-import { AddLiquidityInterfaceVMProvider } from "./AddLiquidityInterfaceVM";
+import {
+  AddLiquidityInterfaceVMProvider,
+  useAddLiquidityInterfaceVM,
+} from "./AddLiquidityInterfaceVM";
+import EggTokenAddLiquidity from "@screens/AddLiquidityInterface/EggTokenAddLiquidity";
+import MultipleTokensAddLiquidity from "@screens/AddLiquidityInterface/MultipleTokensAddLiquidity/MultipleTokensAddLiquidity";
 
 interface IProps {
   poolId: string;
@@ -31,49 +34,32 @@ const Root = styled.div`
 `;
 
 const AddLiquidityInterfaceImpl = () => {
+  const [activeTab, setActiveTab] = useState<0 | 1>(0);
+  const vm = useAddLiquidityInterfaceVM();
+  console.log(vm.pool);
   return (
     <Layout>
-      <Observer>
-        {() => (
-          <Root>
-            <Text fitContent weight={500} size="large">
-              Deposit liquidity
-            </Text>
-            <SizedBox height={4} />
-            <Text fitContent size="medium" type="secondary">
-              Select a pool to invest
-            </Text>
-            <SizedBox height={24} />
-            <SwitchButtons
-              values={["Multiple tokens", "EGG Token"]}
-              active={0}
-              onActivate={() => null}
-            />
-            <SizedBox height={24} />
-            <Text style={{ width: "100%" }} weight={500} type="secondary">
-              To
-            </Text>
-            <SizedBox height={8} />
-            <Card></Card>
-            <SizedBox height={24} />
-
-            <Text style={{ width: "100%" }} weight={500} type="secondary">
-              Amount
-            </Text>
-            <SizedBox height={8} />
-            <Card></Card>
-            <SizedBox height={24} />
-
-            <Text style={{ width: "100%" }} weight={500} type="secondary">
-              Deposit composition
-            </Text>
-            <SizedBox height={8} />
-            <Card></Card>
-            <SizedBox height={24} />
-            <Button fixed>Deposit $ 0</Button>
-          </Root>
+      <Root>
+        <Text fitContent weight={500} size="large">
+          Deposit liquidity
+        </Text>
+        <SizedBox height={4} />
+        <Text fitContent size="medium" type="secondary">
+          Select a pool to invest
+        </Text>
+        <SizedBox height={24} />
+        <SwitchButtons
+          values={["Multiple tokens", "EGG Token"]}
+          active={activeTab}
+          onActivate={(i) => setActiveTab(i)}
+        />
+        <SizedBox height={24} />
+        {activeTab === 0 ? (
+          <MultipleTokensAddLiquidity />
+        ) : (
+          <EggTokenAddLiquidity />
         )}
-      </Observer>
+      </Root>
     </Layout>
   );
 };

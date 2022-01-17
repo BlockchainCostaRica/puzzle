@@ -34,11 +34,15 @@ const Item = styled.div<{ active?: boolean }>`
   cursor: pointer;
 `;
 
-const SwitchButtons: React.FC<IProps> = ({ values, active }) => {
+const SwitchButtons: React.FC<IProps> = ({ values, active, onActivate }) => {
   return (
     <Root>
-      <Item active={active === 0}>{values[0]}</Item>
-      <Item active={active === 1}>{values[1]}</Item>
+      <Item active={active === 0} onClick={() => onActivate(0)}>
+        {values[0]}
+      </Item>
+      <Item active={active === 1} onClick={() => onActivate(1)}>
+        {values[1]}
+      </Item>
     </Root>
   );
 };
