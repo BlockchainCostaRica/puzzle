@@ -5,6 +5,7 @@ import { Column } from "@src/components/Flex";
 import SizedBox from "@components/SizedBox";
 import _Card from "@components/Card";
 import { observer } from "mobx-react-lite";
+import { useInvestToPoolInterfaceVM } from "@screens/InvestToPoolInterface/InvestToPoolInterfaceVM";
 
 interface IProps {}
 
@@ -45,7 +46,8 @@ const CCard = styled(Card)`
   }
 `;
 const PoolInformation: React.FC<IProps> = () => {
-  // const vm = useInvestToPoolInterfaceVM();
+  const vm = useInvestToPoolInterfaceVM();
+  const data = vm.poolStats;
   return (
     <Root>
       <Text weight={500} type="secondary">
@@ -53,9 +55,9 @@ const PoolInformation: React.FC<IProps> = () => {
       </Text>
       <SizedBox height={8} />
       <CCard>
-        <Info text="Pool value" value="$ 999,999" />
-        <Info text="Fees (30D)" value="$ 1,234.00" />
-        <Info text="APY" value="123.45 %" />
+        <Info text="Pool value" value={data.liquidity} />
+        <Info text="Fees (30D)" value={data.monthlyVolume} />
+        <Info text="APY" value={data.apy} />
       </CCard>
     </Root>
   );
