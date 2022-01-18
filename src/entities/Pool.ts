@@ -37,6 +37,7 @@ class Pool implements IPoolConfig {
   public get logo() {
     return this._logo ?? tokenLogos.UNKNOWN;
   }
+
   public get baseToken() {
     return this.getAssetById(this.baseTokenId);
   }
@@ -135,6 +136,46 @@ class Pool implements IPoolConfig {
   //     return acc;
   //   }, [] as Array<{ id: string; decimals: number; weight: number }>);
   // };
+
+  @action.bound public getAccountLiquidityInfo = async (
+    address: string
+  ): Promise<{ liquidity: string; percent: string }> => {
+    //todo check this
+    const ADDRESSIndexStakedUrl = `${
+      NODE_URL_MAP[this.chainId]
+    }/addresses/data/${
+      this.contractAddress
+    }?matches=${address}_indexStaked(.*)`;
+
+    const globalIndexStakedResponse = `${
+      NODE_URL_MAP[this.chainId]
+    }/addresses/data/${this.contractAddress}?matches=global_indexStaked`;
+
+    const nodeRes: { data: IData[] }[] = await Promise.all([
+      axios.get(ADDRESSIndexStakedUrl),
+      axios.get(globalIndexStakedResponse),
+    ]);
+
+    const ADDRESS_indexStaked =
+      nodeRes[0].data.length >= 1 ? new BN(nodeRes[0].data[0].value) : BN.ZERO;
+    const global_indexStaked =
+      nodeRes[1].data.length >= 1 ? new BN(nodeRes[1].data[0].value) : BN.ZERO;
+
+    if (ADDRESS_indexStaked.eq(0)) {
+      return {
+        liquidity: "$ 0",
+        percent: "0 %",
+      };
+    }
+    const liquidity = new BN(this.globalLiquidity)
+      .times(ADDRESS_indexStaked)
+      .div(global_indexStaked);
+    const percent = new BN(this.globalLiquidity)
+      .times(new BN(100))
+      .div(liquidity);
+
+    return { liquidity: liquidity.toFormat(), percent: percent.toFormat() };
+  };
 }
 
 export default Pool;
