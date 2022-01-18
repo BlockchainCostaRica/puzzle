@@ -33,9 +33,7 @@ const Info: React.FC<{ text: string; value: string }> = ({ text, value }) => (
     <Text type="secondary" size="medium" style={{ paddingBottom: 4 }}>
       {text}
     </Text>
-    <Text weight={500} size="large">
-      {value}
-    </Text>
+    <Text style={{ fontSize: 20 }}>{value}</Text>
   </Column>
 );
 const CCard = styled(Card)`

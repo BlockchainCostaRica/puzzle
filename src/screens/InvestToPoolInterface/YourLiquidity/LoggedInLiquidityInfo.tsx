@@ -20,13 +20,7 @@ const LoggedInLiquidityInfo: React.FC<IProps> = () => {
       <Column crossAxisSize="max">
         <Text type="secondary">Value</Text>
         <SizedBox height={4} />
-        <Text
-          weight={500}
-          size="large"
-          style={{ lineHeight: "32px", whiteSpace: "nowrap" }}
-        >
-          $ 1,234
-        </Text>
+        <Text style={{ fontSize: 24 }}>$ 1,234</Text>
         <SizedBox height={16} />
         <Button fixed size="medium" kind="secondary">
           Withdraw
@@ -35,9 +29,7 @@ const LoggedInLiquidityInfo: React.FC<IProps> = () => {
       <Column crossAxisSize="max">
         <Text type="secondary">Share of pool</Text>
         <SizedBox height={4} />
-        <Text weight={500} size="large" style={{ lineHeight: "32px" }}>
-          1.23%
-        </Text>
+        <Text style={{ fontSize: 24 }}>1.23%</Text>
         <SizedBox height={16} />
         <Button fixed size="medium">
           Deposit
