@@ -6,6 +6,7 @@ import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
 import Button from "@components/Button";
 import { useInvestToPoolInterfaceVM } from "@screens/InvestToPoolInterface/InvestToPoolInterfaceVM";
+import { Link } from "react-router-dom";
 
 interface IProps {}
 

@@ -44,7 +44,7 @@ export const Column = styled.div<IFlexProps>`
 `;
 
 const adaptiveStyleTemplate = `
-  & .desktop {
+  & .c {
     display: none;
     @media (min-width: 880px) {
       display: flex;

@@ -10,7 +10,7 @@ import {
   useAddLiquidityInterfaceVM,
 } from "./AddLiquidityInterfaceVM";
 import MultipleTokensAddLiquidity from "./MultipleTokensAddLiquidity";
-import BaseTokenAddLiquidity from "./BaseTokenAddLiquidity";
+import BaseTokenAddLiquidity from "@screens/AddLiquidityInterface/BaseTokenAddLiquidity";
 
 interface IProps {
   poolId: string;
@@ -21,13 +21,12 @@ const Root = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-sizing: border-box;
   padding: 0 16px;
   min-height: 100%;
   margin-bottom: 24px;
   margin-top: 40px;
   width: 100%;
-  max-width: 560px;
+  max-width: calc(560px + 32px);
   @media (min-width: 880px) {
     margin-top: 56px;
   }
@@ -36,7 +35,6 @@ const Root = styled.div`
 const AddLiquidityInterfaceImpl = () => {
   const [activeTab, setActiveTab] = useState<0 | 1>(0);
   const vm = useAddLiquidityInterfaceVM();
-  console.log(vm.pool);
   return (
     <Layout>
       <Root>
