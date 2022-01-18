@@ -14,7 +14,7 @@ const Root = styled.div`
 `;
 
 const Amount: React.FC<IProps> = () => {
-  const [percent, setPercent] = useState<number>(50);
+  const [percent, setPercent] = useState<number>(0);
   //todo add debounce to calculate value after percent is picked
   return (
     <Root>

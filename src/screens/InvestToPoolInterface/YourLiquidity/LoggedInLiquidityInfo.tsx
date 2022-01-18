@@ -20,7 +20,6 @@ const Root = styled.div`
 const LoggedInLiquidityInfo: React.FC<IProps> = () => {
   const { accountStore } = useStores();
   const vm = useInvestToPoolInterfaceVM();
-  const liq = false;
   return (
     <Root>
       <Column crossAxisSize="max">
