@@ -20,6 +20,7 @@ const Root = styled(Card)`
     flex-direction: row;
     padding: 22px 32px;
   }
+
   .button {
     width: 100%;
     margin-top: 12px;

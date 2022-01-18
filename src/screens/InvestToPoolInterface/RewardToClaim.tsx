@@ -29,7 +29,7 @@ const RewardToClaim: React.FC<IProps> = () => {
   return (
     <Root>
       <Text weight={500} type="secondary">
-        Reward to claim
+        Rewards to claim
       </Text>
       <SizedBox height={8} />
       <Card paddingDesktop="24px 0" paddingMobile="16px 0">
@@ -38,6 +38,7 @@ const RewardToClaim: React.FC<IProps> = () => {
             <Text type="secondary">Total value</Text>
             <Text weight={500}>$ 100.00</Text>
           </Column>
+          {/*calculateTokenAvailableReward*/}
           <Button size="medium">Claim</Button>
         </Header>
         <Divider style={{ margin: "24px 0" }} />

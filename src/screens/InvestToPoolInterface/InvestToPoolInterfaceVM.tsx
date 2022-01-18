@@ -32,8 +32,17 @@ type TStats = {
 class InvestToPoolInterfaceVM {
   public poolId: string;
   public rootStore: RootStore;
+
   public stats: TStats | null = null;
   private setStats = (stats: TStats | null) => (this.stats = stats);
+
+  public accountLiquidity: string | null = null;
+  private setAccountLiquidity = (value: string) =>
+    (this.accountLiquidity = value);
+
+  public accountShareOfPool: string | null = null;
+  private setAccountShareOfPool = (value: string) =>
+    (this.accountShareOfPool = value);
 
   constructor(rootStore: RootStore, poolId: string) {
     this.poolId = poolId;
@@ -42,6 +51,7 @@ class InvestToPoolInterfaceVM {
     this.updateStats().catch(() =>
       console.error(`Cannot update stats of ${this.poolId}`)
     );
+    this.updateAccountLiquidityInfo().then();
   }
 
   public get pool() {
@@ -63,4 +73,14 @@ class InvestToPoolInterfaceVM {
       liquidity: liquidity ? new BN(liquidity).toFormat(4) : "–",
     };
   }
+
+  updateAccountLiquidityInfo = async () => {
+    if (this.rootStore.accountStore.address) {
+      const info = await this.pool.getAccountLiquidityInfo(
+        this.rootStore.accountStore.address
+      );
+      this.setAccountShareOfPool(info.percent);
+      this.setAccountLiquidity(info.liquidity);
+    }
+  };
 }
