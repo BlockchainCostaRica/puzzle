@@ -8,6 +8,7 @@ import Button from "@components/Button";
 import { useAddLiquidityInterfaceVM } from "@screens/AddLiquidityInterface/AddLiquidityInterfaceVM";
 import { Row } from "reactstrap";
 import { Column } from "@components/Flex";
+import { Link } from "react-router-dom";
 
 interface IProps {}
 
@@ -84,9 +85,11 @@ const DepositToPool: React.FC<IProps> = () => {
             </Text>
           </Column>
         </Row>
-        <Button kind="secondary" size="medium">
-          Change pool
-        </Button>
+        <Link to="/invest">
+          <Button kind="secondary" size="medium">
+            Change pool
+          </Button>
+        </Link>
       </Card>
     </Root>
   );

@@ -49,7 +49,7 @@ const ShowDesktop = styled.div`
     display: flex;
   }
 `;
-const FixedBlock = styled(HideDesktop)`
+const FixedMobileBlock = styled(HideDesktop)`
   display: flex;
   position: fixed;
   bottom: 0;
@@ -133,9 +133,9 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
       <ShowDesktop>
         <Button fixed>Deposit $ 0</Button>
       </ShowDesktop>
-      <FixedBlock>
+      <FixedMobileBlock>
         <Button fixed>Deposit $ 0</Button>
-      </FixedBlock>
+      </FixedMobileBlock>
     </Root>
   );
 };
