@@ -37,14 +37,6 @@ const Root = styled.div`
     margin-top: 56px;
   }
 `;
-
-// const TopBlock = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   @media (min-width: 880px) {
-//     flex-direction: row;
-//   }
-// `;
 const MainBlock = styled.div`
   width: 100%;
 `;
