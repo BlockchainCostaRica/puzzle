@@ -53,6 +53,10 @@ class Pool implements IPoolConfig {
   @action.bound setGlobalLiquidity = (value: string) =>
     (this.globalLiquidity = value);
 
+  public globalLiquidityRaw: BN = BN.ZERO;
+  @action.bound setGlobalLiquidityRaw = (value: BN) =>
+    (this.globalLiquidityRaw = value);
+
   public liquidity: Record<string, BN> = {};
   @action.bound private setLiquidity = (value: Record<string, BN>) =>
     (this.liquidity = value);
@@ -96,9 +100,9 @@ class Pool implements IPoolConfig {
     if (usdnLiquidity != null && usdnAsset.shareAmount != null) {
       const globalLiquidity = new BN(usdnLiquidity)
         .div(usdnAsset.shareAmount)
-        .div(1e6)
-        .toFormat(2);
-      this.setGlobalLiquidity(globalLiquidity);
+        .div(1e6);
+      this.setGlobalLiquidity(globalLiquidity.toFormat(2));
+      this.setGlobalLiquidityRaw(globalLiquidity);
     }
   };
 
@@ -140,18 +144,15 @@ class Pool implements IPoolConfig {
   @action.bound public getAccountLiquidityInfo = async (
     address: string
   ): Promise<{ liquidity: string; percent: string }> => {
-    //todo check this
     const ADDRESSIndexStakedUrl = `${
       NODE_URL_MAP[this.chainId]
-    }/addresses/data/${
-      this.contractAddress
-    }?matches=${address}_indexStaked(.*)`;
+    }/addresses/data/${this.contractAddress}?matches=${address}_indexStaked`;
 
     const globalIndexStakedResponse = `${
       NODE_URL_MAP[this.chainId]
     }/addresses/data/${this.contractAddress}?matches=global_indexStaked`;
 
-    const nodeRes: { data: IData[] }[] = await Promise.all([
+    const nodeRes = await Promise.all([
       axios.get(ADDRESSIndexStakedUrl),
       axios.get(globalIndexStakedResponse),
     ]);
@@ -167,14 +168,15 @@ class Pool implements IPoolConfig {
         percent: "0 %",
       };
     }
-    const liquidity = new BN(this.globalLiquidity)
+    const liquidity = this.globalLiquidityRaw
       .times(ADDRESS_indexStaked)
       .div(global_indexStaked);
-    const percent = new BN(this.globalLiquidity)
-      .times(new BN(100))
-      .div(liquidity);
+    const percent = liquidity.times(new BN(100)).div(this.globalLiquidityRaw);
 
-    return { liquidity: liquidity.toFormat(), percent: percent.toFormat() };
+    return {
+      liquidity: "$ " + liquidity.toFormat(2),
+      percent: percent.toFormat(2).concat(" %"),
+    };
   };
 }
 
