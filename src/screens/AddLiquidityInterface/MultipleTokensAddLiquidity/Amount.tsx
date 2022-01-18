@@ -4,6 +4,7 @@ import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
 import Card from "@components/Card";
 import RangeInput from "@screens/AddLiquidityInterface/MultipleTokensAddLiquidity/RangeInput";
+import Slider from "@components/Slider";
 
 interface IProps {}
 
@@ -13,7 +14,7 @@ const Root = styled.div`
 `;
 
 const Amount: React.FC<IProps> = () => {
-  const [percent, setPercent] = useState<number>(0);
+  const [percent, setPercent] = useState<number>(50);
   //todo add debounce to calculate value after percent is picked
   return (
     <Root>
@@ -31,7 +32,14 @@ const Amount: React.FC<IProps> = () => {
           <span style={{ color: "#8082C5" }}>{`($${12312})`}</span>
         </Text>
         <SizedBox height={16} />
-        <RangeInput value={percent} onChange={setPercent} />
+        <Slider
+          min={0}
+          max={100}
+          step={1}
+          marks={{ 0: 0, 25: 25, 50: 50, 75: 75, 100: 100 }}
+          value={percent}
+          onChange={setPercent}
+        />
       </Card>
     </Root>
   );

@@ -56,7 +56,7 @@ const InputRange: React.FC<IProps> = ({ value, onChange }) => {
         type="range"
         min="0"
         max="100"
-        step="0.25"
+        step="1"
       />
     </Root>
   );
