@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import React from "react";
 import DepositToPool from "@screens/AddLiquidityInterface/DepositToPool";
 import SizedBox from "@components/SizedBox";
-import Amount from "./Amount";
+import BaseTokenAddLiquidityAmount from "./BaseTokenAddLiquidityAmount";
 
 interface IProps {}
 
@@ -12,13 +12,13 @@ const Root = styled.div`
   width: 100%;
 `;
 
-const EggTokenAddLiquidity: React.FC<IProps> = () => {
+const BaseTokenAddLiquidity: React.FC<IProps> = () => {
   return (
     <Root>
       <DepositToPool />
       <SizedBox height={24} />
-      <Amount />
+      <BaseTokenAddLiquidityAmount />
     </Root>
   );
 };
-export default EggTokenAddLiquidity;
+export default BaseTokenAddLiquidity;

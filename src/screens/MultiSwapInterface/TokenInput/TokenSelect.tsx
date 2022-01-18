@@ -8,6 +8,7 @@ import { IToken } from "@src/constants";
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   token?: IToken;
   balance?: string;
+  selectable?: boolean;
 }
 
 const Root = styled.div`
@@ -41,7 +42,13 @@ const TokenIcon = styled.img`
   color: transparent;
 `;
 
-const TokenSelect: React.FC<IProps> = ({ token, balance, ...rest }) => {
+const TokenSelect: React.FC<IProps> = ({
+  token,
+  selectable,
+  balance,
+  ...rest
+}) => {
+  console.log(token);
   return (
     <Root {...rest}>
       <Row alignItems="center">
@@ -52,7 +59,7 @@ const TokenSelect: React.FC<IProps> = ({ token, balance, ...rest }) => {
           <Balance>{balance ?? "–"}</Balance>
         </Column>
       </Row>
-      <ArrowDownIcon />
+      {selectable && <ArrowDownIcon />}
     </Root>
   );
 };

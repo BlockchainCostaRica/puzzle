@@ -10,7 +10,7 @@ interface IProps {
 
 const Root = styled(Row)`
   background: #fff;
-  padding: 2px;
+  padding: 4px;
   height: 40px;
   width: 100%;
   box-sizing: border-box;

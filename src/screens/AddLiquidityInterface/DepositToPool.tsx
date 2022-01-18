@@ -25,6 +25,7 @@ const Root = styled.div`
       line-height: 24px;
     }
   }
+
   .toCardSubTitle {
     white-space: nowrap;
     width: fit-content;
@@ -34,6 +35,7 @@ const Root = styled.div`
       font-size: 14px;
       line-height: 20px;
     }
+
     b {
       color: #363870;
       font-weight: normal;
@@ -49,6 +51,7 @@ const Icon = styled.img`
   border-radius: 12px;
   border: 1px solid #f1f2fe;
   padding: 0;
+  margin-left: 12px;
   @media (min-width: 880px) {
     width: 56px;
     height: 56px;
