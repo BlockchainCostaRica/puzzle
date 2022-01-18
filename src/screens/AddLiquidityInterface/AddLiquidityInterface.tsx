@@ -9,8 +9,8 @@ import {
   AddLiquidityInterfaceVMProvider,
   useAddLiquidityInterfaceVM,
 } from "./AddLiquidityInterfaceVM";
-import EggTokenAddLiquidity from "@screens/AddLiquidityInterface/EggTokenAddLiquidity";
-import MultipleTokensAddLiquidity from "@screens/AddLiquidityInterface/MultipleTokensAddLiquidity/MultipleTokensAddLiquidity";
+import MultipleTokensAddLiquidity from "./MultipleTokensAddLiquidity";
+import BaseTokenAddLiquidity from "./BaseTokenAddLiquidity";
 
 interface IProps {
   poolId: string;
@@ -49,7 +49,7 @@ const AddLiquidityInterfaceImpl = () => {
         </Text>
         <SizedBox height={24} />
         <SwitchButtons
-          values={["Multiple tokens", "EGG Token"]}
+          values={["Multiple tokens", `${vm.baseToken.symbol} Token`]}
           active={activeTab}
           onActivate={(i) => setActiveTab(i)}
         />
@@ -57,7 +57,7 @@ const AddLiquidityInterfaceImpl = () => {
         {activeTab === 0 ? (
           <MultipleTokensAddLiquidity />
         ) : (
-          <EggTokenAddLiquidity />
+          <BaseTokenAddLiquidity />
         )}
       </Root>
     </Layout>

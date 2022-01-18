@@ -5,8 +5,8 @@ import SizedBox from "@components/SizedBox";
 import Card from "@components/Card";
 import Button from "@components/Button";
 import { observer } from "mobx-react-lite";
-import Amount from "@screens/AddLiquidityInterface/MultipleTokensAddLiquidity/Amount";
 import DepositToPool from "@screens/AddLiquidityInterface/DepositToPool";
+import MultipleTokensAddLiquidityAmount from "./MultipleTokensAddLiquidityAmount";
 
 interface IProps {}
 
@@ -21,10 +21,8 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
     <Root>
       <DepositToPool />
       <SizedBox height={24} />
-
-      <Amount />
+      <MultipleTokensAddLiquidityAmount />
       <SizedBox height={24} />
-
       <Text style={{ width: "100%" }} weight={500} type="secondary">
         Deposit composition
       </Text>

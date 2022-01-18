@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
 import Card from "@components/Card";
-import RangeInput from "@screens/AddLiquidityInterface/MultipleTokensAddLiquidity/RangeInput";
 import Slider from "@components/Slider";
 
 interface IProps {}
@@ -13,9 +12,8 @@ const Root = styled.div`
   flex-direction: column;
 `;
 
-const Amount: React.FC<IProps> = () => {
-  const [percent, setPercent] = useState<number>(0);
-  //todo add debounce to calculate value after percent is picked
+const MultipleTokensAddLiquidityAmount: React.FC<IProps> = () => {
+  const [percent, setPercent] = useState<number>(50);
   return (
     <Root>
       <Text weight={500} type="secondary">
@@ -44,4 +42,4 @@ const Amount: React.FC<IProps> = () => {
     </Root>
   );
 };
-export default Amount;
+export default MultipleTokensAddLiquidityAmount;
