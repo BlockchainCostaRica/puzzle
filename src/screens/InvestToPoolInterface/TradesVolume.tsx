@@ -66,8 +66,6 @@ const TradesVolume: React.FC<IProps> = () => {
             style={{ fill: "#8082c5" }}
           />
           <Tooltip
-            cursorStyle={{ color: "red" }}
-            trigger="click"
             labelFormatter={(date) => (
               <Text type="secondary" size="small">
                 {dayjs.unix(date).format("dddd, MMM DD")}
