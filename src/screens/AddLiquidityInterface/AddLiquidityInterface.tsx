@@ -10,7 +10,8 @@ import {
   useAddLiquidityInterfaceVM,
 } from "./AddLiquidityInterfaceVM";
 import MultipleTokensAddLiquidity from "./MultipleTokensAddLiquidity";
-import BaseTokenAddLiquidity from "@screens/AddLiquidityInterface/BaseTokenAddLiquidity";
+import DepositToPool from "@screens/AddLiquidityInterface/DepositToPool";
+import BaseTokenAddLiquidityAmount from "@screens/AddLiquidityInterface/BaseTokenAddLiquidityAmount";
 
 interface IProps {
   poolId: string;
@@ -52,10 +53,12 @@ const AddLiquidityInterfaceImpl = () => {
           onActivate={(i) => setActiveTab(i)}
         />
         <SizedBox height={24} />
+        <DepositToPool />
+        <SizedBox height={24} />
         {activeTab === 0 ? (
           <MultipleTokensAddLiquidity />
         ) : (
-          <BaseTokenAddLiquidity />
+          <BaseTokenAddLiquidityAmount />
         )}
       </Root>
     </Layout>

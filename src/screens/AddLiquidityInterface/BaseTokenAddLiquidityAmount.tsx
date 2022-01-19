@@ -4,7 +4,7 @@ import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
 import Card from "@components/Card";
 import TokenInput from "@screens/MultiSwapInterface/TokenInput/TokenInput";
-import BaseTokenConvertNotification from "@screens/AddLiquidityInterface/BaseTokenAddLiquidity/BaseTokenConvertNotification";
+import BaseTokenConvertNotification from "@screens/AddLiquidityInterface/BaseTokenConvertNotification";
 import { observer } from "mobx-react-lite";
 import { useAddLiquidityInterfaceVM } from "@screens/AddLiquidityInterface/AddLiquidityInterfaceVM";
 import { useStores } from "@stores";

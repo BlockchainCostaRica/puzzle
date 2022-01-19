@@ -15,9 +15,11 @@ const Root = styled(Row)`
   width: 100%;
   box-sizing: border-box;
   border-radius: 12px;
+  transition: all 0.3s ease;
 `;
 
 const Item = styled.div<{ active?: boolean }>`
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;

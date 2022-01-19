@@ -5,13 +5,11 @@ import SizedBox from "@components/SizedBox";
 import Card from "@components/Card";
 import Button from "@components/Button";
 import { observer } from "mobx-react-lite";
-import DepositToPool from "@screens/AddLiquidityInterface/DepositToPool";
 import MultipleTokensAddLiquidityAmount from "./MultipleTokensAddLiquidityAmount";
-import { AdaptiveRow, Column, Row } from "@components/Flex";
+import { Column, Row } from "@components/Flex";
 import GridTable from "@components/GridTable";
 import { useAddLiquidityInterfaceVM } from "@screens/AddLiquidityInterface/AddLiquidityInterfaceVM";
-import Divider from "@src/components/Divider";
-import Layout from "@components/Layout";
+import Divider from "@components/Divider";
 
 interface IProps {}
 
@@ -62,8 +60,6 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
   const vm = useAddLiquidityInterfaceVM();
   return (
     <Root>
-      <DepositToPool />
-      <SizedBox height={24} />
       <MultipleTokensAddLiquidityAmount />
       <SizedBox height={24} />
       <Text style={{ width: "100%" }} weight={500} type="secondary">
@@ -73,19 +69,13 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
       <Card paddingMobile="0" paddingDesktop="8px 0">
         <GridTable desktopTemplate={"1fr 1fr"} mobileTemplate={"1fr 1fr"}>
           {vm.pool?.tokens.map((token, i) => {
-            // const balance = vm.pool.liquidity[token.assetId] ?? BN.ZERO;
-            // const rate = vm.pool.currentPrice(
-            //   token.assetId,
-            //   accountStore.TOKENS.USDN.assetId
-            // );
-            // const value = balance.times(rate ?? 0);
             return (
               <div
                 className="gridRow"
                 key={i}
                 style={
                   i === vm.pool?.tokens.length! - 1
-                    ? { border: "none" }
+                    ? { borderBottom: "none" }
                     : undefined
                 }
               >
@@ -104,14 +94,12 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
                     </Text>
                   </Column>
                 </Row>
-                <AdaptiveRow>
-                  <Column style={{ width: "100%", textAlign: "end" }}>
-                    <Text nowrap>123,00</Text>
-                    <Text type="secondary" size="small">
-                      Available: 123123
-                    </Text>
-                  </Column>
-                </AdaptiveRow>
+                <Column style={{ width: "100%", textAlign: "end" }}>
+                  <Text nowrap>123,00</Text>
+                  <Text type="secondary" size="small">
+                    Available: 123123
+                  </Text>
+                </Column>
               </div>
             );
           })}

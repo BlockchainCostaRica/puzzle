@@ -15,6 +15,9 @@ const Root = styled.div`
   display: grid;
   column-gap: 8px;
   grid-template-columns: 1fr 1fr;
+  a {
+    width: 100%;
+  }
 `;
 const LoggedInLiquidityInfo: React.FC<IProps> = () => {
   const vm = useInvestToPoolInterfaceVM();
@@ -39,9 +42,11 @@ const LoggedInLiquidityInfo: React.FC<IProps> = () => {
         <SizedBox height={4} />
         <Text style={{ fontSize: 24 }}>{vm.accountShareOfPool ?? "-"}</Text>
         <SizedBox height={16} />
-        <Button fixed size="medium">
-          Deposit
-        </Button>
+        <Link to={`/${vm.pool.id}/addLiquidity`}>
+          <Button fixed size="medium">
+            Deposit
+          </Button>
+        </Link>
       </Column>
     </Root>
   );

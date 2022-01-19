@@ -54,6 +54,10 @@ class AccountStore {
   @action.bound setWalletModalOpened = (state: boolean) =>
     (this.walletModalOpened = state);
 
+  changePoolModalOpened: boolean = false;
+  @action.bound setChangePoolModalOpened = (state: boolean) =>
+    (this.changePoolModalOpened = state);
+
   public assetBalances: Balance[] = [];
   @action.bound setAssetBalances = (assetBalances: Balance[]) =>
     (this.assetBalances = assetBalances);
@@ -100,10 +104,6 @@ class AccountStore {
     const browser = getCurrentBrowser();
     return ["chrome", "firefox", "opera", "edge"].includes(browser);
   }
-
-  // get fee() {
-  //   return this.scripted ? "0.009" : "0.005";
-  // }
 
   login = async (loginType: LOGIN_TYPE) => {
     this.loginType = loginType;
