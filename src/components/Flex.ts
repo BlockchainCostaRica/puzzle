@@ -43,7 +43,7 @@ export const Column = styled.div<IFlexProps>`
     mainAxisSize === "stretch" ? "100%" : "fit-content"};
 `;
 
-const adaptiveStyleTemplate = `
+export const adaptiveStyleTemplate = `
   & .desktop {
     display: none;
     @media (min-width: 880px) {

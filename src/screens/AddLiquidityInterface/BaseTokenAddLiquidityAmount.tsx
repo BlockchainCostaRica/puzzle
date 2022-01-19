@@ -8,6 +8,7 @@ import BaseTokenConvertNotification from "@screens/AddLiquidityInterface/BaseTok
 import { observer } from "mobx-react-lite";
 import { useAddLiquidityInterfaceVM } from "@screens/AddLiquidityInterface/AddLiquidityInterfaceVM";
 import { useStores } from "@stores";
+import Button from "@components/Button";
 
 interface IProps {}
 
@@ -37,6 +38,14 @@ const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
         <SizedBox height={24} />
         <BaseTokenConvertNotification />
       </Card>
+      <SizedBox height={8} />
+      {accountStore.address == null ? (
+        <Button disabled fixed>
+          Connect to deposit
+        </Button>
+      ) : (
+        <Button fixed>Deposit</Button>
+      )}
     </Root>
   );
 };

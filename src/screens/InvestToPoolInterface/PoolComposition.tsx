@@ -25,6 +25,13 @@ const Icon = styled.img`
   border: 1px solid #f1f2fe;
 `;
 
+const AdaptiveTableTitle = styled(AdaptiveRow)`
+  //contilina
+  justify-content: end;
+  @media (min-width: 880px) {
+    justify-content: start;
+  }
+`;
 const PoolComposition: React.FC<IProps> = () => {
   const { accountStore } = useStores();
   const vm = useInvestToPoolInterfaceVM();
@@ -38,10 +45,10 @@ const PoolComposition: React.FC<IProps> = () => {
         <GridTable desktopTemplate={"1fr 1fr 1fr"} mobileTemplate={"1fr 1fr"}>
           <div className="gridTitle">
             <div>Asset</div>
-            <AdaptiveRow>
+            <AdaptiveTableTitle>
               <div className="desktop">Balance</div>
               <div className="mobile">Balance and value</div>
-            </AdaptiveRow>
+            </AdaptiveTableTitle>
             <AdaptiveRow>
               <div className="desktop">Value</div>
             </AdaptiveRow>
@@ -64,7 +71,11 @@ const PoolComposition: React.FC<IProps> = () => {
                   <Text className="desktop" fitContent>
                     {balance.toFormat(2)}
                   </Text>
-                  <Column className="mobile">
+                  <Column
+                    className="mobile"
+                    crossAxisSize="max"
+                    style={{ textAlign: "end" }}
+                  >
                     <Text size="medium">{balance.toFormat(2)}</Text>
                     <Text size="small" type="secondary">
                       $ {value.toFormat(2)}

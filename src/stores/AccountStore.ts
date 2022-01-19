@@ -85,7 +85,8 @@ class AccountStore {
     if (initState) {
       if (initState.loginType === LOGIN_TYPE.KEEPER) {
         this.setLoginType(initState.loginType);
-        this.setAddress(initState.address);
+        // this.setAddress(initState.address);
+        this.setAddress("3P3JJnrVeD9qtBq4AtEm2PZBZ7ez7UaVkxN");
       }
 
       // initState.loginType != null &&

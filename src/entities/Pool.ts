@@ -144,10 +144,12 @@ class Pool implements IPoolConfig {
   @action.bound public getAccountLiquidityInfo = async (
     address: string
   ): Promise<{ liquidity: string; percent: string }> => {
+    //todo change contractRequest
     const ADDRESSIndexStakedUrl = `${
       NODE_URL_MAP[this.chainId]
     }/addresses/data/${this.contractAddress}?matches=${address}_indexStaked`;
 
+    //todo change contractRequest
     const globalIndexStakedResponse = `${
       NODE_URL_MAP[this.chainId]
     }/addresses/data/${this.contractAddress}?matches=global_indexStaked`;
@@ -177,6 +179,18 @@ class Pool implements IPoolConfig {
       liquidity: "$ " + liquidity.toFormat(2),
       percent: percent.toFormat(2).concat(" %"),
     };
+  };
+
+  public contractRequest = async (match: string) => {
+    const url = `${NODE_URL_MAP[this.chainId]}/addresses/data/${
+      this.contractAddress
+    }?matches=${match}`;
+    const response: { data: IData[] } = await axios.get(url);
+    if (response.data) {
+      return response.data;
+    } else {
+      return null;
+    }
   };
 }
 
