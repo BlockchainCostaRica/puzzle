@@ -111,6 +111,9 @@ class InvestToPoolInterfaceVM {
       ({ assetId }) => assetId === token.assetId
     );
     const realBalance = assetBalance?.balance ?? BN.ZERO;
+
+    //fixme change to one request with global _global
+    //check once more
     const [
       globalTokenBalance,
       globalLastCheckTokenEarnings,
@@ -152,7 +155,7 @@ class InvestToPoolInterfaceVM {
 
     const rewardAvailable = currentInterest
       .minus(lastCheckUserInterest)
-      .times(BN.formatUnits(userIndexStaked, token.decimals));
+      .times(BN.formatUnits(userIndexStaked, 1e8));
 
     const rate =
       this.rootStore.poolsStore.usdnRate(token.assetId, 1) ?? BN.ZERO;
@@ -177,6 +180,7 @@ class InvestToPoolInterfaceVM {
       }),
       {} as Record<string, IReward>
     );
+    //todo remade in one place
     const totalReward = rawData.reduce<BN>(
       (acc, { usdEquivalent }) => acc.plus(usdEquivalent),
       BN.ZERO

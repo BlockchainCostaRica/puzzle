@@ -53,6 +53,10 @@ class Pool implements IPoolConfig {
   @action.bound setGlobalLiquidity = (value: BN) =>
     (this.globalLiquidity = value);
 
+  public globalPoolTokenAmount: BN = BN.ZERO;
+  @action.bound setGlobalPoolTokenAmount = (value: BN) =>
+    (this.globalPoolTokenAmount = value);
+
   public liquidity: Record<string, BN> = {};
   @action.bound private setLiquidity = (value: Record<string, BN>) =>
     (this.liquidity = value);
@@ -84,6 +88,13 @@ class Pool implements IPoolConfig {
       return acc;
     }, {});
     this.setLiquidity(balances);
+
+    const globalPoolTokenAmount = data.find(
+      (v) => v.key === "global_poolToken_amount"
+    );
+    if (globalPoolTokenAmount?.value != null) {
+      this.setGlobalPoolTokenAmount(new BN(globalPoolTokenAmount.value));
+    }
 
     // Math.floor(this.state.data.get("global_volume") / 1000000);
     const globalVolumeValue = data.find((v) => v.key === "global_volume");

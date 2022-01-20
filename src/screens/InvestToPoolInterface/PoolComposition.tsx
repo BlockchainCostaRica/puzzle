@@ -54,7 +54,10 @@ const PoolComposition: React.FC<IProps> = () => {
             </AdaptiveRow>
           </div>
           {vm.pool?.tokens.map((token, i) => {
-            const balance = vm.pool.liquidity[token.assetId] ?? BN.ZERO;
+            const balance = BN.formatUnits(
+              vm.pool.liquidity[token.assetId] ?? BN.ZERO,
+              token.decimals
+            );
             const rate = vm.pool.currentPrice(
               token.assetId,
               accountStore.TOKENS.USDN.assetId

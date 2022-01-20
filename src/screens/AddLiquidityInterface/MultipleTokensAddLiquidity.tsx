@@ -58,6 +58,8 @@ const FixedMobileBlock = styled(HideDesktop)`
 `;
 const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
   const vm = useAddLiquidityInterfaceVM();
+  const tokens = vm.pool?.tokens ?? [];
+  const huy = vm.calculateAmountsToDeposit;
   return (
     <Root>
       <MultipleTokensAddLiquidityAmount />
@@ -68,41 +70,35 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
       <SizedBox height={8} />
       <Card paddingMobile="0" paddingDesktop="8px 0">
         <GridTable desktopTemplate={"1fr 1fr"} mobileTemplate={"1fr 1fr"}>
-          {vm.pool?.tokens.map((token, i) => {
-            return (
-              <div
-                className="gridRow"
-                key={i}
-                style={
-                  i === vm.pool?.tokens.length! - 1
-                    ? { borderBottom: "none" }
-                    : undefined
-                }
-              >
-                <Row alignItems="center" mainAxisSize="fit-content">
-                  <TokenIcon src={token.logo} alt="logo" />
-                  <SizedBox width={8} />
-                  <Column>
-                    <Text fitContent size="medium">
-                      {token.symbol}
-                    </Text>
-                    <Text fitContent type="secondary" size="small">
-                      <span>Share: </span>
-                      <span style={{ color: "#363870", paddingLeft: 1 }}>
-                        {token.shareAmount * 100} %
-                      </span>
-                    </Text>
-                  </Column>
-                </Row>
-                <Column style={{ width: "100%", textAlign: "end" }}>
-                  <Text nowrap>123,00</Text>
-                  <Text type="secondary" size="small">
-                    Available: 123123
+          {tokens.map((token, i) => (
+            <div className="gridRow" key={i}>
+              <Row alignItems="center" mainAxisSize="fit-content">
+                <TokenIcon src={token.logo} alt="logo" />
+                <SizedBox width={8} />
+                <Column>
+                  <Text fitContent size="medium">
+                    {token.symbol}
+                  </Text>
+                  <Text fitContent type="secondary" size="small">
+                    <span>Share: </span>
+                    <span style={{ color: "#363870", paddingLeft: 1 }}>
+                      {token.shareAmount * 100} %
+                    </span>
                   </Text>
                 </Column>
-              </div>
-            );
-          })}
+              </Row>
+              <Column style={{ width: "100%", textAlign: "end" }}>
+                <Text nowrap>{huy && huy[token.assetId]}</Text>
+                <Text type="secondary" size="small">
+                  Available:{" "}
+                  {vm.depositComposition != null &&
+                  vm.depositComposition[token.assetId] != null
+                    ? vm.depositComposition[token.assetId].toFormat(2)
+                    : "–"}
+                </Text>
+              </Column>
+            </div>
+          ))}
         </GridTable>
         <Divider />
         <AdaptiveRowWithPadding justifyContent="space-between">
@@ -128,3 +124,8 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
   );
 };
 export default observer(MultipleTokensAddLiquidity);
+// style={
+//   i === tokens.length! - 1
+//     ? { borderBottom: "none" }
+//     : undefined
+// }

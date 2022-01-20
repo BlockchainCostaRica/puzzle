@@ -4,6 +4,8 @@ import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
 import Card from "@components/Card";
 import Slider from "@components/Slider";
+import { useAddLiquidityInterfaceVM } from "@screens/AddLiquidityInterface/AddLiquidityInterfaceVM";
+import { observer } from "mobx-react-lite";
 
 interface IProps {}
 
@@ -13,7 +15,7 @@ const Root = styled.div`
 `;
 
 const MultipleTokensAddLiquidityAmount: React.FC<IProps> = () => {
-  const [percent, setPercent] = useState<number>(50);
+  const vm = useAddLiquidityInterfaceVM();
   return (
     <Root>
       <Text weight={500} type="secondary">
@@ -26,8 +28,8 @@ const MultipleTokensAddLiquidityAmount: React.FC<IProps> = () => {
         </Text>
         <SizedBox height={16} />
         <Text type="primary" size="large" style={{ textAlign: "center" }}>
-          {`${percent}% `}
-          <span style={{ color: "#8082C5" }}>{`($${12312})`}</span>
+          {`${vm.providedPercentOfPool}% `}
+          <span style={{ color: "#8082C5" }}>{`($${100})`}</span>
         </Text>
         <SizedBox height={16} />
         <Slider
@@ -35,11 +37,11 @@ const MultipleTokensAddLiquidityAmount: React.FC<IProps> = () => {
           max={100}
           step={1}
           marks={{ 0: 0, 25: 25, 50: 50, 75: 75, 100: 100 }}
-          value={percent}
-          onChange={setPercent}
+          value={vm.providedPercentOfPool.toNumber()}
+          onChange={vm.setProvidedPercentOfPool}
         />
       </Card>
     </Root>
   );
 };
-export default MultipleTokensAddLiquidityAmount;
+export default observer(MultipleTokensAddLiquidityAmount);
