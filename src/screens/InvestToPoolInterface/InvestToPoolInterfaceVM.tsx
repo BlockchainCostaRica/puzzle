@@ -5,6 +5,7 @@ import { RootStore, useStores } from "@stores";
 import axios from "axios";
 import BN from "@src/utils/BN";
 import { IToken } from "@src/constants";
+import { errorMessage, successMessage } from "@components/Notifications";
 
 const ctx = React.createContext<InvestToPoolInterfaceVM | null>(null);
 
@@ -182,5 +183,28 @@ class InvestToPoolInterfaceVM {
     );
     this.setTotalRewardToClaim(totalReward);
     this.setRewardToClaim(value);
+  };
+
+  get isThereSomethingToClaim() {
+    return this.totalRewardToClaim.eq(0);
+  }
+
+  claimRewards = async () => {
+    if (this.totalRewardToClaim.eq(0)) {
+      errorMessage({ message: "There is nothing to claim" });
+    }
+    return this.rootStore.accountStore.invoke({
+      dApp: this.pool.contractAddress,
+      payment: [],
+      call: {
+        function: "claimIndexRewards",
+        args: [],
+      },
+    });
+  };
+  withdraw = () => {
+    successMessage({
+      title: "Coming soon",
+    });
   };
 }

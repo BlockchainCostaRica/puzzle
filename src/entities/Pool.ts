@@ -151,8 +151,6 @@ class Pool implements IPoolConfig {
       .div(globalIndexStaked);
     const percent = liquidity.times(new BN(100)).div(this.globalLiquidity);
 
-    console.log(liquidity);
-    console.log(percent);
     return {
       liquidity: "$ " + liquidity.toFormat(2),
       percent: percent.toFormat(2).concat(" %"),

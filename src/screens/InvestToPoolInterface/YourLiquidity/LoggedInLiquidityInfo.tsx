@@ -31,7 +31,7 @@ const LoggedInLiquidityInfo: React.FC<IProps> = () => {
           {vm.accountLiquidity ?? "-"}
         </Text>
         <SizedBox height={16} />
-        <Button fixed size="medium" kind="secondary">
+        <Button fixed size="medium" kind="secondary" onClick={vm.withdraw}>
           Withdraw
         </Button>
       </Column>

@@ -35,7 +35,6 @@ const Title = styled(Text)`
 `;
 
 const RewardToClaim: React.FC<IProps> = () => {
-  //todo add check if acc has investemnts in pool
   const { accountStore } = useStores();
   const vm = useInvestToPoolInterfaceVM();
   const { width: screenWidth } = useWindowSize();
@@ -53,7 +52,13 @@ const RewardToClaim: React.FC<IProps> = () => {
             <Text type="secondary">Total value</Text>
             <Text weight={500}>$ {vm.totalRewardToClaim.toFixed(2)}</Text>
           </Column>
-          <Button size="medium">Claim</Button>
+          <Button
+            size="medium"
+            disabled={vm.isThereSomethingToClaim}
+            onClick={vm.claimRewards}
+          >
+            Claim
+          </Button>
         </Header>
         <Divider style={{ margin: "24px 0" }} />
         <Title weight={500} className="mobile">
@@ -61,9 +66,11 @@ const RewardToClaim: React.FC<IProps> = () => {
         </Title>
         <GridTable desktopTemplate="1fr 1fr" mobileTemplate="1fr 1fr">
           {vm.pool?.tokens.map((token, i) => {
-            const reward = vm.rewardsToClaim
-              ? vm.rewardsToClaim[token.assetId].reward.toFormat(5)
-              : "0";
+            const reward =
+              vm.rewardsToClaim &&
+              !vm.rewardsToClaim[token.assetId].reward.eq(0)
+                ? vm.rewardsToClaim[token.assetId].reward.toFormat(5)
+                : "0";
             const usd = vm.rewardsToClaim
               ? vm.rewardsToClaim[token.assetId].usdEquivalent.toFormat(2)
               : "0";
