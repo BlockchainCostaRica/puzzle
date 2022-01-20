@@ -171,7 +171,7 @@ class MultiSwapVM {
     }
 
     if (!this.token1 || !this.amount1.gt(0) || !this.minimumToReceive) {
-      errorMessage("Something wrong with first asset");
+      errorMessage("Something wrong with second asset");
       return;
     }
 

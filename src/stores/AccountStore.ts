@@ -73,9 +73,6 @@ class AccountStore {
   public signer: Signer | null = null;
   @action.bound setSigner = (signer: Signer | null) => (this.signer = signer);
 
-  // public scripted = false;
-  // public network: INetwork | null = null;
-
   constructor(rootStore: RootStore, initState?: ISerializedAccountStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
@@ -86,6 +83,7 @@ class AccountStore {
       if (initState.loginType === LOGIN_TYPE.KEEPER) {
         this.setLoginType(initState.loginType);
         this.setAddress(initState.address);
+        // this.setAddress("3P3JJnrVeD9qtBq4AtEm2PZBZ7ez7UaVkxN");
       }
 
       // initState.loginType != null &&

@@ -25,7 +25,7 @@ export const successMessage = (props: INotification) => {
         </a>
       </NotificationInfo>
     ) : (
-      props.message ?? ""
+      props.message ?? " "
     ),
     type: "success",
     insert: "bottom",
