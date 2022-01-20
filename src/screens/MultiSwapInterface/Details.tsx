@@ -47,7 +47,7 @@ const Details: React.FC = () => {
           <Text type="secondary" size="small">
             Total liquidity
           </Text>
-          <Text>$ {globalLiquidity}</Text>
+          <Text>$ {globalLiquidity.toFormat(2)}</Text>
         </Column>
         {id !== MAINNET_POOL_ID.puzzle && (
           <Column crossAxisSize="max">
