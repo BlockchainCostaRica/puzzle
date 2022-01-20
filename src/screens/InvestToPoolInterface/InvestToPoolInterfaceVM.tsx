@@ -29,6 +29,10 @@ type TStats = {
   monthly_volume: number;
   volume: { date: number; volume: number }[];
 };
+type IReward = {
+  reward: BN;
+  usdEquivalent: BN;
+};
 
 class InvestToPoolInterfaceVM {
   public poolId: string;
@@ -45,9 +49,13 @@ class InvestToPoolInterfaceVM {
   private setAccountShareOfPool = (value: string) =>
     (this.accountShareOfPool = value);
 
-  public rewardsToClaim: Record<string, BN> | null = null;
-  private setRewardToClaim = (value: Record<string, BN>) =>
+  public rewardsToClaim: Record<string, IReward> | null = null;
+  private setRewardToClaim = (value: Record<string, IReward>) =>
     (this.rewardsToClaim = value);
+
+  public totalRewardToClaim: BN = BN.ZERO;
+  private setTotalRewardToClaim = (value: BN) =>
+    (this.totalRewardToClaim = value);
 
   constructor(rootStore: RootStore, poolId: string) {
     this.poolId = poolId;
@@ -95,7 +103,7 @@ class InvestToPoolInterfaceVM {
 
   getTokenRewardInfo = async (
     token: IToken
-  ): Promise<{ rewardAvailable: BN; assetId: string }> => {
+  ): Promise<IReward & { assetId: string }> => {
     const { accountStore } = this.rootStore;
     const { address } = accountStore;
     const assetBalance = accountStore.assetBalances.find(
@@ -143,11 +151,17 @@ class InvestToPoolInterfaceVM {
 
     const rewardAvailable = currentInterest
       .minus(lastCheckUserInterest)
-      .times(userIndexStaked);
+      .times(BN.formatUnits(userIndexStaked, token.decimals));
+
+    const rate =
+      this.rootStore.poolsStore.usdnRate(token.assetId, 1) ?? BN.ZERO;
+
+    const usdEquivalent = rewardAvailable.times(rate);
 
     return {
-      rewardAvailable: BN.formatUnits(rewardAvailable, token.decimals),
+      reward: BN.formatUnits(rewardAvailable, token.decimals),
       assetId: token.assetId,
+      usdEquivalent: BN.formatUnits(usdEquivalent, token.decimals),
     };
   };
 
@@ -156,14 +170,17 @@ class InvestToPoolInterfaceVM {
       this.pool.tokens.map(this.getTokenRewardInfo)
     );
     const value = rawData.reduce(
-      (acc, { rewardAvailable, assetId }) => ({
+      (acc, { reward, assetId, usdEquivalent }) => ({
         ...acc,
-        [assetId]: rewardAvailable,
+        [assetId]: { reward, usdEquivalent },
       }),
-      {} as Record<string, BN>
+      {} as Record<string, IReward>
     );
+    const totalReward = rawData.reduce<BN>(
+      (acc, { usdEquivalent }) => acc.plus(usdEquivalent),
+      BN.ZERO
+    );
+    this.setTotalRewardToClaim(totalReward);
     this.setRewardToClaim(value);
   };
-
-  calculateRewardsToClaim = async () => {};
 }
