@@ -49,13 +49,9 @@ class Pool implements IPoolConfig {
   @action.bound setGlobalVolume = (value: string) =>
     (this.globalVolume = value);
 
-  public globalLiquidity: string = "–";
-  @action.bound setGlobalLiquidity = (value: string) =>
+  public globalLiquidity: BN = BN.ZERO;
+  @action.bound setGlobalLiquidity = (value: BN) =>
     (this.globalLiquidity = value);
-
-  public globalLiquidityRaw: BN = BN.ZERO;
-  @action.bound setGlobalLiquidityRaw = (value: BN) =>
-    (this.globalLiquidityRaw = value);
 
   public liquidity: Record<string, BN> = {};
   @action.bound private setLiquidity = (value: Record<string, BN>) =>
@@ -101,8 +97,7 @@ class Pool implements IPoolConfig {
       const globalLiquidity = new BN(usdnLiquidity)
         .div(usdnAsset.shareAmount)
         .div(1e6);
-      this.setGlobalLiquidity(globalLiquidity.toFormat(2));
-      this.setGlobalLiquidityRaw(globalLiquidity);
+      this.setGlobalLiquidity(globalLiquidity);
     }
   };
 
@@ -126,55 +121,38 @@ class Pool implements IPoolConfig {
     return topValue.div(bottomValue).times(coefficient);
   };
 
-  // updateTokens = async () => {
-  //   const staticAttributesUrl = `https://wavesducks.wavesnodes.com/addresses/data/${this.contractAddress}?matches=static_(.*)`;
-  //   const { data }: { data: IData[] } = await axios.get(staticAttributesUrl);
-  //   const tokens = data.reduce((acc, { key, value }) => {
-  //     const id = key.split("_")[1];
-  //     const attribute = key.split("_")[2];
-  //     const index = acc.findIndex((token) => token.id === id);
-  //     if (index === -1) {
-  //       // acc[index] =
-  //     } else {
-  //     }
-  //     return acc;
-  //   }, [] as Array<{ id: string; decimals: number; weight: number }>);
-  // };
-
   @action.bound public getAccountLiquidityInfo = async (
     address: string
   ): Promise<{ liquidity: string; percent: string }> => {
-    //todo change contractRequest
-    const ADDRESSIndexStakedUrl = `${
-      NODE_URL_MAP[this.chainId]
-    }/addresses/data/${this.contractAddress}?matches=${address}_indexStaked`;
-
-    //todo change contractRequest
-    const globalIndexStakedResponse = `${
-      NODE_URL_MAP[this.chainId]
-    }/addresses/data/${this.contractAddress}?matches=global_indexStaked`;
-
-    const nodeRes = await Promise.all([
-      axios.get(ADDRESSIndexStakedUrl),
-      axios.get(globalIndexStakedResponse),
+    const [address_indexStaked, global_indexStaked] = await Promise.all([
+      this.contractRequest(`${address}_indexStaked`),
+      this.contractRequest(`global_indexStaked`),
     ]);
 
-    const ADDRESS_indexStaked =
-      nodeRes[0].data.length >= 1 ? new BN(nodeRes[0].data[0].value) : BN.ZERO;
-    const global_indexStaked =
-      nodeRes[1].data.length >= 1 ? new BN(nodeRes[1].data[0].value) : BN.ZERO;
+    //poolLiquidity * ADDRESS_indexStaked / global_indexStaked
+    const indexStaked =
+      address_indexStaked && address_indexStaked.length >= 1
+        ? new BN(address_indexStaked[0].value)
+        : BN.ZERO;
 
-    if (ADDRESS_indexStaked.eq(0)) {
+    const globalIndexStaked =
+      global_indexStaked && global_indexStaked.length >= 1
+        ? new BN(global_indexStaked[0].value)
+        : BN.ZERO;
+
+    if (indexStaked.eq(0)) {
       return {
         liquidity: "$ 0",
         percent: "0 %",
       };
     }
-    const liquidity = this.globalLiquidityRaw
-      .times(ADDRESS_indexStaked)
-      .div(global_indexStaked);
-    const percent = liquidity.times(new BN(100)).div(this.globalLiquidityRaw);
+    const liquidity = this.globalLiquidity
+      .times(indexStaked)
+      .div(globalIndexStaked);
+    const percent = liquidity.times(new BN(100)).div(this.globalLiquidity);
 
+    console.log(liquidity);
+    console.log(percent);
     return {
       liquidity: "$ " + liquidity.toFormat(2),
       percent: percent.toFormat(2).concat(" %"),

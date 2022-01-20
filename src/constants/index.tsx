@@ -63,6 +63,6 @@ export interface IPoolConfig {
   name: string;
   defaultAssetId0: string;
   defaultAssetId1: string;
-  tokens: Array<IToken & { shareAmount: number }>;
+  tokens: Array<IToken & { shareAmount: number } & { claimReward?: string }>;
   logo?: string;
 }

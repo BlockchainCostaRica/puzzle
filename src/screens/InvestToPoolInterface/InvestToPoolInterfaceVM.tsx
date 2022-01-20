@@ -45,8 +45,9 @@ class InvestToPoolInterfaceVM {
   private setAccountShareOfPool = (value: string) =>
     (this.accountShareOfPool = value);
 
-  public rewardsToClaim: any[] | null = null;
-  private setRewardToClaim = (value: []) => (this.rewardsToClaim = value);
+  public rewardsToClaim: Record<string, BN> | null = null;
+  private setRewardToClaim = (value: Record<string, BN>) =>
+    (this.rewardsToClaim = value);
 
   constructor(rootStore: RootStore, poolId: string) {
     this.poolId = poolId;
@@ -55,8 +56,11 @@ class InvestToPoolInterfaceVM {
     this.updateStats().catch(() =>
       console.error(`Cannot update stats of ${this.poolId}`)
     );
-    when(() => rootStore.accountStore.address !== null, this.updateRewardInfo);
-    this.updateAccountLiquidityInfo().then();
+    when(
+      () => rootStore.accountStore.address != null,
+      this.updateAccountLiquidityInfo
+    );
+    when(() => rootStore.accountStore.address != null, this.updateRewardInfo);
   }
 
   public get pool() {
@@ -89,75 +93,76 @@ class InvestToPoolInterfaceVM {
     }
   };
 
-  tokenRewardInfo = async (token: IToken) => {
-    const assetBalance = this.rootStore.accountStore.assetBalances.find(
-      ({ assetId: id }) => id === token.assetId
+  getTokenRewardInfo = async (
+    token: IToken
+  ): Promise<{ rewardAvailable: BN; assetId: string }> => {
+    const { accountStore } = this.rootStore;
+    const { address } = accountStore;
+    const assetBalance = accountStore.assetBalances.find(
+      ({ assetId }) => assetId === token.assetId
     );
-    const realBalance = assetBalance && assetBalance.balance;
-
-    const tokenLiquidity = this.pool.liquidity[token.assetId];
-
-    const { address } = this.rootStore.accountStore;
+    const realBalance = assetBalance?.balance ?? BN.ZERO;
     const [
-      global_lastCheck_tokenId_earnings,
-      global_IndexStaked,
-      global_lastCheck_tokenId_interest,
-      user_lastCheck_tokenId_interest,
-      user_indexStaked,
-    ] = await Promise.all([
-      this.pool.contractRequest(`global_${token.assetId}_balance`),
-      this.pool.contractRequest("global_indexStaked"),
-      this.pool.contractRequest(`global_lastCheck_${token.assetId}_interest`),
-      this.pool.contractRequest(
-        `${address}_lastCheck_${token.assetId}_interest`
-      ),
-      this.pool.contractRequest(`${address}_indexStaked`),
-    ]);
+      globalTokenBalance,
+      globalLastCheckTokenEarnings,
+      globalIndexStaked,
+      globalLastCheckTokenInterest,
+      userLastCheckTokenInterest,
+      userIndexStaked,
+    ] = (
+      await Promise.all([
+        this.pool.contractRequest(`global_${token.assetId}_balance`),
+        this.pool.contractRequest(`global_lastCheck_${token.assetId}_earnings`),
+        this.pool.contractRequest("global_indexStaked"),
+        this.pool.contractRequest(`global_lastCheck_${token.assetId}_interest`),
+        this.pool.contractRequest(
+          `${address}_lastCheck_${token.assetId}_interest`
+        ),
+        this.pool.contractRequest(`${address}_indexStaked`),
+      ])
+    ).map((v) => {
+      return v != null && v.length > 0 ? new BN(v[0].value) : BN.ZERO;
+    });
 
-    const globalLastCheckTokenIdEarnings = global_lastCheck_tokenId_earnings
-      ? new BN(global_lastCheck_tokenId_earnings[0].value)
-      : BN.ZERO;
-    const globalIndexStaked = global_IndexStaked
-      ? new BN(global_IndexStaked[0].value)
-      : BN.ZERO;
-    const userLastCheckTokenIdInterest = user_lastCheck_tokenId_interest
-      ? new BN(user_lastCheck_tokenId_interest[0].value)
-      : BN.ZERO;
-    const userIndexStaked = user_indexStaked
-      ? new BN(user_indexStaked[0].value)
-      : BN.ZERO;
-
-    if (
-      tokenLiquidity == null ||
-      realBalance == null ||
-      global_lastCheck_tokenId_earnings == null ||
-      global_IndexStaked == null ||
-      global_lastCheck_tokenId_interest == null ||
-      user_lastCheck_tokenId_interest == null ||
-      user_indexStaked == null
-    ) {
-      return BN.ZERO.toString();
-    }
     const newEarnings = BN.max(
-      realBalance.minus(tokenLiquidity),
-      globalLastCheckTokenIdEarnings
-    ).minus(globalLastCheckTokenIdEarnings);
+      realBalance.minus(globalTokenBalance),
+      globalLastCheckTokenEarnings
+    ).minus(globalLastCheckTokenEarnings);
 
-    const currentInterest = new BN(
-      globalIndexStaked.eq(0) ? BN.ZERO : userLastCheckTokenIdInterest
-    ).plus(newEarnings.div(globalIndexStaked));
+    const lastCheckInterest = globalIndexStaked.eq(0)
+      ? BN.ZERO
+      : globalLastCheckTokenInterest;
 
-    const rewardAvailable = userIndexStaked.times(
-      currentInterest.minus(userLastCheckTokenIdInterest)
+    const currentInterest = lastCheckInterest.plus(
+      newEarnings.div(globalIndexStaked)
     );
-    return BN.parseUnits(rewardAvailable, token.decimals);
+
+    const lastCheckUserInterest = userLastCheckTokenInterest
+      ? userLastCheckTokenInterest
+      : BN.ZERO;
+
+    const rewardAvailable = currentInterest
+      .minus(lastCheckUserInterest)
+      .times(userIndexStaked);
+
+    return {
+      rewardAvailable: BN.formatUnits(rewardAvailable, token.decimals),
+      assetId: token.assetId,
+    };
   };
+
   updateRewardInfo = async () => {
-    console.log("updateRewardInfo");
-    const data = await Promise.all(
-      this.pool.tokens.map((token) => this.tokenRewardInfo(token))
+    const rawData = await Promise.all(
+      this.pool.tokens.map(this.getTokenRewardInfo)
     );
-    console.log(data);
+    const value = rawData.reduce(
+      (acc, { rewardAvailable, assetId }) => ({
+        ...acc,
+        [assetId]: rewardAvailable,
+      }),
+      {} as Record<string, BN>
+    );
+    this.setRewardToClaim(value);
   };
 
   calculateRewardsToClaim = async () => {};

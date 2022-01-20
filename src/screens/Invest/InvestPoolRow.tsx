@@ -86,7 +86,7 @@ const InvestPoolRow: React.FC<IProps> = ({ pool, stats }) => {
       </Row>
       <AdaptiveRow>
         <Text style={{ whiteSpace: "nowrap" }} className="desktop">
-          $ {pool.globalLiquidity}
+          $ {pool.globalLiquidity.toFormat(2)}
         </Text>
         <Text className="mobile" style={{ whiteSpace: "nowrap" }}>
           {apy} %

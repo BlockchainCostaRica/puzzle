@@ -60,6 +60,9 @@ const RewardToClaim: React.FC<IProps> = () => {
         </Title>
         <GridTable desktopTemplate="1fr 1fr" mobileTemplate="1fr 1fr">
           {vm.pool?.tokens.map((token, i) => {
+            const reward = vm.rewardsToClaim
+              ? vm.rewardsToClaim[token.assetId].toString()
+              : "0";
             return (
               <div
                 className="gridRow"
@@ -81,7 +84,7 @@ const RewardToClaim: React.FC<IProps> = () => {
                     className="mobile"
                   >
                     <Text size="medium">
-                      <span>0.1</span>
+                      <span>{reward}</span>
                       <span style={{ color: "#8082C5" }}>($10)</span>
                     </Text>
                   </Row>
@@ -90,7 +93,7 @@ const RewardToClaim: React.FC<IProps> = () => {
                     className="desktop"
                     style={{ textAlign: "end" }}
                   >
-                    <Text size="medium">0.1</Text>
+                    <Text size="medium">{reward}</Text>
                     <Text size="small" type="secondary">
                       $10
                     </Text>
