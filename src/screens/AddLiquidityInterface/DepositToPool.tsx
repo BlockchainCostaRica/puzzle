@@ -49,6 +49,7 @@ const Root = styled.div`
 const DepositToPool: React.FC<IProps> = () => {
   const vm = useAddLiquidityInterfaceVM();
   const pool = vm.pool;
+  const stats = vm.poolStats;
   return (
     <Root>
       <Text weight={500} type="secondary">
@@ -68,7 +69,7 @@ const DepositToPool: React.FC<IProps> = () => {
               {pool?.name}
             </Text>
             <Text className="toCardSubTitle" type="secondary">
-              APY <b>150.20 %</b>
+              APY <b>{stats.apy}</b>
             </Text>
           </Column>
         </Row>

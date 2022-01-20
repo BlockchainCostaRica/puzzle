@@ -48,7 +48,6 @@ const TokenSelect: React.FC<IProps> = ({
   balance,
   ...rest
 }) => {
-  console.log(token);
   return (
     <Root {...rest}>
       <Row alignItems="center">
