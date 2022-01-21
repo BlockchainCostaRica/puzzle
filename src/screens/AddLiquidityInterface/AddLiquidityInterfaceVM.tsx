@@ -5,7 +5,6 @@ import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import axios from "axios";
 import { errorMessage } from "@src/old_components/AuthInterface";
-import Balance from "@src/entities/Balance";
 
 const ctx = React.createContext<AddLiquidityInterfaceVM | null>(null);
 
@@ -180,7 +179,7 @@ class AddLiquidityInterfaceVM {
 
   get baseTokenBalance() {
     return this.rootStore.accountStore.assetBalances.find(
-      ({ assetId }) => this.baseToken.assetId == assetId
+      ({ assetId }) => this.baseToken.assetId === assetId
     );
   }
 
