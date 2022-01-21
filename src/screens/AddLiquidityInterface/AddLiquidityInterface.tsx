@@ -9,7 +9,7 @@ import {
   AddLiquidityInterfaceVMProvider,
   useAddLiquidityInterfaceVM,
 } from "./AddLiquidityInterfaceVM";
-import MultipleTokensAddLiquidity from "./MultipleTokensAddLiquidity";
+import MultipleTokensAddLiquidity from "./MultipleTokensAddLiquidity/MultipleTokensAddLiquidity";
 import DepositToPool from "@screens/AddLiquidityInterface/DepositToPool";
 import BaseTokenAddLiquidityAmount from "@screens/AddLiquidityInterface/BaseTokenAddLiquidityAmount";
 

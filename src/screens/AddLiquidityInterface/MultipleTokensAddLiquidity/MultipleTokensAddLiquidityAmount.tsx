@@ -29,9 +29,11 @@ const MultipleTokensAddLiquidityAmount: React.FC<IProps> = () => {
         <SizedBox height={16} />
         <Text type="primary" size="large" style={{ textAlign: "center" }}>
           {`${vm.providedPercentOfPool}% `}
-          <span
-            style={{ color: "#8082C5" }}
-          >{`($${vm.totalAmountToDeposit})`}</span>
+          {vm.totalAmountToDeposit && (
+            <span
+              style={{ color: "#8082C5" }}
+            >{`(${vm.totalAmountToDeposit})`}</span>
+          )}
         </Text>
         <SizedBox height={16} />
         <Slider

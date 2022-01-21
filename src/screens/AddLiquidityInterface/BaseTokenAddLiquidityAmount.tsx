@@ -4,11 +4,11 @@ import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
 import Card from "@components/Card";
 import TokenInput from "@screens/MultiSwapInterface/TokenInput/TokenInput";
-import BaseTokenConvertNotification from "@screens/AddLiquidityInterface/BaseTokenConvertNotification";
 import { observer } from "mobx-react-lite";
 import { useAddLiquidityInterfaceVM } from "@screens/AddLiquidityInterface/AddLiquidityInterfaceVM";
 import { useStores } from "@stores";
 import Button from "@components/Button";
+import Notification from "@screens/AddLiquidityInterface/Notification";
 
 interface IProps {}
 
@@ -36,7 +36,13 @@ const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
           balances={accountStore.assetBalances ?? []}
         />
         <SizedBox height={24} />
-        <BaseTokenConvertNotification />
+        <Notification
+          type="info"
+          text={`Your ${vm.baseToken.symbol} will be automatically converted to other pool
+        tokens and provided as liquidity. Please pay attention that value of
+        your deposit can be different from value of tokens provided because of
+        slippage. We do not recommend to use this method for bigger amounts.`}
+        />
       </Card>
       <SizedBox height={8} />
       {accountStore.address == null ? (

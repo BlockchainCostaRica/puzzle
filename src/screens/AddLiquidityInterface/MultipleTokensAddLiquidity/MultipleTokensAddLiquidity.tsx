@@ -11,6 +11,8 @@ import GridTable from "@components/GridTable";
 import { useAddLiquidityInterfaceVM } from "@screens/AddLiquidityInterface/AddLiquidityInterfaceVM";
 import Divider from "@components/Divider";
 import BN from "@src/utils/BN";
+import { useStores } from "@stores";
+import Notification from "@screens/AddLiquidityInterface/Notification";
 
 interface IProps {}
 
@@ -59,8 +61,11 @@ const FixedMobileBlock = styled(HideDesktop)`
 `;
 
 const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
+  //todo refactor this page cos it looks like disaster
+  const { accountStore } = useStores();
   const vm = useAddLiquidityInterfaceVM();
   const tokens = vm.pool?.tokens ?? [];
+  const handleConnectToWallet = () => accountStore.setWalletModalOpened(true);
   return (
     <Root>
       <MultipleTokensAddLiquidityAmount />
@@ -71,19 +76,28 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
       <SizedBox height={8} />
       <Card paddingMobile="0" paddingDesktop="8px 0">
         <GridTable desktopTemplate={"1fr 1fr"} mobileTemplate={"1fr 1fr"}>
+          {vm.providedPercentOfPool.eq(100) && (
+            <Notification
+              type="warning"
+              text={`You’ve reached the limit with ${vm.minBalanceAssetSymbol}. Buy ${vm.minBalanceAssetSymbol} to deposit to this pool.`}
+              style={{ margin: 24 }}
+            />
+          )}
           {tokens.map((token, i) => {
+            const balance = accountStore.assetBalances?.find(
+              ({ assetId }) => assetId === token.assetId
+            );
             const available =
-              vm.availableBalances != null &&
-              vm.availableBalances[token.assetId] != null
-                ? vm.availableBalances[token.assetId].toFormat(2)
+              balance && balance.balance
+                ? BN.formatUnits(balance?.balance, balance.decimals).toFormat(4)
                 : "–";
 
-            const depositAmount =
-              vm.tokensToDepositAmount &&
-              BN.formatUnits(
-                vm.tokensToDepositAmount[token.assetId],
-                token.decimals
-              ).toFormat(4);
+            const depositAmount = vm.tokensToDepositAmounts
+              ? BN.formatUnits(
+                  vm.tokensToDepositAmounts[token.assetId],
+                  token.decimals
+                ).toFormat(4)
+              : "-";
             return (
               <div className="gridRow" key={i}>
                 <Row
@@ -123,7 +137,7 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
         <AdaptiveRowWithPadding justifyContent="space-between">
           <Text>Total value</Text>
           <Text weight={500} style={{ textAlign: "end" }}>
-            $ {vm.totalAmountToDeposit}
+            {vm.totalAmountToDeposit}
           </Text>
         </AdaptiveRowWithPadding>
       </Card>
@@ -133,11 +147,36 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
       <HideDesktop>
         <SizedBox height={56} />
       </HideDesktop>
+      {/*todo redo this*/}
       <ShowDesktop>
-        <Button fixed>Deposit $ {vm.totalAmountToDeposit}</Button>
+        {accountStore.address != null ? (
+          <Button
+            fixed
+            disabled={vm.tokensToDepositAmounts == null}
+            onClick={() => vm.depositMultiply}
+          >
+            Deposit {vm.totalAmountToDeposit}{" "}
+          </Button>
+        ) : (
+          <Button onClick={handleConnectToWallet} fixed>
+            Connect Wallet{" "}
+          </Button>
+        )}
       </ShowDesktop>
       <FixedMobileBlock>
-        <Button fixed>Deposit $ {vm.totalAmountToDeposit} </Button>
+        {accountStore.address != null ? (
+          <Button
+            fixed
+            disabled={vm.tokensToDepositAmounts == null}
+            onClick={() => vm.depositMultiply}
+          >
+            Deposit {vm.totalAmountToDeposit}{" "}
+          </Button>
+        ) : (
+          <Button fixed onClick={handleConnectToWallet}>
+            Connect Wallet
+          </Button>
+        )}
       </FixedMobileBlock>
     </Root>
   );
