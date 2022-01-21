@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React from "react";
 import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
 import Card from "@components/Card";
@@ -29,7 +29,9 @@ const MultipleTokensAddLiquidityAmount: React.FC<IProps> = () => {
         <SizedBox height={16} />
         <Text type="primary" size="large" style={{ textAlign: "center" }}>
           {`${vm.providedPercentOfPool}% `}
-          <span style={{ color: "#8082C5" }}>{`($${100})`}</span>
+          <span
+            style={{ color: "#8082C5" }}
+          >{`($${vm.totalAmountToDeposit})`}</span>
         </Text>
         <SizedBox height={16} />
         <Slider

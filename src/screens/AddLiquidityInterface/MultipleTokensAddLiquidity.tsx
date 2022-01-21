@@ -10,6 +10,7 @@ import { Column, Row } from "@components/Flex";
 import GridTable from "@components/GridTable";
 import { useAddLiquidityInterfaceVM } from "@screens/AddLiquidityInterface/AddLiquidityInterfaceVM";
 import Divider from "@components/Divider";
+import BN from "@src/utils/BN";
 
 interface IProps {}
 
@@ -56,10 +57,10 @@ const FixedMobileBlock = styled(HideDesktop)`
   justify-content: center;
   padding: 0 16px 16px;
 `;
+
 const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
   const vm = useAddLiquidityInterfaceVM();
   const tokens = vm.pool?.tokens ?? [];
-  const huy = vm.calculateAmountsToDeposit;
   return (
     <Root>
       <MultipleTokensAddLiquidityAmount />
@@ -70,41 +71,59 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
       <SizedBox height={8} />
       <Card paddingMobile="0" paddingDesktop="8px 0">
         <GridTable desktopTemplate={"1fr 1fr"} mobileTemplate={"1fr 1fr"}>
-          {tokens.map((token, i) => (
-            <div className="gridRow" key={i}>
-              <Row alignItems="center" mainAxisSize="fit-content">
-                <TokenIcon src={token.logo} alt="logo" />
-                <SizedBox width={8} />
-                <Column>
-                  <Text fitContent size="medium">
-                    {token.symbol}
-                  </Text>
-                  <Text fitContent type="secondary" size="small">
-                    <span>Share: </span>
-                    <span style={{ color: "#363870", paddingLeft: 1 }}>
-                      {token.shareAmount * 100} %
-                    </span>
+          {tokens.map((token, i) => {
+            const available =
+              vm.availableBalances != null &&
+              vm.availableBalances[token.assetId] != null
+                ? vm.availableBalances[token.assetId].toFormat(2)
+                : "–";
+
+            const depositAmount =
+              vm.tokensToDepositAmount &&
+              BN.formatUnits(
+                vm.tokensToDepositAmount[token.assetId],
+                token.decimals
+              ).toFormat(4);
+            return (
+              <div className="gridRow" key={i}>
+                <Row
+                  alignItems="center"
+                  mainAxisSize="fit-content"
+                  style={
+                    i === tokens.length! - 1
+                      ? { borderBottom: "none" }
+                      : undefined
+                  }
+                >
+                  <TokenIcon src={token.logo} alt="logo" />
+                  <SizedBox width={8} />
+                  <Column>
+                    <Text fitContent size="medium">
+                      {token.symbol}
+                    </Text>
+                    <Text fitContent type="secondary" size="small">
+                      <span>Share: </span>
+                      <span style={{ color: "#363870", paddingLeft: 1 }}>
+                        {token.shareAmount * 100} %
+                      </span>
+                    </Text>
+                  </Column>
+                </Row>
+                <Column style={{ width: "100%", textAlign: "end" }}>
+                  <Text nowrap>{depositAmount}</Text>
+                  <Text type="secondary" size="small">
+                    Available: {available}
                   </Text>
                 </Column>
-              </Row>
-              <Column style={{ width: "100%", textAlign: "end" }}>
-                <Text nowrap>{huy && huy[token.assetId]}</Text>
-                <Text type="secondary" size="small">
-                  Available:{" "}
-                  {vm.depositComposition != null &&
-                  vm.depositComposition[token.assetId] != null
-                    ? vm.depositComposition[token.assetId].toFormat(2)
-                    : "–"}
-                </Text>
-              </Column>
-            </div>
-          ))}
+              </div>
+            );
+          })}
         </GridTable>
         <Divider />
         <AdaptiveRowWithPadding justifyContent="space-between">
           <Text>Total value</Text>
           <Text weight={500} style={{ textAlign: "end" }}>
-            $ 10 001,23
+            $ {vm.totalAmountToDeposit}
           </Text>
         </AdaptiveRowWithPadding>
       </Card>
@@ -115,17 +134,12 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
         <SizedBox height={56} />
       </HideDesktop>
       <ShowDesktop>
-        <Button fixed>Deposit $ 0</Button>
+        <Button fixed>Deposit $ {vm.totalAmountToDeposit}</Button>
       </ShowDesktop>
       <FixedMobileBlock>
-        <Button fixed>Deposit $ 0</Button>
+        <Button fixed>Deposit $ {vm.totalAmountToDeposit} </Button>
       </FixedMobileBlock>
     </Root>
   );
 };
 export default observer(MultipleTokensAddLiquidity);
-// style={
-//   i === tokens.length! - 1
-//     ? { borderBottom: "none" }
-//     : undefined
-// }

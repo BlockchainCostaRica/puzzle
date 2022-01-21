@@ -29,12 +29,6 @@ type TStats = {
   volume: { date: number; volume: number }[];
 };
 
-interface IDepositToken {
-  assetId: string;
-  amount: BN;
-  decimal: number;
-}
-
 class AddLiquidityInterfaceVM {
   public poolId: string;
   public rootStore: RootStore;
@@ -45,14 +39,12 @@ class AddLiquidityInterfaceVM {
   public stats: TStats | null = null;
   private setStats = (stats: TStats | null) => (this.stats = stats);
 
-  //todo combine into one variable
-  public depositComposition: Record<string, BN> | null = null;
-  private setDepositComposition = (value: Record<string, BN>) =>
-    (this.depositComposition = value);
+  public availableBalances: Record<string, BN> | null = null;
+  private setAvailableBalances = (value: Record<string, BN>) =>
+    (this.availableBalances = value);
 
-  //fixme
-  public tokensToDepositAmount: Record<string, IDepositToken> | null = null;
-  private setTokensToDepositAmount = (value: Record<string, IDepositToken>) =>
+  public tokensToDepositAmount: Record<string, BN> | null = null;
+  @action.bound setTokensToDepositAmount = (value: Record<string, BN>) =>
     (this.tokensToDepositAmount = value);
 
   public minAssetFromPool: BN | null = null;
@@ -106,8 +98,8 @@ class AddLiquidityInterfaceVM {
   // 3- найти минимальное из maxIssuePossible - это будет число индекс токенов, которые пользователь выпустит при значении ползунка 100%
 
   get minimaAssetBalance() {
-    return this.depositComposition != null
-      ? BN.min(...Object.values(this.depositComposition))
+    return this.tokensToDepositAmount != null
+      ? BN.min(...Object.values(this.tokensToDepositAmount))
       : BN.ZERO;
   }
 
@@ -126,7 +118,6 @@ class AddLiquidityInterfaceVM {
     );
   }
 
-  //todo make getter
   updateDepositComposition = () => {
     if (this.pool == null) return;
 
@@ -146,36 +137,44 @@ class AddLiquidityInterfaceVM {
       },
       {}
     );
-    this.setDepositComposition(value);
+    this.setAvailableBalances(value);
   };
 
-  get calculateAmountsToDeposit() {
-    if (this.pool == null) return;
+  calculateAmountsToDeposit(): Record<string, BN> | null {
+    if (this.pool == null) return null;
 
-    const value = this.pool.tokens.reduce<Record<string, string>>(
-      (acc, { assetId }) => {
-        // const Dk =  (((poolTokenAmount + minPIssued) / poolTokenAmount - 1) * Bk) /
-        //   this.poolData.tokenDecimals[tokenNum];
-        const tokenBalance =
-          (this.pool && this.pool.liquidity[assetId]) ?? BN.ZERO;
-        const dk = this.pool!.globalPoolTokenAmount.plus(
-          this.minPIssued ?? BN.ZERO
-        )
-          .div(this.pool!.globalPoolTokenAmount)
-          .minus(new BN(1))
-          .times(tokenBalance)
-          .times(this.providedPercentOfPool)
-          .times(0.01)
-          .toFormat(2);
-        //fixme to correct decimal
-        return {
-          ...acc,
-          [assetId]: dk,
-        };
+    return this.pool.tokens.reduce<Record<string, BN>>((acc, { assetId }) => {
+      const tokenBalance =
+        (this.pool && this.pool.liquidity[assetId]) ?? BN.ZERO;
+      const dk = this.pool!.globalPoolTokenAmount.plus(
+        this.minPIssued ?? BN.ZERO
+      )
+        .div(this.pool!.globalPoolTokenAmount)
+        .minus(new BN(1))
+        .times(tokenBalance)
+        .times(this.providedPercentOfPool)
+        .times(0.01);
+      return {
+        ...acc,
+        [assetId]: dk,
+      };
+    }, {});
+  }
+
+  get totalAmountToDeposit() {
+    const value = this.calculateAmountsToDeposit();
+    if (value == null) return "";
+    this.setTokensToDepositAmount(value);
+
+    const total = Object.entries(value).reduce<BN>(
+      (acc, [assetId, balance]) => {
+        const rate = this.rootStore.poolsStore.usdnRate(assetId, 1) ?? BN.ZERO;
+        const usdnEquivalent = BN.formatUnits(balance.times(rate), 8);
+        return acc.plus(usdnEquivalent);
       },
-      {}
+      BN.ZERO
     );
-    return value;
+    return total.toFormat(2);
   }
 
   //call invoke
