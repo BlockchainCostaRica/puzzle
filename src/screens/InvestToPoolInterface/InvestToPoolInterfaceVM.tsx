@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useVM } from "@src/hooks/useVM";
-import { makeAutoObservable, when } from "mobx";
+import { makeAutoObservable, reaction, when } from "mobx";
 import { RootStore, useStores } from "@stores";
 import axios from "axios";
 import BN from "@src/utils/BN";
@@ -69,6 +69,7 @@ class InvestToPoolInterfaceVM {
       () => rootStore.accountStore.address != null,
       this.updateAccountLiquidityInfo
     );
+    //todo add locin not to display when there is no rewards
     when(() => rootStore.accountStore.address != null, this.updateRewardInfo);
   }
 
@@ -112,29 +113,42 @@ class InvestToPoolInterfaceVM {
     );
     const realBalance = assetBalance?.balance ?? BN.ZERO;
 
-    //fixme change to one request with global _global
-    //check once more
-    const [
-      globalTokenBalance,
-      globalLastCheckTokenEarnings,
-      globalIndexStaked,
-      globalLastCheckTokenInterest,
-      userLastCheckTokenInterest,
-      userIndexStaked,
-    ] = (
-      await Promise.all([
-        this.pool.contractRequest(`global_${token.assetId}_balance`),
-        this.pool.contractRequest(`global_lastCheck_${token.assetId}_earnings`),
-        this.pool.contractRequest("global_indexStaked"),
-        this.pool.contractRequest(`global_lastCheck_${token.assetId}_interest`),
-        this.pool.contractRequest(
-          `${address}_lastCheck_${token.assetId}_interest`
-        ),
-        this.pool.contractRequest(`${address}_indexStaked`),
-      ])
-    ).map((v) => {
-      return v != null && v.length > 0 ? new BN(v[0].value) : BN.ZERO;
-    });
+    const [globalValues, addressValues] = await Promise.all([
+      this.pool.contractRequest(`global_(.*)`),
+      this.pool.contractRequest(`${address}_(.*)`),
+    ]);
+
+    const keysArray = {
+      globalTokenBalance: `global_${token.assetId}_balance`,
+      globalLastCheckTokenEarnings: `global_lastCheck_${token.assetId}_earnings`,
+      globalIndexStaked: "global_indexStaked",
+      globalLastCheckTokenInterest: `global_lastCheck_${token.assetId}_interest`,
+      userLastCheckTokenInterest: `${address}_lastCheck_${token.assetId}_interest`,
+      userIndexStaked: `${address}_indexStaked`,
+    };
+
+    const parsedNodeResponse = [
+      ...(globalValues ?? []),
+      ...(addressValues ?? []),
+    ].reduce<Record<string, BN>>((acc, { key, value }) => {
+      Object.entries(keysArray).forEach(([regName, regValue]) => {
+        const regexp = new RegExp(regValue);
+        if (regexp.test(key)) {
+          acc[regName] = new BN(value);
+        }
+      });
+      return acc;
+    }, {});
+
+    const globalTokenBalance = parsedNodeResponse["globalTokenBalance"];
+    const globalLastCheckTokenEarnings =
+      parsedNodeResponse["globalLastCheckTokenEarnings"];
+    const globalIndexStaked = parsedNodeResponse["globalIndexStaked"];
+    const globalLastCheckTokenInterest =
+      parsedNodeResponse["globalLastCheckTokenInterest"];
+    const userLastCheckTokenInterest =
+      parsedNodeResponse["userLastCheckTokenInterest"];
+    const userIndexStaked = parsedNodeResponse["userIndexStaked"];
 
     const newEarnings = BN.max(
       realBalance.minus(globalTokenBalance),
@@ -155,7 +169,7 @@ class InvestToPoolInterfaceVM {
 
     const rewardAvailable = currentInterest
       .minus(lastCheckUserInterest)
-      .times(BN.formatUnits(userIndexStaked, 1e8));
+      .times(BN.formatUnits(userIndexStaked, 8));
 
     const rate =
       this.rootStore.poolsStore.usdnRate(token.assetId, 1) ?? BN.ZERO;
@@ -173,20 +187,16 @@ class InvestToPoolInterfaceVM {
     const rawData = await Promise.all(
       this.pool.tokens.map(this.getTokenRewardInfo)
     );
-    const value = rawData.reduce(
-      (acc, { reward, assetId, usdEquivalent }) => ({
-        ...acc,
-        [assetId]: { reward, usdEquivalent },
-      }),
-      {} as Record<string, IReward>
-    );
-    //todo remade in one place
-    const totalReward = rawData.reduce<BN>(
-      (acc, { usdEquivalent }) => acc.plus(usdEquivalent),
-      BN.ZERO
-    );
-    this.setTotalRewardToClaim(totalReward);
-    this.setRewardToClaim(value);
+
+    let rewardInfo = {};
+    let totalRewardAmount = BN.ZERO;
+
+    rawData.forEach(({ reward, assetId, usdEquivalent }) => {
+      totalRewardAmount = totalRewardAmount.plus(usdEquivalent);
+      rewardInfo = { ...rewardInfo, [assetId]: { reward, usdEquivalent } };
+    });
+    this.setTotalRewardToClaim(totalRewardAmount);
+    this.setRewardToClaim(rewardInfo);
   };
 
   get isThereSomethingToClaim() {
