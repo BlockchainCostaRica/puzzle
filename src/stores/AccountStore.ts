@@ -80,7 +80,7 @@ class AccountStore {
       this.setupWavesKeeper();
     }
     // this.setAddress("3PLdKX1d7aFaPEDKejBXgYFKvg2Ujh8Y1C8");
-    this.setAddress("3P3JJnrVeD9qtBq4AtEm2PZBZ7ez7UaVkxN");
+    // this.setAddress("3P3JJnrVeD9qtBq4AtEm2PZBZ7ez7UaVkxN");
     if (initState) {
       if (initState.loginType === LOGIN_TYPE.KEEPER) {
         this.setLoginType(initState.loginType);

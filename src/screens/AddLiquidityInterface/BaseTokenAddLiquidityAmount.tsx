@@ -34,6 +34,7 @@ const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
           setAmount={vm.setBaseTokenAmount}
           assetId={vm.baseToken.assetId}
           balances={accountStore.assetBalances ?? []}
+          onMaxClick={vm.onMaxBaseTokenClick}
         />
         <SizedBox height={24} />
         <Notification
@@ -49,8 +50,14 @@ const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
         <Button disabled fixed>
           Connect to deposit
         </Button>
+      ) : vm.isBaseTokenAmountMoreUserBalance ? (
+        <Button fixed disabled>
+          Enter less amount
+        </Button>
       ) : (
-        <Button fixed>Deposit</Button>
+        <Button fixed onClick={vm.depositOneToken}>
+          Deposit
+        </Button>
       )}
     </Root>
   );

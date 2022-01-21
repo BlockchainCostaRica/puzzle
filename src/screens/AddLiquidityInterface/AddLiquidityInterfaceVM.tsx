@@ -5,6 +5,7 @@ import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import axios from "axios";
 import { errorMessage } from "@src/old_components/AuthInterface";
+import Balance from "@src/entities/Balance";
 
 const ctx = React.createContext<AddLiquidityInterfaceVM | null>(null);
 
@@ -54,10 +55,6 @@ class AddLiquidityInterfaceVM {
     this.updateStats().catch(() =>
       console.error(`Cannot update stats of ${this.poolId}`)
     );
-    // reaction(
-    //   () => this.rootStore.accountStore.assetBalances,
-    //   this.getPoolBalances
-    // );
     makeAutoObservable(this);
   }
 
@@ -176,6 +173,44 @@ class AddLiquidityInterfaceVM {
       payment,
       call: {
         function: "generateIndexAndStake",
+        args: [],
+      },
+    });
+  };
+
+  get baseTokenBalance() {
+    return this.rootStore.accountStore.assetBalances.find(
+      ({ assetId }) => this.baseToken.assetId == assetId
+    );
+  }
+
+  get isBaseTokenAmountMoreUserBalance(): boolean {
+    const asset = this.baseTokenBalance;
+    if (asset == null) return false;
+    return asset.balance ? asset.balance.lt(this.baseTokenAmount) : false;
+  }
+
+  @action.bound onMaxBaseTokenClick = () => {
+    const userTokenBalance = this.baseTokenBalance;
+    userTokenBalance &&
+      userTokenBalance.balance &&
+      this.setBaseTokenAmount(userTokenBalance.balance);
+  };
+  depositOneToken = async () => {
+    if (this.pool?.contractAddress == null) {
+      errorMessage("There is no contract address");
+      return;
+    }
+    return this.rootStore.accountStore.invoke({
+      dApp: this.pool.contractAddress,
+      payment: [
+        {
+          assetId: this.baseToken.assetId,
+          amount: this.baseTokenAmount.toString(),
+        },
+      ],
+      call: {
+        function: "generateIndexWithOneTokenAndStake",
         args: [],
       },
     });
