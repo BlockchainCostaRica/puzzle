@@ -5,7 +5,6 @@ import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import axios from "axios";
 import { errorMessage } from "@src/old_components/AuthInterface";
-import { IToken } from "@src/constants";
 import Balance from "@src/entities/Balance";
 
 const ctx = React.createContext<AddLiquidityInterfaceVM | null>(null);
@@ -191,9 +190,10 @@ class AddLiquidityInterfaceVM {
     );
   }
 
-  get isBaseTokenAmountMoreUserBalance(): boolean {
+  get canDepositBaseToken(): boolean {
     const asset = this.baseTokenBalance;
     if (asset == null) return false;
+    if (asset.balance?.lt(0.0001)) return false;
     return asset.balance ? asset.balance.lt(this.baseTokenAmount) : false;
   }
 

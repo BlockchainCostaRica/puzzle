@@ -52,6 +52,7 @@ const MultiSwapInterfaceImpl: React.FC = () => {
           <Root>
             <Card paddingDesktop="32px" maxWidth={560}>
               <TokenInput
+                selectable={true}
                 decimals={vm.token0!.decimals}
                 amount={vm.amount0}
                 setAmount={vm.setAmount0}
@@ -63,6 +64,7 @@ const MultiSwapInterfaceImpl: React.FC = () => {
               />
               <SwitchTokensButton />
               <TokenInput
+                selectable={true}
                 decimals={vm.token1!.decimals}
                 amount={new BN(vm.amount1)}
                 assetId={vm.assetId1}

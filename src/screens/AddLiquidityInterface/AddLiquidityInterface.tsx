@@ -12,6 +12,9 @@ import {
 import MultipleTokensAddLiquidity from "./MultipleTokensAddLiquidity/MultipleTokensAddLiquidity";
 import DepositToPool from "@screens/AddLiquidityInterface/DepositToPool";
 import BaseTokenAddLiquidityAmount from "@screens/AddLiquidityInterface/BaseTokenAddLiquidityAmount";
+import { useStores } from "@stores";
+import Button from "@components/Button";
+import { Observer } from "mobx-react-lite";
 
 interface IProps {
   poolId: string;
@@ -36,31 +39,43 @@ const Root = styled.div`
 const AddLiquidityInterfaceImpl = () => {
   const [activeTab, setActiveTab] = useState<0 | 1>(0);
   const vm = useAddLiquidityInterfaceVM();
+  const { accountStore } = useStores();
   return (
     <Layout>
-      <Root>
-        <Text fitContent weight={500} size="large">
-          Deposit liquidity
-        </Text>
-        <SizedBox height={4} />
-        <Text fitContent size="medium" type="secondary">
-          Select a pool to invest
-        </Text>
-        <SizedBox height={24} />
-        <SwitchButtons
-          values={["Multiple tokens", `${vm.baseToken.symbol} Token`]}
-          active={activeTab}
-          onActivate={(i) => setActiveTab(i)}
-        />
-        <SizedBox height={24} />
-        <DepositToPool />
-        <SizedBox height={24} />
-        {activeTab === 0 ? (
-          <MultipleTokensAddLiquidity />
-        ) : (
-          <BaseTokenAddLiquidityAmount />
+      <Observer>
+        {() => (
+          <Root>
+            <Text fitContent weight={500} size="large">
+              Deposit liquidity
+            </Text>
+            <SizedBox height={4} />
+            <Text fitContent size="medium" type="secondary">
+              Select the method of adding liquidity and enter the value
+            </Text>
+            <SizedBox height={24} />
+            <SwitchButtons
+              values={["Multiple tokens", `${vm.baseToken.symbol} Token`]}
+              active={activeTab}
+              onActivate={(i) => setActiveTab(i)}
+            />
+            <SizedBox height={24} />
+            <DepositToPool />
+            <SizedBox height={24} />
+            {accountStore.address == null ? (
+              <Button
+                fixed
+                onClick={() => accountStore.setWalletModalOpened(true)}
+              >
+                Connect wallet to deposit
+              </Button>
+            ) : activeTab === 0 ? (
+              <MultipleTokensAddLiquidity />
+            ) : (
+              <BaseTokenAddLiquidityAmount />
+            )}
+          </Root>
         )}
-      </Root>
+      </Observer>
     </Layout>
   );
 };

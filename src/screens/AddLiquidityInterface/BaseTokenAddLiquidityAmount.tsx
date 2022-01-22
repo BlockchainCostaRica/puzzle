@@ -37,25 +37,32 @@ const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
           onMaxClick={vm.onMaxBaseTokenClick}
         />
         <SizedBox height={24} />
-        <Notification
-          type="info"
-          text={`Your ${vm.baseToken.symbol} will be automatically converted to other pool
+        {vm.baseTokenBalance && vm.baseTokenBalance.balance?.lt(0.0001) ? (
+          <Notification
+            type="warning"
+            text={`Your ${vm.baseToken.symbol} balance is too low to deposit. Buy ${vm.baseToken.symbol} to deposit.`}
+          />
+        ) : (
+          <Notification
+            type="info"
+            text={`Your ${vm.baseToken.symbol} will be automatically converted to other pool
         tokens and provided as liquidity. Please pay attention that value of
         your deposit can be different from value of tokens provided because of
         slippage. We do not recommend to use this method for bigger amounts.`}
-        />
+          />
+        )}
       </Card>
       <SizedBox height={8} />
       {accountStore.address == null ? (
         <Button disabled fixed>
           Connect to deposit
         </Button>
-      ) : vm.isBaseTokenAmountMoreUserBalance ? (
-        <Button fixed disabled>
-          Enter less amount
-        </Button>
       ) : (
-        <Button fixed onClick={vm.depositOneToken}>
+        <Button
+          fixed
+          onClick={vm.depositOneToken}
+          disabled={!vm.canDepositBaseToken}
+        >
           Deposit
         </Button>
       )}
