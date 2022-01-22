@@ -26,6 +26,7 @@ interface IPoolCreationParams {
 class Pool implements IPoolConfig {
   public readonly chainId: TChainId;
   public readonly contractAddress: string;
+  public readonly layer2Address?: string;
   public readonly baseTokenId: string;
   public readonly name: string;
   public readonly defaultAssetId0: string;
@@ -64,6 +65,7 @@ class Pool implements IPoolConfig {
   constructor(params: IPoolCreationParams) {
     this.id = params.id;
     this.contractAddress = params.config.contractAddress;
+    this.layer2Address = params.config.layer2Address;
     this.baseTokenId = params.config.baseTokenId;
     this.name = params.config.name;
     this._logo = params.config.logo;

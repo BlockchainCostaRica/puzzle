@@ -59,6 +59,7 @@ export interface IToken {
 
 export interface IPoolConfig {
   contractAddress: string;
+  layer2Address?: string;
   baseTokenId: string;
   name: string;
   defaultAssetId0: string;

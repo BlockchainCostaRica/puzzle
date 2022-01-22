@@ -46,6 +46,7 @@ export const MAINNET_ROUTES = {
 export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
   [MAINNET_POOL_ID.farmsPool1]: {
     contractAddress: "3PPRHHF9JKvDLkAc3aHD3Kd5tRZp1CoqAJa",
+    layer2Address: "3PDVDYZiwJzK3pu8vcknuLiKCYBPx6XZntG",
     baseTokenId: mainnetTokens.EGG.assetId,
     name: "Farms 1",
     logo: tokenLogos.EGG,
@@ -82,6 +83,7 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
   },
   [MAINNET_POOL_ID.farmsPool2]: {
     contractAddress: "3PKYPKJPHZENAAwH9e7TF5edDgukNxxBt3M",
+    layer2Address: "3PLNxoMJYKzcA8qQ7hQidGDaUJNvM4w36nj",
     baseTokenId: mainnetTokens.EGG.assetId,
     name: "Farms 2",
     logo: tokenLogos.EGG,
@@ -101,6 +103,7 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
   },
   [MAINNET_POOL_ID.defi]: {
     contractAddress: "3PDrYPF6izza2sXWffzTPF7e2Fcir2CMpki",
+    layer2Address: "3PJAg4A4gPQXtSLKQNAf5VxbXV2QVM9wPei",
     baseTokenId: mainnetTokens.USDN.assetId,
     name: "DeFi",
     logo: tokenLogos.WAVES,
@@ -121,6 +124,7 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
   },
   [MAINNET_POOL_ID.race]: {
     contractAddress: "3PNK5ypnPJioLmLUzfK6ezpaePHLxZd6QLj",
+    layer2Address: "3PQSAdwsdyPVVpfBwjtgXboVXUZgeYHycWM",
     baseTokenId: mainnetTokens.USDN.assetId,
     name: "Race",
     logo: tokenLogos.RACE,

@@ -53,8 +53,8 @@ const PoolInformation: React.FC<IProps> = () => {
       </Text>
       <SizedBox height={8} />
       <CCard>
-        <Info text="Pool value" value={data.liquidity} />
-        <Info text="Fees (30D)" value={data.monthlyVolume} />
+        <Info text="Pool liquidity" value={data.liquidity} />
+        <Info text="Fees (30D)" value={data.fees} />
         <Info text="APY" value={data.apy} />
       </CCard>
     </Root>

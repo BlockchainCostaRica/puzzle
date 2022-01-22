@@ -84,11 +84,11 @@ class InvestToPoolInterfaceVM {
       .then(({ data }) => this.setStats(data));
 
   public get poolStats() {
-    const { apy, monthly_volume, liquidity } = this.stats ?? {};
+    const { apy, liquidity, fees } = this.stats ?? {};
     return {
-      apy: apy ? new BN(apy).toFormat(4).concat("%") : "–",
-      monthlyVolume: monthly_volume ? new BN(monthly_volume).toFormat(1) : "–",
-      liquidity: liquidity ? new BN(liquidity).toFormat(4) : "–",
+      apy: apy ? new BN(apy).toFormat(4).concat(" %") : "–",
+      fees: fees ? "$ " + new BN(fees).toFormat(1) : "–",
+      liquidity: liquidity ? "$ " + new BN(liquidity).toFormat(2) : "–",
     };
   }
 
@@ -202,12 +202,41 @@ class InvestToPoolInterfaceVM {
     return this.totalRewardToClaim.eq(0);
   }
 
+  get poolCompositionValues() {
+    if (this.pool.tokens == null) return [];
+    return this.pool.tokens.reduce<
+      (IToken & { value: BN; parsedBalance: BN })[]
+    >((acc, token) => {
+      const balance = BN.formatUnits(
+        this.pool.liquidity[token.assetId] ?? BN.ZERO,
+        token.decimals
+      );
+      const rate = this.pool.currentPrice(
+        token.assetId,
+        this.rootStore.accountStore.TOKENS.USDN.assetId
+      );
+      return [
+        ...acc,
+        {
+          ...token,
+          value: balance.times(rate ?? 0),
+          parsedBalance: balance,
+        },
+      ];
+    }, []);
+  }
+
   claimRewards = async () => {
     if (this.totalRewardToClaim.eq(0)) {
       errorMessage({ message: "There is nothing to claim" });
+      return;
+    }
+    if (this.pool.layer2Address == null) {
+      errorMessage({ message: "There is nothing to claim" });
+      return;
     }
     return this.rootStore.accountStore.invoke({
-      dApp: this.pool.contractAddress,
+      dApp: this.pool.layer2Address,
       payment: [],
       call: {
         function: "claimIndexRewards",

@@ -7,8 +7,6 @@ import GridTable from "@components/GridTable";
 import { AdaptiveRow, Column, Row } from "@components/Flex";
 import { useInvestToPoolInterfaceVM } from "@screens/InvestToPoolInterface/InvestToPoolInterfaceVM";
 import { observer } from "mobx-react-lite";
-import { useStores } from "@stores";
-import BN from "@src/utils/BN";
 
 interface IProps {}
 
@@ -26,14 +24,12 @@ const Icon = styled.img`
 `;
 
 const AdaptiveTableTitle = styled(AdaptiveRow)`
-  //contilina
   justify-content: end;
   @media (min-width: 880px) {
     justify-content: start;
   }
 `;
 const PoolComposition: React.FC<IProps> = () => {
-  const { accountStore } = useStores();
   const vm = useInvestToPoolInterfaceVM();
   return (
     <Root>
@@ -53,17 +49,9 @@ const PoolComposition: React.FC<IProps> = () => {
               <div className="desktop">Value</div>
             </AdaptiveRow>
           </div>
-          {vm.pool?.tokens.map((token, i) => {
-            const balance = BN.formatUnits(
-              vm.pool.liquidity[token.assetId] ?? BN.ZERO,
-              token.decimals
-            );
-            const rate = vm.pool.currentPrice(
-              token.assetId,
-              accountStore.TOKENS.USDN.assetId
-            );
-            const value = balance.times(rate ?? 0);
-            return (
+          {vm.poolCompositionValues
+            .sort((a, b) => (a.value!.gt(b.value!) ? -1 : 1))
+            .map((token, i) => (
               <div className="gridRow" key={i}>
                 <Row alignItems="center" mainAxisSize="fit-content">
                   <Icon src={token.logo} alt="logo" />
@@ -72,27 +60,26 @@ const PoolComposition: React.FC<IProps> = () => {
                 </Row>
                 <AdaptiveRow>
                   <Text className="desktop" fitContent>
-                    {balance.toFormat(2)}
+                    {token.parsedBalance.toFormat(2)}
                   </Text>
                   <Column
                     className="mobile"
                     crossAxisSize="max"
                     style={{ textAlign: "end" }}
                   >
-                    <Text size="medium">{balance.toFormat(2)}</Text>
+                    <Text size="medium">{token.parsedBalance.toFormat(2)}</Text>
                     <Text size="small" type="secondary">
-                      $ {value.toFormat(2)}
+                      $ {token.value.toFormat(2)}
                     </Text>
                   </Column>
                 </AdaptiveRow>
                 <AdaptiveRow>
                   <Text className="desktop" fitContent nowrap>
-                    $ {value.toFormat(2)}
+                    $ {token.value.toFormat(2)}
                   </Text>
                 </AdaptiveRow>
               </div>
-            );
-          })}
+            ))}
         </GridTable>
       </Card>
     </Root>
