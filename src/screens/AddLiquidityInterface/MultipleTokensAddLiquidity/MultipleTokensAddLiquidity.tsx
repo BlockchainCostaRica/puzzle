@@ -81,32 +81,31 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
               style={{ margin: 24 }}
             />
           )}
-          {vm.tokensToDepositAmounts &&
-            tokens.map((token, i) => {
-              const balance = accountStore.findBalanceByAssetId(token.assetId);
-              const available =
-                balance && balance.balance
-                  ? BN.formatUnits(balance?.balance, balance.decimals)
-                  : BN.ZERO;
+          {tokens.map((token, i) => {
+            const balance = accountStore.findBalanceByAssetId(token.assetId);
+            const available =
+              balance &&
+              balance.balance &&
+              BN.formatUnits(balance?.balance, token.decimals);
 
-              const depositAmount = vm.tokensToDepositAmounts
-                ? BN.formatUnits(
-                    vm.tokensToDepositAmounts[token.assetId],
-                    token.decimals
-                  )
-                : BN.ZERO;
-
-              return (
-                <LiquidityTokenRow
-                  symbol={token.symbol}
-                  key={i}
-                  availableAmount={available}
-                  depositAmount={depositAmount}
-                  percent={token.shareAmount * 100}
-                  logo={token.logo}
-                />
+            const depositAmount =
+              vm.tokensToDepositAmounts &&
+              BN.formatUnits(
+                vm.tokensToDepositAmounts[token.assetId],
+                token.decimals
               );
-            })}
+
+            return (
+              <LiquidityTokenRow
+                symbol={token.symbol}
+                key={i}
+                availableAmount={available}
+                depositAmount={depositAmount}
+                percent={token.shareAmount * 100}
+                logo={token.logo}
+              />
+            );
+          })}
         </GridTable>
         <Divider />
         <AdaptiveRowWithPadding justifyContent="space-between">

@@ -96,9 +96,7 @@ class AddLiquidityInterfaceVM {
   get possibleToMultipleDeposit() {
     if (this.tokensToDepositAmounts == null) return false;
     if (this.providedPercentOfPool.eq(0)) return false;
-    if (Object.values(this.tokensToDepositAmounts).some((v) => v.eq(0)))
-      return false;
-    return true;
+    return !Object.values(this.tokensToDepositAmounts).some((v) => v.eq(0));
   }
 
   get minBalanceAsset(): Balance | null {
@@ -148,7 +146,7 @@ class AddLiquidityInterfaceVM {
       );
       return acc.plus(usdnEquivalent);
     }, BN.ZERO);
-    return !total.eq(0) ? "$ " + total.toFormat(2) : "";
+    return !total.isNaN() ? "$ " + total.toFormat(2) : "";
   }
 
   depositMultiply = async () => {

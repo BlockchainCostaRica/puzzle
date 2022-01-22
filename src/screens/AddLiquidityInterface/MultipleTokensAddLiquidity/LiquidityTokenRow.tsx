@@ -8,8 +8,8 @@ import SquareTokenIcon from "@components/SquareTokenIcon";
 import styled from "@emotion/styled";
 
 interface IProps {
-  availableAmount: BN;
-  depositAmount: BN;
+  availableAmount?: BN;
+  depositAmount: BN | null;
   percent: number;
   symbol: string;
   logo: string;
@@ -27,10 +27,15 @@ const LiquidityTokenRow: React.FC<IProps> = ({
   symbol,
   logo,
 }) => {
-  const available = availableAmount.toFormat(4);
-  const deposit = depositAmount.toFormat(4);
+  const available = availableAmount ? availableAmount.toFormat(4) : "-";
+  const deposit = depositAmount
+    ? depositAmount.isNaN()
+      ? "-"
+      : depositAmount.toFormat(4)
+    : "-";
+  const isLowMoney = availableAmount != null && availableAmount.eq(0);
   return (
-    <Root className="gridRow" warning={availableAmount.eq(0)}>
+    <Root className="gridRow" warning={isLowMoney}>
       <Row alignItems="center" mainAxisSize="fit-content">
         <SquareTokenIcon
           src={logo}
@@ -46,7 +51,7 @@ const LiquidityTokenRow: React.FC<IProps> = ({
             <span>Share: </span>
             <span
               style={{
-                color: availableAmount.eq(0) ? "#ed827e" : "#363870",
+                color: isLowMoney ? "#ed827e" : "#363870",
                 paddingLeft: 1,
               }}
             >
