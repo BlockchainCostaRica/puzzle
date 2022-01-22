@@ -124,7 +124,7 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
         {accountStore.address != null ? (
           <Button
             fixed
-            disabled={!vm.possibleToMultipleDeposit}
+            disabled={!vm.canMultipleDeposit}
             onClick={vm.depositMultiply}
           >
             Deposit {vm.totalAmountToDeposit}

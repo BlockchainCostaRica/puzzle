@@ -41,10 +41,6 @@ class AddLiquidityInterfaceVM {
   public stats: TStats | null = null;
   private setStats = (stats: TStats | null) => (this.stats = stats);
 
-  // public tokensToDepositAmounts: Record<string, BN> | null = null;
-  // @action.bound setTokensToDepositAmounts = (value: Record<string, BN>) =>
-  //   (this.tokensToDepositAmounts = value);
-
   providedPercentOfPool: BN = new BN(50);
   @action.bound setProvidedPercentOfPool = (value: number) =>
     (this.providedPercentOfPool = new BN(value));
@@ -93,7 +89,7 @@ class AddLiquidityInterfaceVM {
     );
   }
 
-  get possibleToMultipleDeposit() {
+  get canMultipleDeposit() {
     return (
       this.tokensToDepositAmounts != null &&
       Object.values(this.tokensToDepositAmounts).every((v) => v.gt(0)) &&
@@ -132,6 +128,14 @@ class AddLiquidityInterfaceVM {
         [assetId]: dk,
       };
     }, {});
+  }
+
+  get baseTokenAmountUsdnEquivalent() {
+    if (this.baseToken == null) return "";
+    const rate =
+      this.rootStore.poolsStore.usdnRate(this.baseToken.assetId, 1) ?? BN.ZERO;
+    const value = rate.times(this.baseTokenAmount);
+    return "~ " + BN.formatUnits(value, this.baseToken.decimals).toFixed(2);
   }
 
   get totalAmountToDeposit(): string {
@@ -186,9 +190,9 @@ class AddLiquidityInterfaceVM {
 
   get canDepositBaseToken(): boolean {
     const asset = this.baseTokenBalance;
-    if (asset == null) return false;
-    if (asset.balance?.lt(0.0001)) return false;
-    return asset.balance ? asset.balance.lt(this.baseTokenAmount) : false;
+    if (asset == null || asset.balance == null) return false;
+    if (this.baseTokenAmount.eq(0)) return false;
+    return asset.balance?.gt(0.0001) && !asset.balance.lt(this.baseTokenAmount);
   }
 
   @action.bound onMaxBaseTokenClick = () => {

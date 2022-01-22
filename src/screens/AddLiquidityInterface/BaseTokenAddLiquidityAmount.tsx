@@ -35,6 +35,7 @@ const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
           assetId={vm.baseToken.assetId}
           balances={accountStore.assetBalances ?? []}
           onMaxClick={vm.onMaxBaseTokenClick}
+          usdnEquivalent={vm.baseTokenAmountUsdnEquivalent}
         />
         <SizedBox height={24} />
         {vm.baseTokenBalance && vm.baseTokenBalance.balance?.lt(0.0001) ? (

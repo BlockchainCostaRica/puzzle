@@ -121,7 +121,12 @@ const TokenInput: React.FC<IProps> = (props) => {
           placeholder="0.00"
           readOnly={!props.setAmount}
         />
-        <Text style={{ whiteSpace: "nowrap" }} type="secondary" size="small">
+        <Text
+          style={{ whiteSpace: "nowrap" }}
+          type="secondary"
+          size="small"
+          fitContent
+        >
           {props.usdnEquivalent}
         </Text>
       </InputContainer>
