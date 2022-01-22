@@ -15,12 +15,15 @@ const Root = styled.div`
   display: grid;
   column-gap: 8px;
   grid-template-columns: 1fr 1fr;
+
   a {
     width: 100%;
   }
 `;
 const LoggedInLiquidityInfo: React.FC<IProps> = () => {
   const vm = useInvestToPoolInterfaceVM();
+  const liquidity = vm.accountLiquidity?.toFormat(2);
+  const shareOfPool = vm.accountShareOfPool?.toFormat(2);
 
   return (
     <Root>
@@ -28,7 +31,7 @@ const LoggedInLiquidityInfo: React.FC<IProps> = () => {
         <Text type="secondary">Value</Text>
         <SizedBox height={4} />
         <Text nowrap style={{ fontSize: 24 }}>
-          {vm.accountLiquidity ?? "-"}
+          {liquidity ? "$" + liquidity : "-"}
         </Text>
         <SizedBox height={16} />
         <Button fixed size="medium" kind="secondary" onClick={vm.withdraw}>
@@ -40,7 +43,9 @@ const LoggedInLiquidityInfo: React.FC<IProps> = () => {
           Share of pool
         </Text>
         <SizedBox height={4} />
-        <Text style={{ fontSize: 24 }}>{vm.accountShareOfPool ?? "-"}</Text>
+        <Text style={{ fontSize: 24 }}>
+          {shareOfPool ? shareOfPool.concat("%") : "-"}
+        </Text>
         <SizedBox height={16} />
         <Link to={`/${vm.pool.id}/addLiquidity`}>
           <Button fixed size="medium">

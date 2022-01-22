@@ -134,7 +134,7 @@ class Pool implements IPoolConfig {
 
   @action.bound public getAccountLiquidityInfo = async (
     address: string
-  ): Promise<{ liquidity: string; percent: string }> => {
+  ): Promise<{ liquidity: BN; percent: BN }> => {
     const [address_indexStaked, global_indexStaked] = await Promise.all([
       this.contractRequest(`${address}_indexStaked`),
       this.contractRequest(`global_indexStaked`),
@@ -153,8 +153,8 @@ class Pool implements IPoolConfig {
 
     if (indexStaked.eq(0)) {
       return {
-        liquidity: "$ 0",
-        percent: "0 %",
+        liquidity: BN.ZERO,
+        percent: BN.ZERO,
       };
     }
     const liquidity = this.globalLiquidity
@@ -163,8 +163,8 @@ class Pool implements IPoolConfig {
     const percent = liquidity.times(new BN(100)).div(this.globalLiquidity);
 
     return {
-      liquidity: "$ " + liquidity.toFormat(2),
-      percent: percent.toFormat(2).concat(" %"),
+      liquidity: liquidity,
+      percent: percent,
     };
   };
 

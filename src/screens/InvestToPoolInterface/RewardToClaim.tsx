@@ -39,7 +39,7 @@ const RewardToClaim: React.FC<IProps> = () => {
   const vm = useInvestToPoolInterfaceVM();
   const { width: screenWidth } = useWindowSize();
 
-  if (accountStore.address == null) return null;
+  if (accountStore.address == null || !vm.isThereRewardToClaim) return null;
   return (
     <Root>
       <Text weight={500} type="secondary">

@@ -42,12 +42,11 @@ class InvestToPoolInterfaceVM {
   public stats: TStats | null = null;
   private setStats = (stats: TStats | null) => (this.stats = stats);
 
-  public accountLiquidity: string | null = null;
-  private setAccountLiquidity = (value: string) =>
-    (this.accountLiquidity = value);
+  public accountLiquidity: BN | null = null;
+  private setAccountLiquidity = (value: BN) => (this.accountLiquidity = value);
 
-  public accountShareOfPool: string | null = null;
-  private setAccountShareOfPool = (value: string) =>
+  public accountShareOfPool: BN | null = null;
+  private setAccountShareOfPool = (value: BN) =>
     (this.accountShareOfPool = value);
 
   public rewardsToClaim: Record<string, IReward> | null = null;
@@ -175,7 +174,9 @@ class InvestToPoolInterfaceVM {
     const usdEquivalent = rewardAvailable.times(rate);
 
     return {
-      reward: BN.formatUnits(rewardAvailable, token.decimals),
+      reward: rewardAvailable.isNaN()
+        ? BN.ZERO
+        : BN.formatUnits(rewardAvailable, token.decimals),
       assetId: token.assetId,
       usdEquivalent: BN.formatUnits(usdEquivalent, token.decimals),
     };
@@ -219,4 +220,9 @@ class InvestToPoolInterfaceVM {
       title: "Coming soon",
     });
   };
+
+  get isThereRewardToClaim() {
+    if (this.accountLiquidity == null) return false;
+    return !this.accountLiquidity.eq(0);
+  }
 }
