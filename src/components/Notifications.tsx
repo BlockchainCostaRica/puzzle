@@ -11,7 +11,7 @@ interface INotification {
 export const NotificationInfo = styled.div`
   font-size: 12px;
   line-height: 16px;
-  color: #8082c5;
+  color: #8082c5; 
 `;
 
 export const successMessage = (props: INotification) => {
