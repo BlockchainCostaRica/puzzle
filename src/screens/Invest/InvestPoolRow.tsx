@@ -69,13 +69,15 @@ const InvestPoolRow: React.FC<IProps> = ({ pool, stats }) => {
           </Row>
           <SharesContainer>
             {pool.tokens.map(({ symbol, shareAmount, assetId }) => {
-              const isDefault =
-                pool.defaultAssetId0 === assetId ||
-                pool.defaultAssetId1 === assetId;
+              const assetBalance = accountStore.findBalanceByAssetId(assetId);
+              const isActive =
+                assetBalance &&
+                assetBalance.balance &&
+                assetBalance.balance.gt(0);
               return (
                 <Tag
                   key={assetId}
-                  background={isDefault ? "#C6C9F4" : undefined}
+                  background={isActive ? "#C6C9F4" : undefined}
                 >
                   {symbol} {shareAmount * 100} %
                 </Tag>
