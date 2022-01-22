@@ -115,7 +115,6 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
           </Text>
         </AdaptiveRowWithPadding>
       </Card>
-
       <SizedBox height={24} />
 
       <HideDesktop>

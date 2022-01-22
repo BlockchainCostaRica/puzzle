@@ -11,7 +11,7 @@ interface INotification {
 export const NotificationInfo = styled.div`
   font-size: 12px;
   line-height: 16px;
-  color: #8082c5; 
+  color: #8082c5;
 `;
 
 export const successMessage = (props: INotification) => {
@@ -39,7 +39,7 @@ export const successMessage = (props: INotification) => {
 export const errorMessage = (props: INotification) => {
   store.addNotification({
     title: props.title ?? "Something went wrong!",
-    message: props.message ?? "",
+    message: props.message ?? " ",
     type: "danger",
     insert: "bottom",
     container: "top-right",

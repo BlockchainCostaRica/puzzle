@@ -60,7 +60,7 @@ const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
       ) : (
         <Button
           fixed
-          onClick={vm.depositOneToken}
+          onClick={vm.depositBaseToken}
           disabled={!vm.canDepositBaseToken}
         >
           Deposit

@@ -4,8 +4,8 @@ import { action, makeAutoObservable } from "mobx";
 import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import axios from "axios";
-import { errorMessage } from "@src/old_components/AuthInterface";
 import Balance from "@src/entities/Balance";
+import { errorMessage } from "@components/Notifications";
 
 const ctx = React.createContext<AddLiquidityInterfaceVM | null>(null);
 
@@ -41,9 +41,9 @@ class AddLiquidityInterfaceVM {
   public stats: TStats | null = null;
   private setStats = (stats: TStats | null) => (this.stats = stats);
 
-  public tokensToDepositAmounts: Record<string, BN> | null = null;
-  @action.bound setTokensToDepositAmounts = (value: Record<string, BN>) =>
-    (this.tokensToDepositAmounts = value);
+  // public tokensToDepositAmounts: Record<string, BN> | null = null;
+  // @action.bound setTokensToDepositAmounts = (value: Record<string, BN>) =>
+  //   (this.tokensToDepositAmounts = value);
 
   providedPercentOfPool: BN = new BN(50);
   @action.bound setProvidedPercentOfPool = (value: number) =>
@@ -94,9 +94,11 @@ class AddLiquidityInterfaceVM {
   }
 
   get possibleToMultipleDeposit() {
-    if (this.tokensToDepositAmounts == null) return false;
-    if (this.providedPercentOfPool.eq(0)) return false;
-    return !Object.values(this.tokensToDepositAmounts).some((v) => v.eq(0));
+    return (
+      this.tokensToDepositAmounts != null &&
+      Object.values(this.tokensToDepositAmounts).every((v) => v.gt(0)) &&
+      this.providedPercentOfPool.gt(0)
+    );
   }
 
   get minBalanceAsset(): Balance | null {
@@ -111,7 +113,7 @@ class AddLiquidityInterfaceVM {
     )[0];
   }
 
-  calculateAmountsToDeposit(): Record<string, BN> | null {
+  get tokensToDepositAmounts(): Record<string, BN> | null {
     if (this.pool == null) return null;
 
     return this.pool.tokens.reduce<Record<string, BN>>((acc, { assetId }) => {
@@ -133,13 +135,12 @@ class AddLiquidityInterfaceVM {
   }
 
   get totalAmountToDeposit(): string {
-    const value = this.calculateAmountsToDeposit();
-    if (value == null || this.pool == null) return "null";
-    this.setTokensToDepositAmounts(value);
+    const tokensToDepositAmounts = this.tokensToDepositAmounts;
+    if (tokensToDepositAmounts == null || this.pool == null) return "–";
     const total = this.pool.tokens.reduce<BN>((acc, token) => {
       const rate =
         this.rootStore.poolsStore.usdnRate(token.assetId, 1) ?? BN.ZERO;
-      const balance = value[token.assetId];
+      const balance = tokensToDepositAmounts[token.assetId];
       const usdnEquivalent = BN.formatUnits(
         balance.times(rate),
         token.decimals
@@ -151,25 +152,20 @@ class AddLiquidityInterfaceVM {
 
   depositMultiply = async () => {
     if (this.pool?.contractAddress == null) {
-      errorMessage("There is no contract address");
+      errorMessage({ message: "There is no contract address" });
       return;
     }
     if (this.tokensToDepositAmounts == null) {
-      errorMessage("There is no tokens to deposit");
+      errorMessage({ message: "There is no tokens to deposit" });
       return;
     }
 
-    const payment = Object.entries(this.tokensToDepositAmounts).reduce<
-      { assetId: string; amount: string }[]
-    >(
+    const payment = Object.entries(this.tokensToDepositAmounts).reduce(
       (acc, [assetId, value]) => [
         ...acc,
-        {
-          assetId,
-          amount: value.toString(),
-        },
+        { assetId, amount: value.toSignificant(0).toString() },
       ],
-      []
+      [] as Array<{ assetId: string; amount: string }>
     );
 
     return this.rootStore.accountStore.invoke({
@@ -201,9 +197,9 @@ class AddLiquidityInterfaceVM {
       userTokenBalance.balance &&
       this.setBaseTokenAmount(userTokenBalance.balance);
   };
-  depositOneToken = async () => {
+  depositBaseToken = async () => {
     if (this.pool?.contractAddress == null) {
-      errorMessage("There is no contract address");
+      errorMessage({ message: "There is no contract address" });
       return;
     }
     return this.rootStore.accountStore.invoke({
