@@ -5,6 +5,8 @@ import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import axios from "axios";
 import { errorMessage } from "@src/old_components/AuthInterface";
+import { IToken } from "@src/constants";
+import Balance from "@src/entities/Balance";
 
 const ctx = React.createContext<AddLiquidityInterfaceVM | null>(null);
 
@@ -84,9 +86,7 @@ class AddLiquidityInterfaceVM {
 
     return BN.min(
       ...this.pool.tokens.map(({ assetId }) => {
-        const asset = this.rootStore.accountStore.assetBalances.find(
-          (token) => token.assetId === assetId
-        );
+        const asset = this.rootStore.accountStore.findBalanceByAssetId(assetId);
         return this.pool!.globalPoolTokenAmount.times(
           asset?.balance ?? BN.ZERO
         ).div(this.pool!.liquidity[assetId]);
@@ -94,16 +94,24 @@ class AddLiquidityInterfaceVM {
     );
   }
 
-  get minBalanceAssetSymbol() {
-    if (this.rootStore.accountStore.assetBalances == null || this.pool == null)
-      return "-";
-    const balance = this.rootStore.accountStore.assetBalances.reduce(
-      (acc, current) =>
-        acc.balance?.lt(current.balance ? current.balance : BN.ZERO)
-          ? acc
-          : current
+  get possibleToMultipleDeposit() {
+    if (this.tokensToDepositAmounts == null) return false;
+    if (this.providedPercentOfPool.eq(0)) return false;
+    if (Object.values(this.tokensToDepositAmounts).some((v) => v.eq(0)))
+      return false;
+    return true;
+  }
+
+  get minBalanceAsset(): Balance | null {
+    const { accountStore } = this.rootStore;
+    if (this.pool == null || accountStore.assetBalances.length === 0)
+      return null;
+    const balances = accountStore.assetBalances.filter((balance) =>
+      this.pool!.tokens.some((t) => t.assetId === balance.assetId)
     );
-    return balance ? balance.symbol : "-";
+    return balances.sort((a, b) =>
+      a.usdnEquivalent!.gt(b.usdnEquivalent!) ? 1 : -1
+    )[0];
   }
 
   calculateAmountsToDeposit(): Record<string, BN> | null {
@@ -127,21 +135,21 @@ class AddLiquidityInterfaceVM {
     }, {});
   }
 
-  get totalAmountToDeposit() {
+  get totalAmountToDeposit(): string {
     const value = this.calculateAmountsToDeposit();
-    if (value == null) return " ";
+    if (value == null || this.pool == null) return "null";
     this.setTokensToDepositAmounts(value);
-
-    // if (this.tokensToDepositAmounts == null) return "";
-    const total = Object.entries(value).reduce<BN>(
-      (acc, [assetId, balance]) => {
-        const rate = this.rootStore.poolsStore.usdnRate(assetId, 1) ?? BN.ZERO;
-        const usdnEquivalent = BN.formatUnits(balance.times(rate), 8);
-        return acc.plus(usdnEquivalent);
-      },
-      BN.ZERO
-    );
-    return total ? "$ " + total.toFormat(2) : " ";
+    const total = this.pool.tokens.reduce<BN>((acc, token) => {
+      const rate =
+        this.rootStore.poolsStore.usdnRate(token.assetId, 1) ?? BN.ZERO;
+      const balance = value[token.assetId];
+      const usdnEquivalent = BN.formatUnits(
+        balance.times(rate),
+        token.decimals
+      );
+      return acc.plus(usdnEquivalent);
+    }, BN.ZERO);
+    return !total.eq(0) ? "$ " + total.toFormat(2) : "";
   }
 
   depositMultiply = async () => {
@@ -178,8 +186,8 @@ class AddLiquidityInterfaceVM {
   };
 
   get baseTokenBalance() {
-    return this.rootStore.accountStore.assetBalances.find(
-      ({ assetId }) => this.baseToken.assetId === assetId
+    return this.rootStore.accountStore.findBalanceByAssetId(
+      this.baseToken.assetId
     );
   }
 

@@ -62,6 +62,9 @@ class AccountStore {
   @action.bound setAssetBalances = (assetBalances: Balance[]) =>
     (this.assetBalances = assetBalances);
 
+  findBalanceByAssetId = (assetId: string) =>
+    this.assetBalances.find((balance) => balance.assetId === assetId);
+
   public address: string | null = null;
   @action.bound setAddress = (address: string | null) =>
     (this.address = address);

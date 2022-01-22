@@ -108,9 +108,7 @@ class InvestToPoolInterfaceVM {
   ): Promise<IReward & { assetId: string }> => {
     const { accountStore } = this.rootStore;
     const { address } = accountStore;
-    const assetBalance = accountStore.assetBalances.find(
-      ({ assetId }) => assetId === token.assetId
-    );
+    const assetBalance = accountStore.findBalanceByAssetId(token.assetId);
     const realBalance = assetBalance?.balance ?? BN.ZERO;
 
     const [globalValues, addressValues] = await Promise.all([

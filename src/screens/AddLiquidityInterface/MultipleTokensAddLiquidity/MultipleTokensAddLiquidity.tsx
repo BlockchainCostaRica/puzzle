@@ -6,13 +6,14 @@ import Card from "@components/Card";
 import Button from "@components/Button";
 import { observer } from "mobx-react-lite";
 import MultipleTokensAddLiquidityAmount from "./MultipleTokensAddLiquidityAmount";
-import { Column, Row } from "@components/Flex";
+import { Row } from "@components/Flex";
 import GridTable from "@components/GridTable";
 import { useAddLiquidityInterfaceVM } from "@screens/AddLiquidityInterface/AddLiquidityInterfaceVM";
 import Divider from "@components/Divider";
 import BN from "@src/utils/BN";
 import { useStores } from "@stores";
 import Notification from "@screens/AddLiquidityInterface/Notification";
+import LiquidityTokenRow from "@screens/AddLiquidityInterface/MultipleTokensAddLiquidity/LiquidityTokenRow";
 
 interface IProps {}
 
@@ -22,15 +23,6 @@ const Root = styled.div`
   width: 100%;
 `;
 
-const TokenIcon = styled.img`
-  border: 1px solid #f1f2fe;
-  border-radius: 12px;
-  box-sizing: border-box;
-  width: 40px;
-  height: 40px;
-  box-shadow: none;
-  color: transparent;
-`;
 const AdaptiveRowWithPadding = styled(Row)`
   padding: 16px;
   @media (min-width: 880px) {
@@ -44,13 +36,7 @@ const HideDesktop = styled.div`
     display: none;
   }
 `;
-const ShowDesktop = styled.div`
-  display: none;
-  @media (min-width: calc(560px + 32px)) {
-    display: flex;
-  }
-`;
-const FixedMobileBlock = styled(HideDesktop)`
+const FixedMobileBlock = styled.div`
   display: flex;
   position: fixed;
   bottom: 0;
@@ -58,13 +44,18 @@ const FixedMobileBlock = styled(HideDesktop)`
   right: 0;
   justify-content: center;
   padding: 0 16px 16px;
+  @media (min-width: calc(560px + 32px)) {
+    position: relative;
+    padding: 0;
+  }
 `;
 
 const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
-  //todo refactor this page cos it looks like disaster
   const { accountStore } = useStores();
   const vm = useAddLiquidityInterfaceVM();
   const tokens = vm.pool?.tokens ?? [];
+  const minBalanceAsset = vm.minBalanceAsset;
+  const minBalance = minBalanceAsset?.balance ?? new BN(1);
   const handleConnectToWallet = () => accountStore.setWalletModalOpened(true);
   return (
     <Root>
@@ -76,62 +67,46 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
       <SizedBox height={8} />
       <Card paddingMobile="0" paddingDesktop="8px 0">
         <GridTable desktopTemplate={"1fr 1fr"} mobileTemplate={"1fr 1fr"}>
-          {vm.providedPercentOfPool.eq(100) && (
+          {vm.providedPercentOfPool.eq(100) && !minBalance.eq(0) && (
             <Notification
-              type="warning"
-              text={`You’ve reached the limit with ${vm.minBalanceAssetSymbol}. Buy ${vm.minBalanceAssetSymbol} to deposit to this pool.`}
+              type="info"
+              text={`You’ve reached the limit with ${minBalanceAsset?.symbol}.`}
               style={{ margin: 24 }}
             />
           )}
-          {tokens.map((token, i) => {
-            const balance = accountStore.assetBalances?.find(
-              ({ assetId }) => assetId === token.assetId
-            );
-            const available =
-              balance && balance.balance
-                ? BN.formatUnits(balance?.balance, balance.decimals).toFormat(4)
-                : "–";
+          {minBalance.eq(0) && (
+            <Notification
+              type="warning"
+              text={`You must have all assets to bring liquidity to the pool. Top up empty balances or provide liquidity with an ${vm.baseToken.symbol} token.`}
+              style={{ margin: 24 }}
+            />
+          )}
+          {vm.tokensToDepositAmounts &&
+            tokens.map((token, i) => {
+              const balance = accountStore.findBalanceByAssetId(token.assetId);
+              const available =
+                balance && balance.balance
+                  ? BN.formatUnits(balance?.balance, balance.decimals)
+                  : BN.ZERO;
 
-            const depositAmount = vm.tokensToDepositAmounts
-              ? BN.formatUnits(
-                  vm.tokensToDepositAmounts[token.assetId],
-                  token.decimals
-                ).toFormat(4)
-              : "-";
-            return (
-              <div className="gridRow" key={i}>
-                <Row
-                  alignItems="center"
-                  mainAxisSize="fit-content"
-                  style={
-                    i === tokens.length! - 1
-                      ? { borderBottom: "none" }
-                      : undefined
-                  }
-                >
-                  <TokenIcon src={token.logo} alt="logo" />
-                  <SizedBox width={8} />
-                  <Column>
-                    <Text fitContent size="medium">
-                      {token.symbol}
-                    </Text>
-                    <Text fitContent type="secondary" size="small">
-                      <span>Share: </span>
-                      <span style={{ color: "#363870", paddingLeft: 1 }}>
-                        {token.shareAmount * 100} %
-                      </span>
-                    </Text>
-                  </Column>
-                </Row>
-                <Column style={{ width: "100%", textAlign: "end" }}>
-                  <Text nowrap>{depositAmount}</Text>
-                  <Text type="secondary" size="small">
-                    Available: {available}
-                  </Text>
-                </Column>
-              </div>
-            );
-          })}
+              const depositAmount = vm.tokensToDepositAmounts
+                ? BN.formatUnits(
+                    vm.tokensToDepositAmounts[token.assetId],
+                    token.decimals
+                  )
+                : BN.ZERO;
+
+              return (
+                <LiquidityTokenRow
+                  symbol={token.symbol}
+                  key={i}
+                  availableAmount={available}
+                  depositAmount={depositAmount}
+                  percent={token.shareAmount * 100}
+                  logo={token.logo}
+                />
+              );
+            })}
         </GridTable>
         <Divider />
         <AdaptiveRowWithPadding justifyContent="space-between">
@@ -147,30 +122,14 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
       <HideDesktop>
         <SizedBox height={56} />
       </HideDesktop>
-      {/*todo redo this*/}
-      <ShowDesktop>
-        {accountStore.address != null ? (
-          <Button
-            fixed
-            disabled={vm.tokensToDepositAmounts == null}
-            onClick={() => vm.depositMultiply}
-          >
-            Deposit {vm.totalAmountToDeposit}{" "}
-          </Button>
-        ) : (
-          <Button onClick={handleConnectToWallet} fixed>
-            Connect Wallet{" "}
-          </Button>
-        )}
-      </ShowDesktop>
       <FixedMobileBlock>
         {accountStore.address != null ? (
           <Button
             fixed
-            disabled={vm.tokensToDepositAmounts == null}
-            onClick={() => vm.depositMultiply}
+            disabled={!vm.possibleToMultipleDeposit}
+            onClick={vm.depositMultiply}
           >
-            Deposit {vm.totalAmountToDeposit}{" "}
+            Deposit {vm.totalAmountToDeposit}
           </Button>
         ) : (
           <Button fixed onClick={handleConnectToWallet}>
