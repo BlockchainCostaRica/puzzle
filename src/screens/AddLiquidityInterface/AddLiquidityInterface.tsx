@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { useEffect } from "react";
+import React from "react";
 import Layout from "@components/Layout";
 import { observer, Observer } from "mobx-react-lite";
 import Text from "@components/Text";
@@ -12,7 +12,6 @@ import {
 import MultipleTokensAddLiquidity from "./MultipleTokensAddLiquidity";
 import BaseTokenAddLiquidityAmount from "./BaseTokenAddLiquidityAmount";
 import { useStores } from "@stores";
-import Button from "@components/Button";
 import FromToPoolCard from "@components/FromToPoolCard";
 import { useNavigate } from "react-router-dom";
 
@@ -47,12 +46,12 @@ const AddLiquidityInterfaceImpl = () => {
 
   const activeTab = addOneTokenRoute.includes(window.location.pathname) ? 1 : 0;
 
-  const buyBaseTokenRoute = {
-    pathname: `/${(accountStore.ROUTES.pools as any)[vm.poolId]}`,
-    search: new URLSearchParams({
-      asset1: vm.baseToken.assetId,
-    }).toString(),
-  };
+  // const buyBaseTokenRoute = {
+  //   pathname: `/${(accountStore.ROUTES.pools as any)[vm.poolId]}`,
+  //   search: new URLSearchParams({
+  //     asset1: vm.baseToken.assetId,
+  //   }).toString(),
+  // };
 
   return (
     <Layout>
