@@ -27,41 +27,43 @@ const MultipleTokensNotifications: React.FC<IProps> = () => {
           style={{ margin: 24 }}
         />
       )}
-      {vm.zeroAssetBalances && vm.zeroAssetBalances >= 2 && (
-        <Notification
-          type="warning"
-          text={
-            <Text size="medium">
-              You must have all assets to bring liquidity to the pool. Top up
-              empty balances or&nbsp;
-              <Link to={addOneTokenRoute}>
-                provide liquidity with an ${vm.baseToken.symbol} token.
-              </Link>
-            </Text>
-          }
-          style={{ margin: 24 }}
-        />
-      )}
-      {vm.minBalanceAsset && minBalance.eq(0) && (
-        <Notification
-          type="warning"
-          text={
-            <Text size="medium">
-              You’ve reached the limit with {vm.minBalanceAsset?.symbol}.&nbsp;
-              <Link
-                to={buildBuyTokenRoute(
-                  (accountStore.ROUTES.pools as any)[vm.poolId],
-                  vm.minBalanceAsset!.assetId
-                )}
-              >
-                &nbsp;Buy {vm.minBalanceAsset?.symbol}&nbsp;
-              </Link>
-              to deposit to this pool.
-            </Text>
-          }
-          style={{ margin: 24 }}
-        />
-      )}
+      {vm.minBalanceAsset &&
+        minBalance.eq(0) &&
+        (vm.zeroAssetBalances != null && vm.zeroAssetBalances >= 2 ? (
+          <Notification
+            type="warning"
+            text={
+              <Text size="medium">
+                You must have all assets to bring liquidity to the pool. Top up
+                empty balances or&nbsp;
+                <Link to={addOneTokenRoute}>
+                  provide liquidity with an {vm.baseToken.symbol} token.
+                </Link>
+              </Text>
+            }
+            style={{ margin: 24 }}
+          />
+        ) : (
+          <Notification
+            type="warning"
+            text={
+              <Text size="medium">
+                You’ve reached the limit with {vm.minBalanceAsset?.symbol}
+                .&nbsp;
+                <Link
+                  to={buildBuyTokenRoute(
+                    (accountStore.ROUTES.pools as any)[vm.poolId],
+                    vm.minBalanceAsset!.assetId
+                  )}
+                >
+                  &nbsp;Buy {vm.minBalanceAsset?.symbol}&nbsp;
+                </Link>
+                to deposit to this pool.
+              </Text>
+            }
+            style={{ margin: 24 }}
+          />
+        ))}
     </>
   );
 };
