@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import Layout from "@components/Layout";
-import { observer } from "mobx-react-lite";
+import { observer, Observer } from "mobx-react-lite";
 import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
 import SwitchButtons from "@components/SwitchButtons";
@@ -9,12 +9,12 @@ import {
   AddLiquidityInterfaceVMProvider,
   useAddLiquidityInterfaceVM,
 } from "./AddLiquidityInterfaceVM";
-import MultipleTokensAddLiquidity from "./MultipleTokensAddLiquidity/MultipleTokensAddLiquidity";
-import DepositToPool from "@screens/AddLiquidityInterface/DepositToPool";
-import BaseTokenAddLiquidityAmount from "@screens/AddLiquidityInterface/BaseTokenAddLiquidityAmount";
+import MultipleTokensAddLiquidity from "./MultipleTokensAddLiquidity";
+import BaseTokenAddLiquidityAmount from "./BaseTokenAddLiquidityAmount";
 import { useStores } from "@stores";
 import Button from "@components/Button";
-import { Observer } from "mobx-react-lite";
+import FromToPoolCard from "@components/FromToPoolCard";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
   poolId: string;
@@ -37,9 +37,23 @@ const Root = styled.div`
 `;
 
 const AddLiquidityInterfaceImpl = () => {
-  const [activeTab, setActiveTab] = useState<0 | 1>(0);
-  const vm = useAddLiquidityInterfaceVM();
   const { accountStore } = useStores();
+  const routes: any = accountStore.ROUTES;
+  const vm = useAddLiquidityInterfaceVM();
+  const pool = vm.pool;
+  const addLiquidityRoute = `/${routes.addLiquidity[vm.poolId]}`;
+  const addOneTokenRoute = `/${routes.addOneToken[vm.poolId]}`;
+  const navigate = useNavigate();
+
+  const activeTab = addOneTokenRoute.includes(window.location.pathname) ? 1 : 0;
+
+  const buyBaseTokenRoute = {
+    pathname: `/${(accountStore.ROUTES.pools as any)[vm.poolId]}`,
+    search: new URLSearchParams({
+      asset1: vm.baseToken.assetId,
+    }).toString(),
+  };
+
   return (
     <Layout>
       <Observer>
@@ -56,21 +70,24 @@ const AddLiquidityInterfaceImpl = () => {
             <SwitchButtons
               values={["Multiple tokens", `${vm.baseToken.symbol} Token`]}
               active={activeTab}
-              onActivate={(i) => setActiveTab(i)}
+              onActivate={(i) =>
+                i === 1
+                  ? navigate(addOneTokenRoute)
+                  : navigate(addLiquidityRoute)
+              }
             />
             <SizedBox height={24} />
-            <DepositToPool />
+            <FromToPoolCard
+              title="To"
+              poolLogo={pool && pool.logo}
+              poolName={pool && pool.name}
+              apy={vm.poolStats.apy}
+            />
             <SizedBox height={24} />
-            {accountStore.address == null ? (
-              <Button
-                fixed
-                onClick={() => accountStore.setWalletModalOpened(true)}
-              >
-                Connect wallet to deposit
-              </Button>
-            ) : activeTab === 0 ? (
+            {window.location.pathname.includes(addLiquidityRoute) && (
               <MultipleTokensAddLiquidity />
-            ) : (
+            )}
+            {window.location.pathname.includes(addOneTokenRoute) && (
               <BaseTokenAddLiquidityAmount />
             )}
           </Root>

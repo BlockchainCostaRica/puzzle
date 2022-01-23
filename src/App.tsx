@@ -6,7 +6,6 @@ import ReactNotification from "react-notifications-component";
 import MultiSwapInterface from "@screens/MultiSwapInterface";
 import { StakeModule } from "@src/old_components/StakeModule";
 import AddLiquidityInterface from "@src/screens/AddLiquidityInterface";
-import { AddOneTokenInterface } from "@src/old_components/AddOneTokenInterface";
 import InvestToPoolInterface from "@src/screens/InvestToPoolInterface";
 import Header from "@components/Header/Header";
 import { Column } from "@components/Flex";
@@ -20,12 +19,13 @@ import "./old_components/AddLiquidity.scss";
 import "./old_components/vovaStyles.css.scss";
 import { WalletModule } from "@src/old_components/WalletModule";
 import Invest from "@screens/Invest";
+import WithdrawLiquidityInterface from "@screens/WithdrawLiquidity/WithdrawLiquidityInterface";
 
 const Root = styled(Column)`
   width: 100%;
   align-items: center;
   z-index: 101;
-`; 
+`;
 
 const App: React.FC = () => {
   const { accountStore } = useStores();
@@ -48,14 +48,14 @@ const App: React.FC = () => {
           />
         ))}
 
-        {/* Add One Token routes */}
-        {Object.entries(ROUTES.addOneToken).map(([poolId, path]) => (
-          <Route
-            key={path}
-            path={path}
-            element={<AddOneTokenInterface poolName={poolId} />}
-          />
-        ))}
+        {/*/!* Add One Token routes *!/*/}
+        {/*{Object.entries(ROUTES.addOneToken).map(([poolId, path]) => (*/}
+        {/*  <Route*/}
+        {/*    key={path}*/}
+        {/*    path={path}*/}
+        {/*    element={<AddOneTokenInterface poolName={poolId} />}*/}
+        {/*  />*/}
+        {/*))}*/}
 
         {/* Invest routes */}
         <Route path={ROUTES.INVEST} element={<Invest />} />
@@ -74,6 +74,20 @@ const App: React.FC = () => {
             key={path}
             path={path}
             element={<AddLiquidityInterface poolId={poolId} />}
+          />
+        ))}
+        {Object.entries(ROUTES.addOneToken).map(([poolId, path]) => (
+          <Route
+            key={path}
+            path={path}
+            element={<AddLiquidityInterface poolId={poolId} />}
+          />
+        ))}
+        {Object.entries(ROUTES.withdraw).map(([poolId, path]) => (
+          <Route
+            key={path}
+            path={path}
+            element={<WithdrawLiquidityInterface poolId={poolId} />}
           />
         ))}
 

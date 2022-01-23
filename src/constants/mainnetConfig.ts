@@ -16,6 +16,12 @@ export const MAINNET_ROUTES = {
   ROOT: "/",
   STAKE: "/stake",
   INVEST: "/invest",
+  withdraw: {
+    farms: `${MAINNET_POOL_ID.farmsPool1}/withdraw`,
+    farms2: `${MAINNET_POOL_ID.farmsPool2}/withdraw`,
+    race: `${MAINNET_POOL_ID.race}/withdraw`,
+    defi: `${MAINNET_POOL_ID.defi}/withdraw`,
+  },
   pools: {
     farms: MAINNET_POOL_ID.farmsPool1,
     farms2: MAINNET_POOL_ID.farmsPool2,

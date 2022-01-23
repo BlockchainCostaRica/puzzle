@@ -12,8 +12,8 @@ import { useAddLiquidityInterfaceVM } from "@screens/AddLiquidityInterface/AddLi
 import Divider from "@components/Divider";
 import BN from "@src/utils/BN";
 import { useStores } from "@stores";
-import Notification from "@screens/AddLiquidityInterface/Notification";
 import LiquidityTokenRow from "@screens/AddLiquidityInterface/MultipleTokensAddLiquidity/LiquidityTokenRow";
+import MultipleTokensNotifications from "@screens/AddLiquidityInterface/MultipleTokensAddLiquidity/MultipleTokensNotifications";
 
 interface IProps {}
 
@@ -54,9 +54,13 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
   const { accountStore } = useStores();
   const vm = useAddLiquidityInterfaceVM();
   const tokens = vm.pool?.tokens ?? [];
-  const minBalanceAsset = vm.minBalanceAsset;
-  const minBalance = minBalanceAsset?.balance ?? new BN(1);
   const handleConnectToWallet = () => accountStore.setWalletModalOpened(true);
+  if (accountStore.address == null)
+    return (
+      <Button fixed onClick={handleConnectToWallet}>
+        Connect Wallet
+      </Button>
+    );
   return (
     <Root>
       <MultipleTokensAddLiquidityAmount />
@@ -67,20 +71,7 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
       <SizedBox height={8} />
       <Card paddingMobile="0" paddingDesktop="8px 0">
         <GridTable desktopTemplate={"1fr 1fr"} mobileTemplate={"1fr 1fr"}>
-          {vm.providedPercentOfPool.eq(100) && !minBalance.eq(0) && (
-            <Notification
-              type="info"
-              text={`You’ve reached the limit with ${minBalanceAsset?.symbol}.`}
-              style={{ margin: 24 }}
-            />
-          )}
-          {minBalance.eq(0) && (
-            <Notification
-              type="warning"
-              text={`You must have all assets to bring liquidity to the pool. Top up empty balances or provide liquidity with an ${vm.baseToken.symbol} token.`}
-              style={{ margin: 24 }}
-            />
-          )}
+          <MultipleTokensNotifications />
           {tokens.map((token, i) => {
             const balance = accountStore.findBalanceByAssetId(token.assetId);
             const available =
@@ -94,7 +85,6 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
                 vm.tokensToDepositAmounts[token.assetId],
                 token.decimals
               );
-
             return (
               <LiquidityTokenRow
                 symbol={token.symbol}
@@ -121,19 +111,13 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
         <SizedBox height={56} />
       </HideDesktop>
       <FixedMobileBlock>
-        {accountStore.address != null ? (
-          <Button
-            fixed
-            disabled={!vm.canMultipleDeposit}
-            onClick={vm.depositMultiply}
-          >
-            Deposit {vm.totalAmountToDeposit}
-          </Button>
-        ) : (
-          <Button fixed onClick={handleConnectToWallet}>
-            Connect Wallet
-          </Button>
-        )}
+        <Button
+          fixed
+          disabled={!vm.canMultipleDeposit}
+          onClick={vm.depositMultiply}
+        >
+          Deposit {vm.totalAmountToDeposit}
+        </Button>
       </FixedMobileBlock>
     </Root>
   );

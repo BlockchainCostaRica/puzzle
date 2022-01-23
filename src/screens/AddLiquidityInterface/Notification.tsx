@@ -17,6 +17,10 @@ const Root = styled.div<{ warning?: boolean }>`
   padding: 18px;
   align-items: start;
   justify-content: center;
+  a {
+    color: #6563dd;
+    text-decoration: underline;
+  }
 `;
 
 const Notification: React.FC<IProps> = ({ text, type, ...rest }) => {

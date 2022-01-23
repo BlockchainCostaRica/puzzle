@@ -5,20 +5,25 @@ import SizedBox from "@components/SizedBox";
 import Card from "@components/Card";
 import { observer } from "mobx-react-lite";
 import Button from "@components/Button";
-import { useAddLiquidityInterfaceVM } from "@screens/AddLiquidityInterface/AddLiquidityInterfaceVM";
 import { Row } from "reactstrap";
 import { Column } from "@components/Flex";
 import SquareTokenIcon from "@components/SquareTokenIcon";
 import { Link } from "react-router-dom";
 
-interface IProps {}
+interface IProps {
+  title: string;
+  poolName?: string;
+  poolLogo?: string;
+  apy?: string;
+  onChangePool?: () => void;
+}
 
 const Root = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
 
-  .toCardTitle {
+  .cardTitle {
     white-space: nowrap;
     width: fit-content;
     font-size: 14px;
@@ -29,7 +34,7 @@ const Root = styled.div`
     }
   }
 
-  .toCardSubTitle {
+  .cardSubTitle {
     white-space: nowrap;
     width: fit-content;
     font-size: 12px;
@@ -46,14 +51,17 @@ const Root = styled.div`
   }
 `;
 
-const DepositToPool: React.FC<IProps> = () => {
-  const vm = useAddLiquidityInterfaceVM();
-  const pool = vm.pool;
-  const stats = vm.poolStats;
+const DepositToPool: React.FC<IProps> = ({
+  title,
+  poolName,
+  poolLogo,
+  apy,
+  onChangePool,
+}) => {
   return (
     <Root>
       <Text weight={500} type="secondary">
-        To
+        {title}
       </Text>
       <SizedBox height={8} />
       <Card
@@ -63,32 +71,22 @@ const DepositToPool: React.FC<IProps> = () => {
         alignItems="center"
       >
         <Row style={{ alignItems: "stretch" }}>
-          <SquareTokenIcon src={pool?.logo} alt="logo" />
+          <SquareTokenIcon src={poolLogo} alt="logo" />
           <Column style={{ height: "100%" }}>
-            <Text className="toCardTitle" weight={500}>
-              {pool?.name}
+            <Text className="cardTitle" weight={500}>
+              {poolName}
             </Text>
-            <Text className="toCardSubTitle" type="secondary">
-              APY <b>{stats.apy}</b>
+            <Text className="cardSubTitle" type="secondary">
+              APY <b>{apy}</b>
             </Text>
           </Column>
         </Row>
-        {/* todo переделать так, что пулы хранились не во вью модели, а в сторе потому*/}
-        {/* что используются одни и те же данные и в invest и в Withdraw */}
         <Link to="/invest">
-          <Button
-            kind="secondary"
-            size="medium"
-            // onClick={() => accountStore.setChangePoolModalOpened(true)}
-          >
+          <Button kind="secondary" size="medium" onClick={onChangePool}>
             Change pool
           </Button>
         </Link>
       </Card>
-      {/*<ChangePoolModal*/}
-      {/*  visible={accountStore.changePoolModalOpened}*/}
-      {/*  onClose={() => accountStore.setChangePoolModalOpened(false)}*/}
-      {/*/>*/}
     </Root>
   );
 };

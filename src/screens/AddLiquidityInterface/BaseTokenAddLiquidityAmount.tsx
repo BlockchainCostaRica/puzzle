@@ -9,6 +9,8 @@ import { useAddLiquidityInterfaceVM } from "@screens/AddLiquidityInterface/AddLi
 import { useStores } from "@stores";
 import Button from "@components/Button";
 import Notification from "@screens/AddLiquidityInterface/Notification";
+import { Link } from "react-router-dom";
+import buildBuyTokenRoute from "@src/utils/buildBuyTokenRoute";
 
 interface IProps {}
 
@@ -20,6 +22,12 @@ const Root = styled.div`
 const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
   const { accountStore } = useStores();
   const vm = useAddLiquidityInterfaceVM();
+
+  const buyBaseTokenRoute = buildBuyTokenRoute(
+    (accountStore.ROUTES.pools as any)[vm.poolId],
+    vm.baseToken.assetId
+  );
+
   return (
     <Root>
       <Text weight={500} type="secondary">
@@ -33,7 +41,7 @@ const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
           amount={vm.baseTokenAmount}
           setAmount={vm.setBaseTokenAmount}
           assetId={vm.baseToken.assetId}
-          balances={accountStore.assetBalances ?? []}
+          balances={vm.balances ?? []}
           onMaxClick={vm.onMaxBaseTokenClick}
           usdnEquivalent={vm.baseTokenAmountUsdnEquivalent}
         />
@@ -41,7 +49,13 @@ const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
         {vm.baseTokenBalance && vm.baseTokenBalance.balance?.lt(0.0001) ? (
           <Notification
             type="warning"
-            text={`Your ${vm.baseToken.symbol} balance is too low to deposit. Buy ${vm.baseToken.symbol} to deposit.`}
+            text={
+              <div>
+                Your ${vm.baseToken.symbol} balance is too low to deposit.{" "}
+                <Link to={buyBaseTokenRoute}>Buy ${vm.baseToken.symbol}</Link>{" "}
+                to deposit.
+              </div>
+            }
           />
         ) : (
           <Notification
@@ -53,9 +67,9 @@ const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
           />
         )}
       </Card>
-      <SizedBox height={8} />
+      <SizedBox height={24} />
       {accountStore.address == null ? (
-        <Button disabled fixed>
+        <Button fixed onClick={() => accountStore.setWalletModalOpened(true)}>
           Connect to deposit
         </Button>
       ) : (

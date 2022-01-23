@@ -45,6 +45,7 @@ const Invest: React.FC<IProps> = () => {
   const { poolsStore, accountStore } = useStores();
   const [searchValue, setSearchValue] = useState<string>("");
   const [stats, setStats] = useState<TStats | null>(null);
+  console.log(poolsStore.pools);
   const filteredPools = poolsStore.pools
     .slice()
     .filter(({ id }) =>

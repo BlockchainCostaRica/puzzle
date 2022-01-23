@@ -54,6 +54,21 @@ class AddLiquidityInterfaceVM {
     makeAutoObservable(this);
   }
 
+  public get balances() {
+    const { accountStore } = this.rootStore;
+    return this.pool?.tokens
+      .map((t) => {
+        const balance = accountStore.findBalanceByAssetId(t.assetId);
+        return balance ?? new Balance(t);
+      })
+      .sort((a, b) => {
+        if (a.usdnEquivalent == null && b.usdnEquivalent == null) return 0;
+        if (a.usdnEquivalent == null && b.usdnEquivalent != null) return 1;
+        if (a.usdnEquivalent == null && b.usdnEquivalent == null) return -1;
+        return a.usdnEquivalent!.lt(b.usdnEquivalent!) ? 1 : -1;
+      });
+  }
+
   updateStats = () =>
     axios
       .get(`https://puzzleback.herokuapp.com/stats/${this.poolId}/30d`)
@@ -107,6 +122,16 @@ class AddLiquidityInterfaceVM {
     return balances.sort((a, b) =>
       a.usdnEquivalent!.gt(b.usdnEquivalent!) ? 1 : -1
     )[0];
+  }
+
+  get zeroAssetBalances(): number | null {
+    const { accountStore } = this.rootStore;
+    if (this.pool == null || accountStore.assetBalances.length === 0)
+      return null;
+    const balances = accountStore.assetBalances.filter((balance) =>
+      this.pool!.tokens.some((t) => t.assetId === balance.assetId)
+    );
+    return balances.filter(({ balance }) => balance && balance.eq(0)).length;
   }
 
   get tokensToDepositAmounts(): Record<string, BN> | null {
