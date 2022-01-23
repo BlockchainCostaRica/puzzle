@@ -163,9 +163,9 @@ class AddLiquidityInterfaceVM {
     return "~ " + BN.formatUnits(value, this.baseToken.decimals).toFixed(2);
   }
 
-  get totalAmountToDeposit(): string {
+  get totalAmountToDeposit(): string | null {
     const tokensToDepositAmounts = this.tokensToDepositAmounts;
-    if (tokensToDepositAmounts == null || this.pool == null) return "–";
+    if (tokensToDepositAmounts == null || this.pool == null) return null;
     const total = this.pool.tokens.reduce<BN>((acc, token) => {
       const rate =
         this.rootStore.poolsStore.usdnRate(token.assetId, 1) ?? BN.ZERO;
@@ -176,7 +176,7 @@ class AddLiquidityInterfaceVM {
       );
       return acc.plus(usdnEquivalent);
     }, BN.ZERO);
-    return !total.isNaN() ? "$ " + total.toFormat(2) : "";
+    return !total.isNaN() ? "$ " + total.toFormat(2) : null;
   }
 
   depositMultiply = async () => {

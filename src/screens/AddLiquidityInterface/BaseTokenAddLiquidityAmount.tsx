@@ -51,9 +51,9 @@ const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
             type="warning"
             text={
               <div>
-                Your ${vm.baseToken.symbol} balance is too low to deposit.{" "}
-                <Link to={buyBaseTokenRoute}>Buy ${vm.baseToken.symbol}</Link>{" "}
-                to deposit.
+                Your {vm.baseToken.symbol} balance is too low to deposit.{" "}
+                <Link to={buyBaseTokenRoute}>Buy {vm.baseToken.symbol}</Link> to
+                deposit.
               </div>
             }
           />

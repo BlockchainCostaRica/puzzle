@@ -5,12 +5,14 @@ import { observer, Observer } from "mobx-react-lite";
 import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
 import { useStores } from "@stores";
-import Button from "@components/Button";
 import {
   useWithdrawLiquidityVM,
   WithdrawLiquidityVMProvider,
-} from "@screens/WithdrawLiquidity/WithdrawLiquidityVM";
-import FromToPoolCard from "@components/FromToPoolCard";
+} from "./WithdrawLiquidityVM";
+import ShortPoolInfoCard from "@components/ShortPoolInfoCard";
+import WithdrawLiquidityAmount from "./WithdrawLiquidityAmount";
+import WithdrawLiquidityTable from "./WithdrawLiquidityTable";
+import Button from "@components/Button";
 
 interface IProps {
   poolId: string;
@@ -44,22 +46,27 @@ const WithdrawLiquidityInterfaceImpl = () => {
               Withdraw liquidity
             </Text>
             <SizedBox height={4} />
-            <FromToPoolCard
+            <Text fitContent size="medium" type="secondary" textAlign="center">
+              Select the percentage of assets you want to withdraw from the pool
+            </Text>
+            <SizedBox height={24} />
+            <ShortPoolInfoCard
               title="From"
               poolLogo={vm.pool.logo}
               poolName={vm.pool.name}
-              apy={""}
+              apy={vm.poolStats.apy}
             />
             <SizedBox height={24} />
-            {accountStore.address == null ? (
+            <WithdrawLiquidityAmount />
+            {accountStore.address != null ? (
+              <WithdrawLiquidityTable />
+            ) : (
               <Button
                 fixed
                 onClick={() => accountStore.setWalletModalOpened(true)}
               >
-                Connect wallet to deposit
+                Connect wallet to withdraw
               </Button>
-            ) : (
-              <div>hui</div>
             )}
           </Root>
         )}

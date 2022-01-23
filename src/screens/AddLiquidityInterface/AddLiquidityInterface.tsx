@@ -12,7 +12,7 @@ import {
 import MultipleTokensAddLiquidity from "./MultipleTokensAddLiquidity";
 import BaseTokenAddLiquidityAmount from "./BaseTokenAddLiquidityAmount";
 import { useStores } from "@stores";
-import FromToPoolCard from "@components/FromToPoolCard";
+import ShortPoolInfoCard from "@components/ShortPoolInfoCard";
 import { useNavigate } from "react-router-dom";
 
 interface IProps {
@@ -46,13 +46,6 @@ const AddLiquidityInterfaceImpl = () => {
 
   const activeTab = addOneTokenRoute.includes(window.location.pathname) ? 1 : 0;
 
-  // const buyBaseTokenRoute = {
-  //   pathname: `/${(accountStore.ROUTES.pools as any)[vm.poolId]}`,
-  //   search: new URLSearchParams({
-  //     asset1: vm.baseToken.assetId,
-  //   }).toString(),
-  // };
-
   return (
     <Layout>
       <Observer>
@@ -62,7 +55,7 @@ const AddLiquidityInterfaceImpl = () => {
               Deposit liquidity
             </Text>
             <SizedBox height={4} />
-            <Text fitContent size="medium" type="secondary">
+            <Text fitContent size="medium" type="secondary" textAlign="center">
               Select the method of adding liquidity and enter the value
             </Text>
             <SizedBox height={24} />
@@ -76,7 +69,7 @@ const AddLiquidityInterfaceImpl = () => {
               }
             />
             <SizedBox height={24} />
-            <FromToPoolCard
+            <ShortPoolInfoCard
               title="To"
               poolLogo={pool && pool.logo}
               poolName={pool && pool.name}

@@ -5,7 +5,8 @@ import { RootStore, useStores } from "@stores";
 import axios from "axios";
 import BN from "@src/utils/BN";
 import { IToken } from "@src/constants";
-import { errorMessage, successMessage } from "@components/Notifications";
+import { errorMessage } from "@components/Notifications";
+import { TPoolStats } from "@stores/RootStore";
 
 const ctx = React.createContext<InvestToPoolInterfaceVM | null>(null);
 
@@ -23,13 +24,6 @@ export const InvestToPoolInterfaceVMProvider: React.FC<{ poolId: string }> = ({
 
 export const useInvestToPoolInterfaceVM = () => useVM(ctx);
 
-type TStats = {
-  apy: number;
-  fees: number;
-  liquidity: number;
-  monthly_volume: number;
-  volume: { date: number; volume: number }[];
-};
 type IReward = {
   reward: BN;
   usdEquivalent: BN;
@@ -39,8 +33,8 @@ class InvestToPoolInterfaceVM {
   public poolId: string;
   public rootStore: RootStore;
 
-  public stats: TStats | null = null;
-  private setStats = (stats: TStats | null) => (this.stats = stats);
+  public stats: TPoolStats | null = null;
+  private setStats = (stats: TPoolStats | null) => (this.stats = stats);
 
   public accountLiquidity: BN | null = null;
   private setAccountLiquidity = (value: BN) => (this.accountLiquidity = value);
@@ -68,7 +62,6 @@ class InvestToPoolInterfaceVM {
       () => rootStore.accountStore.address != null,
       this.updateAccountLiquidityInfo
     );
-    //todo add locin not to display when there is no rewards
     when(() => rootStore.accountStore.address != null, this.updateRewardInfo);
   }
 
@@ -242,11 +235,6 @@ class InvestToPoolInterfaceVM {
         function: "claimIndexRewards",
         args: [],
       },
-    });
-  };
-  withdraw = () => {
-    successMessage({
-      title: "Coming soon",
     });
   };
 

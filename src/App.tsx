@@ -48,18 +48,10 @@ const App: React.FC = () => {
           />
         ))}
 
-        {/*/!* Add One Token routes *!/*/}
-        {/*{Object.entries(ROUTES.addOneToken).map(([poolId, path]) => (*/}
-        {/*  <Route*/}
-        {/*    key={path}*/}
-        {/*    path={path}*/}
-        {/*    element={<AddOneTokenInterface poolName={poolId} />}*/}
-        {/*  />*/}
-        {/*))}*/}
-
-        {/* Invest routes */}
+        {/* Invest table routes */}
         <Route path={ROUTES.INVEST} element={<Invest />} />
 
+        {/* Invest pool info routes */}
         {Object.entries(ROUTES.invest).map(([poolId, path]) => (
           <Route
             key={path}
@@ -69,20 +61,18 @@ const App: React.FC = () => {
         ))}
 
         {/* Add liquidity routes */}
-        {Object.entries(ROUTES.addLiquidity).map(([poolId, path]) => (
+        {[
+          ...Object.entries(ROUTES.addLiquidity),
+          ...Object.entries(ROUTES.addOneToken),
+        ].map(([poolId, path]) => (
           <Route
             key={path}
             path={path}
             element={<AddLiquidityInterface poolId={poolId} />}
           />
         ))}
-        {Object.entries(ROUTES.addOneToken).map(([poolId, path]) => (
-          <Route
-            key={path}
-            path={path}
-            element={<AddLiquidityInterface poolId={poolId} />}
-          />
-        ))}
+
+        {/* Withdraw liquidity routes */}
         {Object.entries(ROUTES.withdraw).map(([poolId, path]) => (
           <Route
             key={path}

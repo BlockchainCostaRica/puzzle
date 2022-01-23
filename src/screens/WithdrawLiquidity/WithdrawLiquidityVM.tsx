@@ -1,7 +1,10 @@
 import React, { useMemo } from "react";
 import { useVM } from "@src/hooks/useVM";
-import { makeAutoObservable } from "mobx";
+import { action, makeAutoObservable, when } from "mobx";
 import { RootStore, useStores } from "@stores";
+import { TPoolStats } from "@stores/RootStore";
+import axios from "axios";
+import BN from "@src/utils/BN";
 
 const ctx = React.createContext<WithdrawLiquidityVM | null>(null);
 
@@ -19,14 +22,60 @@ export const WithdrawLiquidityVMProvider: React.FC<{ poolId: string }> = ({
 
 export const useWithdrawLiquidityVM = () => useVM(ctx);
 
+type WithdrawToken = {
+  amount: BN;
+  usdnEquivalent: BN;
+};
+
 class WithdrawLiquidityVM {
   public poolId: string;
   public rootStore: RootStore;
+
+  public stats: TPoolStats | null = null;
+  private setStats = (stats: TPoolStats | null) => (this.stats = stats);
+
+  public userIndexStaked: BN | null = null;
+  private setUserIndexStaked = (value: BN) => (this.userIndexStaked = value);
+
+  percentToWithdraw: BN = new BN(50);
+  @action.bound setPercentToWithdraw = (value: number) =>
+    (this.percentToWithdraw = new BN(value));
 
   constructor(rootStore: RootStore, poolId: string) {
     this.poolId = poolId;
     this.rootStore = rootStore;
     makeAutoObservable(this);
+    this.updateStats().catch(() =>
+      console.error(`Cannot update stats of ${this.poolId}`)
+    );
+    when(
+      () => this.rootStore.accountStore.address != null,
+      () => this.updateUserIndexStaked()
+    );
+  }
+
+  updateStats = () =>
+    axios
+      .get(`https://puzzleback.herokuapp.com/stats/${this.poolId}/30d`)
+      .then(({ data }) => this.setStats(data));
+
+  updateUserIndexStaked = async () => {
+    if (this.rootStore.accountStore.address == null) return;
+    const response = await this.pool.contractRequest(
+      `${this.rootStore.accountStore.address}_indexStaked`
+    );
+    if (response != null && response.length > 0) {
+      this.setUserIndexStaked(new BN(response[0].value));
+    }
+  };
+
+  public get poolStats() {
+    const { apy, liquidity, fees } = this.stats ?? {};
+    return {
+      apy: apy ? new BN(apy).toFormat(4).concat(" %") : "–",
+      fees: fees ? "$ " + new BN(fees).toFormat(1) : "–",
+      liquidity: liquidity ? "$ " + new BN(liquidity).toFormat(2) : "–",
+    };
   }
 
   public get pool() {
@@ -34,4 +83,64 @@ class WithdrawLiquidityVM {
       ({ id }) => id === this.poolId
     )!;
   }
+
+  get tokensToWithdrawAmounts(): Record<string, WithdrawToken> | null {
+    if (this.pool == null || this.userIndexStaked == null) return null;
+    return this.pool.tokens.reduce<Record<string, WithdrawToken>>(
+      (acc, { assetId, decimals }) => {
+        const top = this.pool.liquidity[assetId]
+          .times(this.percentToWithdraw)
+          .times(0.01)
+          .times(this.userIndexStaked ?? BN.ZERO);
+        const tokenAmountToGet = top.div(this.pool.globalPoolTokenAmount);
+        const parserAmount = BN.formatUnits(tokenAmountToGet, decimals);
+        const rate = this.rootStore.poolsStore.usdnRate(assetId, 1) ?? BN.ZERO;
+        const usdnEquivalent = BN.formatUnits(
+          tokenAmountToGet.times(rate),
+          decimals
+        );
+        return {
+          ...acc,
+          [assetId]: {
+            amount: parserAmount,
+            usdnEquivalent: usdnEquivalent,
+          },
+        };
+      },
+      {}
+    );
+  }
+
+  get totalAmountToWithdraw(): string | null {
+    const tokensToWithdrawAmounts = this.tokensToWithdrawAmounts;
+    if (tokensToWithdrawAmounts == null || this.pool == null) return null;
+    const total = Object.values(tokensToWithdrawAmounts).reduce<BN>(
+      (acc, { usdnEquivalent }) => acc.plus(usdnEquivalent),
+      BN.ZERO
+    );
+    return !total.isNaN() ? "$ " + total.toFormat(2) : null;
+  }
+
+  withdraw = () => {
+    if (this.percentToWithdraw.eq(0) || this.pool.layer2Address == null) {
+      return;
+    }
+    const value = this.percentToWithdraw
+      .times(0.01)
+      .times(this.percentToWithdraw)
+      .toString();
+    return this.rootStore.accountStore.invoke({
+      dApp: this.pool.layer2Address,
+      payment: [],
+      call: {
+        function: "unstakeAndRedeemIndex",
+        args: [
+          {
+            type: "integer",
+            value,
+          },
+        ],
+      },
+    });
+  };
 }

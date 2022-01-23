@@ -34,9 +34,11 @@ const LoggedInLiquidityInfo: React.FC<IProps> = () => {
           {liquidity ? "$" + liquidity : "-"}
         </Text>
         <SizedBox height={16} />
-        <Button fixed size="medium" kind="secondary" onClick={vm.withdraw}>
-          Withdraw
-        </Button>
+        <Link to={`/${vm.pool.id}/withdraw`}>
+          <Button fixed size="medium" kind="secondary">
+            Withdraw
+          </Button>
+        </Link>
       </Column>
       <Column crossAxisSize="max">
         <Text nowrap type="secondary">

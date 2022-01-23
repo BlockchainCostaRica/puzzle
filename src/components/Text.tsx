@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 
 type TTextType = "primary" | "secondary";
 type TTextSize = "small" | "medium" | "large";
+type TTextAlign = "center" | "left" | "right" | "justify";
 
 const Text = styled.div<{
   type?: TTextType;
@@ -9,11 +10,13 @@ const Text = styled.div<{
   size?: TTextSize;
   fitContent?: boolean;
   nowrap?: boolean;
+  textAlign?: TTextAlign;
 }>`
   width: ${({ fitContent }) => (fitContent ? "fit-content" : "100%")};
   font-weight: ${({ weight }) => weight ?? 400};
   color: ${({ type }) => (type === "secondary" ? "#8082C5" : "#363870")};
   white-space: ${({ nowrap }) => (nowrap ? "nowrap" : "unset")};
+  text-align: ${({ textAlign }) => textAlign ?? "default"};
   ${({ size }) =>
     (() => {
       switch (size) {

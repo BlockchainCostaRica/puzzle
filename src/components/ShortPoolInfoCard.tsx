@@ -23,12 +23,16 @@ const Root = styled.div`
   flex-direction: column;
   width: 100%;
 
+  img {
+    margin-left: 10px;
+  }
+
   .cardTitle {
     white-space: nowrap;
     width: fit-content;
     font-size: 14px;
     line-height: 20px;
-    @media (min-width: 880px) {
+    @media (min-width: calc(560px + 32px)) {
       font-size: 16px;
       line-height: 24px;
     }
@@ -39,7 +43,8 @@ const Root = styled.div`
     width: fit-content;
     font-size: 12px;
     line-height: 16px;
-    @media (min-width: 880px) {
+    //@media (min-width: 880px) {
+    @media (min-width: calc(560px + 32px)) {
       font-size: 14px;
       line-height: 20px;
     }
@@ -70,7 +75,7 @@ const DepositToPool: React.FC<IProps> = ({
         justifyContent="space-between"
         alignItems="center"
       >
-        <Row style={{ alignItems: "stretch" }}>
+        <Row style={{ alignItems: "center" }}>
           <SquareTokenIcon src={poolLogo} alt="logo" />
           <Column style={{ height: "100%" }}>
             <Text className="cardTitle" weight={500}>
