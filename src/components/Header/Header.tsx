@@ -129,15 +129,15 @@ const Header: React.FC<IProps> = () => {
                 {name}
               </MenuItem>
             ))}
-            <MenuItem
-              selected={isRoutesEquals(
-                accountStore.ROUTES.INVEST,
-                location.pathname
-              )}
-              to={accountStore.ROUTES.INVEST}
-            >
-              Invest
-            </MenuItem>
+            {/*<MenuItem*/}
+            {/*  selected={isRoutesEquals(*/}
+            {/*    accountStore.ROUTES.INVEST,*/}
+            {/*    location.pathname*/}
+            {/*  )}*/}
+            {/*  to={accountStore.ROUTES.INVEST}*/}
+            {/*>*/}
+            {/*  Invest*/}
+            {/*</MenuItem>*/}
           </Desktop>
         </Row>
         <Mobile>

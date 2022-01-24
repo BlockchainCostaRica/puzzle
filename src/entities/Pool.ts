@@ -143,7 +143,7 @@ class Pool implements IPoolConfig {
     ]);
 
     //poolLiquidity * ADDRESS_indexStaked / global_indexStaked
-    const indexStaked =
+    const addressIndexStaked =
       address_indexStaked && address_indexStaked.length >= 1
         ? new BN(address_indexStaked[0].value)
         : BN.ZERO;
@@ -153,14 +153,14 @@ class Pool implements IPoolConfig {
         ? new BN(global_indexStaked[0].value)
         : BN.ZERO;
 
-    if (indexStaked.eq(0)) {
+    if (addressIndexStaked.eq(0)) {
       return {
         liquidity: BN.ZERO,
         percent: BN.ZERO,
       };
     }
     const liquidity = this.globalLiquidity
-      .times(indexStaked)
+      .times(addressIndexStaked)
       .div(globalIndexStaked);
     const percent = liquidity.times(new BN(100)).div(this.globalLiquidity);
 

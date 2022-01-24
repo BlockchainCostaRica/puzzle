@@ -49,7 +49,6 @@ const FixedMobileBlock = styled.div`
 
 const WithdrawLiquidityTable: React.FC<IProps> = () => {
   const vm = useWithdrawLiquidityVM();
-  const tokens = vm.pool.tokens;
   return (
     <Root>
       <Text style={{ width: "100%" }} weight={500} type="secondary">
@@ -58,28 +57,18 @@ const WithdrawLiquidityTable: React.FC<IProps> = () => {
       <SizedBox height={8} />
       <Card paddingMobile="0" paddingDesktop="8px 0">
         <GridTable desktopTemplate="1fr 1fr" mobileTemplate="1fr 1fr">
-          {tokens.map((token, i) => {
-            const withdraw =
-              (vm &&
-                vm.tokensToWithdrawAmounts &&
-                vm.tokensToWithdrawAmounts[token.assetId].amount) ??
-              BN.ZERO;
-            const inUsdn =
-              (vm &&
-                vm.tokensToWithdrawAmounts &&
-                vm.tokensToWithdrawAmounts[token.assetId].usdnEquivalent) ??
-              BN.ZERO;
-            return (
+          {vm.withdrawCompositionTokens
+            .sort((a, b) => (a.inUsdn!.gt(b.inUsdn!) ? -1 : 1))
+            .map(({ symbol, inUsdn, withdraw, shareAmount, logo }) => (
               <WithdrawTokenRow
-                symbol={token.symbol}
-                key={i}
+                symbol={symbol}
+                key={symbol}
                 withdrawUsdnEquivalent={inUsdn}
                 withdrawAmount={withdraw}
-                percent={token.shareAmount * 100}
-                logo={token.logo}
+                percent={shareAmount * 100}
+                logo={logo}
               />
-            );
-          })}
+            ))}
         </GridTable>
         <Divider />
         <AdaptiveRowWithPadding justifyContent="space-between">

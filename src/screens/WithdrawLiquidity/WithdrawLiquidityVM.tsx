@@ -5,6 +5,7 @@ import { RootStore, useStores } from "@stores";
 import { TPoolStats } from "@stores/RootStore";
 import axios from "axios";
 import BN from "@src/utils/BN";
+import { IToken } from "@src/constants";
 
 const ctx = React.createContext<WithdrawLiquidityVM | null>(null);
 
@@ -84,6 +85,33 @@ class WithdrawLiquidityVM {
     )!;
   }
 
+  get withdrawCompositionTokens(): any[] {
+    if (this.pool.tokens == null) return [];
+    return this.pool.tokens.reduce<(IToken & { withdraw: BN; inUsdn: BN })[]>(
+      (acc, token) => {
+        const withdraw =
+          (this &&
+            this.tokensToWithdrawAmounts &&
+            this.tokensToWithdrawAmounts[token.assetId].amount) ??
+          BN.ZERO;
+        const inUsdn =
+          (this &&
+            this.tokensToWithdrawAmounts &&
+            this.tokensToWithdrawAmounts[token.assetId].usdnEquivalent) ??
+          BN.ZERO;
+        return [
+          ...acc,
+          {
+            ...token,
+            withdraw,
+            inUsdn,
+          },
+        ];
+      },
+      []
+    );
+  }
+
   get tokensToWithdrawAmounts(): Record<string, WithdrawToken> | null {
     if (this.pool == null || this.userIndexStaked == null) return null;
     return this.pool.tokens.reduce<Record<string, WithdrawToken>>(
@@ -129,9 +157,13 @@ class WithdrawLiquidityVM {
     if (this.percentToWithdraw.eq(0) || this.pool.layer2Address == null) {
       return;
     }
-    const value = this.percentToWithdraw
+    if (this.userIndexStaked == null) {
+      return;
+    }
+    const value = this.userIndexStaked
       .times(0.01)
       .times(this.percentToWithdraw)
+      .toSignificant(0)
       .toString();
     return this.rootStore.accountStore.invoke({
       dApp: this.pool.layer2Address,

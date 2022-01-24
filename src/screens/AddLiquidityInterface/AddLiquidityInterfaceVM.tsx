@@ -184,7 +184,10 @@ class AddLiquidityInterfaceVM {
       errorMessage({ message: "There is no contract address" });
       return;
     }
-    if (this.tokensToDepositAmounts == null) {
+    if (
+      this.tokensToDepositAmounts == null ||
+      this.pool.layer2Address == null
+    ) {
       errorMessage({ message: "There is no tokens to deposit" });
       return;
     }
@@ -198,7 +201,7 @@ class AddLiquidityInterfaceVM {
     );
 
     return this.rootStore.accountStore.invoke({
-      dApp: this.pool.contractAddress,
+      dApp: this.pool.layer2Address,
       payment,
       call: {
         function: "generateIndexAndStake",
@@ -227,12 +230,12 @@ class AddLiquidityInterfaceVM {
       this.setBaseTokenAmount(userTokenBalance.balance);
   };
   depositBaseToken = async () => {
-    if (this.pool?.contractAddress == null) {
+    if (this.pool?.contractAddress == null || this.pool.layer2Address == null) {
       errorMessage({ message: "There is no contract address" });
       return;
     }
     return this.rootStore.accountStore.invoke({
-      dApp: this.pool.contractAddress,
+      dApp: this.pool.layer2Address,
       payment: [
         {
           assetId: this.baseToken.assetId,
