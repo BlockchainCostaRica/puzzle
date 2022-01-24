@@ -50,10 +50,8 @@ const FixedMobileBlock = styled.div`
 const WithdrawLiquidityTable: React.FC<IProps> = () => {
   const vm = useWithdrawLiquidityVM();
   const tokens = vm.pool.tokens;
-  // if (vm.tokensToWithdrawAmounts == null) return null;
   return (
     <Root>
-      <SizedBox height={24} />
       <Text style={{ width: "100%" }} weight={500} type="secondary">
         You receive
       </Text>
@@ -87,7 +85,7 @@ const WithdrawLiquidityTable: React.FC<IProps> = () => {
         <AdaptiveRowWithPadding justifyContent="space-between">
           <Text>Total value</Text>
           <Text weight={500} style={{ textAlign: "end" }}>
-            {vm.totalAmountToWithdraw}
+            {vm.totalAmountToWithdrawDisplay}
           </Text>
         </AdaptiveRowWithPadding>
       </Card>
@@ -99,10 +97,12 @@ const WithdrawLiquidityTable: React.FC<IProps> = () => {
       <FixedMobileBlock>
         <Button
           fixed
-          disabled={vm.percentToWithdraw.eq(0)}
+          disabled={
+            vm.percentToWithdraw.eq(0) || vm.totalAmountToWithdraw.eq(0)
+          }
           onClick={vm.withdraw}
         >
-          Withdraw {vm.totalAmountToWithdraw}
+          Withdraw {vm.totalAmountToWithdrawDisplay}
         </Button>
       </FixedMobileBlock>
     </Root>

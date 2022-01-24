@@ -26,10 +26,10 @@ const WithdrawLiquidityAmount: React.FC<IProps> = () => {
       <Card>
         <Text type="primary" size="large" style={{ textAlign: "center" }}>
           {`${vm.percentToWithdraw}% `}
-          {vm.totalAmountToWithdraw && (
+          {vm.totalAmountToWithdrawDisplay && (
             <span
               style={{ color: "#8082C5" }}
-            >{`(${vm.totalAmountToWithdraw})`}</span>
+            >{`(${vm.totalAmountToWithdrawDisplay})`}</span>
           )}
         </Text>
         <SizedBox height={16} />

@@ -57,9 +57,12 @@ const WithdrawLiquidityInterfaceImpl = () => {
               apy={vm.poolStats.apy}
             />
             <SizedBox height={24} />
-            <WithdrawLiquidityAmount />
             {accountStore.address != null ? (
-              <WithdrawLiquidityTable />
+              <>
+                <WithdrawLiquidityAmount />
+                <SizedBox height={24} />
+                <WithdrawLiquidityTable />
+              </>
             ) : (
               <Button
                 fixed

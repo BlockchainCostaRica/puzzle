@@ -111,14 +111,18 @@ class WithdrawLiquidityVM {
     );
   }
 
-  get totalAmountToWithdraw(): string | null {
+  get totalAmountToWithdraw(): BN {
     const tokensToWithdrawAmounts = this.tokensToWithdrawAmounts;
-    if (tokensToWithdrawAmounts == null || this.pool == null) return null;
-    const total = Object.values(tokensToWithdrawAmounts).reduce<BN>(
+    if (tokensToWithdrawAmounts == null || this.pool == null) return BN.ZERO;
+    return Object.values(tokensToWithdrawAmounts).reduce<BN>(
       (acc, { usdnEquivalent }) => acc.plus(usdnEquivalent),
       BN.ZERO
     );
-    return !total.isNaN() ? "$ " + total.toFormat(2) : null;
+  }
+
+  get totalAmountToWithdrawDisplay(): string {
+    const total = this.totalAmountToWithdraw;
+    return "$ " + total.toFormat(2);
   }
 
   withdraw = () => {
