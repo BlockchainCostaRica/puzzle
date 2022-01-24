@@ -5,6 +5,8 @@ import { ReactComponent as SearchIcon } from "@src/assets/icons/search.svg";
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   value?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  suffix?: JSX.Element;
+  suffixCondition?: boolean;
 }
 
 const Root = styled.div<{ focused?: boolean }>`
@@ -16,6 +18,7 @@ const Root = styled.div<{ focused?: boolean }>`
   }
 
   border-radius: 12px;
+  justify-content: space-between;
   display: flex;
   padding: 12px;
   font-size: 16px;
@@ -40,6 +43,8 @@ const Root = styled.div<{ focused?: boolean }>`
 const SearchInput: React.FC<IProps> = ({
   value,
   onChange,
+  suffix,
+  suffixCondition,
   placeholder,
   ...rest
 }) => {
@@ -54,6 +59,7 @@ const SearchInput: React.FC<IProps> = ({
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
       />
+      {suffixCondition && suffix}
     </Root>
   );
 };

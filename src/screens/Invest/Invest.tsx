@@ -83,6 +83,17 @@ const Invest: React.FC<IProps> = () => {
           className="mobile"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
+          suffix={
+            <Text
+              fitContent
+              type="secondary"
+              style={{ cursor: "pointer" }}
+              onClick={() => setSearchValue("")}
+            >
+              CANCEL
+            </Text>
+          }
+          suffixCondition={searchValue.length > 1}
         />
         <SizedBox height={16} />
         <Card style={{ padding: 0, minHeight: 280, justifyContent: "center" }}>
@@ -107,7 +118,10 @@ const Invest: React.FC<IProps> = () => {
               ))}
             </GridTable>
           ) : (
-            <PoolNotFound onClear={() => setSearchValue("")} />
+            <PoolNotFound
+              onClear={() => setSearchValue("")}
+              searchValue={searchValue}
+            />
           )}
         </Card>
       </Root>

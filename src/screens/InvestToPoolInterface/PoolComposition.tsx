@@ -52,7 +52,7 @@ const PoolComposition: React.FC<IProps> = () => {
           {vm.poolCompositionValues
             .sort((a, b) => (a.value!.gt(b.value!) ? -1 : 1))
             .map((token, i) => (
-              <div className="gridRow" key={i}>
+              <div className="gridRow" key={i} style={{ cursor: "default" }}>
                 <Row alignItems="center" mainAxisSize="fit-content">
                   <Icon src={token.logo} alt="logo" />
                   <SizedBox width={8} />

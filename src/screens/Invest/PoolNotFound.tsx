@@ -6,6 +6,7 @@ import Text from "@components/Text";
 
 interface IProps {
   onClear: () => void;
+  searchValue: string;
 }
 
 const Root = styled(Column)`
@@ -31,13 +32,13 @@ const Button = styled.button`
   padding: 0 20px;
 `;
 
-const PoolNotFound: React.FC<IProps> = ({ onClear }) => {
+const PoolNotFound: React.FC<IProps> = ({ onClear, searchValue }) => {
   return (
     <Root crossAxisSize="max" alignItems="center" justifyContent="center">
       <NotFoundIcon style={{ marginBottom: 24 }} />
       <Text size="medium" type="secondary" className="text">
-        Unfortunately, there are no pools that include BTC yet. Reset your
-        search and try something else.
+        Unfortunately, there are no pools that include {searchValue} yet. Reset
+        your search and try something else.
       </Text>
       <Button onClick={onClear}>Cancel the search</Button>
     </Root>

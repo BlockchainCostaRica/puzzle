@@ -30,7 +30,7 @@ const LoggedInLiquidityInfo: React.FC<IProps> = () => {
       <Column crossAxisSize="max">
         <Text type="secondary">Value</Text>
         <SizedBox height={4} />
-        <Text nowrap style={{ fontSize: 24 }}>
+        <Text nowrap style={{ fontSize: 20 }}>
           {liquidity ? "$" + liquidity : "-"}
         </Text>
         <SizedBox height={16} />
@@ -45,7 +45,7 @@ const LoggedInLiquidityInfo: React.FC<IProps> = () => {
           Share of pool
         </Text>
         <SizedBox height={4} />
-        <Text style={{ fontSize: 24 }}>
+        <Text style={{ fontSize: 20 }}>
           {shareOfPool ? shareOfPool.concat("%") : "-"}
         </Text>
         <SizedBox height={16} />

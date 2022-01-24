@@ -4,7 +4,6 @@ import SizedBox from "@components/SizedBox";
 import Text from "@components/Text";
 import Card from "@components/Card";
 import GridTable from "@components/GridTable";
-import BN from "@src/utils/BN";
 import Divider from "@components/Divider";
 import Button from "@components/Button";
 import { Row } from "@components/Flex";

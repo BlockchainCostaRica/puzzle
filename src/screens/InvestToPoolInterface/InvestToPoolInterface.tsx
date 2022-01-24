@@ -10,10 +10,12 @@ import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
 import PoolInformation from "@screens/InvestToPoolInterface/PoolInformation";
 import YourLiquidity from "@screens/InvestToPoolInterface/YourLiquidity/YourLiquidity";
-import { Column } from "@src/components/Flex";
+import { Column, Row } from "@src/components/Flex";
 import TradesVolume from "@screens/InvestToPoolInterface/TradesVolume";
 import PoolComposition from "@screens/InvestToPoolInterface/PoolComposition";
 import RewardToClaim from "@screens/InvestToPoolInterface/RewardToClaim";
+import arrow from "@src/assets/icons/backArrow.svg";
+import { Link } from "react-router-dom";
 
 interface IProps {
   poolId: string;
@@ -30,7 +32,7 @@ const Root = styled.div`
   min-height: 100%;
   max-width: calc(1160px + 32px);
   margin-bottom: 24px;
-  margin-top: 40px;
+  margin-top: 56px;
   text-align: left;
 
   @media (min-width: 880px) {
@@ -61,7 +63,14 @@ const Body = styled.div`
     column-gap: 40px;
   }
 `;
+const BackDiv = styled(Row)`
+  cursor: pointer;
 
+  img {
+    width: 16px;
+    height: 16px;
+  }
+`;
 const InvestToPoolInterfaceImpl: React.FC = () => {
   const vm = useInvestToPoolInterfaceVM();
   return (
@@ -69,6 +78,16 @@ const InvestToPoolInterfaceImpl: React.FC = () => {
       <Observer>
         {() => (
           <Root>
+            <BackDiv alignItems="center">
+              <img src={arrow} alt="back" />
+              <SizedBox width={8} />
+              <Link to="/invest">
+                <Text weight={500} type="secondary">
+                  Back to Pools list
+                </Text>
+              </Link>
+            </BackDiv>
+            <SizedBox height={24} />
             <Text weight={500} size="large">
               {vm.pool?.name}
             </Text>
