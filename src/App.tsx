@@ -43,14 +43,6 @@ const App: React.FC = () => {
         {/* Trade */}
         <Route path={ROUTES.TRADE} element={<TradeInterface />} />
 
-        {/* Swap routes */}
-        {Object.entries(ROUTES.pools).map(([poolId, path]) => (
-          <Route
-            key={path}
-            path={path}
-            element={<MultiSwapInterface poolId={poolId as TPoolId} />}
-          />
-        ))}
 
         {/* Invest table routes */}
         <Route path={ROUTES.INVEST} element={<Invest />} />
