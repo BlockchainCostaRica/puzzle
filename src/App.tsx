@@ -41,7 +41,7 @@ const App: React.FC = () => {
         <Route path={ROUTES.STAKE} element={<StakeModule />} />
 
         {/* Trade */}
-        {/*<Route path={ROUTES.TRADE} element={<TradeInterface />} />*/}
+        <Route path={ROUTES.TRADE} element={<TradeInterface />} />
 
         {/* Swap routes */}
         {Object.entries(ROUTES.pools).map(([poolId, path]) => (
