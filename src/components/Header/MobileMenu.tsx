@@ -25,6 +25,7 @@ const Root = styled.div<{ bannerClosed: boolean; opened: boolean }>`
   height: calc(100vh - ${({ bannerClosed }) => (bannerClosed ? 64 : 144)}px);
   transition: 0.2s;
   overflow: hidden;
+
   ${({ opened }) => (!opened ? `height: 0px;` : "")}
   .menu-body {
     display: flex;
@@ -51,19 +52,18 @@ const communityMenu = [
 
 const MobileMenu: React.FC<IProps> = ({ bannerClosed, opened, onClose }) => {
   const { accountStore } = useStores();
-  const poolsMenu = Object.entries(accountStore.ROUTES.pools).map(
-    ([id, link]) => ({
-      name: (accountStore.POOL_CONFIG as any)[id].name,
-      link,
-    })
-  );
+  const mainFunctional = [
+    { name: "Trade", link: accountStore.ROUTES.TRADE, outer: false },
+    { name: "Invest", link: accountStore.ROUTES.INVEST, outer: false },
+    { name: "Stake", link: accountStore.ROUTES.STAKE, outer: false },
+  ];
   return (
     <Root {...{ bannerClosed, opened }}>
       <div className="menu-body">
         <Divider />
         <Scrollbar style={{ margin: 24, marginBottom: 0 }}>
           <Column crossAxisSize="max" style={{ maxHeight: "50vh" }}>
-            <LinkGroup onClick={onClose} title="Pools" links={poolsMenu} />
+            <LinkGroup onClick={onClose} title="" links={mainFunctional} />
             <SizedBox height={24} />
             <LinkGroup title="Tools" links={toolsMenu} />
             <SizedBox height={24} />

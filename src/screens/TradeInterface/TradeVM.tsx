@@ -53,6 +53,10 @@ class TradeVM {
   amount1: BN = BN.ZERO;
   @action.bound private _setAmount1 = (amount: BN) => (this.amount1 = amount);
 
+  routingModalOpened: boolean = false;
+  @action.bound setRoutingModalState = (state: boolean) =>
+    (this.routingModalOpened = state);
+
   @action.bound private _syncAmount1 = () => {
     if (this.amount0.gt(0)) {
       this.setSynchronizing(true);

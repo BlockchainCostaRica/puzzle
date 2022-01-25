@@ -5,7 +5,6 @@ import { Column, Row } from "@components/Flex";
 import Button from "@components/Button";
 import Text from "@components/Text";
 import { Link } from "react-router-dom";
-import { MAINNET_ROUTES } from "@src/constants/mainnetConfig";
 import { useStores } from "@stores";
 
 interface IProps {}

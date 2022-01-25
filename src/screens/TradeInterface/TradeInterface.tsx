@@ -8,7 +8,6 @@ import Card from "@components/Card";
 import { Observer } from "mobx-react-lite";
 import SwitchTokensButton from "@screens/TradeInterface/SwitchTokensButton";
 import SwapButton from "@screens/TradeInterface/SwapButton";
-// import { ReactComponent as ArrowIcon } from "@src/assets/icons/arrowRightBorderless.svg";
 import Layout from "@components/Layout";
 import { TradeVMProvider, useTradeVM } from "@screens/TradeInterface/TradeVM";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +17,7 @@ import Tooltip from "@components/Tooltip";
 import TooltipFeeInfo from "@screens/MultiSwapInterface/TooltipFeeInfo";
 import { ReactComponent as InfoIcon } from "@src/assets/icons/info.svg";
 import { ReactComponent as ShowMoreIcon } from "@src/assets/icons/showMore.svg";
+import RoutingModal from "@screens/TradeInterface/RoutingModal";
 
 const Root = styled.div`
   display: flex;
@@ -109,7 +109,10 @@ const TradeInterfaceImpl: React.FC = () => {
                       // </>
                       "—"}
                   &nbsp;
-                  <ShowMoreIcon style={{ minWidth: 16 }} />
+                  <ShowMoreIcon
+                    style={{ minWidth: 16, cursor: "pointer" }}
+                    onClick={() => vm.setRoutingModalState(true)}
+                  />
                 </Row>
               </SwapDetailRow>
               <Divider />
@@ -133,6 +136,10 @@ const TradeInterfaceImpl: React.FC = () => {
                 </Row>
               </SwapDetailRow>
             </Card>
+            <RoutingModal
+              visible={vm.routingModalOpened}
+              onClose={() => vm.setRoutingModalState(false)}
+            />
           </Root>
         )}
       </Observer>
