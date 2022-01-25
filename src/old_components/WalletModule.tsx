@@ -148,7 +148,7 @@ export class WalletModule extends React.Component<IProps, IState> {
       .login()
       .then((data: any) => {
         this.setState({ address: data.address });
-        console.log(data);
+        // console.log(data);
       })
       .then(() => {
         signer.getBalance().then((data: any) => {

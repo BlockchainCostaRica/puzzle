@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import Layout from "@components/Layout";
 import Text from "@components/Text";
@@ -10,7 +10,6 @@ import { AdaptiveRow } from "@components/Flex";
 import { useStores } from "@stores";
 import PoolNotFound from "@screens/Invest/PoolNotFound";
 import GridTable from "@components/GridTable";
-import axios from "axios";
 import InvestPoolRow from "@screens/Invest/InvestPoolRow";
 
 interface IProps {}
@@ -33,18 +32,10 @@ const Root = styled.div`
   }
 `;
 
-export type TStatsPoolItem = {
-  apy: number;
-  liquidity: number;
-  monthly_volume: number;
-};
-
-type TStats = Record<string, TStatsPoolItem>;
-
 const Invest: React.FC<IProps> = () => {
   const { poolsStore, accountStore } = useStores();
   const [searchValue, setSearchValue] = useState<string>("");
-  const [stats, setStats] = useState<TStats | null>(null);
+  const stats = poolsStore.poolsStats;
   const filteredPools = poolsStore.pools
     .slice()
     .filter(({ id }) =>
@@ -57,14 +48,6 @@ const Invest: React.FC<IProps> = () => {
             .some((v) => v.includes(searchValue.toLowerCase()))
         : true
     );
-
-  useEffect(() => {
-    stats == null &&
-      axios
-        .get("https://puzzleback.herokuapp.com/stats/pools")
-        .then(({ data }) => setStats(data))
-        .catch(() => console.error(`Cannot update stats of the pools`));
-  }, [stats]);
 
   return (
     <Layout>

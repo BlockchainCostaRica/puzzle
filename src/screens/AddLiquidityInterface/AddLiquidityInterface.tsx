@@ -73,7 +73,7 @@ const AddLiquidityInterfaceImpl = () => {
               title="To"
               poolLogo={pool && pool.logo}
               poolName={pool && pool.name}
-              apy={vm.poolStats.apy}
+              apy={vm.stats?.apy && vm.stats.apy.toFormat(2) + " %"}
             />
             <SizedBox height={24} />
             {window.location.pathname.includes(addLiquidityRoute) && (

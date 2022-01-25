@@ -28,14 +28,17 @@ const Card = styled(_Card)`
   }
 `;
 
-const Info: React.FC<{ text: string; value: string }> = ({ text, value }) => (
-  <Column>
-    <Text type="secondary" size="medium" style={{ paddingBottom: 4 }}>
-      {text}
-    </Text>
-    <Text style={{ fontSize: 20 }}>{value}</Text>
-  </Column>
-);
+const Info: React.FC<{ text: string; value?: string }> = ({ text, value }) => {
+  return (
+    <Column>
+      <Text type="secondary" size="medium" style={{ paddingBottom: 4 }}>
+        {text}
+      </Text>
+      <Text style={{ fontSize: 20 }}>{value ? value : "-"}</Text>
+    </Column>
+  );
+};
+
 const CCard = styled(Card)`
   display: grid;
   grid-template-columns: 1fr;
@@ -45,7 +48,7 @@ const CCard = styled(Card)`
 `;
 const PoolInformation: React.FC<IProps> = () => {
   const vm = useInvestToPoolInterfaceVM();
-  const data = vm.poolStats;
+  const data = vm.stats;
   return (
     <Root>
       <Text weight={500} type="secondary">
@@ -53,9 +56,15 @@ const PoolInformation: React.FC<IProps> = () => {
       </Text>
       <SizedBox height={8} />
       <CCard>
-        <Info text="Pool liquidity" value={data.liquidity} />
-        <Info text="Fees (30D)" value={data.fees} />
-        <Info text="APY" value={data.apy} />
+        <Info
+          text="Pool liquidity"
+          value={data?.liquidity && "$ " + data?.liquidity.toFormat(2)}
+        />
+        <Info
+          text="Fees (30D)"
+          value={data?.fees && "$ " + data?.fees.toFormat(2)}
+        />
+        <Info text="APY" value={data?.apy && data?.apy.toFormat(2) + " %"} />
       </CCard>
     </Root>
   );

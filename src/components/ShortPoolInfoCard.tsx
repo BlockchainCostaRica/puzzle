@@ -82,7 +82,13 @@ const DepositToPool: React.FC<IProps> = ({
               {poolName}
             </Text>
             <Text className="cardSubTitle" type="secondary">
-              APY <b>{apy}</b>
+              {apy ? (
+                <span>
+                  APY <b>{apy}</b>
+                </span>
+              ) : (
+                "-"
+              )}
             </Text>
           </Column>
         </Row>

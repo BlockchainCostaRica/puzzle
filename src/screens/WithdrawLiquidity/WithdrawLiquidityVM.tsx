@@ -2,10 +2,9 @@ import React, { useMemo } from "react";
 import { useVM } from "@src/hooks/useVM";
 import { action, makeAutoObservable, when } from "mobx";
 import { RootStore, useStores } from "@stores";
-import { TPoolStats } from "@stores/RootStore";
-import axios from "axios";
 import BN from "@src/utils/BN";
 import { IToken } from "@src/constants";
+import { PoolStats30Days } from "@stores/PoolsStore";
 
 const ctx = React.createContext<WithdrawLiquidityVM | null>(null);
 
@@ -32,8 +31,8 @@ class WithdrawLiquidityVM {
   public poolId: string;
   public rootStore: RootStore;
 
-  public stats: TPoolStats | null = null;
-  private setStats = (stats: TPoolStats | null) => (this.stats = stats);
+  public stats: PoolStats30Days | null = null;
+  private setStats = (stats: PoolStats30Days | null) => (this.stats = stats);
 
   public userIndexStaked: BN | null = null;
   private setUserIndexStaked = (value: BN) => (this.userIndexStaked = value);
@@ -46,19 +45,19 @@ class WithdrawLiquidityVM {
     this.poolId = poolId;
     this.rootStore = rootStore;
     makeAutoObservable(this);
-    this.updateStats().catch(() =>
-      console.error(`Cannot update stats of ${this.poolId}`)
-    );
+    this.updateStats();
     when(
       () => this.rootStore.accountStore.address != null,
       () => this.updateUserIndexStaked()
     );
   }
 
-  updateStats = () =>
-    axios
-      .get(`https://puzzleback.herokuapp.com/stats/${this.poolId}/30d`)
-      .then(({ data }) => this.setStats(data));
+  updateStats = () => {
+    this.rootStore.poolsStore
+      .get30DaysPoolStats(this.poolId)
+      .then((data) => this.setStats(data))
+      .catch(() => console.error(`Cannot update stats of ${this.poolId}`));
+  };
 
   updateUserIndexStaked = async () => {
     if (this.rootStore.accountStore.address == null) return;
@@ -69,15 +68,6 @@ class WithdrawLiquidityVM {
       this.setUserIndexStaked(new BN(response[0].value));
     }
   };
-
-  public get poolStats() {
-    const { apy, liquidity, fees } = this.stats ?? {};
-    return {
-      apy: apy ? new BN(apy).toFormat(4).concat(" %") : "–",
-      fees: fees ? "$ " + new BN(fees).toFormat(1) : "–",
-      liquidity: liquidity ? "$ " + new BN(liquidity).toFormat(2) : "–",
-    };
-  }
 
   public get pool() {
     return this.rootStore.poolsStore.pools.find(
