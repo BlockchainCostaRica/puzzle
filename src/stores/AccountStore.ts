@@ -128,7 +128,7 @@ class AccountStore {
     }
     const loginData = await this.signer?.login();
     this.setAddress(loginData?.address ?? null);
-    // localStorage.setItem("authMethod", loginType);
+    // localStorage.setItem("authMethod", {LOGIN_TYPE.KEEPER: "keeper", LOGIN_TYPE.SIGNER_EMAIL: "email", LOGIN_TYPE.SIGNER_SEED: "seed"}[loginType]);
   };
 
   logout() {
