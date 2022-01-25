@@ -6,7 +6,7 @@ import liquidity from "@src/assets/landing/liquidityIcon.svg";
 import { Column, Row } from "@components/Flex";
 import Button from "@components/Button";
 import { Link } from "react-router-dom";
-import { MAINNET_POOL_ID } from "@src/constants/mainnetConfig";
+import { useStores } from "@stores";
 
 interface IProps {}
 
@@ -65,6 +65,7 @@ const Subtitle = styled.div`
   line-height: 24px;
   color: #8082c5;
   padding-bottom: 8px;
+
   .dark {
     color: #363870;
   }
@@ -76,6 +77,7 @@ const BtnContainer = styled(Row)`
     button {
       max-width: 144px;
     }
+
     justify-content: start;
   }
 `;
@@ -87,6 +89,7 @@ const Icon = styled.img`
 `;
 
 const Home: React.FC<IProps> = () => {
+  const { accountStore } = useStores();
   return (
     <Wrapper>
       <Root>
@@ -104,7 +107,7 @@ const Home: React.FC<IProps> = () => {
             </Subtitle>
           </Row>
           <BtnContainer>
-            <Link to={MAINNET_POOL_ID.defi}>
+            <Link to={accountStore.ROUTES.TRADE}>
               <Button fixed style={{ marginRight: 8, width: 167 }}>
                 Trade
               </Button>
