@@ -1,14 +1,60 @@
 import React from "react";
+import { useStores } from "@stores";
 import Button from "@components/Button";
 import { observer } from "mobx-react-lite";
+import { useTradeVM } from "@screens/TradeInterface/TradeVM";
+import { Loading } from "@components/Loading";
 
 interface IProps {}
 
 const SwapButton: React.FC<IProps> = () => {
-  return (
-    <Button disabled fixed>
-      Swap
-    </Button>
-  );
+  const { accountStore } = useStores();
+  const vm = useTradeVM();
+  const { amount0, token0, balance0, amount1, synchronizing } = vm;
+  switch (true) {
+    case accountStore.address == null:
+      return (
+        <Button onClick={() => accountStore.setWalletModalOpened(true)} fixed>
+          Connect wallet
+        </Button>
+      );
+
+    case amount0 == null || amount1 == null || amount0.eq(0):
+      return (
+        <Button disabled fixed>
+          Enter an amount
+        </Button>
+      );
+    case amount0!.gt(balance0!):
+      return (
+        <Button disabled fixed>
+          Insufficient {`${token0?.name ?? ""} `}balance
+        </Button>
+      );
+    case synchronizing:
+      return (
+        <Button disabled fixed>
+          Please wait <Loading />
+        </Button>
+      );
+    // case vm.priceImpact && vm.priceImpact.eq(100):
+    //   return (
+    //     <Button disabled fixed>
+    //       Price impact too high
+    //     </Button>
+    //   );
+    case amount0 != null && amount1 != null && !synchronizing:
+      return (
+        <Button onClick={vm.swap} fixed>
+          Swap
+        </Button>
+      );
+    default:
+      return (
+        <Button disabled fixed>
+          Swap
+        </Button>
+      );
+  }
 };
 export default observer(SwapButton);

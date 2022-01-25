@@ -3,6 +3,8 @@ import React, { HTMLAttributes, useState } from "react";
 import { ReactComponent as SwapIcon } from "@src/assets/icons/swap.svg";
 import SizedBox from "@components/SizedBox";
 import Text from "@components/Text";
+import { useTradeVM } from "@screens/TradeInterface/TradeVM";
+import { useNavigate } from "react-router-dom";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -18,8 +20,18 @@ const Root = styled.div`
 `;
 
 const SwitchTokensButton: React.FC<IProps> = ({ ...rest }) => {
+  const vm = useTradeVM();
+  const navigate = useNavigate();
   const [switched, setSwitched] = useState(false);
   const handleSwitch = () => {
+    vm.switchTokens();
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    urlSearchParams.set("asset0", vm.assetId0);
+    urlSearchParams.set("asset1", vm.assetId1);
+    navigate({
+      pathname: window.location.pathname,
+      search: `?${urlSearchParams.toString()}`,
+    });
     setSwitched((v) => !v);
   };
   return (
@@ -32,7 +44,11 @@ const SwitchTokensButton: React.FC<IProps> = ({ ...rest }) => {
         }}
       />
       <SizedBox width={8} />
-      <Text>1 ~</Text>
+      <Text>
+        1 {vm.token0?.symbol} = ~ {vm.price?.toFormat(4) ?? "—"}{" "}
+        {vm.token1?.symbol}
+      </Text>
+
       <SizedBox width={16} />
     </Root>
   );

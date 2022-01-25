@@ -3,36 +3,21 @@ import { action, makeAutoObservable, reaction } from "mobx";
 import Pool from "@src/entities/Pool";
 import { TPoolId } from "@src/constants";
 import BN from "@src/utils/BN";
-import axios from "axios";
+import statsService, {
+  IPoolVolume,
+  IStatsPoolItemResponse,
+} from "@src/services/statsService";
 
-interface StatsPoolItemRaw {
-  apy: number;
-  liquidity: number;
-  monthly_volume: number;
-}
-
-export interface StatsPoolItem {
+export interface IStatsPoolItem {
   apy: BN;
   liquidity: BN;
   monthly_volume: BN;
 }
 
-interface PoolVolume {
-  date: number;
-  volume: number;
-}
-
-export interface PoolStats30DaysRaw extends StatsPoolItemRaw {
-  fees: number;
-  volume: PoolVolume[];
-}
-
-export interface PoolStats30Days extends StatsPoolItem {
+export interface IPoolStats30Days extends IStatsPoolItem {
   fees: BN;
-  volume: PoolVolume[];
+  volume: IPoolVolume[];
 }
-
-type TStats = Record<string, StatsPoolItem>;
 
 export default class PoolsStore {
   public rootStore: RootStore;
@@ -40,8 +25,9 @@ export default class PoolsStore {
   @action.bound setPools = (pools: Pool[]) => (this.pools = pools);
   getPoolById = (id: TPoolId) => this.pools.find((pool) => pool.id === id);
 
-  public poolsStats: TStats | null = null;
-  private setPoolStats = (value: TStats) => (this.poolsStats = value);
+  public poolsStats: Record<string, IStatsPoolItem> | null = null;
+  private setPoolStats = (value: Record<string, IStatsPoolItem>) =>
+    (this.poolsStats = value);
 
   findPoolStatsByPoolId = (poolId: string) =>
     this.poolsStats && this.poolsStats[poolId];
@@ -74,54 +60,33 @@ export default class PoolsStore {
     const accountStore = this.rootStore.accountStore;
     const chainId = accountStore.chainId;
     const pools = Object.values(accountStore.POOL_ID).map(
-      (id) =>
-        new Pool({
-          id,
-          chainId,
-          config: (accountStore.POOL_CONFIG as any)[id],
-        })
+      (id) => new Pool({ id, chainId, config: accountStore.POOL_CONFIG[id] })
     );
     this.setPools(pools);
   };
 
   syncPoolsStats = async () => {
-    axios
-      .get("https://puzzleback.herokuapp.com/stats/pools")
-      .then(({ data }) => {
-        const formattedData = Object.entries(data).reduce<
-          Record<string, StatsPoolItem>
-        >((acc, [poolId, obj]) => {
-          const bnFormat = Object.entries(obj as StatsPoolItemRaw).reduce<
-            Record<string, BN>
-          >((ac, [propertyName, propertyValue]) => {
-            const value = new BN(propertyValue);
-            return { ...ac, [propertyName]: value };
-          }, {});
-          return {
-            ...acc,
-            [poolId]: bnFormat as any,
-          };
-        }, {});
-        this.setPoolStats(formattedData);
-      })
-      .catch(() => console.error(`Cannot update stats of the pools`));
+    const data = await statsService.getStats();
+    const formattedData = Object.entries(data).reduce((acc, [poolId, obj]) => {
+      const bnFormat = Object.entries(obj as IStatsPoolItemResponse).reduce(
+        (ac, [propertyName, propertyValue]) => {
+          const value = new BN(propertyValue);
+          return { ...ac, [propertyName]: value };
+        },
+        {} as IStatsPoolItem
+      );
+      return { ...acc, [poolId]: bnFormat };
+    }, {} as Record<string, IStatsPoolItem>);
+    this.setPoolStats(formattedData);
   };
-  get30DaysPoolStats = async (poolId: string) => {
-    const { data }: { data: PoolStats30DaysRaw } = await axios.get(
-      `https://puzzleback.herokuapp.com/stats/${poolId}/30d`
-    );
-    const formattedData = Object.entries(data).reduce<PoolStats30Days>(
-      (acc, [propertyName, propertyValue]) => {
-        const value = Array.isArray(propertyValue)
-          ? propertyValue
-          : new BN(propertyValue);
-        return {
-          ...acc,
-          [propertyName]: value as any,
-        };
-      },
-      {} as any
-    );
-    return formattedData;
+
+  get30DaysPoolStats = async (poolId: string): Promise<IPoolStats30Days> => {
+    const data = await statsService.getStatsByPoolAndPeriod(poolId);
+    return Object.entries(data).reduce((acc, [propertyName, propertyValue]) => {
+      const value = Array.isArray(propertyValue)
+        ? propertyValue
+        : new BN(propertyValue);
+      return { ...acc, [propertyName]: value };
+    }, {} as IPoolStats30Days);
   };
 }

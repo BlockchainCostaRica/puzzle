@@ -5,7 +5,7 @@ import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import Balance from "@src/entities/Balance";
 import { errorMessage } from "@components/Notifications";
-import { PoolStats30Days } from "@stores/PoolsStore";
+import { IPoolStats30Days } from "@stores/PoolsStore";
 
 const ctx = React.createContext<AddLiquidityInterfaceVM | null>(null);
 
@@ -30,8 +30,8 @@ class AddLiquidityInterfaceVM {
   @action.bound public setBaseTokenAmount = (value: BN) =>
     (this.baseTokenAmount = value);
 
-  public stats: PoolStats30Days | null = null;
-  private setStats = (stats: PoolStats30Days | null) => (this.stats = stats);
+  public stats: IPoolStats30Days | null = null;
+  private setStats = (stats: IPoolStats30Days | null) => (this.stats = stats);
 
   providedPercentOfPool: BN = new BN(50);
   @action.bound setProvidedPercentOfPool = (value: number) =>

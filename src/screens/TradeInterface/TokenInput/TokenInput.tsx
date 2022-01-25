@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import TokenSelect from "@screens/MultiSwapInterface/TokenInput/TokenSelect";
 import MaxButton from "@components/MaxButton";
 import TokenSelectModal from "@screens/MultiSwapInterface/TokenSelectModal/TokenSelectModal";
@@ -9,7 +9,7 @@ import Balance from "@src/entities/Balance";
 import BN from "@src/utils/BN";
 import BigNumberInput from "@components/BigNumberInput";
 import AmountInput from "@components/AmountInput";
-
+import _ from "lodash";
 interface IProps {
   balances: Balance[];
 
@@ -79,9 +79,26 @@ const TokenInput: React.FC<IProps> = (props) => {
   const selectedAssetBalance = props.balances?.find(
     ({ assetId }) => assetId === props.assetId
   );
+  const [amount, setAmount] = useState<BN>(props.amount);
 
-  const handleChangeAmount = (value: BN) =>
-    props.setAmount && props.setAmount(value);
+  useEffect(() => {
+    props.amount && setAmount(props.amount);
+  }, [props.amount]);
+
+  const handleChangeAmount = (v: BN) => {
+    setAmount(v);
+    debounce(v);
+  };
+  //eslint-disable-next-line react-hooks/exhaustive-deps
+  const debounce = useCallback(
+    _.debounce((value: BN) => {
+      props.setAmount && props.setAmount(value);
+    }, 500),
+    []
+  );
+
+  // const handleChangeAmount = (value: BN) =>
+  //   props.setAmount && props.setAmount(value);
   return (
     <Root>
       <TokenSelect
@@ -116,7 +133,7 @@ const TokenInput: React.FC<IProps> = (props) => {
           )}
           autofocus={focused}
           decimals={props.decimals}
-          value={props.amount}
+          value={amount}
           onChange={handleChangeAmount}
           placeholder="0.00"
           readOnly={!props.setAmount}

@@ -5,7 +5,7 @@ import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import { IToken } from "@src/constants";
 import { errorMessage } from "@components/Notifications";
-import { PoolStats30Days } from "@stores/PoolsStore";
+import { IPoolStats30Days } from "@stores/PoolsStore";
 
 const ctx = React.createContext<InvestToPoolInterfaceVM | null>(null);
 
@@ -32,8 +32,8 @@ class InvestToPoolInterfaceVM {
   public poolId: string;
   public rootStore: RootStore;
 
-  public stats: PoolStats30Days | null = null;
-  private setStats = (stats: PoolStats30Days | null) => (this.stats = stats);
+  public stats: IPoolStats30Days | null = null;
+  private setStats = (stats: IPoolStats30Days | null) => (this.stats = stats);
 
   public accountLiquidity: BN | null = null;
   private setAccountLiquidity = (value: BN) => (this.accountLiquidity = value);

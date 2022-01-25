@@ -2,11 +2,11 @@ import React from "react";
 import { Column } from "@components/Flex";
 import Text from "@components/Text";
 import { observer } from "mobx-react-lite";
-import { useMultiSwapVM } from "@screens/MultiSwapInterface/MultiScreenVM";
 import BN from "@src/utils/BN";
+import { useTradeVM } from "@screens/TradeInterface/TradeVM";
 
 const TooltipFeeInfo: React.FC = () => {
-  const vm = useMultiSwapVM();
+  const vm = useTradeVM();
   const token1 = vm.token1!;
   const amount = BN.formatUnits(vm.amount1, token1.decimals);
   return (

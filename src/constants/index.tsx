@@ -44,7 +44,7 @@ export const EXPLORER_URL_MAP: Record<TChainId, string> = {
   T: "https://testnet.wavesexplorer.com",
 };
 
-export const SLIPPAGE = 0.98; //if puzzle slippage = 0
+export const SLIPPAGE = 0.95; //if puzzle slippage = 0
 export const TRADE_FEE = 0.98;
 
 export const CASHBACK_PERCENT = 0.004;

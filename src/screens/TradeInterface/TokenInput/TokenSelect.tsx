@@ -55,7 +55,7 @@ const TokenSelect: React.FC<IProps> = ({
         <SizedBox width={8} />
         <Column justifyContent="center">
           <TokenName>{token?.symbol}</TokenName>
-          <Balance>{balance ?? "–"}</Balance>
+          <Balance>{balance ?? "—"}</Balance>
         </Column>
       </Row>
       {selectable && <ArrowDownIcon />}

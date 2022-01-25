@@ -19,8 +19,6 @@ export interface IBigNumberInputProps {
   readOnly?: boolean;
 }
 
-// const browser = detect();
-
 const BigNumberInput: React.FC<IBigNumberInputProps> = ({
   decimals,
   value,

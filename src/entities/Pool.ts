@@ -2,9 +2,9 @@ import {
   IPoolConfig,
   IToken,
   NODE_URL_MAP,
-  SLIPPAGE,
   TChainId,
   TPoolId,
+  TRADE_FEE,
 } from "@src/constants";
 import axios from "axios";
 import { action, makeAutoObservable } from "mobx";
@@ -46,7 +46,7 @@ class Pool implements IPoolConfig {
   public getAssetById = (assetId: string) =>
     this.tokens.find((t) => assetId === t.assetId);
 
-  public globalVolume: string = "–";
+  public globalVolume: string = "—";
   @action.bound setGlobalVolume = (value: string) =>
     (this.globalVolume = value);
 
@@ -117,7 +117,7 @@ class Pool implements IPoolConfig {
   currentPrice = (
     assetId0: string,
     assetId1: string,
-    coefficient = SLIPPAGE
+    coefficient = TRADE_FEE
   ): BN | null => {
     if (this.tokens == null) return null;
     const asset0 = this.getAssetById(assetId0);

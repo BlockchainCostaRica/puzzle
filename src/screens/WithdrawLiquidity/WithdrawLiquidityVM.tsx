@@ -4,7 +4,7 @@ import { action, makeAutoObservable, when } from "mobx";
 import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import { IToken } from "@src/constants";
-import { PoolStats30Days } from "@stores/PoolsStore";
+import { IPoolStats30Days } from "@stores/PoolsStore";
 
 const ctx = React.createContext<WithdrawLiquidityVM | null>(null);
 
@@ -31,8 +31,8 @@ class WithdrawLiquidityVM {
   public poolId: string;
   public rootStore: RootStore;
 
-  public stats: PoolStats30Days | null = null;
-  private setStats = (stats: PoolStats30Days | null) => (this.stats = stats);
+  public stats: IPoolStats30Days | null = null;
+  private setStats = (stats: IPoolStats30Days | null) => (this.stats = stats);
 
   public userIndexStaked: BN | null = null;
   private setUserIndexStaked = (value: BN) => (this.userIndexStaked = value);

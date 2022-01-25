@@ -26,8 +26,7 @@ import usdnLogo from "@src/assets/tokens/usdn-logo.svg";
 import raceLogo from "@src/assets/tokens/race-logo.svg";
 import unknownLogo from "@src/assets/tokens/unknown-logo.svg";
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default {
+const tokenLogos: Record<string, string> = {
   DUXPLORER: duxplorerLogo,
   MATH: mathLogo,
   TURTLE: turtleLogo,
@@ -56,3 +55,5 @@ export default {
   RACE: raceLogo,
   UNKNOWN: unknownLogo,
 };
+
+export default tokenLogos;
