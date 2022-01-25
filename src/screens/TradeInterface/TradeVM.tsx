@@ -26,7 +26,11 @@ class TradeVM {
     const asset1 = params.get("asset1")?.toString();
     this.assetId0 = asset0 ?? TOKENS.USDN.assetId;
     this.assetId1 = asset1 ?? TOKENS.PUZZLE.assetId;
-    reaction(() => this.amount0, this._syncAmount1);
+    this._syncAmount1();
+    reaction(
+      () => [this.assetId0, this.assetId1, this.amount0],
+      this._syncAmount1
+    );
   }
 
   synchronizing: boolean = false;
@@ -58,26 +62,23 @@ class TradeVM {
     (this.routingModalOpened = state);
 
   @action.bound private _syncAmount1 = () => {
-    if (this.amount0.gt(0)) {
-      this.setSynchronizing(true);
-      aggregatorService
-        .calc(this.assetId0, this.assetId1, this.amount0)
-        .then(({ estimatedOut, priceImpact, routes }) => {
-          this._setAmount1(new BN(estimatedOut));
-          this._setPriceImpact(new BN(priceImpact).times(100));
-          this._setRoute(routes);
-        })
-        .catch(() => {
-          this._setAmount1(BN.ZERO);
-          this._setPriceImpact(BN.ZERO);
-          this._setRoute([]);
-        })
-        .finally(() => this.setSynchronizing(false));
-    } else {
-      this._setAmount1(BN.ZERO);
-      this._setPriceImpact(BN.ZERO);
-      this._setRoute([]);
-    }
+    const { amount0, assetId0, assetId1 } = this;
+    const invalidAmount = amount0 == null || amount0.isNaN || amount0.lte(0);
+    this.setSynchronizing(true);
+    aggregatorService
+      .calc(assetId0, assetId1, invalidAmount ? new BN(1) : amount0)
+      .then(({ estimatedOut, priceImpact, routes }) => {
+        !invalidAmount && this._setAmount1(new BN(estimatedOut));
+        !invalidAmount && this._setPriceImpact(new BN(priceImpact).times(100));
+        this._setRoute(routes);
+        console.log(routes);
+      })
+      .catch(() => {
+        this._setAmount1(BN.ZERO);
+        this._setPriceImpact(BN.ZERO);
+        this._setRoute([]);
+      })
+      .finally(() => this.setSynchronizing(false));
   };
 
   get token0() {
@@ -93,11 +94,15 @@ class TradeVM {
   }
 
   get simpleRoute() {
-    if (this.route.length <= 0 || this.route[0].exchanges.length <= 0) {
+    if (
+      this.route == null ||
+      this.route.length <= 0 ||
+      this.route[0].exchanges.length <= 0
+    ) {
       return null;
     }
 
-    return this.route[0].exchanges.reduce<Array<string>>(
+    const simpleRoute = this.route[0].exchanges.reduce<Array<string>>(
       (acc, e, i) => [
         ...acc,
         ...(i === 0 ? [e.from, e.to] : [e.to]).map((v) => {
@@ -107,6 +112,10 @@ class TradeVM {
       ],
       []
     );
+
+    return simpleRoute.length < 4
+      ? simpleRoute
+      : [simpleRoute[0], "...", simpleRoute[simpleRoute.length - 1]];
   }
 
   getBalanceByAssetId = (assetId: string) =>
