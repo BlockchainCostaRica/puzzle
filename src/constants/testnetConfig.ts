@@ -12,6 +12,7 @@ export enum TESTNET_POOL_ID {
 export const TESTNET_ROUTES = {
   ROOT: "/",
   STAKE: "/stake",
+  TRADE: "/trade",
   withdraw: {
     farms: `${TESTNET_POOL_ID.farmsPool1}/withdraw`,
   },

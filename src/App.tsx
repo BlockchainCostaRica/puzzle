@@ -20,6 +20,7 @@ import "./old_components/vovaStyles.css.scss";
 import { WalletModule } from "@src/old_components/WalletModule";
 import Invest from "@screens/Invest";
 import WithdrawLiquidityInterface from "@screens/WithdrawLiquidity/WithdrawLiquidityInterface";
+import TradeInterface from "@screens/TradeInterface";
 
 const Root = styled(Column)`
   width: 100%;
@@ -38,6 +39,9 @@ const App: React.FC = () => {
         <Route path={ROUTES.ROOT} element={<Landing />} />
         {/* Stake */}
         <Route path={ROUTES.STAKE} element={<StakeModule />} />
+
+        {/* Trade */}
+        {/*<Route path={ROUTES.TRADE} element={<TradeInterface />} />*/}
 
         {/* Swap routes */}
         {Object.entries(ROUTES.pools).map(([poolId, path]) => (
