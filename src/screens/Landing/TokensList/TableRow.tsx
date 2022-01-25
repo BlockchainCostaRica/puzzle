@@ -30,7 +30,8 @@ const TableRow: React.FC<IProps> = ({ v }) => {
         </Text>
       </td>
       <td>
-        <Link to={v.poolId}>
+        {/*todo add link with query params to trade page*/}
+        <Link to="/trade">
           <Button
             className="tableText"
             style={{ height: 40, padding: "0px 4px", width: "100%" }}
