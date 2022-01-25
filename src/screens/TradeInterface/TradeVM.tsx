@@ -88,6 +88,26 @@ class TradeVM {
     return this.balances.find(({ assetId }) => assetId === this.assetId1)!;
   }
 
+  get simpleRoute() {
+    if (this.route.length <= 0 || this.route[0].exchanges.length <= 0) {
+      return null;
+    }
+
+    return this.route[0].exchanges.reduce<Array<string>>(
+      (acc, e, i) => [
+        ...acc,
+        ...(i === 0 ? [e.from, e.to] : [e.to]).map((v) => {
+          const asset = this.getBalanceByAssetId(v);
+          return asset != null ? asset.symbol : "UNKNOWN";
+        }),
+      ],
+      []
+    );
+  }
+
+  getBalanceByAssetId = (assetId: string) =>
+    this.balances.find((b) => assetId === b.assetId);
+
   get balances() {
     const { accountStore } = this.rootStore;
     return (

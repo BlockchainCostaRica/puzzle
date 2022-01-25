@@ -8,7 +8,7 @@ import Card from "@components/Card";
 import { Observer } from "mobx-react-lite";
 import SwitchTokensButton from "@screens/TradeInterface/SwitchTokensButton";
 import SwapButton from "@screens/TradeInterface/SwapButton";
-import { ReactComponent as ArrowIcon } from "@src/assets/icons/arrowRightBorderless.svg";
+// import { ReactComponent as ArrowIcon } from "@src/assets/icons/arrowRightBorderless.svg";
 import Layout from "@components/Layout";
 import { TradeVMProvider, useTradeVM } from "@screens/TradeInterface/TradeVM";
 import { useNavigate } from "react-router-dom";
@@ -92,13 +92,11 @@ const TradeInterfaceImpl: React.FC = () => {
                   mainAxisSize="fit-content"
                   justifyContent="flex-end"
                 >
-                  {vm.route.length > 0
-                    ? vm.route.map((r, i) => (
-                        <React.Fragment key={i}>
-                          <Text style={{ lineHeight: 0 }}>WAVES</Text>&nbsp;
-                          <ArrowIcon style={{ minWidth: 16 }} />
-                          &nbsp;
-                        </React.Fragment>
+                  {vm.simpleRoute
+                    ? vm.simpleRoute.map((symbol, i) => (
+                        <Text key={i} style={{ lineHeight: 0 }}>
+                          {symbol}&nbsp;
+                        </Text>
                       ))
                     : // <>
                       //   <Text style={{ lineHeight: 0 }}>WAVES</Text>&nbsp;

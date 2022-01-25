@@ -30,7 +30,6 @@ const aggregatorService = {
   ): Promise<ICalcResponse> => {
     const url = `https://puzzleback.herokuapp.com/aggregator/calc?token0=${assetId0}&token1=${assetId1}&amountIn=${amount.toString()}`;
     const { data } = await axios.get(url);
-    console.log(data.routes);
     return data;
   },
 };
