@@ -33,6 +33,14 @@ class TradeVM {
     );
   }
 
+  price: BN = BN.ZERO;
+  @action.bound private _setPrice = (price: BN) => (this.price = price);
+  calculatePrice(): BN | null {
+    const price = BN.formatUnits(this.amount1, this.token1.decimals).div(
+      BN.formatUnits(this.amount0, this.token0.decimals)
+    );
+    return !price.isNaN() ? price : null;
+  }
   synchronizing: boolean = false;
   @action.bound setSynchronizing = (synchronizing: boolean) =>
     (this.synchronizing = synchronizing);
@@ -66,12 +74,15 @@ class TradeVM {
     const invalidAmount = amount0 == null || amount0.isNaN || amount0.lte(0);
     this.setSynchronizing(true);
     aggregatorService
-      .calc(assetId0, assetId1, invalidAmount ? new BN(1) : amount0)
+      .calc(
+        assetId0,
+        assetId1,
+        invalidAmount ? BN.parseUnits(1, this.token0.decimals) : amount0
+      )
       .then(({ estimatedOut, priceImpact, routes }) => {
         !invalidAmount && this._setAmount1(new BN(estimatedOut));
         !invalidAmount && this._setPriceImpact(new BN(priceImpact).times(100));
         this._setRoute(routes);
-        console.log(routes);
       })
       .catch(() => {
         this._setAmount1(BN.ZERO);
@@ -141,13 +152,6 @@ class TradeVM {
 
   get minimumToReceive(): BN {
     return this.amount1.times(TRADE_FEE);
-  }
-
-  get price(): BN | null {
-    const price = BN.formatUnits(this.amount1, this.token1.decimals).div(
-      BN.formatUnits(this.amount0, this.token0.decimals)
-    );
-    return !price.isNaN() ? price : null;
   }
 
   switchTokens = () => {
