@@ -1,0 +1,87 @@
+import styled from "@emotion/styled";
+import React from "react";
+import Text from "@components/Text";
+import SizedBox from "@components/SizedBox";
+import Card from "@components/Card";
+import TokenInput from "@screens/MultiSwapInterface/TokenInput/TokenInput";
+import { observer } from "mobx-react-lite";
+import { useAddLiquidityInterfaceVM } from "@screens/AddLiquidityInterface/AddLiquidityInterfaceVM";
+import { useStores } from "@stores";
+import Button from "@components/Button";
+import Notification from "@screens/AddLiquidityInterface/Notification";
+import { Link } from "react-router-dom";
+import buildBuyTokenRoute from "@src/utils/buildBuyTokenRoute";
+
+interface IProps {}
+
+const Root = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
+  const { accountStore } = useStores();
+  const vm = useAddLiquidityInterfaceVM();
+
+  const buyBaseTokenRoute = buildBuyTokenRoute(
+    (accountStore.ROUTES.pools as any)[vm.poolId],
+    vm.baseToken.assetId
+  );
+
+  return (
+    <Root>
+      <Text weight={500} type="secondary">
+        Amount
+      </Text>
+      <SizedBox height={8} />
+      <Card>
+        <TokenInput
+          selectable={false}
+          decimals={vm.baseToken.decimals}
+          amount={vm.baseTokenAmount}
+          setAmount={vm.setBaseTokenAmount}
+          assetId={vm.baseToken.assetId}
+          balances={vm.balances ?? []}
+          onMaxClick={vm.onMaxBaseTokenClick}
+          usdnEquivalent={vm.baseTokenAmountUsdnEquivalent}
+        />
+        <SizedBox height={24} />
+        {vm.baseTokenBalance && vm.baseTokenBalance.balance?.lt(0.0001) ? (
+          <Notification
+            type="warning"
+            text={
+              <div>
+                Your {vm.baseToken.symbol} balance is too low to deposit.{" "}
+                <Link to={buyBaseTokenRoute}>Buy {vm.baseToken.symbol}</Link> to
+                deposit.
+              </div>
+            }
+          />
+        ) : (
+          <Notification
+            type="info"
+            text={`Your ${vm.baseToken.symbol} will be automatically converted to other pool
+        tokens and provided as liquidity. Please pay attention that value of
+        your deposit can be different from value of tokens provided because of
+        slippage. We do not recommend to use this method for bigger amounts.`}
+          />
+        )}
+      </Card>
+      <SizedBox height={24} />
+      {accountStore.address == null ? (
+        <Button fixed onClick={() => accountStore.setWalletModalOpened(true)}>
+          Connect to deposit
+        </Button>
+      ) : (
+        <Button
+          fixed
+          onClick={vm.depositBaseToken}
+          disabled={!vm.canDepositBaseToken}
+        >
+          Deposit
+        </Button>
+      )}
+    </Root>
+  );
+};
+export default observer(BaseTokenAddLiquidityAmount);

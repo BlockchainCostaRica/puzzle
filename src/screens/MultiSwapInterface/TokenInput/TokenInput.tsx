@@ -14,7 +14,7 @@ interface IProps {
   balances: Balance[];
 
   assetId: string;
-  setAssetId: (assetId: string) => void;
+  setAssetId?: (assetId: string) => void;
 
   decimals: number;
 
@@ -23,6 +23,8 @@ interface IProps {
 
   onMaxClick?: () => void;
   usdnEquivalent?: string;
+
+  selectable?: boolean;
 }
 
 const Root = styled.div`
@@ -86,6 +88,7 @@ const TokenInput: React.FC<IProps> = (props) => {
         token={props.balances.find(({ assetId }) => assetId === props.assetId)}
         onClick={() => setOpenModal(!openModal)}
         balance={selectedAssetBalance?.formatBalance}
+        selectable={props.selectable}
       />
       <InputContainer focused={focused} readOnly={!props.setAmount}>
         {props.onMaxClick && (
@@ -118,16 +121,23 @@ const TokenInput: React.FC<IProps> = (props) => {
           placeholder="0.00"
           readOnly={!props.setAmount}
         />
-        <Text style={{ whiteSpace: "nowrap" }} type="secondary" size="small">
+        <Text
+          style={{ whiteSpace: "nowrap" }}
+          type="secondary"
+          size="small"
+          fitContent
+        >
           {props.usdnEquivalent}
         </Text>
       </InputContainer>
-      <TokenSelectModal
-        visible={openModal}
-        onSelect={props.setAssetId}
-        balances={props.balances}
-        onClose={() => setOpenModal(!openModal)}
-      />
+      {props.setAssetId && (
+        <TokenSelectModal
+          visible={openModal}
+          onSelect={props.setAssetId}
+          balances={props.balances}
+          onClose={() => setOpenModal(!openModal)}
+        />
+      )}
     </Root>
   );
 };

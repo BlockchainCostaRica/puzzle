@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useEffect } from "react";
 import SizedBox from "@components/SizedBox";
 import TokenInput from "@screens/MultiSwapInterface/TokenInput";
 import { ReactComponent as InfoIcon } from "@src/assets/icons/info.svg";
@@ -22,6 +22,7 @@ import SwapButton from "@screens/MultiSwapInterface/SwapButton";
 import TooltipFeeInfo from "@screens/MultiSwapInterface/TooltipFeeInfo";
 import BN from "@src/utils/BN";
 import Layout from "@components/Layout";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
   poolId: TPoolId;
@@ -45,28 +46,66 @@ const Root = styled.div`
 
 const MultiSwapInterfaceImpl: React.FC = () => {
   const vm = useMultiSwapVM();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const asset0 = params.get("asset0")?.toString();
+      const asset1 = params.get("asset1")?.toString();
+      if (asset0 != null) {
+        vm.setAssetId0(asset0);
+      }
+      if (asset1 != null) {
+        vm.setAssetId1(asset1);
+      }
+    } catch (e) {}
+  });
+
+  const handleSetAssetId0 = (assetId: string) => {
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    urlSearchParams.set("asset0", assetId);
+    navigate({
+      pathname: window.location.pathname,
+      search: `?${urlSearchParams.toString()}`,
+    });
+    vm.setAssetId0(assetId);
+  };
+
+  const handleSetAssetId1 = (assetId: string) => {
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    urlSearchParams.set("asset1", assetId);
+    navigate({
+      pathname: window.location.pathname,
+      search: `?${urlSearchParams.toString()}`,
+    });
+    vm.setAssetId0(assetId);
+  };
+
   return (
     <Layout>
       <Observer>
         {() => (
           <Root>
-            <Card>
+            <Card paddingDesktop="32px" maxWidth={560}>
               <TokenInput
+                selectable={true}
                 decimals={vm.token0!.decimals}
                 amount={vm.amount0}
                 setAmount={vm.setAmount0}
                 assetId={vm.assetId0}
-                setAssetId={vm.setAssetId0}
+                setAssetId={handleSetAssetId0}
                 balances={vm.balances ?? []}
                 onMaxClick={vm.amount0MaxClickFunc}
                 usdnEquivalent={vm.amount0UsdnEquivalent}
               />
               <SwitchTokensButton />
               <TokenInput
+                selectable={true}
                 decimals={vm.token1!.decimals}
                 amount={new BN(vm.amount1)}
                 assetId={vm.assetId1}
-                setAssetId={vm.setAssetId1}
+                setAssetId={handleSetAssetId1}
                 balances={vm.balances ?? []}
                 usdnEquivalent={vm.amount1UsdnEquivalent}
               />

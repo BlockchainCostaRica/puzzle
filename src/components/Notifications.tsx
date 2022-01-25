@@ -25,7 +25,7 @@ export const successMessage = (props: INotification) => {
         </a>
       </NotificationInfo>
     ) : (
-      props.message ?? ""
+      props.message ?? " "
     ),
     type: "success",
     insert: "bottom",
@@ -39,7 +39,7 @@ export const successMessage = (props: INotification) => {
 export const errorMessage = (props: INotification) => {
   store.addNotification({
     title: props.title ?? "Something went wrong!",
-    message: props.message ?? "",
+    message: props.message ?? " ",
     type: "danger",
     insert: "bottom",
     container: "top-right",

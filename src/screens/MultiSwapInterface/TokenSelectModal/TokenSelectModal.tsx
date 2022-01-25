@@ -1,6 +1,6 @@
 import React, { createRef, useState } from "react";
 import useOnClickOutside from "@src/hooks/useOnClickOutside";
-import SearchInput from "@screens/MultiSwapInterface/SearchInput";
+import SearchInput from "@components/SearchInput";
 import TokenInfo from "@screens/MultiSwapInterface/TokenSelectModal/TokenInfo";
 import Dialog from "@components/Dialog";
 import Scrollbar from "@src/components/Scrollbar";

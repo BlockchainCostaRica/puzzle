@@ -1,157 +1,157 @@
 {
   "DUXPLORER": {
     "assetId": "EfdcPXw7o7rrrPWmMBr2sa66Dk95n56622ngujbaGhye",
-    "name": "DUXPLORER token",
+    "name": "DUXPLORER",
     "symbol": "DUXPLORER",
     "decimals": 8
   },
   "MATH": {
     "assetId": "B543bkZcZNo5GrUnd5fxB6EwkiJhAVyKCkPn5nWzZC2s",
-    "name": "MATH token",
+    "name": "MATH",
     "symbol": "MATH",
     "decimals": 8
   },
   "TURTLE": {
     "assetId": "5bcAh1r6ydrpk44FEmrnmJQjumgKo3NKEEsyfgmZYwxC",
-    "name": "TURTLE token",
+    "name": "TURTLE",
     "symbol": "TURTLE",
     "decimals": 8
   },
   "EGGSEGGS": {
     "assetId": "54UszKAj3MtYmkdRCqSXAcaQLaVALBy7CCrVkfmfzhxR",
-    "name": "EGGSEGGS token",
+    "name": "EGGSEGGS",
     "symbol": "EGGSEGGS",
     "decimals": 8
   },
   "PESOLATINO": {
     "assetId": "5nk9JW8yRonyNBEwhChoksLxpBECVxbVLqaNuQs9EJn1",
-    "name": "PESOLATINO token",
+    "name": "PESOLATINO",
     "symbol": "PESOLATINO",
     "decimals": 8
   },
   "FOMO": {
     "assetId": "Dfx6LJPndo1h5Umk9SofDhMDs6Gi8cHyT3873pSgoASU",
-    "name": "FOMO token",
+    "name": "FOMO",
     "symbol": "FOMO",
     "decimals": 8
   },
   "MUNDO": {
     "assetId": "4kwKSf4Bx2Wq8YxKnVZBhcEHyXzEtJ2pw7ixfJgirwf2",
-    "name": "MUNDO token",
+    "name": "MUNDO",
     "symbol": "MUNDO",
     "decimals": 8
   },
   "EGGPOINT": {
     "assetId": "Ej7kEzxvUsoiMtJKiuFpMD9tC6qfCADpZynyW2vqcWW",
-    "name": "EGGPOINT token",
+    "name": "EGGPOINT",
     "symbol": "EGGPOINT",
     "decimals": 8
   },
   "EGG": {
     "assetId": "C1iWsKGqLwjHUndiQ7iXpdmPum9PeCDFfyXBdJJosDRS",
-    "name": "EGG token",
+    "name": "Waves Ducks",
     "symbol": "EGG",
     "decimals": 8
   },
   "USDN": {
     "assetId": "DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p",
-    "name": "USDN token",
+    "name": "Neutrino USD",
     "symbol": "USDN",
     "decimals": 6
   },
   "ENDO": {
     "assetId": "5HGPPLj58XUx3ryMgkASJoqYq33zwBbTMf1CGxfKw6jp",
-    "name": "ENDO token",
+    "name": "ENDO",
     "symbol": "ENDO",
     "decimals": 8
   },
   "MARVIN": {
     "assetId": "yDf4UTg4DS75sCNP7oC1HraTN4KHtqmd6WueTid4PF1",
-    "name": "MARVIN token",
+    "name": "MARVIN",
     "symbol": "MARVIN",
     "decimals": 8
   },
   "EGGMOON": {
     "assetId": "2R57nL7ftpuwbgdprcmAeA9i7ykLH6A4wzLkZHWPiHKc",
-    "name": "EGGMOON token",
+    "name": "EGGMOON",
     "symbol": "EGGMOON",
     "decimals": 8
   },
   "STREET": {
     "assetId": "CE5cxMvz7865CyFZPFUmDiL4KRkYXP6b6oYgN3vmWdV5",
-    "name": "STREET token",
+    "name": "STREET",
     "symbol": "STREET",
     "decimals": 8
   },
   "KOLKHOZ": {
     "assetId": "5m5stLsMZSPomwxTTjJGMMEnjMafRMfap5vZyaLwgMKD",
-    "name": "KOLKHOZ token",
+    "name": "KOLKHOZ",
     "symbol": "KOLKHOZ",
     "decimals": 8
   },
   "FORKLOG": {
     "assetId": "46PdJcKzDuYfzLuLNjffM3F8jR8hL357V9AdGK2xN3kx",
-    "name": "FORKLOG token",
+    "name": "FORKLOG",
     "symbol": "FORKLOG",
     "decimals": 8
   },
   "CGU": {
     "assetId": "ESaD2AREvgk7o4C9eQkZ8Nmau9BSHqgTK5ymHV36xocy",
-    "name": "CGU token",
+    "name": "CGU",
     "symbol": "CGU",
     "decimals": 8
   },
   "WAVES": {
     "assetId": "WAVES",
-    "name": "WAVES token",
+    "name": "WAVES",
     "symbol": "WAVES",
     "decimals": 8
   },
   "SWOP": {
     "assetId": "Ehie5xYpeN8op1Cctc6aGUrqx8jq3jtf1DSjXDbfm7aT",
-    "name": "SWOP token",
+    "name": "SWOP",
     "symbol": "SWOP",
     "decimals": 8
   },
   "VIRES": {
     "assetId": "DSbbhLsSTeDg5Lsiufk2Aneh3DjVqJuPr2M9uU1gwy5p",
-    "name": "VIRES token",
+    "name": "VIRES",
     "symbol": "VIRES",
     "decimals": 8
   },
   "NSBT": {
     "assetId": "6nSpVyNH7yM69eg446wrQR94ipbbcmZMU1ENPwanC97g",
-    "name": "NSBT token",
+    "name": "NSBT",
     "symbol": "NSBT",
     "decimals": 6
   },
   "ENNO": {
     "assetId": "7LMV3s1J4dKpMQZqge5sKYoFkZRLojnnU49aerqos4yg",
-    "name": "ENNO token",
+    "name": "ENNO",
     "symbol": "ENNO",
     "decimals": 8
   },
   "SIGN": {
     "assetId": "9sQutD5HnRvjM1uui5cVC4w9xkMPAfYEV8ymug3Mon2Y",
-    "name": "SIGN token",
+    "name": "SIGN",
     "symbol": "SIGN",
     "decimals": 8
   },
   "PUZZLE": {
     "assetId": "HEB8Qaw9xrWpWs8tHsiATYGBWDBtP2S7kcPALrMu43AS",
-    "name": "PUZZLE token",
+    "name": "PUZZLE",
     "symbol": "PUZZLE",
     "decimals": 8
   },
   "USDT": {
     "assetId": "34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ",
-    "name": "USDT token",
+    "name": "USDT",
     "symbol": "USDT",
     "decimals": 6
   },
   "RACE": {
     "assetId": "D4TPjtzpsDEJFS1pUAkvh1tJJJMNWGcSrds9sveBoQka",
-    "name": "RACE token",
+    "name": "RACE",
     "symbol": "RACE",
     "decimals": 8
   }

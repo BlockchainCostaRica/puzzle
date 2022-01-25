@@ -102,11 +102,10 @@ class MultiSwapVM {
   };
 
   get balances() {
+    const { accountStore } = this.rootStore;
     return this.pool?.tokens
       .map((t) => {
-        const balance = this.rootStore.accountStore.assetBalances.find(
-          (b) => t.assetId === b.assetId
-        );
+        const balance = accountStore.findBalanceByAssetId(t.assetId);
         return balance ?? new Balance(t);
       })
       .sort((a, b) => {
@@ -171,7 +170,7 @@ class MultiSwapVM {
     }
 
     if (!this.token1 || !this.amount1.gt(0) || !this.minimumToReceive) {
-      errorMessage("Something wrong with first asset");
+      errorMessage("Something wrong with second asset");
       return;
     }
 

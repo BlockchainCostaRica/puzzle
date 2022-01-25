@@ -4,8 +4,7 @@ import { Column } from "@components/Flex";
 const Layout = styled(Column)`
   width: 100%;
   max-width: 1440px;
-  //padding: 0 48px;
-  //box-sizing: border-box;
+  align-items: center;
 `;
 
 export default Layout;

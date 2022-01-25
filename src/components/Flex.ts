@@ -42,3 +42,21 @@ export const Column = styled.div<IFlexProps>`
   height: ${({ mainAxisSize }) =>
     mainAxisSize === "stretch" ? "100%" : "fit-content"};
 `;
+
+export const adaptiveStyleTemplate = `
+  & .desktop {
+    display: none;
+    @media (min-width: 880px) {
+      display: flex;
+    }
+  }
+  & .mobile {
+    display: flex;
+    @media (min-width: 880px) {
+      display: none;
+    }
+  }
+`;
+
+export const AdaptiveRow = styled(Row)(adaptiveStyleTemplate);
+export const AdaptiveColumn = styled(Column)(adaptiveStyleTemplate);

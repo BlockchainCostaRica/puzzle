@@ -81,7 +81,7 @@ class BN extends BigNumber {
     roundingMode: BigNumber.RoundingMode = BigNumber.ROUND_DOWN
   ): BN {
     return this.gte(1)
-      ? this.toDecimalPlaces(6)
+      ? this.toDecimalPlaces(significantDigits)
       : new BN(super.precision(significantDigits, roundingMode));
   }
 

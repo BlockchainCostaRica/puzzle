@@ -15,6 +15,13 @@ export enum MAINNET_POOL_ID {
 export const MAINNET_ROUTES = {
   ROOT: "/",
   STAKE: "/stake",
+  INVEST: "/invest",
+  withdraw: {
+    farms: `${MAINNET_POOL_ID.farmsPool1}/withdraw`,
+    farms2: `${MAINNET_POOL_ID.farmsPool2}/withdraw`,
+    race: `${MAINNET_POOL_ID.race}/withdraw`,
+    defi: `${MAINNET_POOL_ID.defi}/withdraw`,
+  },
   pools: {
     farms: MAINNET_POOL_ID.farmsPool1,
     farms2: MAINNET_POOL_ID.farmsPool2,
@@ -45,8 +52,10 @@ export const MAINNET_ROUTES = {
 export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
   [MAINNET_POOL_ID.farmsPool1]: {
     contractAddress: "3PPRHHF9JKvDLkAc3aHD3Kd5tRZp1CoqAJa",
+    layer2Address: "3PDVDYZiwJzK3pu8vcknuLiKCYBPx6XZntG",
     baseTokenId: mainnetTokens.EGG.assetId,
     name: "Farms 1",
+    logo: tokenLogos.EGG,
     defaultAssetId0: mainnetTokens.MATH.assetId,
     defaultAssetId1: mainnetTokens.USDN.assetId,
     tokens: [
@@ -80,8 +89,10 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
   },
   [MAINNET_POOL_ID.farmsPool2]: {
     contractAddress: "3PKYPKJPHZENAAwH9e7TF5edDgukNxxBt3M",
+    layer2Address: "3PLNxoMJYKzcA8qQ7hQidGDaUJNvM4w36nj",
     baseTokenId: mainnetTokens.EGG.assetId,
     name: "Farms 2",
+    logo: tokenLogos.EGG,
     defaultAssetId0: mainnetTokens.MARVIN.assetId,
     defaultAssetId1: mainnetTokens.USDN.assetId,
     tokens: [
@@ -98,8 +109,10 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
   },
   [MAINNET_POOL_ID.defi]: {
     contractAddress: "3PDrYPF6izza2sXWffzTPF7e2Fcir2CMpki",
+    layer2Address: "3PJAg4A4gPQXtSLKQNAf5VxbXV2QVM9wPei",
     baseTokenId: mainnetTokens.USDN.assetId,
     name: "DeFi",
+    logo: tokenLogos.WAVES,
     defaultAssetId0: mainnetTokens.EGG.assetId,
     defaultAssetId1: mainnetTokens.USDN.assetId,
     tokens: [
@@ -117,8 +130,10 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
   },
   [MAINNET_POOL_ID.race]: {
     contractAddress: "3PNK5ypnPJioLmLUzfK6ezpaePHLxZd6QLj",
+    layer2Address: "3PQSAdwsdyPVVpfBwjtgXboVXUZgeYHycWM",
     baseTokenId: mainnetTokens.USDN.assetId,
     name: "Race",
+    logo: tokenLogos.RACE,
     defaultAssetId0: mainnetTokens.RACE.assetId,
     defaultAssetId1: mainnetTokens.USDN.assetId,
     tokens: [
@@ -131,6 +146,7 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
     contractAddress: "3PFDgzu1UtswAkCMxqqQjbTeHaX4cMab8Kh",
     baseTokenId: mainnetTokens.USDN.assetId,
     name: "Puzzle",
+    logo: tokenLogos.PUZZLE,
     defaultAssetId0: mainnetTokens.PUZZLE.assetId,
     defaultAssetId1: mainnetTokens.USDN.assetId,
     tokens: [

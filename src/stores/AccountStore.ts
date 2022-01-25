@@ -47,14 +47,23 @@ class AccountStore {
   chainId: "W" | "T" = "W";
 
   isWavesKeeperInstalled = false;
+  @action.bound setWavesKeeperInstalled = (state: boolean) =>
+    (this.isWavesKeeperInstalled = state);
 
   walletModalOpened: boolean = false;
   @action.bound setWalletModalOpened = (state: boolean) =>
     (this.walletModalOpened = state);
 
+  changePoolModalOpened: boolean = false;
+  @action.bound setChangePoolModalOpened = (state: boolean) =>
+    (this.changePoolModalOpened = state);
+
   public assetBalances: Balance[] = [];
   @action.bound setAssetBalances = (assetBalances: Balance[]) =>
     (this.assetBalances = assetBalances);
+
+  findBalanceByAssetId = (assetId: string) =>
+    this.assetBalances.find((balance) => balance.assetId === assetId);
 
   public address: string | null = null;
   @action.bound setAddress = (address: string | null) =>
@@ -66,9 +75,6 @@ class AccountStore {
 
   public signer: Signer | null = null;
   @action.bound setSigner = (signer: Signer | null) => (this.signer = signer);
-
-  // public scripted = false;
-  // public network: INetwork | null = null;
 
   constructor(rootStore: RootStore, initState?: ISerializedAccountStore) {
     this.rootStore = rootStore;
@@ -98,10 +104,6 @@ class AccountStore {
     const browser = getCurrentBrowser();
     return ["chrome", "firefox", "opera", "edge"].includes(browser);
   }
-
-  // get fee() {
-  //   return this.scripted ? "0.009" : "0.005";
-  // }
 
   login = async (loginType: LOGIN_TYPE) => {
     this.loginType = loginType;
@@ -148,7 +150,7 @@ class AccountStore {
           // alert("keeper is not installed");
         } else if (window["WavesKeeper"]) {
           reaction.dispose();
-          this.isWavesKeeperInstalled = true;
+          this.setWavesKeeperInstalled(true);
         } else {
           attemptsCount += 1;
         }

@@ -1,10 +1,10 @@
 import styled from "@emotion/styled";
 import React from "react";
-import Home from "@screens/Landing/Home/Home";
-import About from "@screens/Landing/About/About";
-import TokensList from "@screens/Landing/TokensList";
-import Invest from "@screens/Landing/Invest";
-import Footer from "@components/Footer";
+import Home from "./Home/Home";
+import About from "./About/About";
+import TokensList from "./TokensList";
+import Invest from "./Invest";
+import Footer from "./Footer";
 
 const Root = styled.div`
   display: flex;

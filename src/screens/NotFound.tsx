@@ -35,6 +35,7 @@ const Path = styled(Link)`
   color: #7075e9;
 
   margin-left: 32px;
+
   &:first-of-type {
     margin-left: 0;
   }
@@ -43,8 +44,10 @@ const NotFound: React.FC<IProps> = () => {
   return (
     <Root>
       <Img src={noPage} alt="noPage" />
-      <Text size="large">There is no such page</Text>
-      <Text type="secondary" size="medium">
+      <Text fitContent size="large">
+        There is no such page
+      </Text>
+      <Text fitContent type="secondary" size="medium">
         But there are many other useful pages
       </Text>
       <SizedBox height={32} />

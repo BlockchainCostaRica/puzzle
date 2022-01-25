@@ -14,11 +14,13 @@ import { MAINNET_POOL_ID } from "@src/constants/mainnetConfig";
 const Root = styled(Card)`
   display: flex;
   flex-direction: column;
+  max-width: 560px;
   @media (min-width: 560px) {
     align-items: center;
     flex-direction: row;
     padding: 22px 32px;
   }
+
   .button {
     width: 100%;
     margin-top: 12px;
@@ -45,7 +47,7 @@ const Details: React.FC = () => {
           <Text type="secondary" size="small">
             Total liquidity
           </Text>
-          <Text>$ {globalLiquidity}</Text>
+          <Text>$ {globalLiquidity.toFormat(2)}</Text>
         </Column>
         {id !== MAINNET_POOL_ID.puzzle && (
           <Column crossAxisSize="max">

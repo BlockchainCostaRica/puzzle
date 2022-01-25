@@ -9,6 +9,7 @@ import {
 import axios from "axios";
 import { action, makeAutoObservable } from "mobx";
 import BN from "@src/utils/BN";
+import tokenLogos from "@src/assets/tokens/tokenLogos";
 
 interface IData {
   key: string;
@@ -25,12 +26,22 @@ interface IPoolCreationParams {
 class Pool implements IPoolConfig {
   public readonly chainId: TChainId;
   public readonly contractAddress: string;
+  public readonly layer2Address?: string;
   public readonly baseTokenId: string;
   public readonly name: string;
   public readonly defaultAssetId0: string;
   public readonly defaultAssetId1: string;
   public readonly tokens: Array<IToken & { shareAmount: number }> = [];
   public readonly id: TPoolId;
+  private readonly _logo?: string;
+
+  public get logo() {
+    return this._logo ?? tokenLogos.UNKNOWN;
+  }
+
+  public get baseToken() {
+    return this.getAssetById(this.baseTokenId);
+  }
 
   public getAssetById = (assetId: string) =>
     this.tokens.find((t) => assetId === t.assetId);
@@ -39,9 +50,13 @@ class Pool implements IPoolConfig {
   @action.bound setGlobalVolume = (value: string) =>
     (this.globalVolume = value);
 
-  public globalLiquidity: string = "–";
-  @action.bound setGlobalLiquidity = (value: string) =>
+  public globalLiquidity: BN = BN.ZERO;
+  @action.bound setGlobalLiquidity = (value: BN) =>
     (this.globalLiquidity = value);
+
+  public globalPoolTokenAmount: BN = BN.ZERO;
+  @action.bound setGlobalPoolTokenAmount = (value: BN) =>
+    (this.globalPoolTokenAmount = value);
 
   public liquidity: Record<string, BN> = {};
   @action.bound private setLiquidity = (value: Record<string, BN>) =>
@@ -50,8 +65,10 @@ class Pool implements IPoolConfig {
   constructor(params: IPoolCreationParams) {
     this.id = params.id;
     this.contractAddress = params.config.contractAddress;
+    this.layer2Address = params.config.layer2Address;
     this.baseTokenId = params.config.baseTokenId;
     this.name = params.config.name;
+    this._logo = params.config.logo;
     this.tokens = params.config.tokens;
     this.defaultAssetId0 = params.config.defaultAssetId0;
     this.defaultAssetId1 = params.config.defaultAssetId1;
@@ -74,6 +91,13 @@ class Pool implements IPoolConfig {
     }, {});
     this.setLiquidity(balances);
 
+    const globalPoolTokenAmount = data.find(
+      (v) => v.key === "global_poolToken_amount"
+    );
+    if (globalPoolTokenAmount?.value != null) {
+      this.setGlobalPoolTokenAmount(new BN(globalPoolTokenAmount.value));
+    }
+
     // Math.floor(this.state.data.get("global_volume") / 1000000);
     const globalVolumeValue = data.find((v) => v.key === "global_volume");
     if (globalVolumeValue?.value != null) {
@@ -85,8 +109,7 @@ class Pool implements IPoolConfig {
     if (usdnLiquidity != null && usdnAsset.shareAmount != null) {
       const globalLiquidity = new BN(usdnLiquidity)
         .div(usdnAsset.shareAmount)
-        .div(1e6)
-        .toFormat(2);
+        .div(1e6);
       this.setGlobalLiquidity(globalLiquidity);
     }
   };
@@ -111,20 +134,53 @@ class Pool implements IPoolConfig {
     return topValue.div(bottomValue).times(coefficient);
   };
 
-  // updateTokens = async () => {
-  //   const staticAttributesUrl = `https://wavesducks.wavesnodes.com/addresses/data/${this.contractAddress}?matches=static_(.*)`;
-  //   const { data }: { data: IData[] } = await axios.get(staticAttributesUrl);
-  //   const tokens = data.reduce((acc, { key, value }) => {
-  //     const id = key.split("_")[1];
-  //     const attribute = key.split("_")[2];
-  //     const index = acc.findIndex((token) => token.id === id);
-  //     if (index === -1) {
-  //       // acc[index] =
-  //     } else {
-  //     }
-  //     return acc;
-  //   }, [] as Array<{ id: string; decimals: number; weight: number }>);
-  // };
+  @action.bound public getAccountLiquidityInfo = async (
+    address: string
+  ): Promise<{ liquidity: BN; percent: BN }> => {
+    const [address_indexStaked, global_indexStaked] = await Promise.all([
+      this.contractRequest(`${address}_indexStaked`),
+      this.contractRequest(`global_indexStaked`),
+    ]);
+
+    //poolLiquidity * ADDRESS_indexStaked / global_indexStaked
+    const addressIndexStaked =
+      address_indexStaked && address_indexStaked.length >= 1
+        ? new BN(address_indexStaked[0].value)
+        : BN.ZERO;
+
+    const globalIndexStaked =
+      global_indexStaked && global_indexStaked.length >= 1
+        ? new BN(global_indexStaked[0].value)
+        : BN.ZERO;
+
+    if (addressIndexStaked.eq(0)) {
+      return {
+        liquidity: BN.ZERO,
+        percent: BN.ZERO,
+      };
+    }
+    const liquidity = this.globalLiquidity
+      .times(addressIndexStaked)
+      .div(globalIndexStaked);
+    const percent = liquidity.times(new BN(100)).div(this.globalLiquidity);
+
+    return {
+      liquidity: liquidity,
+      percent: percent,
+    };
+  };
+
+  public contractRequest = async (match: string) => {
+    const url = `${NODE_URL_MAP[this.chainId]}/addresses/data/${
+      this.contractAddress
+    }?matches=${match}`;
+    const response: { data: IData[] } = await axios.get(url);
+    if (response.data) {
+      return response.data;
+    } else {
+      return null;
+    }
+  };
 }
 
 export default Pool;
