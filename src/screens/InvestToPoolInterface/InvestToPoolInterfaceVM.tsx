@@ -229,7 +229,7 @@ class InvestToPoolInterfaceVM {
       return;
     }
     return this.rootStore.accountStore.invoke({
-      dApp: this.pool.address,
+      dApp: this.pool.contractAddress,
       payment: [],
       call: {
         function: "claimIndexRewards",
