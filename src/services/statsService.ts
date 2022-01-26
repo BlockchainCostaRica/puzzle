@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-anonymous-default-export
 import axios from "axios";
 
 export interface IStatsPoolItemResponse {
@@ -21,7 +20,7 @@ type TStatsResponse = Record<string, IStatsPoolItemResponse>;
 
 const statsService = {
   getStats: async (): Promise<TStatsResponse> => {
-    const url = "https://puzzleback.herokuapp.com/stats/pools";
+    const url = "https://api.puzzleswap.org/stats/pools";
     const { data } = await axios.get(url);
     return data;
   },
@@ -30,7 +29,7 @@ const statsService = {
     poolId: string,
     period = "30d"
   ): Promise<IStatsByPoolAndPeriodResponse> => {
-    const url = `https://puzzleback.herokuapp.com/stats/${poolId}/${period}`;
+    const url = `https://api.puzzleswap.org/stats/${poolId}/${period}`;
     const { data } = await axios.get(url);
     return data;
   },
