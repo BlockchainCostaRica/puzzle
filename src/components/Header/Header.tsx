@@ -124,6 +124,7 @@ const Header: React.FC<IProps> = () => {
             <SizedBox width={54} />
             {menuItems.map(({ name, link }) => (
               <MenuItem
+                key={name}
                 selected={isRoutesEquals(link, location.pathname)}
                 to={link}
               >

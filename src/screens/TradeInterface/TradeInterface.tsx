@@ -19,6 +19,7 @@ import TooltipFeeInfo from "@screens/MultiSwapInterface/TooltipFeeInfo";
 import { ReactComponent as InfoIcon } from "@src/assets/icons/info.svg";
 import { ReactComponent as ShowMoreIcon } from "@src/assets/icons/showMore.svg";
 import RoutingModal from "@screens/TradeInterface/RoutingModal";
+import { errorMessage } from "@components/Notifications";
 
 const Root = styled.div`
   display: flex;
@@ -41,6 +42,13 @@ const TradeInterfaceImpl: React.FC = () => {
   const navigate = useNavigate();
 
   const handleSetAssetId0 = (assetId: string) => {
+    if (assetId === vm.assetId1) {
+      errorMessage({
+        message: "You can't choose same assets",
+        title: "Warning",
+      });
+      return;
+    }
     const urlSearchParams = new URLSearchParams(window.location.search);
     urlSearchParams.set("asset0", assetId);
     navigate({
@@ -51,6 +59,13 @@ const TradeInterfaceImpl: React.FC = () => {
   };
 
   const handleSetAssetId1 = (assetId: string) => {
+    if (assetId === vm.assetId0) {
+      errorMessage({
+        message: "You can't choose same assets",
+        title: "Warning",
+      });
+      return;
+    }
     const urlSearchParams = new URLSearchParams(window.location.search);
     urlSearchParams.set("asset1", assetId);
     navigate({
