@@ -1,23 +1,28 @@
 import styled from "@emotion/styled";
 import React from "react";
 import SizedBox from "@components/SizedBox";
+import { useTradeVM } from "@screens/TradeInterface/TradeVM";
+import Route from "@screens/TradeInterface/RoutingModal/Route";
 
 interface IProps {}
 
 const Root = styled.div<{
   template?: string;
 }>`
-  display: grid;
-  grid-template-columns: ${({ template }) => template ?? "6fr 2fr 1fr"};
+  display: flex;
+  flex-direction: column;
+  //grid-template-columns: ${({ template }) => template ?? "6fr 2fr 1fr"};
   width: 100%;
   overflow-y: scroll;
 `;
 
 const RoutingSchema: React.FC<IProps> = () => {
-  // const vm = useTradeVM();
+  const vm = useTradeVM();
   return (
     <Root>
-      <SizedBox width={1700} height={100} />
+      {vm.schemaValues?.map((i, index) => (
+        <Route {...i} key={index} />
+      ))}
     </Root>
   );
 };

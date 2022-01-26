@@ -2,34 +2,32 @@ import styled from "@emotion/styled";
 import React from "react";
 import SquareTokenIcon from "@components/SquareTokenIcon";
 import SizedBox from "@components/SizedBox";
+import { Column } from "@src/components/Flex";
+import { ReactComponent as Arrow } from "@src/assets/icons/blackRightArrow.svg";
+import FilledText from "@screens/TradeInterface/RoutingModal/FilledText";
 
 interface IProps {
-  assetId?: string;
+  imgSrc?: string;
   percent?: string;
 }
 
 const Root = styled.div`
   display: flex;
-  flex-direction: column;
-`;
-const Percent = styled.div`
-  font-weight: normal;
-  font-size: 12px;
-  line-height: 16px;
-  color: #363870;
-  background: #f1f2fe;
-  border-radius: 6px;
-  width: 40px;
-  height: 24px;
   align-items: center;
+  width: fit-content;
   justify-content: center;
+  flex-direction: row;
 `;
-const Token0Amount: React.FC<IProps> = ({ percent }) => {
+const Token0Amount: React.FC<IProps> = ({ percent, imgSrc }) => {
   return (
     <Root>
-      <SquareTokenIcon size="small" />
-      <SizedBox height={8} />
-      <Percent>{percent} %</Percent>
+      <Column>
+        <SquareTokenIcon size="small" alt="icon" src={imgSrc} />
+        <SizedBox height={8} />
+        <FilledText>{percent} %</FilledText>
+      </Column>
+      <SizedBox width={21} />
+      <Arrow style={{ fill: "black" }} />
     </Root>
   );
 };

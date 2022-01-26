@@ -16,6 +16,7 @@ export type TCalcRoute = {
 };
 
 export interface ICalcResponse {
+  aggregatedProfit: number;
   estimatedOut: number;
   priceImpact: number;
   parameters: string;
