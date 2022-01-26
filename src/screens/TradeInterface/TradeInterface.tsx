@@ -111,7 +111,6 @@ const TradeInterfaceImpl: React.FC = () => {
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     if (vm.amount0.eq(0)) return;
-                    if (vm.parsingSchema) return;
                     vm.setRoutingModalState(true);
                   }}
                 >

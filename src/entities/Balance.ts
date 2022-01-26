@@ -28,7 +28,7 @@ class Balance implements IAssetBalance {
   }
 
   get logo() {
-    return this._logo ?? (tokenLogos as any)[this.symbol] ?? tokenLogos.WAVES;
+    return this._logo ?? tokenLogos[this.symbol] ?? tokenLogos.UNKNOWN;
   }
 
   get formatBalance() {

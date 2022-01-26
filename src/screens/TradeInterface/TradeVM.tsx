@@ -56,10 +56,6 @@ class TradeVM {
   @action.bound private _setSynchronizing = (synchronizing: boolean) =>
     (this.synchronizing = synchronizing);
 
-  parsingSchema: boolean = false;
-  @action.bound private _setParsingSchema = (v: boolean) =>
-    (this.parsingSchema = v);
-
   priceImpact: BN = BN.ZERO;
   @action.bound private _setPriceImpact = (priceImpact: BN) =>
     (this.priceImpact = priceImpact);
@@ -249,15 +245,14 @@ class TradeVM {
     ) {
       return null;
     }
-    this._setParsingSchema(true);
-    const v = this.route.reduce<Array<ISchemaRoute>>((acc, v) => {
+    return this.route.reduce<Array<ISchemaRoute>>((acc, v) => {
       const { accountStore } = this.rootStore;
       const exchanges = v.exchanges.reduce<Array<ISchemaExchange>>((ac, v) => {
         const token0 = accountStore.findBalanceByAssetId(v.from);
         const token1 = accountStore.findBalanceByAssetId(v.to);
 
-        const top = new BN(v.amountOut).div(token1?.decimals ?? new BN(1));
-        const bottom = new BN(v.amountIn).div(token0?.decimals ?? new BN(1));
+        const top = BN.formatUnits(v.amountOut, token1?.decimals);
+        const bottom = BN.formatUnits(v.amountIn, token0?.decimals);
         const rate = top.div(bottom);
 
         const type = v.type;
@@ -268,8 +263,6 @@ class TradeVM {
         : new BN(v.in).times(new BN(100)).div(this.amount0);
       return [...acc, { percent: percent, exchanges }];
     }, []);
-    this._setParsingSchema(false);
-    return v;
   }
 }
 
