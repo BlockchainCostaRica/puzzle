@@ -6,6 +6,7 @@ import Balance from "@src/entities/Balance";
 import BN from "@src/utils/BN";
 import aggregatorService, { TCalcRoute } from "@src/services/aggregatorService";
 import { TRADE_FEE } from "@src/constants";
+import { errorMessage } from "@components/Notifications";
 
 const ctx = React.createContext<TradeVM | null>(null);
 
@@ -44,8 +45,12 @@ class TradeVM {
     );
     this._setPrice(!price.isNaN() ? price : BN.ZERO);
   }
+  parameters: string | null = null;
+  @action.bound private _setParameters = (parameters: string | null) =>
+    (this.parameters = parameters);
+
   synchronizing: boolean = false;
-  @action.bound setSynchronizing = (synchronizing: boolean) =>
+  @action.bound private _setSynchronizing = (synchronizing: boolean) =>
     (this.synchronizing = synchronizing);
 
   priceImpact: BN = BN.ZERO;
@@ -65,6 +70,13 @@ class TradeVM {
   amount0: BN = BN.ZERO;
   @action.bound setAmount0 = (amount: BN) => (this.amount0 = amount);
 
+  get amount0MaxClickFunc(): (() => void) | undefined {
+    const { token0, balance0 } = this;
+    return token0 != null && balance0 != null
+      ? () => this.setAmount0(balance0)
+      : undefined;
+  }
+
   amount1: BN = BN.ZERO;
   @action.bound private _setAmount1 = (amount: BN) => (this.amount1 = amount);
 
@@ -72,19 +84,21 @@ class TradeVM {
   @action.bound setRoutingModalState = (state: boolean) =>
     (this.routingModalOpened = state);
 
+  //todo cun out kludge with invalidAmount
   @action.bound private _syncAmount1 = () => {
     const { amount0, assetId0, assetId1 } = this;
     const invalidAmount = amount0 == null || amount0.isNaN() || amount0.lte(0);
     if (amount0 != null && amount0.eq(0)) {
       this._setAmount1(BN.ZERO);
     }
-    this.setSynchronizing(true);
+    this._setSynchronizing(true);
     const defaultAmount0 = BN.parseUnits(1, this.token0.decimals);
     aggregatorService
       .calc(assetId0, assetId1, invalidAmount ? defaultAmount0 : amount0)
-      .then(({ estimatedOut, priceImpact, routes }) => {
+      .then(({ estimatedOut, priceImpact, routes, parameters }) => {
         !invalidAmount && this._setAmount1(new BN(estimatedOut));
         !invalidAmount && this._setPriceImpact(new BN(priceImpact).times(100));
+        this._setParameters(!invalidAmount ? parameters : null);
         this._setRoute(routes);
         this._calculatePrice(
           invalidAmount ? defaultAmount0 : amount0,
@@ -96,8 +110,9 @@ class TradeVM {
         this._setPriceImpact(BN.ZERO);
         this._setRoute([]);
         this._setPrice(BN.ZERO);
+        this._setParameters(null);
       })
-      .finally(() => this.setSynchronizing(false));
+      .finally(() => this._setSynchronizing(false));
   };
 
   get token0() {
@@ -169,10 +184,39 @@ class TradeVM {
   };
 
   swap = async () => {
-    return this.rootStore.accountStore.invoke({
-      dApp: "",
-      payment: [],
-      call: { function: "swap", args: [] },
+    const { accountStore } = this.rootStore;
+    const { token0, amount0, minimumToReceive, parameters } = this;
+    if (this.synchronizing || parameters == null) {
+      errorMessage({ message: "Something wrong" });
+      return;
+    }
+    if (token0 == null || amount0.eq(0)) {
+      errorMessage({ message: "Something wrong with first asset" });
+      return;
+    }
+
+    if (minimumToReceive == null) {
+      errorMessage({ message: "Something wrong with second asset" });
+      return;
+    }
+    return accountStore.invoke({
+      dApp: "3PGFHzVGT4NTigwCKP1NcwoXkodVZwvBuuU", //todo move contract to constants
+      payment: [
+        {
+          assetId: token0.assetId,
+          amount: amount0.toString(),
+        },
+      ],
+      call: {
+        function: "swap",
+        args: [
+          { type: "string", value: parameters },
+          {
+            type: "integer",
+            value: minimumToReceive.toFixed(0).toString(),
+          },
+        ],
+      },
     });
   };
 }

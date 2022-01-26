@@ -88,6 +88,7 @@ const TradeInterfaceImpl: React.FC = () => {
                 assetId={vm.assetId0}
                 setAssetId={handleSetAssetId0}
                 balances={vm.balances}
+                onMaxClick={vm.amount0MaxClickFunc}
                 selectable
               />
               <SwitchTokensButton />

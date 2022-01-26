@@ -254,8 +254,12 @@ class AccountStore {
     const tx = await window.WavesKeeper.signAndPublishTransaction({
       type: 16,
       data,
-    } as any).catch(({ data: message }: any) => {
-      errorMessage({ title: "Transaction is not completed", message });
+    } as any).catch((error: any) => {
+      console.error({ error, data });
+      errorMessage({
+        title: "Transaction is not completed",
+        message: error.data,
+      });
       return null;
     });
     if (tx === null) return null;
