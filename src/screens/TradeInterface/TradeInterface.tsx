@@ -109,6 +109,7 @@ const TradeInterfaceImpl: React.FC = () => {
                   mainAxisSize="fit-content"
                   justifyContent="flex-end"
                   style={{ cursor: "pointer" }}
+                  onClick={() => vm.setRoutingModalState(true)}
                 >
                   {vm.simpleRoute != null
                     ? vm.simpleRoute.map((symbol, i) => (
@@ -121,10 +122,7 @@ const TradeInterfaceImpl: React.FC = () => {
                       ))
                     : "—"}
                   &nbsp;
-                  <ShowMoreIcon
-                    style={{ minWidth: 16, cursor: "pointer" }}
-                    onClick={() => vm.setRoutingModalState(true)}
-                  />
+                  <ShowMoreIcon style={{ minWidth: 16, cursor: "pointer" }} />
                 </Row>
               </SwapDetailRow>
               <Divider />

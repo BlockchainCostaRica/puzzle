@@ -1,12 +1,13 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { HTMLAttributes } from "react";
 import Token0Amount from "@screens/TradeInterface/RoutingModal/Token0Amount";
 import { ISchemaRoute } from "@screens/TradeInterface/TradeVM";
 import Asset from "./Asset";
 import { ReactComponent as Arrow } from "@src/assets/icons/blackRightArrow.svg";
 
-interface IProps extends ISchemaRoute {
+interface IProps extends ISchemaRoute, HTMLAttributes<HTMLDivElement> {
   token0Logo: string;
+  singleRoute?: boolean;
 }
 
 const Root = styled.div`
@@ -15,14 +16,24 @@ const Root = styled.div`
   padding: 12px 0;
 `;
 
-const Route: React.FC<IProps> = ({ percent, token0Logo, exchanges }) => {
+const Route: React.FC<IProps> = ({
+  percent,
+  token0Logo,
+  exchanges,
+  singleRoute,
+}) => {
   const per = percent.isInteger() ? percent.toFormat(0) : percent.toFormat(2);
   return (
     <Root>
       <Token0Amount percent={per} imgSrc={token0Logo} />
       {exchanges.map((item, index, array) => (
         <>
-          <Asset {...item} key={index} singleAsset={array.length === 1} />
+          <Asset
+            {...item}
+            key={index}
+            singleAsset={array.length === 1}
+            singleRoute={singleRoute}
+          />
           {array.length - 1 !== index && (
             <div style={{ position: "relative" }}>
               <Arrow

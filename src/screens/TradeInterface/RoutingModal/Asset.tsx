@@ -9,9 +9,10 @@ import RoundTokenIcon from "@components/RoundTokenIcon";
 
 interface IProps extends ISchemaExchange, HTMLAttributes<HTMLDivElement> {
   singleAsset?: boolean;
+  singleRoute?: boolean;
 }
 
-const Root = styled.div<{ singleAsset?: boolean }>`
+const Root = styled.div<{ singleAsset?: boolean; singleRoute?: boolean }>`
   display: flex;
   flex-direction: column;
   border: 1px solid #f1f2fe;
@@ -19,8 +20,8 @@ const Root = styled.div<{ singleAsset?: boolean }>`
   border-radius: 12px;
   padding: 16px;
   margin: 0 24px;
-  //min-width: 245px;
-  width: ${({ singleAsset }) => (singleAsset ? "100%" : "245%")};
+  width: 100%;
+  ${({ singleAsset }) => (singleAsset ? "" : "max-width: 245px")};
 `;
 
 const Asset: React.FC<IProps> = ({
@@ -29,21 +30,11 @@ const Asset: React.FC<IProps> = ({
   token1,
   type,
   singleAsset,
+  singleRoute,
   ...rest
 }) => {
-  const formatType = (type: string) => {
-    switch (type) {
-      case "swopfi":
-        return "Swop.fi";
-      case "waves":
-        return "Waves";
-      case "puzzle":
-        return "Puzzle";
-    }
-  };
-  const newType = formatType(type);
   return (
-    <Root {...rest} singleAsset={singleAsset}>
+    <Root {...rest} singleAsset={singleAsset} singleRoute={singleRoute}>
       <Row alignItems="center">
         <RoundTokenIcon alt="icon" src={token0?.logo} />
         <SizedBox width={8} />
@@ -52,7 +43,7 @@ const Asset: React.FC<IProps> = ({
       <SizedBox height={8} />
       <FilledText justifyContent="start">
         1 {token0?.symbol} = {rate.toFormat(2)} {token1?.symbol} &nbsp;
-        <b>{newType}</b>
+        <b>{type}</b>
       </FilledText>
     </Root>
   );

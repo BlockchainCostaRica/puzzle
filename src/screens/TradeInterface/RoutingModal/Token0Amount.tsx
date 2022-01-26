@@ -28,7 +28,7 @@ const Token0Amount: React.FC<IProps> = ({ percent, imgSrc }) => {
           src={imgSrc ?? tokenLogos.UNKNOWN}
         />
         <SizedBox height={8} />
-        <FilledText>{percent} %</FilledText>
+        <FilledText style={{ width: 60 }}>{percent} %</FilledText>
       </Column>
       <SizedBox width={21} />
       <Arrow style={{ fill: "black" }} />

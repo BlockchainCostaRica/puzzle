@@ -8,9 +8,7 @@ import SizedBox from "@components/SizedBox";
 
 interface IProps {}
 
-const Root = styled.div<{
-  template?: string;
-}>`
+const Root = styled.div`
   display: flex;
   align-items: center;
   overflow: scroll;
@@ -18,6 +16,7 @@ const Root = styled.div<{
 const RoutesContainer = styled.div`
   display: flex;
   flex-direction: column;
+  flex: 1;
 `;
 const RoutingSchema: React.FC<IProps> = () => {
   const vm = useTradeVM();
@@ -26,7 +25,12 @@ const RoutingSchema: React.FC<IProps> = () => {
     <Root>
       <RoutesContainer>
         {values?.map((i, index) => (
-          <Route {...i} key={index} token0Logo={vm.token0.logo} />
+          <Route
+            {...i}
+            key={index}
+            token0Logo={vm.token0.logo}
+            singleRoute={values?.length === 1}
+          />
         ))}
       </RoutesContainer>
       {values?.length !== 1 && <SizedBox width={12} />}

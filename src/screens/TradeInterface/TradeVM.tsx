@@ -252,14 +252,16 @@ class TradeVM {
         const token0 = accountStore.findBalanceByAssetId(v.from);
         const token1 = accountStore.findBalanceByAssetId(v.to);
 
-        const top = new BN(v.amountOut).div(token1?.decimals ?? BN.ZERO);
-        const bottom = new BN(v.amountIn).div(token0?.decimals ?? BN.ZERO);
+        const top = new BN(v.amountOut).div(token1?.decimals ?? new BN(1));
+        const bottom = new BN(v.amountIn).div(token0?.decimals ?? new BN(1));
         const rate = top.div(bottom);
 
         const type = v.type;
         return [...ac, { rate, token0, token1, type }];
       }, []);
-      const percent = new BN(v.in).times(new BN(100)).div(this.amount0);
+      const percent = this.amount0.eq(0)
+        ? new BN(100)
+        : new BN(v.in).times(new BN(100)).div(this.amount0);
       return [...acc, { percent: percent, exchanges }];
     }, []);
   }

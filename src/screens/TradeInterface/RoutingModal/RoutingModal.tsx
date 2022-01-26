@@ -5,7 +5,6 @@ import styled from "@emotion/styled";
 import { useTradeVM } from "@screens/TradeInterface/TradeVM";
 import RoutingSchema from "@screens/TradeInterface/RoutingModal/RoutingSchema";
 import SizedBox from "@components/SizedBox";
-import BN from "@src/utils/BN";
 
 interface IProps {
   onClose: () => void;
@@ -20,10 +19,9 @@ const Title = styled(Text)`
 `;
 const RoutingModal: React.FC<IProps> = ({ ...rest }) => {
   const vm = useTradeVM();
-  const { token0, token1 } = vm;
-  //todo спросить Вову что тут не так
-  // const profit = aggregatedProfit.div(token1.decimals).toFormat(2);
-  const profit = BN.ZERO.toFormat(2);
+  const { token0, token1, aggregatedProfit } = vm;
+  //todo
+  const profit = aggregatedProfit.div(token1.decimals).toFormat(2);
   return (
     <Dialog style={{ maxWidth: 760, maxHeight: 496 }} title="Routing" {...rest}>
       <Title type="secondary">
