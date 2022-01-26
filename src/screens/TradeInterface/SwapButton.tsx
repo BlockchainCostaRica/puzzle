@@ -18,7 +18,12 @@ const SwapButton: React.FC<IProps> = () => {
           Connect wallet
         </Button>
       );
-
+    case synchronizing:
+      return (
+        <Button disabled fixed>
+          Please wait <Loading />
+        </Button>
+      );
     case amount0 == null || amount1 == null || amount0.eq(0):
       return (
         <Button disabled fixed>
@@ -31,18 +36,12 @@ const SwapButton: React.FC<IProps> = () => {
           Insufficient {`${token0?.name ?? ""} `}balance
         </Button>
       );
-    case synchronizing:
+    case vm.priceImpact && vm.priceImpact.eq(100):
       return (
         <Button disabled fixed>
-          Please wait <Loading />
+          Price impact too high
         </Button>
       );
-    // case vm.priceImpact && vm.priceImpact.eq(100):
-    //   return (
-    //     <Button disabled fixed>
-    //       Price impact too high
-    //     </Button>
-    //   );
     case amount0 != null && amount1 != null && !synchronizing:
       return (
         <Button onClick={vm.swap} fixed>

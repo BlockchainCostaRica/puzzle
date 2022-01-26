@@ -5,6 +5,7 @@ import SizedBox from "@components/SizedBox";
 import Text from "@components/Text";
 import { useTradeVM } from "@screens/TradeInterface/TradeVM";
 import { useNavigate } from "react-router-dom";
+import { Loading } from "@components/Loading";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -45,8 +46,13 @@ const SwitchTokensButton: React.FC<IProps> = ({ ...rest }) => {
       />
       <SizedBox width={8} />
       <Text>
-        1 {vm.token0?.symbol} = ~ {vm.price?.toFormat(4) ?? "—"}{" "}
-        {vm.token1?.symbol}
+        {!vm.synchronizing ? (
+          `1 ${vm.token0?.symbol} = ~ ${vm.price?.toFormat(4) ?? "—"} ${
+            vm.token1?.symbol
+          }`
+        ) : (
+          <Loading />
+        )}
       </Text>
 
       <SizedBox width={16} />

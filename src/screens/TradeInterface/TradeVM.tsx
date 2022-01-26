@@ -35,11 +35,14 @@ class TradeVM {
 
   price: BN = BN.ZERO;
   @action.bound private _setPrice = (price: BN) => (this.price = price);
-  calculatePrice(): BN | null {
-    const price = BN.formatUnits(this.amount1, this.token1.decimals).div(
-      BN.formatUnits(this.amount0, this.token0.decimals)
+  @action.bound private _calculatePrice(
+    amount0: BN = this.amount0,
+    amount1: BN = this.amount1
+  ) {
+    const price = BN.formatUnits(amount1, this.token1.decimals).div(
+      BN.formatUnits(amount0, this.token0.decimals)
     );
-    return !price.isNaN() ? price : null;
+    this._setPrice(!price.isNaN() ? price : BN.ZERO);
   }
   synchronizing: boolean = false;
   @action.bound setSynchronizing = (synchronizing: boolean) =>
@@ -71,23 +74,28 @@ class TradeVM {
 
   @action.bound private _syncAmount1 = () => {
     const { amount0, assetId0, assetId1 } = this;
-    const invalidAmount = amount0 == null || amount0.isNaN || amount0.lte(0);
+    const invalidAmount = amount0 == null || amount0.isNaN() || amount0.lte(0);
+    if (amount0 != null && amount0.eq(0)) {
+      this._setAmount1(BN.ZERO);
+    }
     this.setSynchronizing(true);
+    const defaultAmount0 = BN.parseUnits(1, this.token0.decimals);
     aggregatorService
-      .calc(
-        assetId0,
-        assetId1,
-        invalidAmount ? BN.parseUnits(1, this.token0.decimals) : amount0
-      )
+      .calc(assetId0, assetId1, invalidAmount ? defaultAmount0 : amount0)
       .then(({ estimatedOut, priceImpact, routes }) => {
         !invalidAmount && this._setAmount1(new BN(estimatedOut));
         !invalidAmount && this._setPriceImpact(new BN(priceImpact).times(100));
         this._setRoute(routes);
+        this._calculatePrice(
+          invalidAmount ? defaultAmount0 : amount0,
+          new BN(estimatedOut)
+        );
       })
       .catch(() => {
         this._setAmount1(BN.ZERO);
         this._setPriceImpact(BN.ZERO);
         this._setRoute([]);
+        this._setPrice(BN.ZERO);
       })
       .finally(() => this.setSynchronizing(false));
   };
