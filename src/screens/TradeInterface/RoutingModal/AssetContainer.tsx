@@ -1,15 +1,14 @@
 import styled from "@emotion/styled";
 import React from "react";
-import SquareTokenIcon from "@components/SquareTokenIcon";
 import FilledText from "@screens/TradeInterface/RoutingModal/FilledText";
-import { Row } from "reactstrap";
 import Text from "@components/Text";
+import { ISchemaExchange } from "@screens/TradeInterface/TradeVM";
+import tokenLogos from "@src/assets/tokens/tokenLogos";
+import SizedBox from "@components/SizedBox";
+import { Row } from "src/components/Flex";
+import RoundTokenIcon from "@components/RoundTokenIcon";
 
-interface IProps {
-  tokenLogo: string;
-  tokenSymbol: string;
-  changeService: string;
-}
+interface IProps extends ISchemaExchange {}
 
 const Root = styled.div`
   display: flex;
@@ -17,20 +16,28 @@ const Root = styled.div`
   border: 1px solid #f1f2fe;
   box-sizing: border-box;
   border-radius: 12px;
+  padding: 16px;
 `;
 
 const AssetContainer: React.FC<IProps> = ({
-  tokenLogo,
-  tokenSymbol,
-  changeService,
+  amount0,
+  amount1,
+  token0,
+  token1,
+  type,
 }) => {
+  console.log(token0?.logo);
   return (
     <Root>
-      <Row>
-        <SquareTokenIcon src={tokenLogo} alt="icon" />
-        <Text>{tokenSymbol.toUpperCase()}</Text>
+      <Row alignItems="center">
+        <RoundTokenIcon alt="icon" src={token0?.logo} />
+        <SizedBox width={8} />
+        <Text>{token0?.symbol}</Text>
       </Row>
-      <FilledText>1 USDN = 0.057 WAVES {changeService}</FilledText>
+      <SizedBox width={8} />
+      <FilledText>
+        1 {token0?.symbol} = 0.057 {token1?.symbol} {type}
+      </FilledText>
     </Root>
   );
 };

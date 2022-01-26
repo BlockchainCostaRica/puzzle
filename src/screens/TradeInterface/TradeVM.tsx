@@ -5,7 +5,7 @@ import { RootStore, useStores } from "@stores";
 import Balance from "@src/entities/Balance";
 import BN from "@src/utils/BN";
 import aggregatorService, { TCalcRoute } from "@src/services/aggregatorService";
-import {  TRADE_FEE } from "@src/constants";
+import { IToken, TRADE_FEE } from "@src/constants";
 import { errorMessage } from "@components/Notifications";
 
 const ctx = React.createContext<TradeVM | null>(null);
@@ -47,10 +47,10 @@ class TradeVM {
     );
     this._setPrice(!price.isNaN() ? price : BN.ZERO);
   }
+
   parameters: string | null = null;
   @action.bound private _setParameters = (parameters: string | null) =>
     (this.parameters = parameters);
-
 
   synchronizing: boolean = false;
   @action.bound private _setSynchronizing = (synchronizing: boolean) =>
@@ -102,17 +102,26 @@ class TradeVM {
     const defaultAmount0 = BN.parseUnits(1, this.token0.decimals);
     aggregatorService
       .calc(assetId0, assetId1, invalidAmount ? defaultAmount0 : amount0)
-      .then(({ estimatedOut, priceImpact, routes, parameters, aggregatedProfit }) => {
-        !invalidAmount && this._setAmount1(new BN(estimatedOut));
-        !invalidAmount && this._setPriceImpact(new BN(priceImpact).times(100));
-        this._setParameters(!invalidAmount ? parameters : null);
-        this._setRoute(routes);
-        this._setAggregatedProfit(new BN(aggregatedProfit));
-        this._calculatePrice(
-          invalidAmount ? defaultAmount0 : amount0,
-          new BN(estimatedOut)
-        );
-      })
+      .then(
+        ({
+          estimatedOut,
+          priceImpact,
+          routes,
+          parameters,
+          aggregatedProfit,
+        }) => {
+          !invalidAmount && this._setAmount1(new BN(estimatedOut));
+          !invalidAmount &&
+            this._setPriceImpact(new BN(priceImpact).times(100));
+          this._setParameters(!invalidAmount ? parameters : null);
+          this._setRoute(routes);
+          this._setAggregatedProfit(new BN(aggregatedProfit));
+          this._calculatePrice(
+            invalidAmount ? defaultAmount0 : amount0,
+            new BN(estimatedOut)
+          );
+        }
+      )
       .catch(() => {
         this._setAmount1(BN.ZERO);
         this._setPriceImpact(BN.ZERO);
@@ -237,27 +246,33 @@ class TradeVM {
       return null;
     }
 
-    return this.route.reduce<Array<TRoute>>((acc, v) => {
+    return this.route.reduce<Array<ISchemaRoute>>((acc, v) => {
       //todo calculate in percents
       // const inTokenImg = accountStore.findBalanceByAssetId();
 
       const { accountStore } = this.rootStore;
-      const exchanges = v.exchanges.reduce<Array<TExchange>>((ac, v) => {
-        return [...ac, { tokenOutSrc: "" }];
+      const exchanges = v.exchanges.reduce<Array<ISchemaExchange>>((ac, v) => {
+        const amount0 = new BN(v.amountIn);
+        const amount1 = new BN(v.amountOut);
+        const token0 = accountStore.findBalanceByAssetId(v.from);
+        const token1 = accountStore.findBalanceByAssetId(v.to);
+        const type = v.type;
+        return [...ac, { amount0, amount1, token0, token1, type }];
       }, []);
-      return [
-        ...acc,
-        { percent: "50", exchanges, token0Img: this.token0.logo },
-      ];
+      return [...acc, { percent: "50", exchanges }];
     }, []);
   }
 }
 
-type TRoute = {
-  token0Img: string;
+export interface ISchemaRoute {
   percent: string;
-  exchanges: TExchange[];
-};
-type TExchange = {
-  tokenOutSrc: string;
-};
+  exchanges: ISchemaExchange[];
+}
+
+export interface ISchemaExchange {
+  amount0: BN;
+  amount1: BN;
+  token0?: Balance;
+  token1?: Balance;
+  type: string;
+}

@@ -5,6 +5,7 @@ import SizedBox from "@components/SizedBox";
 import { Column } from "@src/components/Flex";
 import { ReactComponent as Arrow } from "@src/assets/icons/blackRightArrow.svg";
 import FilledText from "@screens/TradeInterface/RoutingModal/FilledText";
+import tokenLogos from "@src/assets/tokens/tokenLogos";
 
 interface IProps {
   imgSrc?: string;
@@ -22,7 +23,11 @@ const Token0Amount: React.FC<IProps> = ({ percent, imgSrc }) => {
   return (
     <Root>
       <Column>
-        <SquareTokenIcon size="small" alt="icon" src={imgSrc} />
+        <SquareTokenIcon
+          size="small"
+          alt="icon"
+          src={imgSrc ?? tokenLogos.UNKNOWN}
+        />
         <SizedBox height={8} />
         <FilledText>{percent} %</FilledText>
       </Column>

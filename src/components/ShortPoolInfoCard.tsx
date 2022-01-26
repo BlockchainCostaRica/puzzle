@@ -5,8 +5,7 @@ import SizedBox from "@components/SizedBox";
 import Card from "@components/Card";
 import { observer } from "mobx-react-lite";
 import Button from "@components/Button";
-import { Row } from "reactstrap";
-import { Column } from "@components/Flex";
+import { Column, Row } from "@components/Flex";
 import SquareTokenIcon from "@components/SquareTokenIcon";
 import { Link } from "react-router-dom";
 
@@ -22,10 +21,6 @@ const Root = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-
-  img {
-    margin-left: 10px;
-  }
 
   .cardTitle {
     white-space: nowrap;
@@ -43,7 +38,6 @@ const Root = styled.div`
     width: fit-content;
     font-size: 12px;
     line-height: 16px;
-    //@media (min-width: 880px) {
     @media (min-width: calc(560px + 32px)) {
       font-size: 14px;
       line-height: 20px;
@@ -55,7 +49,7 @@ const Root = styled.div`
     }
   }
 `;
-
+//todo fix btn size!
 const DepositToPool: React.FC<IProps> = ({
   title,
   poolName,
@@ -77,6 +71,7 @@ const DepositToPool: React.FC<IProps> = ({
       >
         <Row style={{ alignItems: "center" }}>
           <SquareTokenIcon src={poolLogo} alt="logo" />
+          <SizedBox width={8} />
           <Column style={{ height: "100%" }}>
             <Text className="cardTitle" weight={500}>
               {poolName}
