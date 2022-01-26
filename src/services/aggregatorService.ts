@@ -31,6 +31,7 @@ const aggregatorService = {
   ): Promise<ICalcResponse> => {
     const url = `https://api.puzzleswap.org//aggregator/calc?token0=${assetId0}&token1=${assetId1}&amountIn=${amount.toString()}`;
     const { data } = await axios.get(url);
+    console.log(url);
     return data;
   },
 };

@@ -1,8 +1,10 @@
 import styled from "@emotion/styled";
 import React from "react";
-import SizedBox from "@components/SizedBox";
 import { useTradeVM } from "@screens/TradeInterface/TradeVM";
 import Route from "@screens/TradeInterface/RoutingModal/Route";
+import { ReactComponent as Arrow } from "@src/assets/icons/blackRightArrow.svg";
+import SquareTokenIcon from "@components/SquareTokenIcon";
+import SizedBox from "@components/SizedBox";
 
 interface IProps {}
 
@@ -10,21 +12,35 @@ const Root = styled.div<{
   template?: string;
 }>`
   display: flex;
-  flex-direction: column;
-  //grid-template-columns: ${({ template }) => template ?? "6fr 2fr 1fr"};
-  //width: 100%;
-  overflow-y: scroll;
+  align-items: center;
+  overflow: scroll;
 `;
-
+const RoutesContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 const RoutingSchema: React.FC<IProps> = () => {
   const vm = useTradeVM();
-  const v = vm.schemaValues && vm.schemaValues[0];
+  const values = vm.schemaValues;
   return (
     <Root>
-      {/*{vm.schemaValues?.map((i, index) => (*/}
-      {/*  <Route {...i} key={index} />*/}
-      {/*))}*/}
-      {v && <Route {...v} token0Logo={vm.token0.logo} />}
+      <RoutesContainer>
+        {values?.map((i, index) => (
+          <Route {...i} key={index} token0Logo={vm.token0.logo} />
+        ))}
+      </RoutesContainer>
+      {values?.length !== 1 && <SizedBox width={12} />}
+      <Arrow />
+      <SizedBox width={12} />
+      <div style={{ position: "relative" }}>
+        {values?.length !== 1 && (
+          <Arrow
+            height="100%"
+            style={{ position: "absolute", left: "-32px" }}
+          />
+        )}
+        <SquareTokenIcon src={vm.token1.logo} />
+      </div>
     </Root>
   );
 };

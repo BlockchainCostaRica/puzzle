@@ -5,7 +5,7 @@ import { RootStore, useStores } from "@stores";
 import Balance from "@src/entities/Balance";
 import BN from "@src/utils/BN";
 import aggregatorService, { TCalcRoute } from "@src/services/aggregatorService";
-import { IToken, TRADE_FEE } from "@src/constants";
+import { TRADE_FEE } from "@src/constants";
 import { errorMessage } from "@components/Notifications";
 
 const ctx = React.createContext<TradeVM | null>(null);
@@ -247,31 +247,33 @@ class TradeVM {
     }
 
     return this.route.reduce<Array<ISchemaRoute>>((acc, v) => {
-      //todo calculate in percents
-      // const inTokenImg = accountStore.findBalanceByAssetId();
-
       const { accountStore } = this.rootStore;
       const exchanges = v.exchanges.reduce<Array<ISchemaExchange>>((ac, v) => {
-        const amount0 = new BN(v.amountIn);
-        const amount1 = new BN(v.amountOut);
         const token0 = accountStore.findBalanceByAssetId(v.from);
         const token1 = accountStore.findBalanceByAssetId(v.to);
+
+        const top = new BN(v.amountOut).div(token1?.decimals ?? BN.ZERO);
+        const bottom = new BN(v.amountIn).div(token0?.decimals ?? BN.ZERO);
+        const rate = top.div(bottom);
+
         const type = v.type;
-        return [...ac, { amount0, amount1, token0, token1, type }];
+        return [...ac, { rate, token0, token1, type }];
       }, []);
-      return [...acc, { percent: "50", exchanges }];
+      const percent = new BN(v.in).times(new BN(100)).div(this.amount0);
+      return [...acc, { percent: percent, exchanges }];
     }, []);
   }
 }
 
 export interface ISchemaRoute {
-  percent: string;
+  percent: BN;
   exchanges: ISchemaExchange[];
 }
 
 export interface ISchemaExchange {
-  amount0: BN;
-  amount1: BN;
+  rate: BN;
+  // amount0: BN;
+  // amount1: BN;
   token0?: Balance;
   token1?: Balance;
   type: string;

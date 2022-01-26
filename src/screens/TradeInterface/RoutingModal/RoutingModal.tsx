@@ -25,7 +25,7 @@ const RoutingModal: React.FC<IProps> = ({ ...rest }) => {
   // const profit = aggregatedProfit.div(token1.decimals).toFormat(2);
   const profit = BN.ZERO.toFormat(2);
   return (
-    <Dialog style={{ maxWidth: 720 }} title="Routing" {...rest}>
+    <Dialog style={{ maxWidth: 760, maxHeight: 496 }} title="Routing" {...rest}>
       <Title type="secondary">
         Algorithms find the most profitable routes of exchange for you. With the
         selected path you will get by{" "}

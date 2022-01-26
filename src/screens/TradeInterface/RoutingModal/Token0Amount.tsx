@@ -16,13 +16,12 @@ const Root = styled.div`
   display: flex;
   align-items: center;
   width: fit-content;
-  justify-content: center;
   flex-direction: row;
 `;
 const Token0Amount: React.FC<IProps> = ({ percent, imgSrc }) => {
   return (
     <Root>
-      <Column>
+      <Column justifyContent="center" alignItems="center">
         <SquareTokenIcon
           size="small"
           alt="icon"
