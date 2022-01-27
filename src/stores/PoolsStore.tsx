@@ -39,6 +39,13 @@ export default class PoolsStore {
     );
   }
 
+  get globalVolume(): BN {
+    return this.pools.reduce(
+      (acc, pool) => acc.plus(pool.globalVolume ?? BN.ZERO),
+      BN.ZERO
+    );
+  }
+
   usdnRate = (assetId: string, coefficient = 0.98): BN | null => {
     const pool = this.pools.find(({ tokens }) =>
       tokens.some((t) => t.assetId === assetId)

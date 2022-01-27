@@ -47,7 +47,7 @@ const SwitchTokensButton: React.FC<IProps> = ({ ...rest }) => {
       <SizedBox width={8} />
       <Text>
         {!vm.synchronizing ? (
-          `1 ${vm.token0?.symbol} = ~ ${vm.price?.toFormat(4) ?? "—"} ${
+          `1 ${vm.token0?.symbol} = ~ ${vm.price?.toFormat(8) ?? "—"} ${
             vm.token1?.symbol
           }`
         ) : (

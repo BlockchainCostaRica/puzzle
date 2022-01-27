@@ -20,6 +20,7 @@ import { ReactComponent as InfoIcon } from "@src/assets/icons/info.svg";
 import { ReactComponent as ShowMoreIcon } from "@src/assets/icons/showMore.svg";
 import RoutingModal from "@screens/TradeInterface/RoutingModal";
 import { errorMessage } from "@components/Notifications";
+import Details from "./Details";
 
 const Root = styled.div`
   display: flex;
@@ -146,6 +147,8 @@ const TradeInterfaceImpl: React.FC = () => {
                 </Row>
               </SwapDetailRow>
             </Card>
+            <SizedBox height={16} />
+            <Details />
             <RoutingModal
               visible={vm.routingModalOpened}
               onClose={() => vm.setRoutingModalState(false)}

@@ -30,8 +30,9 @@ class TradeVM {
     this._syncAmount1();
     reaction(
       () => [this.assetId0, this.assetId1, this.amount0],
-      this._syncAmount1
+      () => this._syncAmount1()
     );
+    setInterval(() => this._syncAmount1(true), 15 * 1000);
   }
 
   price: BN = BN.ZERO;
@@ -92,13 +93,13 @@ class TradeVM {
     (this.routingModalOpened = state);
 
   //todo cun out kludge with invalidAmount
-  @action.bound private _syncAmount1 = () => {
+  @action.bound private _syncAmount1 = (quiet = false) => {
     const { amount0, assetId0, assetId1 } = this;
     const invalidAmount = amount0 == null || amount0.isNaN() || amount0.lte(0);
     if (amount0 != null && amount0.eq(0)) {
       this._setAmount1(BN.ZERO);
     }
-    this._setSynchronizing(true);
+    !quiet && this._setSynchronizing(true);
     const defaultAmount0 = BN.parseUnits(1, this.token0.decimals);
     aggregatorService
       .calc(assetId0, assetId1, invalidAmount ? defaultAmount0 : amount0)
@@ -236,6 +237,15 @@ class TradeVM {
       },
     });
   };
+
+  get totalLiquidity() {
+    if (this.rootStore.poolsStore == null) return "";
+    const liq = this.rootStore.poolsStore.pools.reduce(
+      (acc, pool) => acc.plus(pool.globalLiquidity),
+      BN.ZERO
+    );
+    return liq.toFormat(0);
+  }
 
   get schemaValues() {
     if (
