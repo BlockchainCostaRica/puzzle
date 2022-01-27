@@ -5,7 +5,7 @@ import { Column, Row } from "@components/Flex";
 import Button from "@components/Button";
 import Text from "@components/Text";
 import { Link } from "react-router-dom";
-import { MAINNET_ROUTES } from "@src/constants/mainnetConfig";
+import { useStores } from "@stores";
 
 interface IProps {}
 
@@ -95,6 +95,7 @@ const BtnContainer = styled(Row)`
 `;
 
 const Invest: React.FC<IProps> = () => {
+  const { accountStore } = useStores();
   return (
     <Wrapper>
       <Root>
@@ -102,6 +103,7 @@ const Invest: React.FC<IProps> = () => {
           <Text
             style={{ color: "#7075E9", textAlign: "center", marginBottom: 8 }}
             weight={500}
+            fitContent
           >
             INVEST
           </Text>
@@ -123,10 +125,9 @@ const Invest: React.FC<IProps> = () => {
             </Subtitle>
           </Row>
           <BtnContainer>
-            <Link to={MAINNET_ROUTES.addLiquidity.farms}>
+            <Link to={accountStore.ROUTES.INVEST}>
               <Button style={{ marginRight: 8, width: 167 }}>Invest</Button>
             </Link>
-            {/*<Text type="secondary">Current total volume</Text>*/}
           </BtnContainer>
         </TitleWrapper>
         <Img src={invest} alt="puzzle" />

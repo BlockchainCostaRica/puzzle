@@ -82,11 +82,7 @@ const RewardToClaim: React.FC<IProps> = () => {
               >
                 <Row alignItems="center">
                   {screenWidth && screenWidth >= 880 ? (
-                    <SquareTokenIcon
-                      src={token.logo}
-                      alt="logo"
-                      style={{ width: 40, height: 40 }}
-                    />
+                    <SquareTokenIcon size="small" src={token.logo} alt="logo" />
                   ) : (
                     <RoundTokenIcon src={token.logo} alt="logo" />
                   )}

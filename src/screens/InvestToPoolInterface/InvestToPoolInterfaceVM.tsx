@@ -2,11 +2,10 @@ import React, { useMemo } from "react";
 import { useVM } from "@src/hooks/useVM";
 import { makeAutoObservable, when } from "mobx";
 import { RootStore, useStores } from "@stores";
-import axios from "axios";
 import BN from "@src/utils/BN";
 import { IToken } from "@src/constants";
 import { errorMessage } from "@components/Notifications";
-import { TPoolStats } from "@stores/RootStore";
+import { IPoolStats30Days } from "@stores/PoolsStore";
 
 const ctx = React.createContext<InvestToPoolInterfaceVM | null>(null);
 
@@ -33,8 +32,8 @@ class InvestToPoolInterfaceVM {
   public poolId: string;
   public rootStore: RootStore;
 
-  public stats: TPoolStats | null = null;
-  private setStats = (stats: TPoolStats | null) => (this.stats = stats);
+  public stats: IPoolStats30Days | null = null;
+  private setStats = (stats: IPoolStats30Days | null) => (this.stats = stats);
 
   public accountLiquidity: BN | null = null;
   private setAccountLiquidity = (value: BN) => (this.accountLiquidity = value);
@@ -55,9 +54,7 @@ class InvestToPoolInterfaceVM {
     this.poolId = poolId;
     this.rootStore = rootStore;
     makeAutoObservable(this);
-    this.updateStats().catch(() =>
-      console.error(`Cannot update stats of ${this.poolId}`)
-    );
+    this.updateStats();
     when(
       () => rootStore.accountStore.address != null,
       this.updateAccountLiquidityInfo
@@ -71,19 +68,12 @@ class InvestToPoolInterfaceVM {
     )!;
   }
 
-  updateStats = () =>
-    axios
-      .get(`https://puzzleback.herokuapp.com/stats/${this.poolId}/30d`)
-      .then(({ data }) => this.setStats(data));
-
-  public get poolStats() {
-    const { apy, liquidity, fees } = this.stats ?? {};
-    return {
-      apy: apy ? new BN(apy).toFormat(4).concat(" %") : "–",
-      fees: fees ? "$ " + new BN(fees).toFormat(1) : "–",
-      liquidity: liquidity ? "$ " + new BN(liquidity).toFormat(2) : "–",
-    };
-  }
+  updateStats = () => {
+    this.rootStore.poolsStore
+      .get30DaysPoolStats(this.poolId)
+      .then((data) => this.setStats(data))
+      .catch(() => console.error(`Cannot update stats of ${this.poolId}`));
+  };
 
   updateAccountLiquidityInfo = async () => {
     if (this.rootStore.accountStore.address) {

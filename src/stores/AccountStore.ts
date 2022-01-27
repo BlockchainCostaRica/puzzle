@@ -20,6 +20,7 @@ import { getCurrentBrowser } from "@src/utils/getCurrentBrowser";
 import BN from "@src/utils/BN";
 import { waitForTx } from "@waves/waves-transactions";
 import { errorMessage, successMessage } from "@src/components/Notifications";
+import tokenLogos from "@src/assets/tokens/tokenLogos";
 
 export enum LOGIN_TYPE {
   SIGNER_SEED = "SIGNER_SEED",
@@ -253,8 +254,12 @@ class AccountStore {
     const tx = await window.WavesKeeper.signAndPublishTransaction({
       type: 16,
       data,
-    } as any).catch(({ data: message }: any) => {
-      errorMessage({ title: "Transaction is not completed", message });
+    } as any).catch((error: any) => {
+      console.error({ error, data });
+      errorMessage({
+        title: "Transaction is not completed",
+        message: error.data,
+      });
       return null;
     });
     if (tx === null) return null;
@@ -272,7 +277,15 @@ class AccountStore {
   };
 
   get TOKENS() {
-    return TOKENS[this.chainId];
+    return Object.values(TOKENS[this.chainId])
+      .map((t) => ({
+        ...t,
+        logo: tokenLogos[t.symbol] ?? tokenLogos.UNKNOWN,
+      }))
+      .reduce(
+        (acc, token) => ({ ...acc, [token.symbol]: token }),
+        {} as Record<string, IToken>
+      );
   }
 
   get POOL_ID() {

@@ -3,7 +3,6 @@ import { Route, Routes } from "react-router-dom";
 import styled from "@emotion/styled";
 import { observer } from "mobx-react-lite";
 import ReactNotification from "react-notifications-component";
-import MultiSwapInterface from "@screens/MultiSwapInterface";
 import { StakeModule } from "@src/old_components/StakeModule";
 import AddLiquidityInterface from "@src/screens/AddLiquidityInterface";
 import InvestToPoolInterface from "@src/screens/InvestToPoolInterface";
@@ -12,7 +11,6 @@ import { Column } from "@components/Flex";
 import NotFound from "@screens/NotFound";
 import Landing from "@screens/Landing";
 import { useStores } from "@stores";
-import { TPoolId } from "@src/constants";
 import "./old_components/App.scss";
 import "./old_components/Landing.scss";
 import "./old_components/AddLiquidity.scss";
@@ -20,6 +18,7 @@ import "./old_components/vovaStyles.css.scss";
 import { WalletModule } from "@src/old_components/WalletModule";
 import Invest from "@screens/Invest";
 import WithdrawLiquidityInterface from "@screens/WithdrawLiquidity/WithdrawLiquidityInterface";
+import TradeInterface from "@screens/TradeInterface";
 
 const Root = styled(Column)`
   width: 100%;
@@ -39,14 +38,8 @@ const App: React.FC = () => {
         {/* Stake */}
         <Route path={ROUTES.STAKE} element={<StakeModule />} />
 
-        {/* Swap routes */}
-        {Object.entries(ROUTES.pools).map(([poolId, path]) => (
-          <Route
-            key={path}
-            path={path}
-            element={<MultiSwapInterface poolId={poolId as TPoolId} />}
-          />
-        ))}
+        {/* Trade */}
+        <Route path={ROUTES.TRADE} element={<TradeInterface />} />
 
         {/* Invest table routes */}
         <Route path={ROUTES.INVEST} element={<Invest />} />

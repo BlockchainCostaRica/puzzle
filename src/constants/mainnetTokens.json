@@ -1,110 +1,14 @@
 {
-  "DUXPLORER": {
-    "assetId": "EfdcPXw7o7rrrPWmMBr2sa66Dk95n56622ngujbaGhye",
-    "name": "DUXPLORER",
-    "symbol": "DUXPLORER",
-    "decimals": 8
-  },
-  "MATH": {
-    "assetId": "B543bkZcZNo5GrUnd5fxB6EwkiJhAVyKCkPn5nWzZC2s",
-    "name": "MATH",
-    "symbol": "MATH",
-    "decimals": 8
-  },
-  "TURTLE": {
-    "assetId": "5bcAh1r6ydrpk44FEmrnmJQjumgKo3NKEEsyfgmZYwxC",
-    "name": "TURTLE",
-    "symbol": "TURTLE",
-    "decimals": 8
-  },
-  "EGGSEGGS": {
-    "assetId": "54UszKAj3MtYmkdRCqSXAcaQLaVALBy7CCrVkfmfzhxR",
-    "name": "EGGSEGGS",
-    "symbol": "EGGSEGGS",
-    "decimals": 8
-  },
-  "PESOLATINO": {
-    "assetId": "5nk9JW8yRonyNBEwhChoksLxpBECVxbVLqaNuQs9EJn1",
-    "name": "PESOLATINO",
-    "symbol": "PESOLATINO",
-    "decimals": 8
-  },
-  "FOMO": {
-    "assetId": "Dfx6LJPndo1h5Umk9SofDhMDs6Gi8cHyT3873pSgoASU",
-    "name": "FOMO",
-    "symbol": "FOMO",
-    "decimals": 8
-  },
-  "MUNDO": {
-    "assetId": "4kwKSf4Bx2Wq8YxKnVZBhcEHyXzEtJ2pw7ixfJgirwf2",
-    "name": "MUNDO",
-    "symbol": "MUNDO",
-    "decimals": 8
-  },
-  "EGGPOINT": {
-    "assetId": "Ej7kEzxvUsoiMtJKiuFpMD9tC6qfCADpZynyW2vqcWW",
-    "name": "EGGPOINT",
-    "symbol": "EGGPOINT",
+  "WAVES": {
+    "assetId": "WAVES",
+    "name": "WAVES",
+    "symbol": "WAVES",
     "decimals": 8
   },
   "EGG": {
     "assetId": "C1iWsKGqLwjHUndiQ7iXpdmPum9PeCDFfyXBdJJosDRS",
     "name": "Waves Ducks",
     "symbol": "EGG",
-    "decimals": 8
-  },
-  "USDN": {
-    "assetId": "DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p",
-    "name": "Neutrino USD",
-    "symbol": "USDN",
-    "decimals": 6
-  },
-  "ENDO": {
-    "assetId": "5HGPPLj58XUx3ryMgkASJoqYq33zwBbTMf1CGxfKw6jp",
-    "name": "ENDO",
-    "symbol": "ENDO",
-    "decimals": 8
-  },
-  "MARVIN": {
-    "assetId": "yDf4UTg4DS75sCNP7oC1HraTN4KHtqmd6WueTid4PF1",
-    "name": "MARVIN",
-    "symbol": "MARVIN",
-    "decimals": 8
-  },
-  "EGGMOON": {
-    "assetId": "2R57nL7ftpuwbgdprcmAeA9i7ykLH6A4wzLkZHWPiHKc",
-    "name": "EGGMOON",
-    "symbol": "EGGMOON",
-    "decimals": 8
-  },
-  "STREET": {
-    "assetId": "CE5cxMvz7865CyFZPFUmDiL4KRkYXP6b6oYgN3vmWdV5",
-    "name": "STREET",
-    "symbol": "STREET",
-    "decimals": 8
-  },
-  "KOLKHOZ": {
-    "assetId": "5m5stLsMZSPomwxTTjJGMMEnjMafRMfap5vZyaLwgMKD",
-    "name": "KOLKHOZ",
-    "symbol": "KOLKHOZ",
-    "decimals": 8
-  },
-  "FORKLOG": {
-    "assetId": "46PdJcKzDuYfzLuLNjffM3F8jR8hL357V9AdGK2xN3kx",
-    "name": "FORKLOG",
-    "symbol": "FORKLOG",
-    "decimals": 8
-  },
-  "CGU": {
-    "assetId": "ESaD2AREvgk7o4C9eQkZ8Nmau9BSHqgTK5ymHV36xocy",
-    "name": "CGU",
-    "symbol": "CGU",
-    "decimals": 8
-  },
-  "WAVES": {
-    "assetId": "WAVES",
-    "name": "WAVES",
-    "symbol": "WAVES",
     "decimals": 8
   },
   "SWOP": {
@@ -153,6 +57,102 @@
     "assetId": "D4TPjtzpsDEJFS1pUAkvh1tJJJMNWGcSrds9sveBoQka",
     "name": "RACE",
     "symbol": "RACE",
+    "decimals": 8
+  },
+  "DUXPLORER": {
+    "assetId": "EfdcPXw7o7rrrPWmMBr2sa66Dk95n56622ngujbaGhye",
+    "name": "DUXPLORER",
+    "symbol": "DUXPLORER",
+    "decimals": 8
+  },
+  "MATH": {
+    "assetId": "B543bkZcZNo5GrUnd5fxB6EwkiJhAVyKCkPn5nWzZC2s",
+    "name": "MATH",
+    "symbol": "MATH",
+    "decimals": 8
+  },
+  "TURTLE": {
+    "assetId": "5bcAh1r6ydrpk44FEmrnmJQjumgKo3NKEEsyfgmZYwxC",
+    "name": "TURTLE",
+    "symbol": "TURTLE",
+    "decimals": 8
+  },
+  "EGGSEGGS": {
+    "assetId": "54UszKAj3MtYmkdRCqSXAcaQLaVALBy7CCrVkfmfzhxR",
+    "name": "EGGSEGGS",
+    "symbol": "EGGSEGGS",
+    "decimals": 8
+  },
+  "PESOLATINO": {
+    "assetId": "5nk9JW8yRonyNBEwhChoksLxpBECVxbVLqaNuQs9EJn1",
+    "name": "PESOLATINO",
+    "symbol": "PESOLATINO",
+    "decimals": 8
+  },
+  "FOMO": {
+    "assetId": "Dfx6LJPndo1h5Umk9SofDhMDs6Gi8cHyT3873pSgoASU",
+    "name": "FOMO",
+    "symbol": "FOMO",
+    "decimals": 8
+  },
+  "MUNDO": {
+    "assetId": "4kwKSf4Bx2Wq8YxKnVZBhcEHyXzEtJ2pw7ixfJgirwf2",
+    "name": "MUNDO",
+    "symbol": "MUNDO",
+    "decimals": 8
+  },
+  "EGGPOINT": {
+    "assetId": "Ej7kEzxvUsoiMtJKiuFpMD9tC6qfCADpZynyW2vqcWW",
+    "name": "EGGPOINT",
+    "symbol": "EGGPOINT",
+    "decimals": 8
+  },
+  "USDN": {
+    "assetId": "DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p",
+    "name": "Neutrino USD",
+    "symbol": "USDN",
+    "decimals": 6
+  },
+  "ENDO": {
+    "assetId": "5HGPPLj58XUx3ryMgkASJoqYq33zwBbTMf1CGxfKw6jp",
+    "name": "ENDO",
+    "symbol": "ENDO",
+    "decimals": 8
+  },
+  "MARVIN": {
+    "assetId": "yDf4UTg4DS75sCNP7oC1HraTN4KHtqmd6WueTid4PF1",
+    "name": "MARVIN",
+    "symbol": "MARVIN",
+    "decimals": 8
+  },
+  "EGGMOON": {
+    "assetId": "2R57nL7ftpuwbgdprcmAeA9i7ykLH6A4wzLkZHWPiHKc",
+    "name": "EGGMOON",
+    "symbol": "EGGMOON",
+    "decimals": 8
+  },
+  "STREET": {
+    "assetId": "CE5cxMvz7865CyFZPFUmDiL4KRkYXP6b6oYgN3vmWdV5",
+    "name": "STREET",
+    "symbol": "STREET",
+    "decimals": 8
+  },
+  "KOLKHOZ": {
+    "assetId": "5m5stLsMZSPomwxTTjJGMMEnjMafRMfap5vZyaLwgMKD",
+    "name": "KOLKHOZ",
+    "symbol": "KOLKHOZ",
+    "decimals": 8
+  },
+  "FORKLOG": {
+    "assetId": "46PdJcKzDuYfzLuLNjffM3F8jR8hL357V9AdGK2xN3kx",
+    "name": "FORKLOG",
+    "symbol": "FORKLOG",
+    "decimals": 8
+  },
+  "CGU": {
+    "assetId": "ESaD2AREvgk7o4C9eQkZ8Nmau9BSHqgTK5ymHV36xocy",
+    "name": "CGU",
+    "symbol": "CGU",
     "decimals": 8
   }
 }

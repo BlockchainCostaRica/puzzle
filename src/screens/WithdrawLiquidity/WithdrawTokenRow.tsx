@@ -32,11 +32,7 @@ const WithdrawTokenRow: React.FC<IProps> = ({
   return (
     <div className="gridRow">
       <Row alignItems="center" mainAxisSize="fit-content">
-        <SquareTokenIcon
-          src={logo}
-          alt="logo"
-          style={{ width: 40, height: 40 }}
-        />
+        <SquareTokenIcon src={logo} alt="logo" size="small" />
         <SizedBox width={8} />
         <Column>
           <Text fitContent size="medium" className="text">

@@ -7,12 +7,11 @@ import Text from "@components/Text";
 import Tag from "@components/Tag";
 import { useStores } from "@stores";
 import { observer } from "mobx-react-lite";
-import { TStatsPoolItem } from "@screens/Invest/Invest";
 import Pool from "@src/entities/Pool";
-import BN from "@src/utils/BN";
+import { IStatsPoolItem } from "@stores/PoolsStore";
 
 interface IProps {
-  stats?: TStatsPoolItem;
+  stats?: IStatsPoolItem;
   pool: Pool;
 }
 
@@ -41,7 +40,7 @@ const SharesContainer = styled(Row)`
 
 const InvestPoolRow: React.FC<IProps> = ({ pool, stats }) => {
   const { accountStore } = useStores();
-  const apy = stats?.apy != null ? new BN(stats.apy).toFormat(2) : "–";
+  const apy = stats?.apy != null ? stats.apy.toFormat(2) : "—";
   return (
     <Link
       to={`/${(accountStore.ROUTES.invest as any)[pool.id]}`}

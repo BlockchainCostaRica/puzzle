@@ -99,9 +99,11 @@ const Header: React.FC<IProps> = () => {
     setMobileMenuOpened(state);
   };
 
-  const menuItems = Object.entries(accountStore.ROUTES.pools).map(
-    ([id, link]) => ({ name: (accountStore.POOL_CONFIG as any)[id].name, link })
-  );
+  const menuItems = [
+    { name: "Trade", link: accountStore.ROUTES.TRADE },
+    { name: "Invest", link: accountStore.ROUTES.INVEST },
+    { name: "Stake", link: accountStore.ROUTES.STAKE },
+  ];
   return (
     <Root>
       <Mobile>
@@ -120,24 +122,15 @@ const Header: React.FC<IProps> = () => {
           </Link>
           <Desktop>
             <SizedBox width={54} />
-            {menuItems.map(({ name, link }, key) => (
+            {menuItems.map(({ name, link }) => (
               <MenuItem
+                key={name}
                 selected={isRoutesEquals(link, location.pathname)}
                 to={link}
-                key={key}
               >
                 {name}
               </MenuItem>
             ))}
-            {/*<MenuItem*/}
-            {/*  selected={isRoutesEquals(*/}
-            {/*    accountStore.ROUTES.INVEST,*/}
-            {/*    location.pathname*/}
-            {/*  )}*/}
-            {/*  to={accountStore.ROUTES.INVEST}*/}
-            {/*>*/}
-            {/*  Invest*/}
-            {/*</MenuItem>*/}
           </Desktop>
         </Row>
         <Mobile>
