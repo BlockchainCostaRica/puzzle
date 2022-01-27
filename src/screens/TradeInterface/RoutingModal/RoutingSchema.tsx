@@ -21,6 +21,7 @@ const RoutesContainer = styled.div`
 const RoutingSchema: React.FC<IProps> = () => {
   const vm = useTradeVM();
   const values = vm.schemaValues;
+  const isAmount0Empty = vm.amount0.eq(0);
   return (
     <Root>
       <RoutesContainer>
@@ -29,12 +30,11 @@ const RoutingSchema: React.FC<IProps> = () => {
             {...i}
             key={`${i.percent.toString()}-${index}`}
             token0Logo={vm.token0.logo}
-            singleRoute={values?.length === 1}
+            isAmount0Empty={isAmount0Empty}
           />
         ))}
       </RoutesContainer>
       {values?.length !== 1 && <SizedBox width={12} />}
-      <Arrow />
       <SizedBox width={12} />
       <div style={{ position: "relative" }}>
         {values?.length !== 1 && (

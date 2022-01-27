@@ -6,6 +6,7 @@ import { useTradeVM } from "@screens/TradeInterface/TradeVM";
 import RoutingSchema from "@screens/TradeInterface/RoutingModal/RoutingSchema";
 import SizedBox from "@components/SizedBox";
 import BN from "@src/utils/BN";
+import { Loading } from "@components/Loading";
 
 interface IProps {
   onClose: () => void;
@@ -38,7 +39,13 @@ const RoutingModal: React.FC<IProps> = ({ ...rest }) => {
         )}
       </Title>
       <SizedBox height={24} />
-      <RoutingSchema />
+      {vm.schemaValues != null ? (
+        <RoutingSchema />
+      ) : (
+        <Text>
+          Please wait <Loading />
+        </Text>
+      )}
     </Dialog>
   );
 };

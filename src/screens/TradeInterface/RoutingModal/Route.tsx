@@ -7,7 +7,7 @@ import { ReactComponent as Arrow } from "@src/assets/icons/blackRightArrow.svg";
 
 interface IProps extends ISchemaRoute, HTMLAttributes<HTMLDivElement> {
   token0Logo: string;
-  singleRoute?: boolean;
+  isAmount0Empty?: boolean;
 }
 
 const Root = styled.div`
@@ -20,20 +20,19 @@ const Route: React.FC<IProps> = ({
   percent,
   token0Logo,
   exchanges,
-  singleRoute,
+  isAmount0Empty,
 }) => {
   const per = percent.isInteger() ? percent.toFormat(0) : percent.toFormat(2);
   return (
     <Root>
-      <Token0Amount percent={per} imgSrc={token0Logo} />
+      <Token0Amount
+        percent={per}
+        imgSrc={token0Logo}
+        displayPercent={!isAmount0Empty}
+      />
       {exchanges.map((item, index, array) => (
         <>
-          <Asset
-            {...item}
-            key={index}
-            singleAsset={array.length === 1}
-            singleRoute={singleRoute}
-          />
+          <Asset {...item} key={index} />
           {array.length - 1 !== index && (
             <div style={{ position: "relative" }}>
               <Arrow

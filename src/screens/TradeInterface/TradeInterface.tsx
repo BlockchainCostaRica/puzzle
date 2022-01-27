@@ -109,10 +109,7 @@ const TradeInterfaceImpl: React.FC = () => {
                   mainAxisSize="fit-content"
                   justifyContent="flex-end"
                   style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    if (vm.amount0.eq(0)) return;
-                    vm.setRoutingModalState(true);
-                  }}
+                  onClick={() => vm.setRoutingModalState(true)}
                 >
                   {vm.simpleRoute != null
                     ? vm.simpleRoute.map((symbol, i) => (

@@ -10,6 +10,7 @@ import tokenLogos from "@src/assets/tokens/tokenLogos";
 interface IProps {
   imgSrc?: string;
   percent?: string;
+  displayPercent?: boolean;
 }
 
 const Root = styled.div`
@@ -18,7 +19,11 @@ const Root = styled.div`
   width: fit-content;
   flex-direction: row;
 `;
-const Token0Amount: React.FC<IProps> = ({ percent, imgSrc }) => {
+const Token0Amount: React.FC<IProps> = ({
+  percent,
+  imgSrc,
+  displayPercent,
+}) => {
   return (
     <Root>
       <Column justifyContent="center" alignItems="center">
@@ -27,8 +32,12 @@ const Token0Amount: React.FC<IProps> = ({ percent, imgSrc }) => {
           alt="icon"
           src={imgSrc ?? tokenLogos.UNKNOWN}
         />
-        <SizedBox height={8} />
-        <FilledText style={{ width: 60 }}>{percent} %</FilledText>
+        {displayPercent && (
+          <>
+            <SizedBox height={8} />
+            <FilledText style={{ width: 60 }}>{percent} %</FilledText>
+          </>
+        )}
       </Column>
       <SizedBox width={21} />
       <Arrow style={{ fill: "black" }} />

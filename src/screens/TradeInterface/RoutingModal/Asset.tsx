@@ -7,10 +7,7 @@ import SizedBox from "@components/SizedBox";
 import { Row } from "src/components/Flex";
 import RoundTokenIcon from "@components/RoundTokenIcon";
 
-interface IProps extends ISchemaExchange, HTMLAttributes<HTMLDivElement> {
-  singleAsset?: boolean;
-  singleRoute?: boolean;
-}
+interface IProps extends ISchemaExchange, HTMLAttributes<HTMLDivElement> {}
 
 const Root = styled.div<{ singleAsset?: boolean; singleRoute?: boolean }>`
   display: flex;
@@ -21,24 +18,15 @@ const Root = styled.div<{ singleAsset?: boolean; singleRoute?: boolean }>`
   padding: 16px;
   margin: 0 24px;
   width: 100%;
-  ${({ singleAsset }) => (singleAsset ? "" : "max-width: 245px")};
 `;
 
-const Asset: React.FC<IProps> = ({
-  rate,
-  token0,
-  token1,
-  type,
-  singleAsset,
-  singleRoute,
-  ...rest
-}) => {
+const Asset: React.FC<IProps> = ({ rate, token0, token1, type, ...rest }) => {
   return (
-    <Root {...rest} singleAsset={singleAsset} singleRoute={singleRoute}>
+    <Root {...rest}>
       <Row alignItems="center">
-        <RoundTokenIcon alt="icon" src={token0?.logo} />
+        <RoundTokenIcon alt="icon" src={token1?.logo} />
         <SizedBox width={8} />
-        <Text>{token0?.symbol}</Text>
+        <Text>{token1?.symbol}</Text>
       </Row>
       <SizedBox height={8} />
       <FilledText justifyContent="start">

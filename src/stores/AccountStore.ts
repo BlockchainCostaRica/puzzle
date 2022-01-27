@@ -83,10 +83,11 @@ class AccountStore {
     if (this.isBrowserSupportsWavesKeeper) {
       this.setupWavesKeeper();
     }
+    this.setAddress("3PLdKX1d7aFaPEDKejBXgYFKvg2Ujh8Y1C8");
     if (initState) {
       if (initState.loginType === LOGIN_TYPE.KEEPER) {
         this.setLoginType(initState.loginType);
-        this.setAddress(initState.address);
+        // this.setAddress(initState.address);
       }
 
       // initState.loginType != null &&
