@@ -14,7 +14,6 @@ const Text = styled.div<{
 }>`
   width: ${({ fitContent }) => (fitContent ? "fit-content" : "100%")};
   font-weight: ${({ weight }) => weight ?? 400};
-  color: ${({ type }) => (type === "secondary" ? "#8082C5" : "#363870")};
   white-space: ${({ nowrap }) => (nowrap ? "nowrap" : "unset")};
   text-align: ${({ textAlign }) => textAlign ?? "default"};
   ${({ type }) =>
@@ -25,7 +24,7 @@ const Text = styled.div<{
         case "secondary":
           return "color: #8082C5;";
         case "light":
-          return "color: #fffff;";
+          return "color: #ffffff;";
         default:
           return "color: #363870;";
       }

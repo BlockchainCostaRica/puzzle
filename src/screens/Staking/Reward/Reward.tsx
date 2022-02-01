@@ -6,6 +6,7 @@ import { observer } from "mobx-react-lite";
 import { useStores } from "@stores";
 import LoggedOutRewardInfo from "./LoggedOutRewardInfo";
 import LoggedInRewardInfo from "./LoggedInRewardInfo";
+import SizedBox from "@components/SizedBox";
 
 interface IProps {}
 
@@ -23,6 +24,7 @@ const Reward: React.FC<IProps> = () => {
       <Text weight={500} type="secondary">
         Reward
       </Text>
+      <SizedBox height={8} />
       <Card>
         {address == null ? <LoggedOutRewardInfo /> : <LoggedInRewardInfo />}
       </Card>

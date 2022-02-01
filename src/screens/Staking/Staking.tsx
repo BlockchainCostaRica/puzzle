@@ -7,11 +7,14 @@ import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
 import Reward from "./Reward";
 import NFTStaking from "./NFTStaking";
+import Overview from "@screens/Staking/Overview";
+import MyBalances from "@screens/Staking/MyBalances";
+import StakeUnstake from "./StakeUnstake";
+import { Column } from "@components/Flex";
 
 const Root = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   box-sizing: border-box;
   padding: 0 16px;
@@ -26,9 +29,40 @@ const Root = styled.div`
   }
 `;
 
-const StakingImpl: React.FC = () => {
-  // const vm = useStakingVM();
+const Body = styled.div`
+  width: 100%;
+  display: grid;
+  @media (min-width: 880px) {
+    //grid-template-columns: 2fr 1fr;
+    //grid-template-columns: 6fr 3fr;
+    grid-template-columns: auto 50ch;
+    column-gap: 40px;
+  }
+`;
 
+const MainBlock = styled.div`
+  width: 100%;
+`;
+const RightBlockMobile = styled(Column)`
+  width: 100%;
+  @media (min-width: 880px) {
+    display: none;
+  }
+`;
+const RightBlock = styled(Column)`
+  width: 100%;
+  display: none;
+  @media (min-width: 880px) {
+    display: flex;
+  }
+`;
+const AdaptiveText = styled(Text)`
+  @media (min-width: 880px) {
+    max-width: 450px;
+  }
+`;
+
+const StakingImpl: React.FC = () => {
   return (
     <Layout>
       <Observer>
@@ -38,12 +72,25 @@ const StakingImpl: React.FC = () => {
               PUZZLE Staking
             </Text>
             <SizedBox height={8} />
-            <Text type="secondary">
+            <AdaptiveText fitContent textAlign="left" type="secondary">
               For every swap on the exchange, 0.8% of the swap fees are
               distributed as USDN to your share of the staking balance.
-            </Text>
-            <Reward />
-            <NFTStaking />
+            </AdaptiveText>
+            <Body>
+              <MainBlock>
+                <RightBlockMobile>
+                  <Reward />
+                  <NFTStaking />
+                </RightBlockMobile>
+                <Overview />
+                <MyBalances />
+                <StakeUnstake />
+              </MainBlock>
+              <RightBlock>
+                <Reward />
+                <NFTStaking />
+              </RightBlock>
+            </Body>
           </Root>
         )}
       </Observer>

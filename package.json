@@ -90,7 +90,6 @@
     "react-popper-tooltip": "^4.3.1",
     "react-refresh": "^0.8.3",
     "react-router-dom": "^6.0.2",
-    "reactstrap": "^8.10.0",
     "recharts": "^2.1.8",
     "resolve": "1.18.1",
     "resolve-url-loader": "^3.1.2",

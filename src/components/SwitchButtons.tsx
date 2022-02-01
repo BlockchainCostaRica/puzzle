@@ -6,9 +6,10 @@ interface IProps {
   values: [string, string];
   active: 0 | 1;
   onActivate: (v: 0 | 1) => void;
+  border?: boolean;
 }
 
-const Root = styled(Row)`
+const Root = styled(Row)<{ border?: boolean }>`
   background: #fff;
   padding: 4px;
   height: 40px;
@@ -16,6 +17,7 @@ const Root = styled(Row)`
   box-sizing: border-box;
   border-radius: 12px;
   transition: all 0.3s ease;
+  border: ${({ border }) => border && "1px solid #f1f2fe"};
 `;
 
 const Item = styled.div<{ active?: boolean }>`
@@ -36,9 +38,14 @@ const Item = styled.div<{ active?: boolean }>`
   cursor: pointer;
 `;
 
-const SwitchButtons: React.FC<IProps> = ({ values, active, onActivate }) => {
+const SwitchButtons: React.FC<IProps> = ({
+  values,
+  active,
+  onActivate,
+  border,
+}) => {
   return (
-    <Root>
+    <Root border={border}>
       <Item active={active === 0} onClick={() => onActivate(0)}>
         {values[0]}
       </Item>

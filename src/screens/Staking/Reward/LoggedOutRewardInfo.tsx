@@ -18,7 +18,7 @@ const LoggedOutRewardInfo: React.FC<IProps> = () => {
   return (
     <Root>
       <Text type="secondary" style={{ textAlign: "center" }}>
-        Connect your wallet to see pool token balance
+        Connect your wallet to see your staking balance and reward
       </Text>
       <SizedBox height={8} />
       <Button

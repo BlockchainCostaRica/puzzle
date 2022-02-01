@@ -1,5 +1,5 @@
 import React from "react";
-import Notification from "@screens/AddLiquidityInterface/Notification";
+import Notification from "@components/Notification";
 import { Link } from "react-router-dom";
 import buildBuyTokenRoute from "@src/utils/buildBuyTokenRoute";
 import { observer } from "mobx-react-lite";

@@ -7,7 +7,7 @@ import { observer } from "mobx-react-lite";
 import { useAddLiquidityInterfaceVM } from "@screens/AddLiquidityInterface/AddLiquidityInterfaceVM";
 import { useStores } from "@stores";
 import Button from "@components/Button";
-import Notification from "@screens/AddLiquidityInterface/Notification";
+import Notification from "@components/Notification";
 import { Link } from "react-router-dom";
 import buildBuyTokenRoute from "@src/utils/buildBuyTokenRoute";
 import TokenInput from "@components/TokenInput";
