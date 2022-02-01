@@ -31,7 +31,7 @@ const Route: React.FC<IProps> = ({
         displayPercent={!isAmount0Empty}
       />
       {exchanges.map((item, index, array) => (
-        <>
+        <React.Fragment key={index}>
           <Asset {...item} key={index} />
           {array.length - 1 !== index && (
             <div style={{ position: "relative" }}>
@@ -41,7 +41,7 @@ const Route: React.FC<IProps> = ({
               />
             </div>
           )}
-        </>
+        </React.Fragment>
       ))}
     </Root>
   );

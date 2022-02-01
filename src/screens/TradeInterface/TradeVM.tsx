@@ -5,7 +5,7 @@ import { RootStore, useStores } from "@stores";
 import Balance from "@src/entities/Balance";
 import BN from "@src/utils/BN";
 import aggregatorService, { TCalcRoute } from "@src/services/aggregatorService";
-import { TRADE_FEE } from "@src/constants";
+import { IToken, TRADE_FEE } from "@src/constants";
 
 const ctx = React.createContext<TradeVM | null>(null);
 
@@ -243,7 +243,7 @@ class TradeVM {
       (acc, pool) => acc.plus(pool.globalLiquidity),
       BN.ZERO
     );
-    return liq.toFormat(0);
+    return liq.toFormat(2);
   }
 
   get schemaValues() {
@@ -254,11 +254,11 @@ class TradeVM {
     ) {
       return null;
     }
+    const tokens = Object.values(this.rootStore.accountStore.TOKENS);
     return this.route.reduce<Array<ISchemaRoute>>((acc, v) => {
-      const { accountStore } = this.rootStore;
       const exchanges = v.exchanges.reduce<Array<ISchemaExchange>>((ac, v) => {
-        const token0 = accountStore.findBalanceByAssetId(v.from);
-        const token1 = accountStore.findBalanceByAssetId(v.to);
+        const token0 = tokens.find(({ assetId }) => assetId === v.from);
+        const token1 = tokens.find(({ assetId }) => assetId === v.from);
 
         const top = BN.formatUnits(v.amountOut, token1?.decimals);
         const bottom = BN.formatUnits(v.amountIn, token0?.decimals);
@@ -282,7 +282,7 @@ export interface ISchemaRoute {
 
 export interface ISchemaExchange {
   rate: BN;
-  token0?: Balance;
-  token1?: Balance;
+  token0?: IToken;
+  token1?: IToken;
   type: string;
 }

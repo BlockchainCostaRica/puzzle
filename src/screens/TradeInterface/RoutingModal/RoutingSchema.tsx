@@ -5,6 +5,7 @@ import Route from "@screens/TradeInterface/RoutingModal/Route";
 import { ReactComponent as Arrow } from "@src/assets/icons/blackRightArrow.svg";
 import SquareTokenIcon from "@components/SquareTokenIcon";
 import SizedBox from "@components/SizedBox";
+import { observer } from "mobx-react-lite";
 
 interface IProps {}
 
@@ -48,4 +49,4 @@ const RoutingSchema: React.FC<IProps> = () => {
     </Root>
   );
 };
-export default RoutingSchema;
+export default observer(RoutingSchema);
