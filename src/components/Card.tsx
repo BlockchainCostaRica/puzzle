@@ -20,6 +20,7 @@ const Card = styled.div<{
     | "flex-start"
     | "baseline";
   flexDirection?: "column" | "row";
+  type?: "white" | "dark";
 }>`
   display: flex;
   flex-direction: ${({ flexDirection }) => flexDirection ?? "column"};

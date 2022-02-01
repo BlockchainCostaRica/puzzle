@@ -19,7 +19,7 @@ import axios from "axios";
 import { getCurrentBrowser } from "@src/utils/getCurrentBrowser";
 import BN from "@src/utils/BN";
 import { waitForTx } from "@waves/waves-transactions";
-import { errorMessage, successMessage } from "@src/components/Notifications";
+// import { errorMessage, successMessage } from "@src/components/Notifications";
 import tokenLogos from "@src/assets/tokens/tokenLogos";
 
 export enum LOGIN_TYPE {
@@ -217,7 +217,8 @@ class AccountStore {
 
   private invokeWithSigner = async (txParams: IInvokeTxParams) => {
     if (this.signer == null) {
-      errorMessage({ message: "You need login firstly" });
+      //todo replace with new notifications
+      // errorMessage({ message: "You need login firstly" });
       return;
     }
     try {
@@ -229,18 +230,20 @@ class AccountStore {
       });
 
       ttx.broadcast().then((tx: any) => {
-        successMessage({
-          title: "Transaction is completed",
-          link: `${this.EXPLORER_LINK}/tx/${tx.id}`,
-        });
+        ///todo replace with new notifications
+        // successMessage({
+        //   title: "Transaction is completed",
+        //   link: `${this.EXPLORER_LINK}/tx/${tx.id}`,
+        // });
         return tx;
       });
     } catch (e: any) {
       console.warn(e);
-      errorMessage({
-        title: "Transaction is not completed",
-        message: e,
-      });
+      //todo replace with new notifications
+      // errorMessage({
+      //   title: "Transaction is not completed",
+      //   message: e,
+      // });
     }
   };
 
@@ -256,10 +259,11 @@ class AccountStore {
       data,
     } as any).catch((error: any) => {
       console.error({ error, data });
-      errorMessage({
-        title: "Transaction is not completed",
-        message: error.data,
-      });
+      //todo replace with new notifications
+      // errorMessage({
+      //   title: "Transaction is not completed",
+      //   message: error.data,
+      // });
       return null;
     });
     if (tx === null) return null;
@@ -268,11 +272,11 @@ class AccountStore {
     await waitForTx(txId, {
       apiBase: NODE_URL_MAP[this.chainId],
     });
-
-    successMessage({
-      title: "Transaction is completed",
-      link: `${this.EXPLORER_LINK}/tx/${txId}`,
-    });
+    //todo replace with new notifications
+    // successMessage({
+    //   title: "Transaction is completed",
+    //   link: `${this.EXPLORER_LINK}/tx/${txId}`,
+    // });
     return tx;
   };
 

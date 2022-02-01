@@ -1,15 +1,14 @@
 import React from "react";
 import styled from "@emotion/styled";
-// import {
-//   ErrorIcn,
-//   InfoIcn,
-//   SuccessIcn,
-//   WarningIcn,
-// } from "@src/assets/icons/AlertIcons/AlertIcon";
 import { TNotifyOptions } from "@stores/NotificationStore";
-
+import { ReactComponent as CloseIcon } from "@src/assets/icons/close.svg";
+import { ReactComponent as ErrorIcon } from "@src/assets/icons/error.svg";
+import { ReactComponent as SuccessIcon } from "@src/assets/icons/success.svg";
+import { ReactComponent as WarningIcon } from "@src/assets/icons/warning.svg";
+import { ReactComponent as InfoIcon } from "@src/assets/icons/information.svg";
+import { Column, Row } from "@components/Flex";
+import Text from "@components/Text";
 const Root = styled.div`
-  padding: 25px 20px;
   display: flex;
   flex-direction: column;
   width: 410px;
@@ -19,16 +18,23 @@ const Root = styled.div`
   }
 `;
 
-const Body = styled.div``;
+const Body = styled(Row)`
+  padding-right: 48px;
+  box-sizing: border-box;
+`;
 
-const Title = styled.div``;
+const Content = styled(Column)``;
 
-const Content = styled.div``;
-
-const Link = styled.a``;
+const Link = styled.a`
+  margin-top: 12px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #7075e9;
+`;
 
 const getAlert = (
-  content: string | JSX.Element,
+  content: string,
   { type, title, link, linkTitle }: TNotifyOptions
 ) => {
   if (!type) return null;
@@ -37,8 +43,14 @@ const getAlert = (
       <Body>
         <Icon type={type} />
         <Content>
-          {title && <Title>{title}</Title>}
-          {content}
+          {title && (
+            <Text size="medium" weight={500}>
+              {title}
+            </Text>
+          )}
+          <Text size="small" type="secondary" style={{ marginTop: 2 }}>
+            {content}
+          </Text>
           {link && (
             <Link target="_blank" href={link}>
               {linkTitle || link}
@@ -60,40 +72,21 @@ const Icon: React.FunctionComponent<{
   `;
   switch (type) {
     case "error":
-      icon = "";
-      // icon = <ErrorIcn />;
+      icon = <ErrorIcon />;
       break;
     case "success":
-      icon = "";
-      // icon = <SuccessIcn />;
+      icon = <SuccessIcon />;
       break;
     case "info":
-      icon = "";
-      // icon = <InfoIcn />;
+      icon = <InfoIcon />;
       break;
     case "warning":
-      icon = "";
-      // icon = <WarningIcn />;
+      icon = <WarningIcon />;
       break;
   }
   return <Root>{icon}</Root>;
 };
 
-export const closeAlertIcon = (
-  <svg
-    width="23"
-    height="22"
-    viewBox="0 0 23 22"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M10.8773 10.6071L5.85347 15.6309L6.56058 16.338L11.5844 11.3142L16.4594 16.1891L17.1665 15.482L12.2915 10.6071L17.1672 5.73139L16.4601 5.02428L11.5844 9.89995L6.55988 4.87542L5.85278 5.58253L10.8773 10.6071Z"
-      fill="#A3ACC4"
-    />
-  </svg>
-);
+export const closeAlertIcon = <CloseIcon />;
 
 export default getAlert;

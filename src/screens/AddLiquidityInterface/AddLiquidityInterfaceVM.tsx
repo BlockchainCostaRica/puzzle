@@ -4,7 +4,6 @@ import { action, makeAutoObservable } from "mobx";
 import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import Balance from "@src/entities/Balance";
-import { errorMessage } from "@components/Notifications";
 import { IPoolStats30Days } from "@stores/PoolsStore";
 
 const ctx = React.createContext<AddLiquidityInterfaceVM | null>(null);
@@ -164,14 +163,14 @@ class AddLiquidityInterfaceVM {
 
   depositMultiply = async () => {
     if (this.pool?.contractAddress == null) {
-      errorMessage({ message: "There is no contract address" });
+      // errorMessage({ message: "There is no contract address" });
       return;
     }
     if (
       this.tokensToDepositAmounts == null ||
       this.pool.layer2Address == null
     ) {
-      errorMessage({ message: "There is no tokens to deposit" });
+      // errorMessage({ message: "There is no tokens to deposit" });
       return;
     }
 
@@ -214,7 +213,7 @@ class AddLiquidityInterfaceVM {
   };
   depositBaseToken = async () => {
     if (this.pool?.contractAddress == null || this.pool.layer2Address == null) {
-      errorMessage({ message: "There is no contract address" });
+      // errorMessage({ message: "There is no contract address" });
       return;
     }
     return this.rootStore.accountStore.invoke({

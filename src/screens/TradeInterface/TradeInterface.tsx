@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import React from "react";
 import SizedBox from "@components/SizedBox";
-import TokenInput from "@screens/TradeInterface/TokenInput";
+import TokenInput from "@components/TokenInput";
 import SwapDetailRow from "@components/SwapDetailRow";
 import Divider from "@src/components/Divider";
 import Card from "@components/Card";
@@ -15,12 +15,11 @@ import { useNavigate } from "react-router-dom";
 import { Row } from "@components/Flex";
 import Text from "@components/Text";
 import Tooltip from "@components/Tooltip";
-import TooltipFeeInfo from "@screens/MultiSwapInterface/TooltipFeeInfo";
 import { ReactComponent as InfoIcon } from "@src/assets/icons/info.svg";
 import { ReactComponent as ShowMoreIcon } from "@src/assets/icons/showMore.svg";
 import RoutingModal from "@screens/TradeInterface/RoutingModal";
-import { errorMessage } from "@components/Notifications";
 import Details from "./Details";
+import TooltipFeeInfo from "@screens/TradeInterface/TooltipFeeInfo";
 
 const Root = styled.div`
   display: flex;
@@ -44,10 +43,11 @@ const TradeInterfaceImpl: React.FC = () => {
 
   const handleSetAssetId0 = (assetId: string) => {
     if (assetId === vm.assetId1) {
-      errorMessage({
-        message: "You can't choose same assets",
-        title: "Warning",
-      });
+      //todo replace
+      // errorMessage({
+      //   message: "You can't choose same assets",
+      //   title: "Warning",
+      // });
       return;
     }
     const urlSearchParams = new URLSearchParams(window.location.search);
@@ -61,10 +61,11 @@ const TradeInterfaceImpl: React.FC = () => {
 
   const handleSetAssetId1 = (assetId: string) => {
     if (assetId === vm.assetId0) {
-      errorMessage({
-        message: "You can't choose same assets",
-        title: "Warning",
-      });
+      ////todo replace
+      // errorMessage({
+      //   message: "You can't choose same assets",
+      //   title: "Warning",
+      // });
       return;
     }
     const urlSearchParams = new URLSearchParams(window.location.search);

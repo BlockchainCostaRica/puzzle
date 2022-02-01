@@ -6,7 +6,6 @@ import Balance from "@src/entities/Balance";
 import BN from "@src/utils/BN";
 import aggregatorService, { TCalcRoute } from "@src/services/aggregatorService";
 import { TRADE_FEE } from "@src/constants";
-import { errorMessage } from "@components/Notifications";
 
 const ctx = React.createContext<TradeVM | null>(null);
 
@@ -205,16 +204,16 @@ class TradeVM {
     const { accountStore } = this.rootStore;
     const { token0, amount0, minimumToReceive, parameters } = this;
     if (this.synchronizing || parameters == null) {
-      errorMessage({ message: "Something wrong" });
+      // errorMessage({ message: "Something wrong" });
       return;
     }
     if (token0 == null || amount0.eq(0)) {
-      errorMessage({ message: "Something wrong with first asset" });
+      // errorMessage({ message: "Something wrong with first asset" });
       return;
     }
 
     if (minimumToReceive == null) {
-      errorMessage({ message: "Something wrong with second asset" });
+      // errorMessage({ message: "Something wrong with second asset" });
       return;
     }
     return accountStore.invoke({

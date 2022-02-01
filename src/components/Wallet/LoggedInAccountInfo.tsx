@@ -11,8 +11,10 @@ import { useStores } from "@stores";
 import Tooltip from "@components/Tooltip";
 import { observer } from "mobx-react-lite";
 import BN from "@src/utils/BN";
-import WalletBalancesTooltip from "@screens/MultiSwapInterface/TokenSelectModal/WalletBalancesTooltip";
-import WalletActionsTooltip from "@screens/MultiSwapInterface/TokenSelectModal/WalletActionsTooltip";
+import WalletBalancesTooltip from "@src/screens/TradeInterface/TokenSelectModal/WalletBalancesTooltip";
+import WalletActionsTooltip from "@src/screens/TradeInterface/TokenSelectModal/WalletActionsTooltip";
+// import WalletActionsTooltip from "@screens/TradeInterface/TokenSelectModal/WalletActionsTooltip";
+// import WalletBalancesTooltip from "@screens/TradeInterface/TokenSelectModal/WalletBalancesTooltip";
 
 interface IProps {}
 

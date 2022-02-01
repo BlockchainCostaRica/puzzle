@@ -2,33 +2,39 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import styled from "@emotion/styled";
 import { observer } from "mobx-react-lite";
-import ReactNotification from "react-notifications-component";
-import { StakeModule } from "@src/old_components/StakeModule";
 import AddLiquidityInterface from "@src/screens/AddLiquidityInterface";
 import InvestToPoolInterface from "@src/screens/InvestToPoolInterface";
-import Header from "@components/Header/Header";
+import Header from "@components/Header";
 import { Column } from "@components/Flex";
 import NotFound from "@screens/NotFound";
 import Landing from "@screens/Landing";
 import { useStores } from "@stores";
-import "./old_components/App.scss";
-import "./old_components/Landing.scss";
-import "./old_components/AddLiquidity.scss";
-import "./old_components/vovaStyles.css.scss";
-import { WalletModule } from "@src/old_components/WalletModule";
 import Invest from "@screens/Invest";
-import WithdrawLiquidityInterface from "@screens/WithdrawLiquidity/WithdrawLiquidityInterface";
+import WithdrawLiquidityInterface from "@screens/WithdrawLiquidity";
 import TradeInterface from "@screens/TradeInterface";
+import Staking from "@screens/Staking";
 
 const Root = styled(Column)`
   width: 100%;
   align-items: center;
-  z-index: 101;
+  background: #f1f2fe;
+  min-height: 100vh;
 `;
 
 const App: React.FC = () => {
+  // const { accountStore, notificationStore } = useStores();
   const { accountStore } = useStores();
   const { ROUTES } = accountStore;
+  // useEffect(() => {
+  //   notificationStore.notify(
+  //     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Condimentum risus, eget dis mus nibh fringilla posuere.",
+  //     {
+  //       title: "Headline",
+  //       linkTitle: "Action",
+  //       link: "https://google.com",
+  //     }
+  //   );
+  // });
   return (
     <Root>
       <Header />
@@ -36,7 +42,7 @@ const App: React.FC = () => {
         {/* Landing */}
         <Route path={ROUTES.ROOT} element={<Landing />} />
         {/* Stake */}
-        <Route path={ROUTES.STAKE} element={<StakeModule />} />
+        <Route path={ROUTES.STAKE} element={<Staking />} />
 
         {/* Trade */}
         <Route path={ROUTES.TRADE} element={<TradeInterface />} />
@@ -76,9 +82,7 @@ const App: React.FC = () => {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
-
-      <ReactNotification className="notificationWindow" />
-      <WalletModule />
+      {/*<ReactNotification className="notificationWindow" />*/}
     </Root>
   );
 };

@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import puzzleLogo from "@src/old_components/img/puzzle-logo.svg";
+import puzzleLogo from "@src/assets/logo.svg";
 import mobileMenuIcon from "@src/assets/icons/mobileMenu.svg";
 import closeIcon from "@src/assets/icons/close.svg";
 import Banner from "./Banner";
@@ -20,6 +20,11 @@ const Root = styled(Column)`
   align-items: center;
   z-index: 102;
   box-shadow: 0px 8px 56px rgba(54, 56, 112, 0.16);
+
+  //todo check
+  a {
+    text-decoration: none;
+  }
 `;
 
 const TopMenu = styled.header`

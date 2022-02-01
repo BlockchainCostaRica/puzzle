@@ -3,7 +3,6 @@ import React from "react";
 import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
 import Card from "@components/Card";
-import TokenInput from "@screens/MultiSwapInterface/TokenInput/TokenInput";
 import { observer } from "mobx-react-lite";
 import { useAddLiquidityInterfaceVM } from "@screens/AddLiquidityInterface/AddLiquidityInterfaceVM";
 import { useStores } from "@stores";
@@ -11,6 +10,7 @@ import Button from "@components/Button";
 import Notification from "@screens/AddLiquidityInterface/Notification";
 import { Link } from "react-router-dom";
 import buildBuyTokenRoute from "@src/utils/buildBuyTokenRoute";
+import TokenInput from "@components/TokenInput";
 
 interface IProps {}
 

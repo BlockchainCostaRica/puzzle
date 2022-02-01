@@ -11,6 +11,9 @@ const Root = styled.div`
   flex-direction: column;
   width: 100%;
   align-items: center;
+  a {
+    text-decoration: none;
+  }
 `;
 
 const Landing: React.FC = () => {

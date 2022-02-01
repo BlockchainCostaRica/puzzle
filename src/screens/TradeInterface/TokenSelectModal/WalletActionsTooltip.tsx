@@ -4,7 +4,6 @@ import { Column } from "@components/Flex";
 import Text from "@components/Text";
 import Divider from "@components/Divider";
 import copy from "copy-to-clipboard";
-import { successMessage } from "@src/components/Notifications";
 import { observer } from "mobx-react-lite";
 import { useStores } from "@stores";
 
@@ -37,7 +36,8 @@ const WalletActionsTooltip: React.FC<IProps> = ({ address }) => {
 
   const handleCopyAddress = () => {
     address && copy(address);
-    successMessage({ message: "Your address was copied" });
+    //todo
+    // successMessage({ message: "Your address was copied" });
   };
   const handleLogout = () => accountStore.logout();
 
