@@ -127,7 +127,7 @@ class BN extends BigNumber {
 
   static ZERO = new BN(0);
   static MaxUint256 =
-    "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"; // TODO: What about solana?
+    "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
 }
 
 export type TEtherBigNumber = EthersBigNumber;

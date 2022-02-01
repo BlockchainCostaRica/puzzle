@@ -20,6 +20,7 @@ import { ReactComponent as ShowMoreIcon } from "@src/assets/icons/showMore.svg";
 import RoutingModal from "@screens/TradeInterface/RoutingModal";
 import Details from "./Details";
 import TooltipFeeInfo from "@screens/TradeInterface/TooltipFeeInfo";
+import { useStores } from "@stores";
 
 const Root = styled.div`
   display: flex;
@@ -38,16 +39,16 @@ const Root = styled.div`
 `;
 
 const TradeInterfaceImpl: React.FC = () => {
+  const { notificationStore } = useStores();
   const vm = useTradeVM();
   const navigate = useNavigate();
 
   const handleSetAssetId0 = (assetId: string) => {
     if (assetId === vm.assetId1) {
-      //todo replace
-      // errorMessage({
-      //   message: "You can't choose same assets",
-      //   title: "Warning",
-      // });
+      notificationStore.notify("You can't choose same assets", {
+        type: "error",
+        title: "Warning",
+      });
       return;
     }
     const urlSearchParams = new URLSearchParams(window.location.search);
@@ -61,11 +62,10 @@ const TradeInterfaceImpl: React.FC = () => {
 
   const handleSetAssetId1 = (assetId: string) => {
     if (assetId === vm.assetId0) {
-      ////todo replace
-      // errorMessage({
-      //   message: "You can't choose same assets",
-      //   title: "Warning",
-      // });
+      notificationStore.notify("You can't choose same assets", {
+        type: "error",
+        title: "Warning",
+      });
       return;
     }
     const urlSearchParams = new URLSearchParams(window.location.search);

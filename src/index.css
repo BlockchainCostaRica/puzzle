@@ -34,11 +34,6 @@ a {
     font-weight: 500;
 }
 
-.rc-notification {
-    top: 20px !important;
-    right: 20px !important;
-}
-
 .custom-notification .rc-notification-notice-close {
     opacity: 1;
     top: 16px;

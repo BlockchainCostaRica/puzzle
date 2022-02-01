@@ -33,9 +33,7 @@ const Body = styled.div`
   width: 100%;
   display: grid;
   @media (min-width: 880px) {
-    //grid-template-columns: 2fr 1fr;
-    //grid-template-columns: 6fr 3fr;
-    grid-template-columns: auto 50ch;
+    grid-template-columns: auto 45ch;
     column-gap: 40px;
   }
 `;

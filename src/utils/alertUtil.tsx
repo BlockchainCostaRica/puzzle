@@ -8,22 +8,17 @@ import { ReactComponent as WarningIcon } from "@src/assets/icons/warning.svg";
 import { ReactComponent as InfoIcon } from "@src/assets/icons/information.svg";
 import { Column, Row } from "@components/Flex";
 import Text from "@components/Text";
+
 const Root = styled.div`
   display: flex;
   flex-direction: column;
-  width: 410px;
-  height: fit-content;
-  @media (max-width: 768px) {
-    width: 300px;
-  }
+  //width: fit-content;
 `;
 
 const Body = styled(Row)`
   padding-right: 48px;
   box-sizing: border-box;
 `;
-
-const Content = styled(Column)``;
 
 const Link = styled.a`
   margin-top: 12px;
@@ -42,7 +37,7 @@ const getAlert = (
     <Root>
       <Body>
         <Icon type={type} />
-        <Content>
+        <Column>
           {title && (
             <Text size="medium" weight={500}>
               {title}
@@ -56,7 +51,7 @@ const getAlert = (
               {linkTitle || link}
             </Link>
           )}
-        </Content>
+        </Column>
       </Body>
     </Root>
   );

@@ -23,10 +23,7 @@ const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
   const { accountStore } = useStores();
   const vm = useAddLiquidityInterfaceVM();
 
-  const buyBaseTokenRoute = buildBuyTokenRoute(
-    (accountStore.ROUTES.pools as any)[vm.poolId],
-    vm.baseToken.assetId
-  );
+  const buyBaseTokenRoute = buildBuyTokenRoute("trade", vm.baseToken.assetId);
 
   return (
     <Root>

@@ -32,12 +32,14 @@ const Root = styled(Column)`
 `;
 
 const WalletActionsTooltip: React.FC<IProps> = ({ address }) => {
-  const { accountStore } = useStores();
+  const { accountStore, notificationStore } = useStores();
 
   const handleCopyAddress = () => {
     address && copy(address);
-    //todo
-    // successMessage({ message: "Your address was copied" });
+    notificationStore.notify("Your address was copied", {
+      type: "success",
+      title: "Congratulations!",
+    });
   };
   const handleLogout = () => accountStore.logout();
 

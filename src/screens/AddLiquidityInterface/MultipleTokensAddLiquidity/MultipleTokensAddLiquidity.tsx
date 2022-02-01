@@ -100,7 +100,7 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
         <Divider />
         <AdaptiveRowWithPadding justifyContent="space-between">
           <Text>Total value</Text>
-          <Text weight={500} style={{ textAlign: "end" }}>
+          <Text weight={500} fitContent>
             {vm.totalAmountToDeposit}
           </Text>
         </AdaptiveRowWithPadding>

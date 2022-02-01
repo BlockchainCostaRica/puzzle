@@ -217,8 +217,9 @@ class AccountStore {
 
   private invokeWithSigner = async (txParams: IInvokeTxParams) => {
     if (this.signer == null) {
-      //todo replace with new notifications
-      // errorMessage({ message: "You need login firstly" });
+      this.rootStore.notificationStore.notify("You need login firstly", {
+        type: "error",
+      });
       return;
     }
     try {
@@ -230,20 +231,20 @@ class AccountStore {
       });
 
       ttx.broadcast().then((tx: any) => {
-        ///todo replace with new notifications
-        // successMessage({
-        //   title: "Transaction is completed",
-        //   link: `${this.EXPLORER_LINK}/tx/${tx.id}`,
-        // });
+        this.rootStore.notificationStore.notify("", {
+          type: "success",
+          title: "Transaction is completed",
+          link: `${this.EXPLORER_LINK}/tx/${tx.id}`,
+          linkTitle: "Waves Explorer",
+        });
         return tx;
       });
     } catch (e: any) {
       console.warn(e);
-      //todo replace with new notifications
-      // errorMessage({
-      //   title: "Transaction is not completed",
-      //   message: e,
-      // });
+      this.rootStore.notificationStore.notify(e.toString(), {
+        type: "error",
+        title: "Transaction is not completed",
+      });
     }
   };
 
@@ -259,11 +260,10 @@ class AccountStore {
       data,
     } as any).catch((error: any) => {
       console.error({ error, data });
-      //todo replace with new notifications
-      // errorMessage({
-      //   title: "Transaction is not completed",
-      //   message: error.data,
-      // });
+      this.rootStore.notificationStore.notify(error.data, {
+        type: "error",
+        title: "Transaction is not completed",
+      });
       return null;
     });
     if (tx === null) return null;
@@ -272,11 +272,12 @@ class AccountStore {
     await waitForTx(txId, {
       apiBase: NODE_URL_MAP[this.chainId],
     });
-    //todo replace with new notifications
-    // successMessage({
-    //   title: "Transaction is completed",
-    //   link: `${this.EXPLORER_LINK}/tx/${txId}`,
-    // });
+    this.rootStore.notificationStore.notify("", {
+      type: "success",
+      title: "Transaction is completed",
+      link: `${this.EXPLORER_LINK}/tx/${txId}`,
+      linkTitle: "Waves Explorer",
+    });
     return tx;
   };
 
