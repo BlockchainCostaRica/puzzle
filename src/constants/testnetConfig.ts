@@ -13,10 +13,11 @@ export const TESTNET_ROUTES = {
   ROOT: "/",
   STAKE: "/stake",
   TRADE: "/trade",
+  INVEST: "/invest",
+  NFT: "/nft",
   withdraw: {
     farms: `${TESTNET_POOL_ID.farmsPool1}/withdraw`,
   },
-  INVEST: "/invest",
   pools: {
     farms: TESTNET_POOL_ID.farmsPool1,
   },
@@ -44,4 +45,9 @@ export const TESTNET_POOL_CONFIG: Record<TESTNET_POOL_ID, IPoolConfig> = {
       { ...testnetTokens.WAVES, logo: tokenLogos.WAVES, shareAmount: 0.4 },
     ],
   },
+};
+
+export const TESTNET_CONTRACTS_ADDRESSES = {
+  staking: "",
+  aggregator: "",
 };

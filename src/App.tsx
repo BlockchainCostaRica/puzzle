@@ -13,6 +13,7 @@ import Invest from "@screens/Invest";
 import WithdrawLiquidityInterface from "@screens/WithdrawLiquidity";
 import TradeInterface from "@screens/TradeInterface";
 import Staking from "@screens/Staking";
+import NFTStaking from "@screens/NFTStaking";
 
 const Root = styled(Column)`
   width: 100%;
@@ -22,19 +23,8 @@ const Root = styled(Column)`
 `;
 
 const App: React.FC = () => {
-  // const { accountStore, notificationStore } = useStores();
   const { accountStore } = useStores();
   const { ROUTES } = accountStore;
-  // useEffect(() => {
-  //   notificationStore.notify(
-  //     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Condimentum risus, eget dis mus nibh fringilla posuere.",
-  //     {
-  //       title: "Headline",
-  //       linkTitle: "Action",
-  //       link: "https://google.com",
-  //     }
-  //   );
-  // });
   return (
     <Root>
       <Header />
@@ -80,9 +70,10 @@ const App: React.FC = () => {
           />
         ))}
 
+        <Route path={ROUTES.NFT} element={<NFTStaking />} />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
-      {/*<ReactNotification className="notificationWindow" />*/}
     </Root>
   );
 };

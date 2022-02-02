@@ -79,10 +79,6 @@ const Subtitle = styled.div`
   }
 `;
 const BtnContainer = styled(Row)`
-  & > * {
-    width: 50%;
-  }
-
   padding: 40px 0;
   justify-content: center;
   @media (min-width: 880px) {

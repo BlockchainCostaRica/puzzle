@@ -17,6 +17,7 @@ export const MAINNET_ROUTES = {
   STAKE: "/stake",
   TRADE: "/trade",
   INVEST: "/invest",
+  NFT: "/nft",
   withdraw: {
     farms: `${MAINNET_POOL_ID.farmsPool1}/withdraw`,
     farms2: `${MAINNET_POOL_ID.farmsPool2}/withdraw`,
@@ -156,4 +157,9 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
       { ...mainnetTokens.USDN, shareAmount: 0.1, logo: tokenLogos.USDN },
     ],
   },
+};
+
+export const MAINNET_CONTRACTS_ADDRESSES = {
+  staking: "3PFTbywqxtFfukX3HyT881g4iW5K4QL3FAS",
+  aggregator: "3PGFHzVGT4NTigwCKP1NcwoXkodVZwvBuuU",
 };

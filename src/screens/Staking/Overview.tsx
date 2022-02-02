@@ -4,6 +4,8 @@ import Text from "@components/Text";
 import Card from "@components/Card";
 import SizedBox from "@components/SizedBox";
 import { Column } from "@src/components/Flex";
+import { observer } from "mobx-react-lite";
+import { useStakingVM } from "@screens/Staking/StakingVM";
 
 const Root = styled.div`
   display: flex;
@@ -21,6 +23,7 @@ const Container = styled(Card)`
   }
 `;
 const Overview: React.FC = () => {
+  const vm = useStakingVM();
   return (
     <Root>
       <Text weight={500} type="secondary">
@@ -38,10 +41,12 @@ const Overview: React.FC = () => {
           <Text type="secondary" size="small">
             My share in total staking
           </Text>
-          <Text style={{ fontSize: 20 }}>1.32 %</Text>
+          <Text style={{ fontSize: 20 }}>
+            {vm.shareOfTotalStake.toFormat(2)} %
+          </Text>
         </Column>
       </Container>
     </Root>
   );
 };
-export default Overview;
+export default observer(Overview);

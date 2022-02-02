@@ -163,14 +163,12 @@ class AddLiquidityInterfaceVM {
 
   depositMultiply = async () => {
     if (this.pool?.contractAddress == null) {
-      // errorMessage({ message: "There is no contract address" });
       return;
     }
     if (
       this.tokensToDepositAmounts == null ||
       this.pool.layer2Address == null
     ) {
-      // errorMessage({ message: "There is no tokens to deposit" });
       return;
     }
 
@@ -213,7 +211,6 @@ class AddLiquidityInterfaceVM {
   };
   depositBaseToken = async () => {
     if (this.pool?.contractAddress == null || this.pool.layer2Address == null) {
-      // errorMessage({ message: "There is no contract address" });
       return;
     }
     return this.rootStore.accountStore.invoke({

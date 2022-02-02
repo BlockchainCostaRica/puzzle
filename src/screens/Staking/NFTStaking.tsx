@@ -6,6 +6,8 @@ import { Column } from "@src/components/Flex";
 import eagle from "@src/assets/eagle.png";
 import Button from "@components/Button";
 import SizedBox from "@components/SizedBox";
+import { Link } from "react-router-dom";
+import { useStores } from "@stores";
 
 const Root = styled.div`
   display: flex;
@@ -29,6 +31,8 @@ const Title = styled(Text)`
   line-height: 32px;
 `;
 const NFTStaking: React.FC = () => {
+  const { accountStore } = useStores();
+  const { ROUTES } = accountStore;
   return (
     <Root>
       <Card
@@ -43,9 +47,11 @@ const NFTStaking: React.FC = () => {
             Buy and stake NFTs to get APY boost up to 45.32%
           </Text>
           <SizedBox height={16} />
-          <Button kind="secondary" style={{ color: "#7075E9" }} size="medium">
-            Go to NFT Staking
-          </Button>
+          <Link to={ROUTES.NFT}>
+            <Button kind="secondary" style={{ color: "#7075E9" }} size="medium">
+              Go to NFT Staking
+            </Button>
+          </Link>
         </Column>
         <Img src={eagle} alt="eagle" />
       </Card>

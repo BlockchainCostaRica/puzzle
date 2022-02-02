@@ -7,6 +7,9 @@ import { Column, Row } from "@src/components/Flex";
 import SquareTokenIcon from "@components/SquareTokenIcon";
 import stakedPuzzle from "@src/assets/tokens/staked-puzzle.svg";
 import puzzleLogo from "@src/assets/tokens/PUZZLE.svg";
+import { useStakingVM } from "@screens/Staking/StakingVM";
+import { observer } from "mobx-react-lite";
+import BN from "@src/utils/BN";
 
 const Root = styled.div`
   display: flex;
@@ -24,6 +27,15 @@ const Container = styled(Card)`
   }
 `;
 const MyBalances: React.FC = () => {
+  const vm = useStakingVM();
+  const staked = BN.formatUnits(
+    vm.addressStaked ?? BN.ZERO,
+    vm.puzzleToken.decimals
+  );
+  const available = BN.formatUnits(
+    vm.puzzleBalance.balance ?? BN.ZERO,
+    vm.puzzleToken.decimals
+  );
   return (
     <Root>
       <Text weight={500} type="secondary">
@@ -38,7 +50,7 @@ const MyBalances: React.FC = () => {
             <Text type="secondary" size="small">
               Available to stake
             </Text>
-            <Text weight={500}>0 PUZZLE</Text>
+            <Text weight={500}> {available.toFormat(2)} PUZZLE</Text>
           </Column>
         </Row>
         <Row>
@@ -48,11 +60,11 @@ const MyBalances: React.FC = () => {
             <Text type="secondary" size="small">
               Staked balance
             </Text>
-            <Text weight={500}>0 PUZZLE</Text>
+            <Text weight={500}>{staked.toFormat(2)} PUZZLE</Text>
           </Column>
         </Row>
       </Container>
     </Root>
   );
 };
-export default MyBalances;
+export default observer(MyBalances);

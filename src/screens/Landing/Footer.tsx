@@ -10,7 +10,6 @@ interface IProps {}
 const Wrapper = styled(Column)`
   background-color: #363870;
   width: 100%;
-  padding: 56px 16px;
   align-items: center;
 `;
 const Text = styled.a<{ secondary?: boolean }>`
@@ -24,7 +23,8 @@ const Text = styled.a<{ secondary?: boolean }>`
 const Root = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  width: 100%;
+  width: calc(100% - 32px);
+  padding: 56px 16px;
   max-width: 1440px;
   align-items: start;
 
