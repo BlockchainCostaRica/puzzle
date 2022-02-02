@@ -2,13 +2,11 @@ import styled from "@emotion/styled";
 import React from "react";
 import Card from "@components/Card";
 import SwitchButtons from "@components/SwitchButtons";
-import TokenInput from "@components/TokenInput/TokenInput";
 import { observer } from "mobx-react-lite";
 import { useStakingVM } from "@screens/Staking/StakingVM";
 import SizedBox from "@components/SizedBox";
-import Text from "@components/Text";
-import { Row } from "@src/components/Flex";
-import Button from "@components/Button";
+import Stake from "@screens/Staking/Stake";
+import UnStake from "@screens/Staking/UnStake";
 
 interface IProps {}
 
@@ -27,14 +25,7 @@ const StakeUnstake: React.FC<IProps> = () => {
         border
       />
       <SizedBox height={24} />
-      <TokenInput {...vm.tokenInputInfo} />
-      <SizedBox height={24} />
-      <Row alignItems="center" justifyContent="space-between">
-        <Text type="secondary">Transaction fee</Text>
-        <Text textAlign="right">0.005 WAVES</Text>
-      </Row>
-      <SizedBox height={24} />
-      <Button fixed>Stake Puzzle</Button>
+      {vm.action === 0 ? <Stake /> : <UnStake />}
     </Root>
   );
 };

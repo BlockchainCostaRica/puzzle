@@ -99,8 +99,6 @@ const TokenInput: React.FC<IProps> = (props) => {
     []
   );
 
-  // const handleChangeAmount = (value: BN) =>
-  //   props.setAmount && props.setAmount(value);
   return (
     <Root>
       <TokenSelect

@@ -258,7 +258,7 @@ class TradeVM {
     return this.route.reduce<Array<ISchemaRoute>>((acc, v) => {
       const exchanges = v.exchanges.reduce<Array<ISchemaExchange>>((ac, v) => {
         const token0 = tokens.find(({ assetId }) => assetId === v.from);
-        const token1 = tokens.find(({ assetId }) => assetId === v.from);
+        const token1 = tokens.find(({ assetId }) => assetId === v.to);
 
         const top = BN.formatUnits(v.amountOut, token1?.decimals);
         const bottom = BN.formatUnits(v.amountIn, token0?.decimals);

@@ -37,9 +37,13 @@ class StakingVM {
     when(() => accountStore.address !== null, this.getAddressStakingInfo);
   }
 
-  public puzzleAmount: BN = BN.ZERO;
-  @action.bound public setPuzzleAmount = (value: BN) =>
-    (this.puzzleAmount = value);
+  public puzzleAmountToStake: BN = BN.ZERO;
+  @action.bound public setPuzzleAmountToStake = (value: BN) =>
+    (this.puzzleAmountToStake = value);
+
+  public puzzleAmountToUnstake: BN = BN.ZERO;
+  @action.bound public setPuzzleAmountToUnStake = (value: BN) =>
+    (this.puzzleAmountToUnstake = value);
 
   public get puzzleToken() {
     return this.rootStore.accountStore.TOKENS.PUZZLE;
@@ -86,13 +90,13 @@ class StakingVM {
     });
   };
   stake = () => {
-    const { puzzleToken, puzzleAmount } = this;
+    const { puzzleToken, puzzleAmountToStake } = this;
     return this.rootStore.accountStore.invoke({
       dApp: this.rootStore.accountStore.CONTRACT_ADDRESSES.staking ?? "",
       payment: [
         {
           assetId: puzzleToken.assetId,
-          amount: puzzleAmount.toString(),
+          amount: puzzleAmountToStake.toString(),
         },
       ],
       call: {
@@ -102,7 +106,7 @@ class StakingVM {
     });
   };
   unStake = () => {
-    const { puzzleAmount } = this;
+    const { puzzleAmountToUnstake } = this;
     return this.rootStore.accountStore.invoke({
       dApp: this.rootStore.accountStore.CONTRACT_ADDRESSES.staking ?? "",
       payment: [],
@@ -111,32 +115,65 @@ class StakingVM {
         args: [
           {
             type: "integer",
-            value: puzzleAmount.toString(),
+            value: puzzleAmountToUnstake.toString(),
           },
         ],
       },
     });
   };
 
-  get tokenInputInfo() {
-    if (this.action === 0)
-      return {
-        selectable: false,
-        decimals: this.puzzleToken.decimals,
-        amount: this.puzzleAmount,
-        setAmount: this.setPuzzleAmount,
-        assetId: this.puzzleToken.assetId,
-        balances: [this.puzzleBalance],
-      };
-    else {
-      return {
-        selectable: false,
-        decimals: this.puzzleToken.decimals,
-        amount: this.puzzleAmount,
-        setAmount: this.setPuzzleAmount,
-        assetId: this.puzzleToken.assetId,
-        balances: [this.puzzleBalance],
-      };
-    }
+  get tokenStakeInputInfo() {
+    const { address } = this.rootStore.accountStore;
+    const onMaxClick =
+      address != null
+        ? () =>
+            this.setPuzzleAmountToStake(this.puzzleBalance.balance ?? BN.ZERO)
+        : undefined;
+    return {
+      selectable: false,
+      decimals: this.puzzleToken.decimals,
+      amount: this.puzzleAmountToStake,
+      setAmount: this.setPuzzleAmountToStake,
+      assetId: this.puzzleToken.assetId,
+      balances: [this.puzzleBalance],
+      onMaxClick,
+    };
+  }
+
+  get unstakeTokenInputInfo() {
+    const { address } = this.rootStore.accountStore;
+    const balances = new Balance({
+      ...this.puzzleBalance,
+      balance: this.addressStaked ?? BN.ZERO,
+    });
+    const onMaxClick =
+      address != null
+        ? () => this.setPuzzleAmountToUnStake(this.addressStaked ?? BN.ZERO)
+        : undefined;
+    return {
+      selectable: false,
+      decimals: this.puzzleToken.decimals,
+      amount: this.puzzleAmountToUnstake,
+      setAmount: this.setPuzzleAmountToUnStake,
+      assetId: this.puzzleToken.assetId,
+      balances: [balances],
+      onMaxClick,
+    };
+  }
+
+  get canStake(): boolean {
+    return (
+      this.puzzleAmountToStake.gt(0) &&
+      this.puzzleAmountToStake.lte(this.puzzleAmountToStake) &&
+      this.puzzleBalance.balance?.gt(0) != null
+    );
+  }
+
+  get canUnStake(): boolean {
+    return (
+      this.puzzleAmountToUnstake.gt(0) &&
+      this.puzzleAmountToUnstake.lte(this.puzzleAmountToUnstake) &&
+      this.globalStaked?.gt(0) != null
+    );
   }
 }
