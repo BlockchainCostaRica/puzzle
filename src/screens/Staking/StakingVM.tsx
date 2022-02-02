@@ -72,10 +72,14 @@ class StakingVM {
       nodeRequest(chainId, stakingContractAddress, `${address}_staked`),
     ]);
     this.setAddressStaked(
-      addressStaked ? new BN(addressStaked[0].value) : BN.ZERO
+      addressStaked && addressStaked.length > 0
+        ? new BN(addressStaked[0].value)
+        : BN.ZERO
     );
     this.setGlobalStaked(
-      globalStaked ? new BN(globalStaked[0].value) : BN.ZERO
+      globalStaked && globalStaked.length > 0
+        ? new BN(globalStaked[0].value)
+        : BN.ZERO
     );
   };
 

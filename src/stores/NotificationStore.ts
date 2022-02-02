@@ -71,7 +71,7 @@ class NotificationStore {
             ...opts.style,
           },
           className: "custom-notification",
-          duration: opts.duration ?? 5,
+          duration: opts.duration ?? 50,
           key: opts.key,
           closable: true,
           closeIcon: closeAlertIcon,
