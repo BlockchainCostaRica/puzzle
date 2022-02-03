@@ -70,7 +70,7 @@ const App: React.FC = () => {
           />
         ))}
 
-        <Route path={ROUTES.NFT} element={<NFTStaking />} />
+        <Route path={ROUTES.ULTRASTAKE} element={<NFTStaking />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

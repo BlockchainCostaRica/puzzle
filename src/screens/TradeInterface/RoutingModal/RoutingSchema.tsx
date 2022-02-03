@@ -44,7 +44,7 @@ const RoutingSchema: React.FC<IProps> = () => {
             style={{ position: "absolute", left: "-32px" }}
           />
         )}
-        <SquareTokenIcon src={vm.token1.logo} />
+        <SquareTokenIcon src={vm.token1.logo} size="small" />
       </div>
     </Root>
   );

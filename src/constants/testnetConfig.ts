@@ -14,7 +14,7 @@ export const TESTNET_ROUTES = {
   STAKE: "/stake",
   TRADE: "/trade",
   INVEST: "/invest",
-  NFT: "/nft",
+  ULTRASTAKE: "/ultrastake",
   withdraw: {
     farms: `${TESTNET_POOL_ID.farmsPool1}/withdraw`,
   },

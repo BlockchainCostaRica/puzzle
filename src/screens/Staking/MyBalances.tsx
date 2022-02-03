@@ -50,7 +50,9 @@ const MyBalances: React.FC = () => {
             <Text type="secondary" size="small">
               Available to stake
             </Text>
-            <Text weight={500}> {available.toFormat(2)} PUZZLE</Text>
+            <Text weight={500}>
+              {available.eq(0) ? "—" : `${available.toFormat(2)} PUZZLE`}
+            </Text>
           </Column>
         </Row>
         <Row>
@@ -60,7 +62,9 @@ const MyBalances: React.FC = () => {
             <Text type="secondary" size="small">
               Staked balance
             </Text>
-            <Text weight={500}>{staked.toFormat(2)} PUZZLE</Text>
+            <Text weight={500}>
+              {staked.eq(0) ? "—" : `${staked.toFormat(2)} PUZZLE`}
+            </Text>
           </Column>
         </Row>
       </Container>

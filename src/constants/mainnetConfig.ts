@@ -17,7 +17,7 @@ export const MAINNET_ROUTES = {
   STAKE: "/stake",
   TRADE: "/trade",
   INVEST: "/invest",
-  NFT: "/nft",
+  ULTRASTAKE: "/ultrastake",
   withdraw: {
     farms: `${MAINNET_POOL_ID.farmsPool1}/withdraw`,
     farms2: `${MAINNET_POOL_ID.farmsPool2}/withdraw`,
