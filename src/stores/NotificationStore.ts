@@ -46,6 +46,7 @@ class NotificationStore {
   isOpenMobileAccount = false;
 
   constructor(rootStore: RootStore) {
+    const width = window.innerWidth;
     const mobileStyle = {
       top: 80,
       right: 16,
@@ -54,13 +55,13 @@ class NotificationStore {
     const desktopStyle = {
       top: 96,
       right: 16,
-      left: "50%",
+      left: width - 320 - 16,
     };
     this.rootStore = rootStore;
     notification.newInstance(
       {
         closeIcon: closeAlertIcon,
-        style: window.innerWidth >= 880 ? desktopStyle : mobileStyle,
+        style: width >= 880 ? desktopStyle : mobileStyle,
       },
       (notification: any) => (this._instance = notification)
     );
