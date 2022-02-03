@@ -6,6 +6,7 @@ import BN from "@src/utils/BN";
 import Balance from "@src/entities/Balance";
 import nodeRequest from "@src/utils/nodeRequest";
 import stakedPuzzleLogo from "@src/assets/tokens/staked-puzzle.svg";
+import statsService from "@src/services/statsService";
 
 const ctx = React.createContext<StakingVM | null>(null);
 
@@ -17,10 +18,17 @@ export const StakingVMProvider: React.FC = ({ children }) => {
 
 export const useStakingVM = () => useVM(ctx);
 
+export interface IStakingStats {
+  apy: BN;
+}
+
 class StakingVM {
   private stakingContractAddress: string = "";
   @action.bound private _setStakingAddress = (v: string) =>
     (this.stakingContractAddress = v);
+
+  public stats: IStakingStats | null = null;
+  private _setStats = (v: IStakingStats) => (this.stats = v);
 
   public action: 0 | 1 = 0;
   @action.bound setAction = (v: 0 | 1) => (this.action = v);
@@ -39,6 +47,7 @@ class StakingVM {
 
   constructor(private rootStore: RootStore) {
     const { accountStore } = this.rootStore;
+    this.syncStats().then();
     this._setStakingAddress(accountStore.CONTRACT_ADDRESSES.staking);
     makeAutoObservable(this);
     when(() => accountStore.address !== null, this.getAddressStakingInfo);
@@ -77,11 +86,6 @@ class StakingVM {
     const [globalValues, addressValues] = await Promise.all([
       nodeRequest(chainId, stakingContractAddress, `global_(.*)`),
       nodeRequest(chainId, stakingContractAddress, `${address}_(.*)`),
-      // nodeRequest(
-      //   chainId,
-      //   stakingContractAddress,
-      //   `${address}_${TOKENS.USDN.assetId}_lastClaim`
-      // ),
     ]);
 
     const keysArray = {
@@ -124,6 +128,14 @@ class StakingVM {
       .times(addressStaked);
     this._setAvailableToClaim(availableToClaim);
     lastClaimDate && this._setLastClaimDate(lastClaimDate);
+  };
+
+  syncStats = async () => {
+    const data = await statsService.getStakingStats();
+    const formattedData = Object.entries(data).reduce((acc, [field, value]) => {
+      return { ...acc, [field]: new BN(value) };
+    }, {} as IStakingStats);
+    this._setStats(formattedData);
   };
 
   claimRewards = () => {

@@ -216,7 +216,7 @@ class TradeVM {
       // errorMessage({ message: "Something wrong with second asset" });
       return;
     }
-    return accountStore.invoke({
+    const tx = await accountStore.invoke({
       dApp: "3PGFHzVGT4NTigwCKP1NcwoXkodVZwvBuuU", //todo move contract to constants
       payment: [
         {
@@ -235,6 +235,7 @@ class TradeVM {
         ],
       },
     });
+    console.log(tx);
   };
 
   get totalLiquidity() {

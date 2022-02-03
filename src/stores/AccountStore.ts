@@ -83,7 +83,6 @@ class AccountStore {
     if (this.isBrowserSupportsWavesKeeper) {
       this.setupWavesKeeper();
     }
-    // this.setAddress("3P2AjQFAZd9iSkFjWGbn9ryCCftDtJp4kzu");
     if (initState) {
       if (initState.loginType === LOGIN_TYPE.KEEPER) {
         this.setLoginType(initState.loginType);
@@ -231,12 +230,12 @@ class AccountStore {
       });
 
       ttx.broadcast().then((tx: any) => {
-        this.rootStore.notificationStore.notify("", {
-          type: "success",
-          title: "Transaction is completed",
-          link: `${this.EXPLORER_LINK}/tx/${tx.id}`,
-          linkTitle: "Waves Explorer",
-        });
+        // this.rootStore.notificationStore.notify("", {
+        //   type: "success",
+        //   title: "Transaction is completed",
+        //   link: `${this.EXPLORER_LINK}/tx/${tx.id}`,
+        //   linkTitle: "Waves Explorer",
+        // });
         return tx;
       });
     } catch (e: any) {
@@ -272,12 +271,12 @@ class AccountStore {
     await waitForTx(txId, {
       apiBase: NODE_URL_MAP[this.chainId],
     });
-    this.rootStore.notificationStore.notify("", {
-      type: "success",
-      title: "Transaction is completed",
-      link: `${this.EXPLORER_LINK}/tx/${txId}`,
-      linkTitle: "Waves Explorer",
-    });
+    // this.rootStore.notificationStore.notify("", {
+    //   type: "success",
+    //   title: "Transaction is completed",
+    //   link: `${this.EXPLORER_LINK}/tx/${txId}`,
+    //   linkTitle: "Waves Explorer",
+    // });
     return tx;
   };
 
