@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import React, { HTMLAttributes } from "react";
 import Text from "@components/Text";
 import info from "@src/assets/icons/info.svg";
+import warning from "@src/assets/icons/warning.svg";
 import SizedBox from "@components/SizedBox";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
@@ -15,8 +16,8 @@ const Root = styled.div<{ warning?: boolean }>`
   background: ${({ warning }) => (warning ? "#FCF4F1" : "#f1f2fe")};
   border-radius: 12px;
   padding: 18px;
-  align-items: start;
-  justify-content: center;
+  align-items: center;
+  justify-content: flex-start;
 
   a {
     color: #6563dd;
@@ -25,9 +26,10 @@ const Root = styled.div<{ warning?: boolean }>`
 `;
 
 const Notification: React.FC<IProps> = ({ text, type, ...rest }) => {
+  const icon = type === "warning" ? warning : info;
   return (
     <Root warning={type === "warning"} {...rest}>
-      <img src={info} alt="info" />
+      <img src={icon} alt="info" />
       <SizedBox width={10} />
       {typeof text === "string" ? <Text size="medium">{text}</Text> : text}
     </Root>

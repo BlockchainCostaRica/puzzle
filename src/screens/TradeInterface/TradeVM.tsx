@@ -174,20 +174,17 @@ class TradeVM {
 
   get balances() {
     const { accountStore } = this.rootStore;
-    return (
-      Object.values(this.rootStore.accountStore.TOKENS)
-        .map((t) => {
-          const balance = accountStore.findBalanceByAssetId(t.assetId);
-          return balance ?? new Balance(t);
-        })
-        // .sort((a, b) => b.symbol.localeCompare(b.symbol));
-        .sort((a, b) => {
-          if (a.usdnEquivalent == null && b.usdnEquivalent == null) return 0;
-          if (a.usdnEquivalent == null && b.usdnEquivalent != null) return 1;
-          if (a.usdnEquivalent == null && b.usdnEquivalent == null) return -1;
-          return a.usdnEquivalent!.lt(b.usdnEquivalent!) ? 1 : -1;
-        })
-    );
+    return Object.values(this.rootStore.accountStore.TOKENS)
+      .map((t) => {
+        const balance = accountStore.findBalanceByAssetId(t.assetId);
+        return balance ?? new Balance(t);
+      })
+      .sort((a, b) => {
+        if (a.usdnEquivalent == null && b.usdnEquivalent == null) return 0;
+        if (a.usdnEquivalent == null && b.usdnEquivalent != null) return 1;
+        if (a.usdnEquivalent == null && b.usdnEquivalent == null) return -1;
+        return a.usdnEquivalent!.lt(b.usdnEquivalent!) ? 1 : -1;
+      });
   }
 
   get minimumToReceive(): BN {
@@ -201,41 +198,44 @@ class TradeVM {
   };
 
   swap = async () => {
-    const { accountStore } = this.rootStore;
+    const { accountStore, notificationStore } = this.rootStore;
+    const { CONTRACT_ADDRESSES } = accountStore;
     const { token0, amount0, minimumToReceive, parameters } = this;
-    if (this.synchronizing || parameters == null) {
-      // errorMessage({ message: "Something wrong" });
-      return;
-    }
-    if (token0 == null || amount0.eq(0)) {
-      // errorMessage({ message: "Something wrong with first asset" });
-      return;
-    }
-
-    if (minimumToReceive == null) {
-      // errorMessage({ message: "Something wrong with second asset" });
-      return;
-    }
-    const tx = await accountStore.invoke({
-      dApp: "3PGFHzVGT4NTigwCKP1NcwoXkodVZwvBuuU", //todo move contract to constants
-      payment: [
-        {
-          assetId: token0.assetId,
-          amount: amount0.toString(),
-        },
-      ],
-      call: {
-        function: "swap",
-        args: [
-          { type: "string", value: parameters },
+    if (this.synchronizing || parameters == null) return;
+    if (token0 == null || amount0.eq(0)) return;
+    if (minimumToReceive == null) return;
+    accountStore
+      .invoke({
+        dApp: CONTRACT_ADDRESSES.aggregator,
+        payment: [
           {
-            type: "integer",
-            value: minimumToReceive.toFixed(0).toString(),
+            assetId: token0.assetId,
+            amount: amount0.toString(),
           },
         ],
-      },
-    });
-    console.log(tx);
+        call: {
+          function: "swap",
+          args: [
+            { type: "string", value: parameters },
+            {
+              type: "integer",
+              value: minimumToReceive.toFixed(0).toString(),
+            },
+          ],
+        },
+      })
+      .then((txId) => {
+        if (txId == null) return;
+        notificationStore.notify(
+          "You can view the details of it in Waves Explorer",
+          {
+            type: "success",
+            title: "Transaction is completed",
+            link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
+            linkTitle: "View on Explorer",
+          }
+        );
+      });
   };
 
   get totalLiquidity() {

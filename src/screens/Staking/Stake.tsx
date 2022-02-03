@@ -24,10 +24,10 @@ const Stake: React.FC<IProps> = () => {
           <Notification
             type="warning"
             text={
-              <span>
+              <div>
                 Your have low PUZZLE balance.{" "}
                 <Link to={buyPuzzleRoute}>Buy PUZZLE</Link> to stake it.
-              </span>
+              </div>
             }
           />
           <SizedBox height={24} />

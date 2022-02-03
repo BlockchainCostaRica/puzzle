@@ -162,15 +162,10 @@ class AddLiquidityInterfaceVM {
   }
 
   depositMultiply = async () => {
-    if (this.pool?.contractAddress == null) {
+    const { accountStore, notificationStore } = this.rootStore;
+    if (this.pool?.contractAddress == null) return;
+    if (this.tokensToDepositAmounts == null || this.pool.layer2Address == null)
       return;
-    }
-    if (
-      this.tokensToDepositAmounts == null ||
-      this.pool.layer2Address == null
-    ) {
-      return;
-    }
 
     const payment = Object.entries(this.tokensToDepositAmounts).reduce(
       (acc, [assetId, value]) => [
@@ -180,14 +175,27 @@ class AddLiquidityInterfaceVM {
       [] as Array<{ assetId: string; amount: string }>
     );
 
-    return this.rootStore.accountStore.invoke({
-      dApp: this.pool.layer2Address,
-      payment,
-      call: {
-        function: "generateIndexAndStake",
-        args: [],
-      },
-    });
+    accountStore
+      .invoke({
+        dApp: this.pool.layer2Address,
+        payment,
+        call: {
+          function: "generateIndexAndStake",
+          args: [],
+        },
+      })
+      .then((txId) => {
+        if (txId == null) return;
+        notificationStore.notify(
+          `Liquidity successfully provided to the ${this.pool?.name}. You can track your reward on the pool page.`,
+          {
+            type: "success",
+            title: "Successfully provided",
+            link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
+            linkTitle: "View on Explorer",
+          }
+        );
+      });
   };
 
   get baseTokenBalance() {
@@ -210,21 +218,25 @@ class AddLiquidityInterfaceVM {
       this.setBaseTokenAmount(userTokenBalance.balance);
   };
   depositBaseToken = async () => {
-    if (this.pool?.contractAddress == null || this.pool.layer2Address == null) {
+    if (this.pool?.contractAddress == null || this.pool.layer2Address == null)
       return;
-    }
-    return this.rootStore.accountStore.invoke({
-      dApp: this.pool.layer2Address,
-      payment: [
-        {
-          assetId: this.baseToken.assetId,
-          amount: this.baseTokenAmount.toString(),
+
+    this.rootStore.accountStore
+      .invoke({
+        dApp: this.pool.layer2Address,
+        payment: [
+          {
+            assetId: this.baseToken.assetId,
+            amount: this.baseTokenAmount.toString(),
+          },
+        ],
+        call: {
+          function: "generateIndexWithOneTokenAndStake",
+          args: [],
         },
-      ],
-      call: {
-        function: "generateIndexWithOneTokenAndStake",
-        args: [],
-      },
-    });
+      })
+      .then((txId) => {
+        if (txId == null) return;
+      });
   };
 }

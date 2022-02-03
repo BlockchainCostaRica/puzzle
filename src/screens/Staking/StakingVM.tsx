@@ -126,7 +126,7 @@ class StakingVM {
     const availableToClaim = globalLastCheckInterest
       .minus(addressLastCheckInterest)
       .times(addressStaked);
-    this._setAvailableToClaim(availableToClaim);
+    addressStaked && this._setAvailableToClaim(availableToClaim);
     lastClaimDate && this._setLastClaimDate(lastClaimDate);
   };
 
@@ -149,36 +149,72 @@ class StakingVM {
     });
   };
   stake = () => {
-    const { puzzleToken, puzzleAmountToStake } = this;
-    return this.rootStore.accountStore.invoke({
-      dApp: this.rootStore.accountStore.CONTRACT_ADDRESSES.staking ?? "",
-      payment: [
-        {
-          assetId: puzzleToken.assetId,
-          amount: puzzleAmountToStake.toString(),
-        },
-      ],
-      call: {
-        function: "stake",
-        args: [],
-      },
-    });
-  };
-  unStake = () => {
-    const { puzzleAmountToUnstake } = this;
-    return this.rootStore.accountStore.invoke({
-      dApp: this.rootStore.accountStore.CONTRACT_ADDRESSES.staking ?? "",
-      payment: [],
-      call: {
-        function: "unStake",
-        args: [
+    const { puzzleToken, puzzleAmountToStake, rootStore } = this;
+    const { accountStore, notificationStore } = rootStore;
+    const puzzleAmount = BN.parseUnits(
+      this.puzzleAmountToStake,
+      this.puzzleToken.decimals
+    ).toFormat(2);
+    accountStore
+      .invoke({
+        dApp: this.rootStore.accountStore.CONTRACT_ADDRESSES.staking ?? "",
+        payment: [
           {
-            type: "integer",
-            value: puzzleAmountToUnstake.toString(),
+            assetId: puzzleToken.assetId,
+            amount: puzzleAmountToStake.toString(),
           },
         ],
-      },
-    });
+        call: {
+          function: "stake",
+          args: [],
+        },
+      })
+      .then((txId) => {
+        if (txId == null) return;
+        notificationStore.notify(
+          `You can track your reward on the staking page`,
+          {
+            type: "success",
+            title: `${puzzleAmount} PUZZLE successfully staked`,
+            link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
+            linkTitle: "View on Explorer",
+          }
+        );
+      });
+  };
+  unStake = () => {
+    const { puzzleAmountToUnstake, rootStore } = this;
+    const { accountStore, notificationStore } = rootStore;
+    const puzzleAmount = BN.parseUnits(
+      this.puzzleAmountToUnstake,
+      this.puzzleToken.decimals
+    ).toFormat(2);
+    accountStore
+      .invoke({
+        dApp: this.rootStore.accountStore.CONTRACT_ADDRESSES.staking ?? "",
+        payment: [],
+        call: {
+          function: "unStake",
+          args: [
+            {
+              type: "integer",
+              value: puzzleAmountToUnstake.toString(),
+            },
+          ],
+        },
+      })
+      .then((txId) => {
+        if (txId == null) return;
+        notificationStore.notify(
+          `You can track your available to trade PUZZLE balance in the header section`,
+          {
+            type: "success",
+            title: `${puzzleAmount} PUZZLE successfully unstaked`,
+            link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
+            linkTitle: "View on Explorer",
+          }
+        );
+      });
   };
 
   get tokenStakeInputInfo() {

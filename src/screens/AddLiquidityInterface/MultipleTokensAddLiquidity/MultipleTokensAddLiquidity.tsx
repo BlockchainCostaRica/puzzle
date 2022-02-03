@@ -24,8 +24,10 @@ const Root = styled.div`
 `;
 
 const AdaptiveRowWithPadding = styled(Row)`
+  width: calc(100% - 32px);
   padding: 16px;
   @media (min-width: 880px) {
+    width: calc(100% - 48px);
     padding: 24px;
   }
 `;
@@ -99,8 +101,8 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
         </GridTable>
         <Divider />
         <AdaptiveRowWithPadding justifyContent="space-between">
-          <Text>Total value</Text>
-          <Text weight={500} fitContent>
+          <Text fitContent>Total value</Text>
+          <Text weight={500} fitContent nowrap>
             {vm.totalAmountToDeposit}
           </Text>
         </AdaptiveRowWithPadding>

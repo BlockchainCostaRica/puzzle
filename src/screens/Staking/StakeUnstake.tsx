@@ -1,4 +1,3 @@
-import styled from "@emotion/styled";
 import React from "react";
 import Card from "@components/Card";
 import SwitchButtons from "@components/SwitchButtons";
@@ -10,14 +9,10 @@ import UnStake from "@screens/Staking/UnStake";
 
 interface IProps {}
 
-const Root = styled(Card)`
-  margin-top: 24px;
-`;
-
 const StakeUnstake: React.FC<IProps> = () => {
   const vm = useStakingVM();
   return (
-    <Root>
+    <Card style={{ marginTop: 24 }}>
       <SwitchButtons
         values={["Stake", "Unstake"]}
         active={vm.action}
@@ -26,7 +21,7 @@ const StakeUnstake: React.FC<IProps> = () => {
       />
       <SizedBox height={24} />
       {vm.action === 0 ? <Stake /> : <UnStake />}
-    </Root>
+    </Card>
   );
 };
 export default observer(StakeUnstake);

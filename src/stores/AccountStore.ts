@@ -214,12 +214,14 @@ class AccountStore {
       ? this.invokeWithKeeper(txParams)
       : this.invokeWithSigner(txParams);
 
-  private invokeWithSigner = async (txParams: IInvokeTxParams) => {
+  private invokeWithSigner = async (
+    txParams: IInvokeTxParams
+  ): Promise<string | null> => {
     if (this.signer == null) {
       this.rootStore.notificationStore.notify("You need login firstly", {
         type: "error",
       });
-      return;
+      return null;
     }
     try {
       const ttx = this.signer.invoke({
@@ -229,25 +231,20 @@ class AccountStore {
         call: txParams.call,
       });
 
-      ttx.broadcast().then((tx: any) => {
-        // this.rootStore.notificationStore.notify("", {
-        //   type: "success",
-        //   title: "Transaction is completed",
-        //   link: `${this.EXPLORER_LINK}/tx/${tx.id}`,
-        //   linkTitle: "Waves Explorer",
-        // });
-        return tx;
-      });
+      return ttx.broadcast().then((tx: any) => tx.id);
     } catch (e: any) {
       console.warn(e);
       this.rootStore.notificationStore.notify(e.toString(), {
         type: "error",
         title: "Transaction is not completed",
       });
+      return null;
     }
   };
 
-  private invokeWithKeeper = async (txParams: IInvokeTxParams) => {
+  private invokeWithKeeper = async (
+    txParams: IInvokeTxParams
+  ): Promise<string | null> => {
     const data = {
       fee: { assetId: "WAVES", amount: 500000 },
       dApp: txParams.dApp,
@@ -271,13 +268,7 @@ class AccountStore {
     await waitForTx(txId, {
       apiBase: NODE_URL_MAP[this.chainId],
     });
-    // this.rootStore.notificationStore.notify("", {
-    //   type: "success",
-    //   title: "Transaction is completed",
-    //   link: `${this.EXPLORER_LINK}/tx/${txId}`,
-    //   linkTitle: "Waves Explorer",
-    // });
-    return tx;
+    return txId;
   };
 
   get TOKENS() {
