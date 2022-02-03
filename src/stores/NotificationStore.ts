@@ -46,9 +46,22 @@ class NotificationStore {
   isOpenMobileAccount = false;
 
   constructor(rootStore: RootStore) {
+    const mobileStyle = {
+      top: 80,
+      right: 16,
+      left: 16,
+    };
+    const desktopStyle = {
+      top: 96,
+      right: 16,
+      left: "50%",
+    };
     this.rootStore = rootStore;
     notification.newInstance(
-      { closeIcon: closeAlertIcon },
+      {
+        closeIcon: closeAlertIcon,
+        style: window.innerWidth >= 880 ? desktopStyle : mobileStyle,
+      },
       (notification: any) => (this._instance = notification)
     );
     makeAutoObservable(this);
@@ -71,7 +84,7 @@ class NotificationStore {
             ...opts.style,
           },
           className: "custom-notification",
-          duration: opts.duration ?? 50,
+          duration: opts.duration ?? 5000,
           key: opts.key,
           closable: true,
           closeIcon: closeAlertIcon,

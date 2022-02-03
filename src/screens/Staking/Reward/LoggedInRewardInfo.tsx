@@ -50,7 +50,7 @@ const LoggedInRewardInfo: React.FC = () => {
           </Column>
         </Row>
         <Text type="secondary" textAlign="right">
-          {!vm.lastClaimDate.eq(0) && format}
+          {!vm.lastClaimDate.eq(0) && "Last claim " + format}
         </Text>
       </Row>
       <SizedBox height={18} />

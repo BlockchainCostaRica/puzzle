@@ -218,7 +218,8 @@ class AccountStore {
     txParams: IInvokeTxParams
   ): Promise<string | null> => {
     if (this.signer == null) {
-      this.rootStore.notificationStore.notify("You need login firstly", {
+      this.rootStore.notificationStore.notify("You need to login firstly", {
+        title: "Error",
         type: "error",
       });
       return null;

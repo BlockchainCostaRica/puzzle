@@ -12,7 +12,7 @@ import Text from "@components/Text";
 const Root = styled.div`
   display: flex;
   flex-direction: column;
-  //width: fit-content;
+  width: 100%;
 `;
 
 const Body = styled(Row)`
@@ -63,7 +63,7 @@ const Icon: React.FunctionComponent<{
   let icon = null;
   const Root = styled.div`
     margin-right: 16px;
-    flex: 1;
+    //flex: 1;
   `;
   switch (type) {
     case "error":

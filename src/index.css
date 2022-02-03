@@ -34,6 +34,15 @@ a {
     font-weight: 500;
 }
 
+.rc-notification {
+    top: 30px;
+    right: 16px;
+}
+
+.rc-notification-notice-content {
+    display: flex;
+}
+
 .custom-notification .rc-notification-notice-close {
     opacity: 1;
     top: 16px;
