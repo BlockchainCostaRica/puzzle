@@ -47,11 +47,11 @@ const NFTStaking: React.FC = () => {
             Buy and stake NFTs to get APY boost up to 45.32%
           </Text>
           <SizedBox height={16} />
-          <Link to={{ pathname: "https://eagles.puzzleswap.org" }} target="_blank">
+          <a href="https://eagles.puzzleswap.org" target="_blank">
             <Button kind="secondary" style={{ color: "#7075E9" }} size="medium">
               Go to NFT Staking
             </Button>
-          </Link>
+          </a>
         </Column>
         <Img src={eagle} alt="eagle" />
       </Card>
