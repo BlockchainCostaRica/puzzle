@@ -20,14 +20,14 @@ const Root = styled.div`
   flex-direction: column;
   background: #ffffff;
   padding: 8px;
-  width: fit-content;
   border-radius: 16px;
+  @media (min-width: 880px) {
+    //max-width: 278px;
+  }
 `;
 const Img = styled.img`
   border: 1px solid #f1f2fe;
   border-radius: 12px;
-  width: 262px;
-  height: 262px;
 `;
 const Bottom = styled.div`
   display: flex;
@@ -36,8 +36,6 @@ const Bottom = styled.div`
 `;
 const Buttons = styled.div`
   display: flex;
-  //flex-direction: column;
-  //padding: 16px;
 `;
 
 const NFTCard: React.FC<IProps> = ({ src, price, boostAPY, name, isInOwn }) => {

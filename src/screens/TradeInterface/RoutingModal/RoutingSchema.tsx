@@ -26,12 +26,13 @@ const RoutingSchema: React.FC<IProps> = () => {
   return (
     <Root>
       <RoutesContainer>
-        {values?.map((i, index) => (
+        {values?.map((i, index, array) => (
           <Route
             {...i}
             key={`${i.percent.toString()}-${index}`}
             token0Logo={vm.token0.logo}
             isAmount0Empty={isAmount0Empty}
+            isSingleRoute={array.length === 1}
           />
         ))}
       </RoutesContainer>

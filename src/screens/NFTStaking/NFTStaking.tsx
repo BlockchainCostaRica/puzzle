@@ -27,7 +27,58 @@ const Root = styled.div`
 `;
 const NFTContainer = styled.div`
   display: grid;
+  row-gap: 16px;
+  grid-template-columns: 1fr;
+  @media (min-width: 880px) {
+    //grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fill, 278px);
+    column-gap: 16px;
+  }
 `;
+const array = [
+  {
+    src: eagle,
+    price: "~ 3,099 $",
+    boostAPY: 10.11,
+    name: "Early eagle",
+    isInOwn: true,
+  },
+  {
+    src: eagle,
+    price: "~ 3,099 $",
+    boostAPY: 10.11,
+    name: "Early eagle",
+    isInOwn: true,
+  },
+  {
+    src: eagle,
+    price: "~ 3,099 $",
+    boostAPY: 10.11,
+    name: "Early eagle",
+    isInOwn: true,
+  },
+  {
+    src: eagle,
+    price: "~ 3,099 $",
+    boostAPY: 10.11,
+    name: "Early eagle",
+    isInOwn: true,
+  },
+  {
+    src: eagle,
+    price: "~ 3,099 $",
+    boostAPY: 10.11,
+    name: "Early eagle",
+    isInOwn: true,
+  },
+  {
+    src: eagle,
+    price: "~ 3,099 $",
+    boostAPY: 10.11,
+    name: "Early eagle",
+    isInOwn: true,
+  },
+];
 const NFTStakingImpl: React.FC = () => {
   return (
     <Layout>
@@ -41,7 +92,10 @@ const NFTStakingImpl: React.FC = () => {
             </Text>
             <SizedBox height={8} />
             <Text type="secondary">
-              Stake special NFTs to boost APY up to +25 %
+              Stake Puzzle NFT to share the rewards pool from Puzzle aggregator
+              fees and boost your staking rewards up to
+              <b style={{ color: "#35A15A" }}> 45.3 %</b>. You can stake one of
+              each type of NFTs.
             </Text>
             <SizedBox height={24} />
             <Text weight={500} type="secondary">
@@ -49,13 +103,9 @@ const NFTStakingImpl: React.FC = () => {
             </Text>
             <SizedBox height={8} />
             <NFTContainer>
-              <NFTCard
-                src={eagle}
-                price="~ 3,099 $"
-                boostAPY={10.11}
-                name="Early eagle"
-                isInOwn
-              />
+              {array.map((i, index) => (
+                <NFTCard {...i} key={index} />
+              ))}
             </NFTContainer>
           </Root>
         )}
