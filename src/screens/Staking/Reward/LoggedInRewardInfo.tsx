@@ -51,7 +51,7 @@ const LoggedInRewardInfo: React.FC = () => {
             <Text weight={500}>{claimedReward}</Text>
           </Column>
         </Row>
-        <Text type="secondary" textAlign="right">
+        <Text type="secondary" textAlign="right" size="medium">
           {!vm.lastClaimDate.eq(0) && "Last claim " + format}
         </Text>
       </Row>
