@@ -68,7 +68,7 @@ const LoggedInRewardInfo: React.FC = () => {
       <Button
         fixed
         size="medium"
-        onClick={vm.claimRewards}
+        onClick={vm.claimReward}
         disabled={!vm.canClaim}
       >
         Claim reward

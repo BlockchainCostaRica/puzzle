@@ -46,7 +46,9 @@ const Overview: React.FC = () => {
           <Text style={{ fontSize: 20 }}>
             {vm.shareOfTotalStake.eq(0)
               ? "—"
-              : `${vm.shareOfTotalStake.toFormat(2)}%`}
+              : vm.shareOfTotalStake.gte(0.01)
+              ? vm.shareOfTotalStake.toFormat(2).concat(" %")
+              : vm.shareOfTotalStake.toFormat(6).concat(" %")}
           </Text>
         </Column>
       </Container>

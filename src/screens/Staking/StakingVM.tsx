@@ -138,20 +138,25 @@ class StakingVM {
     this._setStats(formattedData);
   };
 
-  claimRewards = () => {
-    return this.rootStore.accountStore.invoke({
-      dApp: this.rootStore.accountStore.CONTRACT_ADDRESSES.staking ?? "",
-      payment: [],
-      call: {
-        function: "claimReward",
-        args: [],
-      },
-    });
+  claimReward = () => {
+    if (!this.canClaim) return;
+    this.rootStore.accountStore
+      .invoke({
+        dApp: this.rootStore.accountStore.CONTRACT_ADDRESSES.staking ?? "",
+        payment: [],
+        call: {
+          function: "claimReward",
+          args: [],
+        },
+      })
+      .then();
+    this.getAddressStakingInfo().then();
   };
   stake = () => {
+    if (!this.canStake) return;
     const { puzzleToken, puzzleAmountToStake, rootStore } = this;
     const { accountStore, notificationStore } = rootStore;
-    const puzzleAmount = BN.parseUnits(
+    const puzzleAmount = BN.formatUnits(
       this.puzzleAmountToStake,
       this.puzzleToken.decimals
     ).toFormat(2);
@@ -171,6 +176,9 @@ class StakingVM {
       })
       .then((txId) => {
         if (txId == null) return;
+        this._setAddressStaked(
+          this.addressStaked?.plus(this.puzzleAmountToStake) ?? BN.ZERO
+        );
         notificationStore.notify(
           `You can track your reward on the staking page`,
           {
@@ -181,11 +189,13 @@ class StakingVM {
           }
         );
       });
+    this.getAddressStakingInfo().then();
   };
   unStake = () => {
+    if (!this.canUnStake) return;
     const { puzzleAmountToUnstake, rootStore } = this;
     const { accountStore, notificationStore } = rootStore;
-    const puzzleAmount = BN.parseUnits(
+    const puzzleAmount = BN.formatUnits(
       this.puzzleAmountToUnstake,
       this.puzzleToken.decimals
     ).toFormat(2);
@@ -205,6 +215,10 @@ class StakingVM {
       })
       .then((txId) => {
         if (txId == null) return;
+        this._setAddressStaked(
+          this.addressStaked?.minus(this.puzzleAmountToUnstake ?? BN.ZERO) ??
+            BN.ZERO
+        );
         notificationStore.notify(
           `You can track your available to trade PUZZLE balance in the header section`,
           {
@@ -215,6 +229,7 @@ class StakingVM {
           }
         );
       });
+    this.getAddressStakingInfo().then();
   };
 
   get tokenStakeInputInfo() {
@@ -225,7 +240,7 @@ class StakingVM {
     const usdnEquivalentValue = rate.times(this.puzzleAmountToStake);
     const usdnEquivalent =
       "~ " +
-      BN.formatUnits(usdnEquivalentValue, this.puzzleToken.decimals).toFixed(2);
+      BN.formatUnits(usdnEquivalentValue, this.puzzleToken.decimals).toFixed(0);
     const onMaxClick =
       address != null
         ? () =>
@@ -251,7 +266,7 @@ class StakingVM {
     const usdnEquivalentValue = rate.times(this.puzzleAmountToUnstake);
     const usdnEquivalent =
       "~ " +
-      BN.formatUnits(usdnEquivalentValue, this.puzzleToken.decimals).toFixed(2);
+      BN.formatUnits(usdnEquivalentValue, this.puzzleToken.decimals).toFixed(0);
     const balances = new Balance({
       ...this.puzzleBalance,
       balance: this.addressStaked ?? BN.ZERO,
