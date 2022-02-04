@@ -23,10 +23,10 @@ const Img = styled.img`
   padding-bottom: 44px;
 `;
 const paths = [
-  { title: "Explore", link: "" },
-  { title: "Trade", link: "" },
-  { title: "Invest", link: "" },
-  { title: "Stake", link: "" },
+  // { title: "Explore", link: "" },
+  { title: "Trade", link: "/trade" },
+  { title: "Invest", link: "/invest" },
+  { title: "Stake", link: "/stake" },
 ];
 const Path = styled(Link)`
   font-weight: 500;
