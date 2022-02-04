@@ -16,27 +16,24 @@ export type TNotifyOptions = Partial<{
 }>;
 
 const style = {
-  boxShadow: "0px 6px 20px rgba(155, 166, 177, 0.3)",
-  borderRadius: "0",
-  padding: 0,
+  boxShadow: "0px 8px 24px rgba(54, 56, 112, 0.16)",
+  borderRadius: 12,
+  padding: 16,
+  border: "1px solid #F1F2FE",
 };
 
 const styles = {
   error: {
     ...style,
-    borderTop: "2px solid #EF7362",
   },
   warning: {
     ...style,
-    borderTop: "2px solid #FFD56A",
   },
   info: {
     ...style,
-    borderTop: "2px solid #5A8AFF",
   },
   success: {
     ...style,
-    borderTop: "2px solid #7ECF81",
   },
 };
 
@@ -49,15 +46,29 @@ class NotificationStore {
   isOpenMobileAccount = false;
 
   constructor(rootStore: RootStore) {
+    const width = window.innerWidth;
+    const mobileStyle = {
+      top: 80,
+      right: 16,
+      left: 16,
+    };
+    const desktopStyle = {
+      top: 96,
+      right: 16,
+      left: width - 320 - 16,
+    };
     this.rootStore = rootStore;
     notification.newInstance(
-      { closeIcon: closeAlertIcon },
+      {
+        closeIcon: closeAlertIcon,
+        style: width >= 880 ? desktopStyle : mobileStyle,
+      },
       (notification: any) => (this._instance = notification)
     );
     makeAutoObservable(this);
   }
 
-  notify(content: string | JSX.Element, opts: TNotifyOptions = {}) {
+  notify(content: string, opts: TNotifyOptions = {}) {
     if (opts.key) {
       this._instance.removeNotice(opts.key);
     }
@@ -67,9 +78,14 @@ class NotificationStore {
       this._instance &&
         this._instance.notice({
           ...opts,
+          placement: "center",
           content: getAlert(content, { ...opts, type }),
-          style: { ...styles[type], ...opts.style },
-          duration: opts.duration || 1000000,
+          style: {
+            ...styles[type],
+            ...opts.style,
+          },
+          className: "custom-notification",
+          duration: opts.duration ?? 5,
           key: opts.key,
           closable: true,
           closeIcon: closeAlertIcon,

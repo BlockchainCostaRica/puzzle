@@ -8,6 +8,7 @@ import { ReactComponent as Arrow } from "@src/assets/icons/blackRightArrow.svg";
 interface IProps extends ISchemaRoute, HTMLAttributes<HTMLDivElement> {
   token0Logo: string;
   isAmount0Empty?: boolean;
+  isSingleRoute?: boolean;
 }
 
 const Root = styled.div`
@@ -21,6 +22,7 @@ const Route: React.FC<IProps> = ({
   token0Logo,
   exchanges,
   isAmount0Empty,
+  isSingleRoute,
 }) => {
   const per = percent.isInteger() ? percent.toFormat(0) : percent.toFormat(2);
   return (
@@ -31,7 +33,7 @@ const Route: React.FC<IProps> = ({
         displayPercent={!isAmount0Empty}
       />
       {exchanges.map((item, index, array) => (
-        <>
+        <React.Fragment key={index}>
           <Asset {...item} key={index} />
           {array.length - 1 !== index && (
             <div style={{ position: "relative" }}>
@@ -41,7 +43,15 @@ const Route: React.FC<IProps> = ({
               />
             </div>
           )}
-        </>
+          {isSingleRoute && (
+            <div style={{ position: "relative" }}>
+              <Arrow
+                height="100%"
+                style={{ position: "absolute", right: "-8px" }}
+              />
+            </div>
+          )}
+        </React.Fragment>
       ))}
     </Root>
   );

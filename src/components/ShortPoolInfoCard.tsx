@@ -49,7 +49,6 @@ const Root = styled.div`
     }
   }
 `;
-//todo fix btn size!
 const DepositToPool: React.FC<IProps> = ({
   title,
   poolName,
@@ -88,7 +87,12 @@ const DepositToPool: React.FC<IProps> = ({
           </Column>
         </Row>
         <Link to="/invest">
-          <Button kind="secondary" size="medium" onClick={onChangePool}>
+          <Button
+            kind="secondary"
+            size="medium"
+            onClick={onChangePool}
+            style={{ whiteSpace: "nowrap" }}
+          >
             Change pool
           </Button>
         </Link>

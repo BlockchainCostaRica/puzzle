@@ -4,7 +4,6 @@ import { Column } from "@components/Flex";
 import Text from "@components/Text";
 import Divider from "@components/Divider";
 import copy from "copy-to-clipboard";
-import { successMessage } from "@src/components/Notifications";
 import { observer } from "mobx-react-lite";
 import { useStores } from "@stores";
 
@@ -33,11 +32,14 @@ const Root = styled(Column)`
 `;
 
 const WalletActionsTooltip: React.FC<IProps> = ({ address }) => {
-  const { accountStore } = useStores();
+  const { accountStore, notificationStore } = useStores();
 
   const handleCopyAddress = () => {
     address && copy(address);
-    successMessage({ message: "Your address was copied" });
+    notificationStore.notify("Your address was copied", {
+      type: "success",
+      title: "Congratulations!",
+    });
   };
   const handleLogout = () => accountStore.logout();
 

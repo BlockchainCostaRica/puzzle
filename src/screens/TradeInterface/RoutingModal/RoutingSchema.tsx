@@ -5,6 +5,7 @@ import Route from "@screens/TradeInterface/RoutingModal/Route";
 import { ReactComponent as Arrow } from "@src/assets/icons/blackRightArrow.svg";
 import SquareTokenIcon from "@components/SquareTokenIcon";
 import SizedBox from "@components/SizedBox";
+import { observer } from "mobx-react-lite";
 
 interface IProps {}
 
@@ -25,12 +26,13 @@ const RoutingSchema: React.FC<IProps> = () => {
   return (
     <Root>
       <RoutesContainer>
-        {values?.map((i, index) => (
+        {values?.map((i, index, array) => (
           <Route
             {...i}
             key={`${i.percent.toString()}-${index}`}
             token0Logo={vm.token0.logo}
             isAmount0Empty={isAmount0Empty}
+            isSingleRoute={array.length === 1}
           />
         ))}
       </RoutesContainer>
@@ -43,9 +45,9 @@ const RoutingSchema: React.FC<IProps> = () => {
             style={{ position: "absolute", left: "-32px" }}
           />
         )}
-        <SquareTokenIcon src={vm.token1.logo} />
+        <SquareTokenIcon src={vm.token1.logo} size="small" />
       </div>
     </Root>
   );
 };
-export default RoutingSchema;
+export default observer(RoutingSchema);

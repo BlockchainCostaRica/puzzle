@@ -4,6 +4,7 @@ import { ProviderWeb } from "@waves.exchange/provider-web";
 import { ProviderCloud } from "@waves.exchange/provider-cloud";
 import { ProviderKeeper } from "@waves/provider-keeper";
 import {
+  CONTRACT_ADDRESSES_MAP,
   EXPLORER_URL_MAP,
   IPoolConfig,
   IToken,
@@ -19,7 +20,6 @@ import axios from "axios";
 import { getCurrentBrowser } from "@src/utils/getCurrentBrowser";
 import BN from "@src/utils/BN";
 import { waitForTx } from "@waves/waves-transactions";
-import { errorMessage, successMessage } from "@src/components/Notifications";
 import tokenLogos from "@src/assets/tokens/tokenLogos";
 
 export enum LOGIN_TYPE {
@@ -88,7 +88,6 @@ class AccountStore {
         this.setLoginType(initState.loginType);
         this.setAddress(initState.address);
       }
-
       // initState.loginType != null &&
       //   this.login(initState.loginType)
       //     .then(this.updateAccountAssets)
@@ -215,10 +214,15 @@ class AccountStore {
       ? this.invokeWithKeeper(txParams)
       : this.invokeWithSigner(txParams);
 
-  private invokeWithSigner = async (txParams: IInvokeTxParams) => {
+  private invokeWithSigner = async (
+    txParams: IInvokeTxParams
+  ): Promise<string | null> => {
     if (this.signer == null) {
-      errorMessage({ message: "You need login firstly" });
-      return;
+      this.rootStore.notificationStore.notify("You need to login firstly", {
+        title: "Error",
+        type: "error",
+      });
+      return null;
     }
     try {
       const ttx = this.signer.invoke({
@@ -228,23 +232,20 @@ class AccountStore {
         call: txParams.call,
       });
 
-      ttx.broadcast().then((tx: any) => {
-        successMessage({
-          title: "Transaction is completed",
-          link: `${this.EXPLORER_LINK}/tx/${tx.id}`,
-        });
-        return tx;
-      });
+      return ttx.broadcast().then((tx: any) => tx.id);
     } catch (e: any) {
       console.warn(e);
-      errorMessage({
+      this.rootStore.notificationStore.notify(e.toString(), {
+        type: "error",
         title: "Transaction is not completed",
-        message: e,
       });
+      return null;
     }
   };
 
-  private invokeWithKeeper = async (txParams: IInvokeTxParams) => {
+  private invokeWithKeeper = async (
+    txParams: IInvokeTxParams
+  ): Promise<string | null> => {
     const data = {
       fee: { assetId: "WAVES", amount: 500000 },
       dApp: txParams.dApp,
@@ -256,9 +257,9 @@ class AccountStore {
       data,
     } as any).catch((error: any) => {
       console.error({ error, data });
-      errorMessage({
+      this.rootStore.notificationStore.notify(error.data, {
+        type: "error",
         title: "Transaction is not completed",
-        message: error.data,
       });
       return null;
     });
@@ -268,12 +269,7 @@ class AccountStore {
     await waitForTx(txId, {
       apiBase: NODE_URL_MAP[this.chainId],
     });
-
-    successMessage({
-      title: "Transaction is completed",
-      link: `${this.EXPLORER_LINK}/tx/${txId}`,
-    });
-    return tx;
+    return txId;
   };
 
   get TOKENS() {
@@ -302,6 +298,10 @@ class AccountStore {
 
   get EXPLORER_LINK() {
     return EXPLORER_URL_MAP[this.chainId];
+  }
+
+  get CONTRACT_ADDRESSES() {
+    return CONTRACT_ADDRESSES_MAP[this.chainId];
   }
 }
 

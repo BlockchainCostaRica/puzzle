@@ -4,7 +4,6 @@ import { makeAutoObservable, when } from "mobx";
 import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import { IToken } from "@src/constants";
-import { errorMessage } from "@components/Notifications";
 import { IPoolStats30Days } from "@stores/PoolsStore";
 
 const ctx = React.createContext<InvestToPoolInterfaceVM | null>(null);
@@ -211,11 +210,11 @@ class InvestToPoolInterfaceVM {
 
   claimRewards = async () => {
     if (this.totalRewardToClaim.eq(0)) {
-      errorMessage({ message: "There is nothing to claim" });
+      // errorMessage({ message: "There is nothing to claim" });
       return;
     }
     if (this.pool.layer2Address == null) {
-      errorMessage({ message: "There is nothing to claim" });
+      // errorMessage({ message: "There is nothing to claim" });
       return;
     }
     return this.rootStore.accountStore.invoke({

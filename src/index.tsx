@@ -21,14 +21,6 @@ autorun(
   { delay: 1000 }
 );
 
-//todo add ReactGA support
-// const trackingId = "G-W203LN8Q6R";
-// ReactGA.initialize(trackingId);
-// history.listen(({ location }) => {
-//   console.log(location.pathname + location.search);
-//   ReactGA.pageview(location.pathname + location.search);
-// });
-
 ReactDOM.render(
   <React.StrictMode>
     <storesContext.Provider value={mobxStore}>

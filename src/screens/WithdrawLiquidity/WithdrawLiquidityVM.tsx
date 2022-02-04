@@ -144,29 +144,41 @@ class WithdrawLiquidityVM {
   }
 
   withdraw = () => {
-    if (this.percentToWithdraw.eq(0) || this.pool.layer2Address == null) {
-      return;
-    }
-    if (this.userIndexStaked == null) {
-      return;
-    }
+    const { accountStore, notificationStore } = this.rootStore;
+    if (this.percentToWithdraw.eq(0) || this.pool.layer2Address == null) return;
+
+    if (this.userIndexStaked == null) return;
+
     const value = this.userIndexStaked
       .times(0.01)
       .times(this.percentToWithdraw)
       .toSignificant(0)
       .toString();
-    return this.rootStore.accountStore.invoke({
-      dApp: this.pool.layer2Address,
-      payment: [],
-      call: {
-        function: "unstakeAndRedeemIndex",
-        args: [
+    this.rootStore.accountStore
+      .invoke({
+        dApp: this.pool.layer2Address,
+        payment: [],
+        call: {
+          function: "unstakeAndRedeemIndex",
+          args: [
+            {
+              type: "integer",
+              value,
+            },
+          ],
+        },
+      })
+      .then((txId) => {
+        if (txId == null) return;
+        notificationStore.notify(
+          `Liquidity is successfully withdrawn from the ${this.pool?.name}.`,
           {
-            type: "integer",
-            value,
-          },
-        ],
-      },
-    });
+            type: "success",
+            title: "Successfully withdrawn",
+            link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
+            linkTitle: "View on Explorer",
+          }
+        );
+      });
   };
 }

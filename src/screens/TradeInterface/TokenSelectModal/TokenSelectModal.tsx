@@ -1,7 +1,6 @@
 import React, { createRef, useState } from "react";
 import useOnClickOutside from "@src/hooks/useOnClickOutside";
 import SearchInput from "@components/SearchInput";
-import TokenInfo from "@screens/MultiSwapInterface/TokenSelectModal/TokenInfo";
 import Dialog from "@components/Dialog";
 import Scrollbar from "@src/components/Scrollbar";
 import { Column } from "@src/components/Flex";
@@ -9,6 +8,7 @@ import SizedBox from "@components/SizedBox";
 import { observer } from "mobx-react-lite";
 import Text from "@components/Text";
 import Balance from "@src/entities/Balance";
+import TokenInfo from "@screens/TradeInterface/TokenSelectModal/TokenInfo";
 
 interface IProps {
   onClose: () => void;

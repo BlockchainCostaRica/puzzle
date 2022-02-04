@@ -61,8 +61,15 @@ const TokenInfo: React.FC<IProps> = ({ token, ...rest }) => {
         </Column>
       </Row>
       <Column alignItems="flex-end">
-        <Text style={{ whiteSpace: "nowrap" }}>{token.formatBalance}</Text>
-        <Text style={{ whiteSpace: "nowrap" }} type="secondary" size="small">
+        <Text style={{ whiteSpace: "nowrap" }} textAlign="right">
+          {token.formatBalance}
+        </Text>
+        <Text
+          style={{ whiteSpace: "nowrap" }}
+          textAlign="right"
+          type="secondary"
+          size="small"
+        >
           {token.formatUsdnEquivalent}
         </Text>
       </Column>

@@ -22,7 +22,7 @@ const Title = styled(Text)`
 const RoutingModal: React.FC<IProps> = ({ ...rest }) => {
   const vm = useTradeVM();
   const { token0, token1, aggregatedProfit } = vm;
-  const profit = BN.formatUnits(aggregatedProfit, token1.decimals).toFormat(2);
+  const profit = BN.formatUnits(aggregatedProfit, token1.decimals);
   return (
     <Dialog style={{ maxWidth: 760, maxHeight: 496 }} title="Routing" {...rest}>
       <Title type="secondary">
@@ -31,7 +31,8 @@ const RoutingModal: React.FC<IProps> = ({ ...rest }) => {
           <>
             &nbsp;With the selected path you will get by&nbsp;
             <b>
-              {profit} {token1.symbol} more
+              {profit.gte(0.01) ? profit.toFormat(2) : profit.toFormat(6)}{" "}
+              {token1.symbol} more
             </b>
             &nbsp;than if you exchange directly from {token0.symbol} to{" "}
             {token1.symbol}.

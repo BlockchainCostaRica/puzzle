@@ -16,11 +16,32 @@ export interface IStatsByPoolAndPeriodResponse extends IStatsPoolItemResponse {
   volume: IPoolVolume[];
 }
 
+export interface IArtWorkResponse {
+  floorPrice?: number;
+  name: string;
+  typeId: string;
+  apy?: string;
+}
+
 type TStatsResponse = Record<string, IStatsPoolItemResponse>;
+
+type TStakingStatsResponse = Record<string, number>;
+
+type TUltraStakingStatsResponse = IArtWorkResponse[];
 
 const statsService = {
   getStats: async (): Promise<TStatsResponse> => {
     const url = "https://api.puzzleswap.org/stats/pools";
+    const { data } = await axios.get(url);
+    return data;
+  },
+  getStakingStats: async (): Promise<TStakingStatsResponse> => {
+    const url = "https://api.puzzleswap.org/stats/staking";
+    const { data } = await axios.get(url);
+    return data.classic;
+  },
+  getUltraStakingStats: async (): Promise<TUltraStakingStatsResponse> => {
+    const url = "https://api.puzzleswap.org/stats/artworks";
     const { data } = await axios.get(url);
     return data;
   },
