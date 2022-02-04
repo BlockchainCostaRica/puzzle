@@ -51,7 +51,9 @@ const MyBalances: React.FC = () => {
               Available to stake
             </Text>
             <Text weight={500}>
-              {available.eq(0) ? "—" : `${available.toFormat(2)} PUZZLE`}
+              {vm.puzzleBalance.balance == null
+                ? "—"
+                : `${available.toFormat(2)} PUZZLE`}
             </Text>
           </Column>
         </Row>

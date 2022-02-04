@@ -13,6 +13,7 @@ interface IProps {
   price: string;
   boostAPY: number;
   isInOwn?: boolean;
+  typeId: string;
 }
 
 const Root = styled.div`
@@ -21,13 +22,14 @@ const Root = styled.div`
   background: #ffffff;
   padding: 8px;
   border-radius: 16px;
-  @media (min-width: 880px) {
-    //max-width: 278px;
-  }
+  //width: calc(100% - 32px);
+  width: fit-content;
 `;
 const Img = styled.img`
   border: 1px solid #f1f2fe;
   border-radius: 12px;
+  width: 100%;
+  height: auto;
 `;
 const Bottom = styled.div`
   display: flex;
@@ -38,7 +40,15 @@ const Buttons = styled.div`
   display: flex;
 `;
 
-const NFTCard: React.FC<IProps> = ({ src, price, boostAPY, name, isInOwn }) => {
+const NFTCard: React.FC<IProps> = ({
+  src,
+  price,
+  boostAPY,
+  name,
+  isInOwn,
+  typeId,
+}) => {
+  const signArtLInk = `https://mainnet.sign-art.app/user/3PFTZA987iHHbP6UWVTbbrquNetcFSULqUP/artwork/${typeId}/edition/ARTWORKNUM`;
   return (
     <Root>
       <Img src={src} alt="nft" />

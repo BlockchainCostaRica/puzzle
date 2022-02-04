@@ -17,9 +17,10 @@ export interface IStatsByPoolAndPeriodResponse extends IStatsPoolItemResponse {
 }
 
 export interface IArtWorkResponse {
-  floorPrice: number;
+  floorPrice?: number;
   name: string;
   typeId: string;
+  apy?: string;
 }
 
 type TStatsResponse = Record<string, IStatsPoolItemResponse>;
@@ -37,7 +38,6 @@ const statsService = {
   getStakingStats: async (): Promise<TStakingStatsResponse> => {
     const url = "https://api.puzzleswap.org/stats/staking";
     const { data } = await axios.get(url);
-    //todo fix
     return data.classic;
   },
   getUltraStakingStats: async (): Promise<TUltraStakingStatsResponse> => {

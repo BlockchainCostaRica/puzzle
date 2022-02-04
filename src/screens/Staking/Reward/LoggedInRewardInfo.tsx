@@ -45,7 +45,9 @@ const LoggedInRewardInfo: React.FC = () => {
           <Icon src={income} alt="income" />
           <SizedBox width={8} />
           <Column>
-            <Text type="secondary">Claimed reward</Text>
+            <Text type="secondary" size="medium">
+              Claimed reward
+            </Text>
             <Text weight={500}>{claimedReward}</Text>
           </Column>
         </Row>
@@ -60,7 +62,9 @@ const LoggedInRewardInfo: React.FC = () => {
         <Icon src={wallet} alt="wallet" />
         <SizedBox width={8} />
         <Column>
-          <Text type="secondary">Available to claim</Text>
+          <Text type="secondary" size="medium">
+            Available to claim
+          </Text>
           <Text weight={500}>{availableToClaim}</Text>
         </Column>
       </Row>

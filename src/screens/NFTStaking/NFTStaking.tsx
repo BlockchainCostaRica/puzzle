@@ -29,7 +29,7 @@ const NFTContainer = styled.div`
   display: grid;
   row-gap: 16px;
   grid-template-columns: 1fr;
-  @media (min-width: 880px) {
+  @media (min-width: 604px) {
     //grid-template-columns: repeat(4, 1fr);
     grid-template-columns: repeat(auto-fill, 278px);
     column-gap: 16px;
@@ -104,7 +104,7 @@ const NFTStakingImpl: React.FC = () => {
             <SizedBox height={8} />
             <NFTContainer>
               {array.map((i, index) => (
-                <NFTCard {...i} key={index} />
+                <NFTCard {...i} key={index} typeId="12312" />
               ))}
             </NFTContainer>
           </Root>
