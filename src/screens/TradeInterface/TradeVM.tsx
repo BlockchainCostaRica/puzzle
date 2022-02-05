@@ -111,15 +111,16 @@ class TradeVM {
           aggregatedProfit,
         }) => {
           !invalidAmount && this._setAmount1(new BN(estimatedOut));
+          this._calculatePrice(
+            invalidAmount ? defaultAmount0 : amount0,
+            new BN(estimatedOut)
+          );
+          this._setSynchronizing(false);
           !invalidAmount &&
             this._setPriceImpact(new BN(priceImpact).times(100));
           this._setParameters(!invalidAmount ? parameters : null);
           this._setRoute(routes);
           this._setAggregatedProfit(new BN(aggregatedProfit));
-          this._calculatePrice(
-            invalidAmount ? defaultAmount0 : amount0,
-            new BN(estimatedOut)
-          );
         }
       )
       .catch(() => {
