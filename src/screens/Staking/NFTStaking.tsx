@@ -6,8 +6,6 @@ import { Column } from "@src/components/Flex";
 import eagle from "@src/assets/eagle.png";
 import Button from "@components/Button";
 import SizedBox from "@components/SizedBox";
-import { Link } from "react-router-dom";
-import { useStores } from "@stores";
 
 const Root = styled.div`
   display: flex;
@@ -30,32 +28,32 @@ const Title = styled(Text)`
   font-size: 24px;
   line-height: 32px;
 `;
-const NFTStaking: React.FC = () => {
-  const { accountStore } = useStores();
-  const { ROUTES } = accountStore;
-  return (
-    <Root>
-      <Card
-        type="dark"
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Column mainAxisSize="stretch">
-          <Title type="light">NFT Staking</Title>
-          <Text type="light" style={{ maxWidth: 195 }}>
-            Buy and stake NFTs to get APY boost up to 45.32%
-          </Text>
-          <SizedBox height={16} />
-          <a href="https://eagles.puzzleswap.org" target="_blank">
-            <Button kind="secondary" style={{ color: "#7075E9" }} size="medium">
-              Go to NFT Staking
-            </Button>
-          </a>
-        </Column>
-        <Img src={eagle} alt="eagle" />
-      </Card>
-    </Root>
-  );
-};
+const NFTStaking: React.FC = () => (
+  <Root>
+    <Card
+      type="dark"
+      flexDirection="row"
+      justifyContent="space-between"
+      alignItems="center"
+    >
+      <Column mainAxisSize="stretch">
+        <Title type="light">NFT Staking</Title>
+        <Text type="light" style={{ maxWidth: 195 }}>
+          Buy and stake NFTs to get APY boost up to 45.32%
+        </Text>
+        <SizedBox height={16} />
+        <a
+          rel="noreferrer noopener"
+          href="https://eagles.puzzleswap.org"
+          target="_blank"
+        >
+          <Button kind="secondary" style={{ color: "#7075E9" }} size="medium">
+            Go to NFT Staking
+          </Button>
+        </a>
+      </Column>
+      <Img src={eagle} alt="eagle" />
+    </Card>
+  </Root>
+);
 export default NFTStaking;
