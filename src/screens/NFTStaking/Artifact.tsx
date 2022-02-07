@@ -40,15 +40,13 @@ const Buttons = styled.div`
   display: flex;
 `;
 
-const NFTCard: React.FC<IProps> = ({
+const Artifact: React.FC<IProps> = ({
   src,
   price,
   boostAPY,
   name,
   isInOwn,
-  typeId,
 }) => {
-  const signArtLInk = `https://mainnet.sign-art.app/user/3PFTZA987iHHbP6UWVTbbrquNetcFSULqUP/artwork/${typeId}/edition/ARTWORKNUM`;
   return (
     <Root>
       <Img src={src} alt="nft" />
@@ -88,4 +86,4 @@ const NFTCard: React.FC<IProps> = ({
     </Root>
   );
 };
-export default NFTCard;
+export default Artifact;

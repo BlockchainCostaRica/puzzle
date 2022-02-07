@@ -13,6 +13,7 @@ import Invest from "@screens/Invest";
 import WithdrawLiquidityInterface from "@screens/WithdrawLiquidity";
 import TradeInterface from "@screens/TradeInterface";
 import Staking from "@screens/Staking";
+import NFTStaking from "@screens/NFTStaking";
 
 const Root = styled(Column)`
   width: 100%;
@@ -69,7 +70,7 @@ const App: React.FC = () => {
           />
         ))}
 
-        {/*<Route path={ROUTES.ULTRASTAKE} element={<NFTStaking />} />*/}
+        <Route path={ROUTES.ULTRASTAKE} element={<NFTStaking />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -6,8 +6,9 @@ import Text from "@components/Text";
 import { NFTStakingVMProvider } from "./NFTStakingVM";
 import GoBack from "@components/GoBack";
 import SizedBox from "@components/SizedBox";
-import NFTCard from "@screens/NFTStaking/NFTCard";
+import Artifact from "@screens/NFTStaking/Artifact";
 import eagle from "@src/assets/nfts/eagle.png";
+import Reward from "./Reward";
 
 const Root = styled.div`
   display: flex;
@@ -102,9 +103,11 @@ const NFTStakingImpl: React.FC = () => {
               NFT to stake
             </Text>
             <SizedBox height={8} />
+            <Reward />
+            <SizedBox height={24} />
             <NFTContainer>
               {array.map((i, index) => (
-                <NFTCard {...i} key={index} typeId="12312" />
+                <Artifact {...i} key={index} typeId="12312" />
               ))}
             </NFTContainer>
           </Root>
