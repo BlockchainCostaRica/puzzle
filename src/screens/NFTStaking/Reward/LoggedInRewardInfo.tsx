@@ -8,7 +8,7 @@ import Divider from "@src/components/Divider";
 import income from "@src/assets/icons/income.svg";
 import wallet from "@src/assets/icons/wallet.svg";
 import Text from "@components/Text";
-import { useStores } from "@stores";
+// import { useStores } from "@stores";
 
 const Root = styled.div`
   display: flex;
@@ -20,7 +20,7 @@ const Icon = styled.img`
   width: 40px;
 `;
 const LoggedInRewardInfo: React.FC = () => {
-  const { accountStore } = useStores();
+  // const { accountStore } = useStores();
   const availableToClaim = "—";
   const claimedReward = "—";
   return (

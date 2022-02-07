@@ -23,9 +23,12 @@ export interface IArtWorkResponse {
   apy?: string;
 }
 
-type TStatsResponse = Record<string, IStatsPoolItemResponse>;
+export interface IStakingStatsResponse {
+  classic: { apy: number };
+  ultra: { apy: number };
+}
 
-type TStakingStatsResponse = Record<string, number>;
+type TStatsResponse = Record<string, IStatsPoolItemResponse>;
 
 type TUltraStakingStatsResponse = IArtWorkResponse[];
 
@@ -35,10 +38,10 @@ const statsService = {
     const { data } = await axios.get(url);
     return data;
   },
-  getStakingStats: async (): Promise<TStakingStatsResponse> => {
+  getStakingStats: async (): Promise<IStakingStatsResponse> => {
     const url = "https://api.puzzleswap.org/stats/staking";
     const { data } = await axios.get(url);
-    return data.classic;
+    return data;
   },
   getUltraStakingStats: async (): Promise<TUltraStakingStatsResponse> => {
     const url = "https://api.puzzleswap.org/stats/artworks";

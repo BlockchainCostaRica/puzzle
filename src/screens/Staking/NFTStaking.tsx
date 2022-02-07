@@ -8,6 +8,8 @@ import Button from "@components/Button";
 import SizedBox from "@components/SizedBox";
 import { useStores } from "@stores";
 import { Link } from "react-router-dom";
+import { observer } from "mobx-react-lite";
+import { useStakingVM } from "@screens/Staking/StakingVM";
 
 const Root = styled.div`
   display: flex;
@@ -32,6 +34,7 @@ const Title = styled(Text)`
 `;
 const NFTStaking: React.FC = () => {
   const { accountStore } = useStores();
+  const vm = useStakingVM();
   return (
     <Root>
       <Card
@@ -43,7 +46,8 @@ const NFTStaking: React.FC = () => {
         <Column mainAxisSize="stretch">
           <Title type="light">NFT Staking</Title>
           <Text type="light" style={{ maxWidth: 195 }}>
-            Buy and stake NFTs to get APY boost up to 45.32%
+            Buy and stake NFTs to get APY boost up to{" "}
+            {vm.stats == null ? "—" : vm.stats?.ultra.toFormat(2).concat(" %")}
           </Text>
           <SizedBox height={16} />
           <Link to={accountStore.ROUTES.ULTRASTAKE}>
@@ -57,4 +61,4 @@ const NFTStaking: React.FC = () => {
     </Root>
   );
 };
-export default NFTStaking;
+export default observer(NFTStaking);
