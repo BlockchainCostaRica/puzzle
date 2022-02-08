@@ -98,13 +98,11 @@ const NFTStakingImpl: React.FC = () => {
               <b style={{ color: "#35A15A" }}> 45.3 %</b>. You can stake one of
               each type of NFTs.
             </Text>
+            <Reward />
             <SizedBox height={24} />
             <Text weight={500} type="secondary">
               NFT to stake
             </Text>
-            <SizedBox height={8} />
-            <Reward />
-            <SizedBox height={24} />
             <NFTContainer>
               {array.map((i, index) => (
                 <Artifact {...i} key={index} typeId="12312" />

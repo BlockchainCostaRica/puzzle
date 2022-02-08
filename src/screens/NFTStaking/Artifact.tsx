@@ -4,8 +4,6 @@ import SizedBox from "@components/SizedBox";
 import Text from "@components/Text";
 import Button from "@components/Button";
 import { Column, Row } from "@src/components/Flex";
-import DetailsButton from "@components/DetailsButton";
-import { ReactComponent as LinkIcon } from "@src/assets/icons/link.svg";
 
 interface IProps {
   name: string;
@@ -22,7 +20,6 @@ const Root = styled.div`
   background: #ffffff;
   padding: 8px;
   border-radius: 16px;
-  //width: calc(100% - 32px);
   width: fit-content;
 `;
 const Img = styled.img`
@@ -40,13 +37,7 @@ const Buttons = styled.div`
   display: flex;
 `;
 
-const Artifact: React.FC<IProps> = ({
-  src,
-  price,
-  boostAPY,
-  name,
-  isInOwn,
-}) => {
+const Artifact: React.FC<IProps> = ({ src, price, boostAPY, name }) => {
   return (
     <Root>
       <Img src={src} alt="nft" />
@@ -66,21 +57,21 @@ const Artifact: React.FC<IProps> = ({
           <Button size="medium" fixed>
             Buy on SignArt
           </Button>
-          {isInOwn && (
-            <DetailsButton style={{ marginLeft: 8 }}>
-              <Row alignItems="center">
-                <LinkIcon />
-                <SizedBox width={8} />
-                <Text>View on SignArt</Text>
-              </Row>
-              <SizedBox height={20} />
-              <Row alignItems="center">
-                <LinkIcon />
-                <SizedBox width={8} />
-                <Text>View on Waves Explorer</Text>
-              </Row>
-            </DetailsButton>
-          )}
+          {/*{isInOwn && (*/}
+          {/*<DetailsButton style={{ marginLeft: 8 }}>*/}
+          {/*  <Row alignItems="center">*/}
+          {/*    <LinkIcon />*/}
+          {/*    <SizedBox width={8} />*/}
+          {/*    <Text>View on SignArt</Text>*/}
+          {/*  </Row>*/}
+          {/*  <SizedBox height={20} />*/}
+          {/*  <Row alignItems="center">*/}
+          {/*    <LinkIcon />*/}
+          {/*    <SizedBox width={8} />*/}
+          {/*    <Text>View on Waves Explorer</Text>*/}
+          {/*  </Row>*/}
+          {/*</DetailsButton>*/}
+          {/*)}*/}
         </Buttons>
       </Bottom>
     </Root>
