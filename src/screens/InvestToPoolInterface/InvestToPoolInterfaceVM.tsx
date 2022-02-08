@@ -35,7 +35,10 @@ class InvestToPoolInterfaceVM {
   @action.bound private _setLoading = (l: boolean) => (this.loading = l);
 
   public stats: IPoolStats30Days | null = null;
-  private setStats = (stats: IPoolStats30Days | null) => (this.stats = stats);
+  private setStats = (stats: IPoolStats30Days | null) => {
+    console.log(stats);
+    this.stats = stats;
+  };
 
   public accountLiquidity: BN | null = null;
   private setAccountLiquidity = (value: BN) => (this.accountLiquidity = value);
