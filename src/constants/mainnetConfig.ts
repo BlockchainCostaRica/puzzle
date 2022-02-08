@@ -23,7 +23,7 @@ export const MAINNET_ROUTES = {
     farms: `${MAINNET_POOL_ID.farmsPool1}/withdraw`,
     farms2: `${MAINNET_POOL_ID.farmsPool2}/withdraw`,
     race: `${MAINNET_POOL_ID.race}/withdraw`,
-    defi: `${MAINNET_POOL_ID.defi}/withdraw`,,
+    defi: `${MAINNET_POOL_ID.defi}/withdraw`,
     egg: `${MAINNET_POOL_ID.egg}/withdraw`,
   },
   pools: {
@@ -155,7 +155,7 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
     layer2Address: "3P84BhX5dCVs1TCgYnGa57kCHrMz4mUBXyE",
     baseTokenId: mainnetTokens.EGG.assetId,
     name: "Egg",
-    logo: tokenLogos.RACE,
+    logo: tokenLogos.EGG,
     defaultAssetId0: mainnetTokens.USDN.assetId,
     defaultAssetId1: mainnetTokens.EGG.assetId,
     tokens: [
