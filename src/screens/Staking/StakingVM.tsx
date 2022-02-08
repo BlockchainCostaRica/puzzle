@@ -27,6 +27,9 @@ class StakingVM {
   @action.bound private _setStakingAddress = (v: string) =>
     (this.stakingContractAddress = v);
 
+  loading: boolean = false;
+  @action.bound private _setLoading = (l: boolean) => (this.loading = l);
+
   public stats: IStakingStats | null = null;
   private _setStats = (v: IStakingStats) => (this.stats = v);
 
@@ -50,7 +53,7 @@ class StakingVM {
     this.syncStats().then();
     this._setStakingAddress(accountStore.CONTRACT_ADDRESSES.staking);
     makeAutoObservable(this);
-    when(() => accountStore.address !== null, this.getAddressStakingInfo);
+    when(() => accountStore.address !== null, this.updateAddressStakingInfo);
   }
 
   public puzzleAmountToStake: BN = BN.ZERO;
@@ -79,7 +82,7 @@ class StakingVM {
     return addressStaked.div(globalStaked).times(100);
   }
 
-  getAddressStakingInfo = async () => {
+  private updateAddressStakingInfo = async () => {
     const { chainId, address, TOKENS } = this.rootStore.accountStore;
     const { stakingContractAddress } = this;
 
@@ -138,29 +141,47 @@ class StakingVM {
     this._setStats(formattedData);
   };
 
-  claimReward = () => {
+  claimReward = async () => {
     if (!this.canClaim) return;
-    this.rootStore.accountStore
+    this._setLoading(true);
+    const { accountStore, notificationStore } = this.rootStore;
+    await accountStore
       .invoke({
-        dApp: this.rootStore.accountStore.CONTRACT_ADDRESSES.staking ?? "",
+        dApp: accountStore.CONTRACT_ADDRESSES.staking!,
         payment: [],
         call: {
           function: "claimReward",
           args: [],
         },
       })
-      .then();
-    this.getAddressStakingInfo().then();
+      .then((txId) => {
+        if (txId == null) return;
+        notificationStore.notify(`Your rewards was claimed`, {
+          type: "success",
+          title: `Success`,
+          link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
+          linkTitle: "View on Explorer",
+        });
+      })
+      .catch((e) => {
+        notificationStore.notify(e.message ?? e.toString(), {
+          type: "error",
+          title: "Transaction is not completed",
+        });
+      })
+      .then(this.updateAddressStakingInfo)
+      .finally(() => this._setLoading(false));
   };
-  stake = () => {
+  stake = async () => {
     if (!this.canStake) return;
+    this._setLoading(true);
     const { puzzleToken, puzzleAmountToStake, rootStore } = this;
     const { accountStore, notificationStore } = rootStore;
     const puzzleAmount = BN.formatUnits(
       this.puzzleAmountToStake,
       this.puzzleToken.decimals
     ).toFormat(2);
-    accountStore
+    await accountStore
       .invoke({
         dApp: this.rootStore.accountStore.CONTRACT_ADDRESSES.staking ?? "",
         payment: [
@@ -175,7 +196,6 @@ class StakingVM {
         },
       })
       .then((txId) => {
-        if (txId == null) return;
         this._setAddressStaked(
           this.addressStaked?.plus(this.puzzleAmountToStake) ?? BN.ZERO
         );
@@ -188,18 +208,26 @@ class StakingVM {
             linkTitle: "View on Explorer",
           }
         );
-      });
-    this.getAddressStakingInfo().then();
+      })
+      .catch((e) => {
+        notificationStore.notify(e.message ?? e.toString(), {
+          type: "error",
+          title: "Transaction is not completed",
+        });
+      })
+      .then(this.updateAddressStakingInfo)
+      .finally(() => this._setLoading(false));
   };
-  unStake = () => {
+  unStake = async () => {
     if (!this.canUnStake) return;
+    this._setLoading(true);
     const { puzzleAmountToUnstake, rootStore } = this;
     const { accountStore, notificationStore } = rootStore;
     const puzzleAmount = BN.formatUnits(
       this.puzzleAmountToUnstake,
       this.puzzleToken.decimals
     ).toFormat(2);
-    accountStore
+    await accountStore
       .invoke({
         dApp: this.rootStore.accountStore.CONTRACT_ADDRESSES.staking ?? "",
         payment: [],
@@ -214,7 +242,6 @@ class StakingVM {
         },
       })
       .then((txId) => {
-        if (txId == null) return;
         this._setAddressStaked(
           this.addressStaked?.minus(this.puzzleAmountToUnstake ?? BN.ZERO) ??
             BN.ZERO
@@ -228,8 +255,15 @@ class StakingVM {
             linkTitle: "View on Explorer",
           }
         );
-      });
-    this.getAddressStakingInfo().then();
+      })
+      .catch((e) => {
+        notificationStore.notify(e.message ?? e.toString(), {
+          type: "error",
+          title: "Transaction is not completed",
+        });
+      })
+      .then(this.updateAddressStakingInfo)
+      .finally(() => this._setLoading(false));
   };
 
   get tokenStakeInputInfo() {
@@ -239,7 +273,7 @@ class StakingVM {
       BN.ZERO;
     const usdnEquivalentValue = rate.times(this.puzzleAmountToStake);
     const usdnEquivalent =
-      "~ " +
+      "~ $ " +
       BN.formatUnits(usdnEquivalentValue, this.puzzleToken.decimals).toFixed(0);
     const onMaxClick =
       address != null
@@ -265,7 +299,7 @@ class StakingVM {
       BN.ZERO;
     const usdnEquivalentValue = rate.times(this.puzzleAmountToUnstake);
     const usdnEquivalent =
-      "~ " +
+      "~ $ " +
       BN.formatUnits(usdnEquivalentValue, this.puzzleToken.decimals).toFixed(0);
     const balances = new Balance({
       ...this.puzzleBalance,

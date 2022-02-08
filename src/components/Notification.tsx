@@ -4,6 +4,7 @@ import Text from "@components/Text";
 import info from "@src/assets/icons/info.svg";
 import warning from "@src/assets/icons/warning.svg";
 import SizedBox from "@components/SizedBox";
+import { Column } from "./Flex";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   type: "warning" | "info";
@@ -16,7 +17,6 @@ const Root = styled.div<{ warning?: boolean }>`
   background: ${({ warning }) => (warning ? "#FCF4F1" : "#f1f2fe")};
   border-radius: 12px;
   padding: 18px;
-  align-items: center;
   justify-content: flex-start;
 
   a {
@@ -29,9 +29,19 @@ const Notification: React.FC<IProps> = ({ text, type, ...rest }) => {
   const icon = type === "warning" ? warning : info;
   return (
     <Root warning={type === "warning"} {...rest}>
-      <img src={icon} alt="info" />
+      <Column>
+        <img src={icon} alt="info" />
+      </Column>
       <SizedBox width={10} />
-      {typeof text === "string" ? <Text size="medium">{text}</Text> : text}
+      <Column justifyContent="center" mainAxisSize="stretch">
+        {typeof text === "string" ? (
+          <Text style={{ height: "100%" }} size="medium">
+            {text}
+          </Text>
+        ) : (
+          text
+        )}
+      </Column>
     </Root>
   );
 };

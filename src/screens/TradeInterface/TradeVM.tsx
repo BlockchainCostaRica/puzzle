@@ -56,6 +56,9 @@ class TradeVM {
   @action.bound private _setSynchronizing = (synchronizing: boolean) =>
     (this.synchronizing = synchronizing);
 
+  loading: boolean = false;
+  @action.bound private _setLoading = (l: boolean) => (this.loading = l);
+
   priceImpact: BN = BN.ZERO;
   @action.bound private _setPriceImpact = (priceImpact: BN) =>
     (this.priceImpact = priceImpact);
@@ -205,6 +208,7 @@ class TradeVM {
     if (this.synchronizing || parameters == null) return;
     if (token0 == null || amount0.eq(0)) return;
     if (minimumToReceive == null) return;
+    this._setLoading(true);
     accountStore
       .invoke({
         dApp: CONTRACT_ADDRESSES.aggregator,
@@ -226,7 +230,6 @@ class TradeVM {
         },
       })
       .then((txId) => {
-        if (txId == null) return;
         notificationStore.notify(
           "You can view the details of it in Waves Explorer",
           {
@@ -236,7 +239,14 @@ class TradeVM {
             linkTitle: "View on Explorer",
           }
         );
-      });
+      })
+      .catch((e) => {
+        notificationStore.notify(e.message ?? e.toString(), {
+          type: "error",
+          title: "Transaction is not completed",
+        });
+      })
+      .finally(() => this._setLoading(false));
   };
 
   get totalLiquidity() {

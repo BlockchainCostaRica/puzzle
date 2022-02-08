@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useVM } from "@src/hooks/useVM";
-import { makeAutoObservable, when } from "mobx";
+import { action, makeAutoObservable, when } from "mobx";
 import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import { IToken } from "@src/constants";
@@ -30,6 +30,9 @@ type IReward = {
 class InvestToPoolInterfaceVM {
   public poolId: string;
   public rootStore: RootStore;
+
+  loading: boolean = false;
+  @action.bound private _setLoading = (l: boolean) => (this.loading = l);
 
   public stats: IPoolStats30Days | null = null;
   private setStats = (stats: IPoolStats30Days | null) => (this.stats = stats);
@@ -209,22 +212,35 @@ class InvestToPoolInterfaceVM {
   }
 
   claimRewards = async () => {
-    if (this.totalRewardToClaim.eq(0)) {
-      // errorMessage({ message: "There is nothing to claim" });
-      return;
-    }
-    if (this.pool.layer2Address == null) {
-      // errorMessage({ message: "There is nothing to claim" });
-      return;
-    }
-    return this.rootStore.accountStore.invoke({
-      dApp: this.pool.contractAddress,
-      payment: [],
-      call: {
-        function: "claimIndexRewards",
-        args: [],
-      },
-    });
+    if (this.totalRewardToClaim.eq(0)) return;
+    if (this.pool.layer2Address == null) return;
+    this._setLoading(true);
+    const { accountStore, notificationStore } = this.rootStore;
+    accountStore
+      .invoke({
+        dApp: this.pool.contractAddress,
+        payment: [],
+        call: {
+          function: "claimIndexRewards",
+          args: [],
+        },
+      })
+      .then((txId) => {
+        notificationStore.notify(`Your rewards was claimed`, {
+          type: "success",
+          title: `Success`,
+          link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
+          linkTitle: "View on Explorer",
+        });
+      })
+      .catch((e) => {
+        notificationStore.notify(e.message ?? e.toString(), {
+          type: "error",
+          title: "Transaction is not completed",
+        });
+      })
+      .then(this.updateRewardInfo)
+      .finally(() => this._setLoading(false));
   };
 
   get isThereRewardToClaim() {

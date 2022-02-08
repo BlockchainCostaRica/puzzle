@@ -11,6 +11,7 @@ import Notification from "@components/Notification";
 import { Link } from "react-router-dom";
 import buildBuyTokenRoute from "@src/utils/buildBuyTokenRoute";
 import TokenInput from "@components/TokenInput";
+import { Loading } from "@components/Loading";
 
 interface IProps {}
 
@@ -22,7 +23,6 @@ const Root = styled.div`
 const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
   const { accountStore } = useStores();
   const vm = useAddLiquidityInterfaceVM();
-
   const buyBaseTokenRoute = buildBuyTokenRoute("trade", vm.baseToken.assetId);
 
   return (
@@ -65,19 +65,25 @@ const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
         )}
       </Card>
       <SizedBox height={24} />
-      {accountStore.address == null ? (
+      {accountStore.address == null && (
         <Button fixed onClick={() => accountStore.setWalletModalOpened(true)}>
           Connect to deposit
         </Button>
-      ) : (
-        <Button
-          fixed
-          onClick={vm.depositBaseToken}
-          disabled={!vm.canDepositBaseToken}
-        >
-          Deposit
-        </Button>
       )}
+      {accountStore.address != null &&
+        (!vm.loading ? (
+          <Button
+            fixed
+            onClick={vm.depositBaseToken}
+            disabled={!vm.canDepositBaseToken}
+          >
+            Deposit
+          </Button>
+        ) : (
+          <Button disabled fixed>
+            Transaction in progress <Loading />
+          </Button>
+        ))}
     </Root>
   );
 };

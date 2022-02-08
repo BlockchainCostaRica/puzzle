@@ -37,6 +37,9 @@ class WithdrawLiquidityVM {
   public userIndexStaked: BN | null = null;
   private setUserIndexStaked = (value: BN) => (this.userIndexStaked = value);
 
+  public loading: boolean = false;
+  @action.bound private _setLoading = (l: boolean) => (this.loading = l);
+
   percentToWithdraw: BN = new BN(50);
   @action.bound setPercentToWithdraw = (value: number) =>
     (this.percentToWithdraw = new BN(value));
@@ -146,8 +149,9 @@ class WithdrawLiquidityVM {
   withdraw = () => {
     const { accountStore, notificationStore } = this.rootStore;
     if (this.percentToWithdraw.eq(0) || this.pool.layer2Address == null) return;
-
     if (this.userIndexStaked == null) return;
+
+    this._setLoading(true);
 
     const value = this.userIndexStaked
       .times(0.01)
@@ -169,7 +173,6 @@ class WithdrawLiquidityVM {
         },
       })
       .then((txId) => {
-        if (txId == null) return;
         notificationStore.notify(
           `Liquidity is successfully withdrawn from the ${this.pool?.name}.`,
           {
@@ -179,6 +182,14 @@ class WithdrawLiquidityVM {
             linkTitle: "View on Explorer",
           }
         );
-      });
+      })
+      .catch((e) => {
+        notificationStore.notify(e.message ?? e.toString(), {
+          type: "error",
+          title: "Transaction is not completed",
+        });
+      })
+      .then(this.updateUserIndexStaked)
+      .finally(() => this._setLoading(false));
   };
 }
