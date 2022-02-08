@@ -2,16 +2,12 @@ import styled from "@emotion/styled";
 import React from "react";
 import SizedBox from "@components/SizedBox";
 import Text from "@components/Text";
-import Button from "@components/Button";
 import { Column, Row } from "@src/components/Flex";
+import { IArtWork } from "@src/services/statsService";
+import noPic from "@src/assets/noCard.png";
 
-interface IProps {
-  name: string;
-  src: string;
-  price: string;
-  boostAPY: number;
-  isInOwn?: boolean;
-  typeId: string;
+interface IProps extends IArtWork {
+  buttons?: JSX.Element;
 }
 
 const Root = styled.div`
@@ -37,15 +33,22 @@ const Buttons = styled.div`
   display: flex;
 `;
 
-const Artifact: React.FC<IProps> = ({ src, price, boostAPY, name }) => {
+const Artefact: React.FC<IProps> = ({
+  name,
+  apy,
+  imageLink,
+  floorPrice,
+  buttons,
+}) => {
+  const price = floorPrice && floorPrice / 100000;
   return (
     <Root>
-      <Img src={src} alt="nft" />
+      <Img src={imageLink ?? noPic} alt="nft" />
       <Bottom>
         <Row mainAxisSize="stretch" justifyContent="space-between">
           <Column>
             <Text>{name}</Text>
-            <Text type="secondary">{boostAPY} boost APY</Text>
+            <Text type="secondary">{apy} boost APY</Text>
           </Column>
           <Column>
             <Text type="secondary">Floor price</Text>
@@ -54,9 +57,10 @@ const Artifact: React.FC<IProps> = ({ src, price, boostAPY, name }) => {
         </Row>
         <SizedBox height={16} />
         <Buttons>
-          <Button size="medium" fixed>
-            Buy on SignArt
-          </Button>
+          {buttons}
+          {/*<Button size="medium" fixed>*/}
+          {/*  Buy on SignArt*/}
+          {/*</Button>*/}
           {/*{isInOwn && (*/}
           {/*<DetailsButton style={{ marginLeft: 8 }}>*/}
           {/*  <Row alignItems="center">*/}
@@ -77,4 +81,4 @@ const Artifact: React.FC<IProps> = ({ src, price, boostAPY, name }) => {
     </Root>
   );
 };
-export default Artifact;
+export default Artefact;

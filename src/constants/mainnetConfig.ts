@@ -163,3 +163,7 @@ export const MAINNET_CONTRACTS_ADDRESSES = {
   staking: "3PFTbywqxtFfukX3HyT881g4iW5K4QL3FAS",
   aggregator: "3PGFHzVGT4NTigwCKP1NcwoXkodVZwvBuuU",
 };
+
+export const MAINNET_NFT_ISSUERS_WHITELIST = [
+  "3PDBLdsUrcsiPxNbt8g2gQVoefKgzt3kJzV",
+];

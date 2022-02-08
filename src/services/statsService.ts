@@ -16,7 +16,7 @@ export interface IStatsByPoolAndPeriodResponse extends IStatsPoolItemResponse {
   volume: IPoolVolume[];
 }
 
-export interface IArtWorkResponse {
+export interface IArtWork {
   floorPrice?: number;
   name: string;
   imageLink: string;
@@ -32,7 +32,7 @@ export interface IStakingStatsResponse {
 
 type TStatsResponse = Record<string, IStatsPoolItemResponse>;
 
-type TArtworksResponse = IArtWorkResponse[];
+type TArtworksResponse = IArtWork[];
 
 const statsService = {
   getStats: async (): Promise<TStatsResponse> => {

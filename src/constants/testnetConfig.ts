@@ -51,3 +51,5 @@ export const TESTNET_CONTRACTS_ADDRESSES = {
   staking: "",
   aggregator: "",
 };
+
+export const TESTNET_NFT_ISSUERS_WHITELIST = [];
