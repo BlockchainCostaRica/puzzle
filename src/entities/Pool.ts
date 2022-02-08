@@ -58,7 +58,7 @@ class Pool implements IPoolConfig {
     (this.globalPoolTokenAmount = value);
 
   public liquidity: Record<string, BN> = {};
-  @action.bound private setLiquidity = (value: Record<string, BN>) =>
+  private setLiquidity = (value: Record<string, BN>) =>
     (this.liquidity = value);
 
   constructor(params: IPoolCreationParams) {
@@ -78,7 +78,7 @@ class Pool implements IPoolConfig {
     makeAutoObservable(this);
   }
 
-  @action.bound private syncLiquidity = async () => {
+  private syncLiquidity = async () => {
     const globalAttributesUrl = `${NODE_URL_MAP[this.chainId]}/addresses/data/${
       this.contractAddress
     }?matches=global_(.*)`;

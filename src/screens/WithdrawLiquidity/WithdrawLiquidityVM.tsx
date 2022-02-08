@@ -38,7 +38,7 @@ class WithdrawLiquidityVM {
   private setUserIndexStaked = (value: BN) => (this.userIndexStaked = value);
 
   public loading: boolean = false;
-  @action.bound private _setLoading = (l: boolean) => (this.loading = l);
+  private _setLoading = (l: boolean) => (this.loading = l);
 
   percentToWithdraw: BN = new BN(50);
   @action.bound setPercentToWithdraw = (value: number) =>

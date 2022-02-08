@@ -24,11 +24,10 @@ export interface IStakingStats {
 
 class StakingVM {
   private stakingContractAddress: string = "";
-  @action.bound private _setStakingAddress = (v: string) =>
-    (this.stakingContractAddress = v);
+  private _setStakingAddress = (v: string) => (this.stakingContractAddress = v);
 
   loading: boolean = false;
-  @action.bound private _setLoading = (l: boolean) => (this.loading = l);
+  private _setLoading = (l: boolean) => (this.loading = l);
 
   public stats: IStakingStats | null = null;
   private _setStats = (v: IStakingStats) => (this.stats = v);

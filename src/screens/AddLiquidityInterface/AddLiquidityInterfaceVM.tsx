@@ -38,7 +38,7 @@ class AddLiquidityInterfaceVM {
   private setStats = (stats: IPoolStats30Days | null) => (this.stats = stats);
 
   loading: boolean = false;
-  @action.bound private _setLoading = (l: boolean) => (this.loading = l);
+  private _setLoading = (l: boolean) => (this.loading = l);
 
   public notificationParams: IDialogNotificationProps | null = null;
   public setNotificationParams = (params: IDialogNotificationProps | null) =>
@@ -236,17 +236,6 @@ class AddLiquidityInterfaceVM {
       )
       .then(accountStore.updateAccountAssets)
       .finally(() => this._setLoading(false));
-    // .then((txId) => {
-    //   notificationStore.notify(
-    //     `Liquidity successfully provided to the ${this.pool?.name}. You can track your reward on the pool page.`,
-    //     {
-    //       type: "success",
-    //       title: "Successfully provided",
-    //       link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
-    //       linkTitle: "View on Explorer",
-    //     }
-    //   );
-    // });
   };
 
   depositBaseToken = async () => {

@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useVM } from "@src/hooks/useVM";
-import { action, makeAutoObservable, when } from "mobx";
+import { makeAutoObservable, when } from "mobx";
 import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import { IToken } from "@src/constants";
@@ -32,7 +32,7 @@ class InvestToPoolInterfaceVM {
   public rootStore: RootStore;
 
   loading: boolean = false;
-  @action.bound private _setLoading = (l: boolean) => (this.loading = l);
+  private _setLoading = (l: boolean) => (this.loading = l);
 
   public stats: IPoolStats30Days | null = null;
   private setStats = (stats: IPoolStats30Days | null) => {
