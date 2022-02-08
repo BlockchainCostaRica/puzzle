@@ -13,6 +13,7 @@ import { useInvestToPoolInterfaceVM } from "@screens/InvestToPoolInterface/Inves
 import SquareTokenIcon from "@components/SquareTokenIcon";
 import RoundTokenIcon from "@components/RoundTokenIcon";
 import useWindowSize from "@src/hooks/useWindowSize";
+import { Loading } from "@components/Loading";
 
 interface IProps {}
 
@@ -48,17 +49,26 @@ const RewardToClaim: React.FC<IProps> = () => {
       <SizedBox height={8} />
       <Card paddingDesktop="24px 0 0" paddingMobile="16px 0 0">
         <Header>
-          <Column crossAxisSize="max">
+          <Column crossAxisSize="max" style={{ flex: 1 }}>
             <Text type="secondary">Total value</Text>
             <Text weight={500}>$ {vm.totalRewardToClaim.toFixed(2)}</Text>
           </Column>
-          <Button
-            size="medium"
-            disabled={vm.isThereSomethingToClaim}
-            onClick={vm.claimRewards}
-          >
-            Claim
-          </Button>
+          {!vm.loading ? (
+            <Button
+              style={{ flex: 1 }}
+              size="medium"
+              disabled={vm.isThereSomethingToClaim}
+              onClick={vm.claimRewards}
+              fixed
+            >
+              Claim
+            </Button>
+          ) : (
+            <Button style={{ flex: 1 }} size="medium" disabled fixed>
+              Claiming
+              <Loading />
+            </Button>
+          )}
         </Header>
         <Divider style={{ margin: "24px 0" }} />
         <Title weight={500} className="mobile">

@@ -244,6 +244,7 @@ class TradeVM {
           title: "Transaction is not completed",
         });
       })
+      .then(accountStore.updateAccountAssets)
       .finally(() => this._setLoading(false));
   };
 
