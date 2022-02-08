@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import React from "react";
 import Text from "@components/Text";
-import SizedBox from "@components/SizedBox";
 import Button from "@components/Button";
 import { useStores } from "@stores";
 import { observer } from "mobx-react-lite";
@@ -9,18 +8,27 @@ import { observer } from "mobx-react-lite";
 interface IProps {}
 
 const Root = styled.div`
-  display: flex;
+  display: grid;
+  align-items: center;
   flex-direction: column;
+  grid-template-columns: 1fr;
+  row-gap: 16px;
+  @media (min-width: 880px) {
+    grid-template-columns: 80% 20%;
+    flex-direction: row;
+    .text {
+      width: fit-content;
+    }
+  }
 `;
 
 const LoggedOutRewardInfo: React.FC<IProps> = () => {
   const { accountStore } = useStores();
   return (
     <Root>
-      <Text type="secondary" style={{ textAlign: "center" }}>
+      <Text type="secondary" style={{ textAlign: "center" }} className="text">
         Connect your wallet to see your staking balance and reward
       </Text>
-      <SizedBox height={8} />
       <Button
         fixed
         size="medium"

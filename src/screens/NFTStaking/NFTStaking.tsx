@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React from "react";
 import { Observer } from "mobx-react-lite";
 import Layout from "@components/Layout";
 import Text from "@components/Text";
@@ -16,7 +16,7 @@ const Root = styled.div`
   flex-direction: column;
   justify-content: center;
   box-sizing: border-box;
-  padding: 16px;
+  padding: 0 16px;
   width: 100%;
   min-height: 100%;
   max-width: calc(1160px + 32px);
@@ -25,20 +25,12 @@ const Root = styled.div`
   text-align: left;
   @media (min-width: 880px) {
     margin-top: 56px;
+    .title {
+      max-width: 560px;
+    }
   }
 `;
-// const NFTContainer = styled.div`
-//   display: grid;
-//   row-gap: 16px;
-//   grid-template-columns: 1fr;
-//   @media (min-width: 604px) {
-//     //grid-template-columns: repeat(4, 1fr);
-//     grid-template-columns: repeat(auto-fill, 278px);
-//     column-gap: 16px;
-//   }
-// `;
 const NFTStakingImpl: React.FC = () => {
-  const [activeTab, setActiveTab] = useState(0);
   const vm = useNFTStakingVM();
   return (
     <Layout>
@@ -54,24 +46,24 @@ const NFTStakingImpl: React.FC = () => {
                 NFT-Staking
               </Text>
               <SizedBox height={8} />
-              <Text type="secondary">
+              <Text type="secondary" className="title">
                 Stake Puzzle NFT to share the rewards pool from Puzzle
                 aggregator fees and boost your staking rewards up to
                 <b style={{ color: "#35A15A" }}> 45.3 %</b>. You can stake one
                 of each type of NFTs.
               </Text>
               <Reward />
-              <SizedBox height={24} />
+              <SizedBox height={40} />
               <Tabs
                 tabs={[
-                  { name: "On my wallet", additionalInfo: accountNftAmount },
                   { name: "Market", additionalInfo: marketNftAmount },
+                  { name: "On my wallet", additionalInfo: accountNftAmount },
                 ]}
-                activeTab={activeTab}
-                setActive={setActiveTab}
+                activeTab={vm.nftDisplayState}
+                setActive={vm.setNftDisplayState}
               />
               <SizedBox height={16} />
-              {activeTab == 0 ? <AccountNfts /> : <MarketNfts />}
+              {vm.nftDisplayState === 0 ? <MarketNfts /> : <AccountNfts />}
             </Root>
           );
         }}

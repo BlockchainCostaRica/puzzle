@@ -6,10 +6,11 @@ import Artefact from "@screens/NFTStaking/Artefact";
 import Button from "@components/Button";
 import { useStores } from "@stores";
 import { ReactComponent as LinkIcon } from "@src/assets/icons/link.svg";
-import { Row } from "@src/components/Flex";
-import SizedBox from "@src/components/SizedBox";
+import { Row } from "@components/Flex";
+import SizedBox from "@components/SizedBox";
 import Text from "@components/Text";
 import DetailsButton from "@components/DetailsButton";
+import NoNfts from "@screens/NFTStaking/NoNfts";
 
 interface IProps {}
 
@@ -26,7 +27,22 @@ const AccountNfts: React.FC<IProps> = () => {
   const { accountStore } = useStores();
   const vm = useNFTStakingVM();
 
-  if (accountStore.address == null) return <Button>Connect wallet</Button>;
+  if (accountStore.address == null)
+    return (
+      <NoNfts
+        text="Connect your wallet to see your NFTs"
+        btnText="Connect wallet"
+        onBtnClick={() => accountStore.setWalletModalOpened(true)}
+      />
+    );
+  if (vm.accountArtworks.length === 0)
+    return (
+      <NoNfts
+        text="You have no NFT on your wallet yet.Go to the market tab to buy one."
+        btnText="Go to Market"
+        onBtnClick={() => vm.setNftDisplayState(0)}
+      />
+    );
   return (
     <Root>
       {vm.artworks.map((art, index) => (

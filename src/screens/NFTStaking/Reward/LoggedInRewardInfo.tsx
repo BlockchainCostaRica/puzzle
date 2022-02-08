@@ -4,15 +4,18 @@ import Button from "@components/Button";
 import { observer } from "mobx-react-lite";
 import SizedBox from "@components/SizedBox";
 import { Column, Row } from "@src/components/Flex";
-import Divider from "@src/components/Divider";
 import income from "@src/assets/icons/income.svg";
 import wallet from "@src/assets/icons/wallet.svg";
 import Text from "@components/Text";
-// import { useStores } from "@stores";
 
 const Root = styled.div`
-  display: flex;
+  display: grid;
   flex-direction: column;
+  grid-template-columns: 1fr;
+  row-gap: 16px;
+  @media (min-width: 880px) {
+    grid-template-columns: 41% 41% 18%;
+  }
 `;
 const Icon = styled.img`
   border-radius: 8px;
@@ -36,13 +39,7 @@ const LoggedInRewardInfo: React.FC = () => {
             <Text weight={500}>{claimedReward}</Text>
           </Column>
         </Row>
-        <Text type="secondary" textAlign="right" size="medium">
-          Last claim
-        </Text>
       </Row>
-      <SizedBox height={18} />
-      <Divider />
-      <SizedBox height={18} />
       <Row>
         <Icon src={wallet} alt="wallet" />
         <SizedBox width={8} />
@@ -53,7 +50,6 @@ const LoggedInRewardInfo: React.FC = () => {
           <Text weight={500}>{availableToClaim}</Text>
         </Column>
       </Row>
-      <SizedBox height={18} />
       <Button fixed size="medium">
         Claim reward
       </Button>
