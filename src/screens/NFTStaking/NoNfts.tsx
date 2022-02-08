@@ -77,7 +77,7 @@ const NoNfts: React.FC<IProps> = ({ text, btnText, onBtnClick }) => {
         <Card key={index + "empty-card"} />
       ))}
       <Actions>
-        <Text textAlign="center" style={{ maxWidth: 320 }}>
+        <Text textAlign="center" style={{ maxWidth: 320, whiteSpace: "pre" }}>
           {text}
         </Text>
         <Button size="medium" onClick={onBtnClick}>

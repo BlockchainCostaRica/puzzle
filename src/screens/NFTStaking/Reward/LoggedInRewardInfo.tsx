@@ -22,6 +22,16 @@ const Icon = styled.img`
   height: 40px;
   width: 40px;
 `;
+const AvailableToClaim = styled(Row)`
+  border-top: 1px solid #f1f2fe;
+  padding-top: 18px;
+  @media (min-width: 880px) {
+    border-left: 1px solid #f1f2fe;
+    border-top: none;
+    padding-left: 24px;
+    padding-top: 0;
+  }
+`;
 const LoggedInRewardInfo: React.FC = () => {
   // const { accountStore } = useStores();
   const availableToClaim = "—";
@@ -40,7 +50,7 @@ const LoggedInRewardInfo: React.FC = () => {
           </Column>
         </Row>
       </Row>
-      <Row>
+      <AvailableToClaim>
         <Icon src={wallet} alt="wallet" />
         <SizedBox width={8} />
         <Column>
@@ -49,7 +59,7 @@ const LoggedInRewardInfo: React.FC = () => {
           </Text>
           <Text weight={500}>{availableToClaim}</Text>
         </Column>
-      </Row>
+      </AvailableToClaim>
       <Button fixed size="medium">
         Claim reward
       </Button>
