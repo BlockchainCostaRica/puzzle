@@ -10,6 +10,7 @@ import { useStores } from "@stores";
 import Notification from "@components/Notification";
 import { Link } from "react-router-dom";
 import buildBuyTokenRoute from "@src/utils/buildBuyTokenRoute";
+import { Loading } from "@components/Loading";
 
 interface IProps {}
 
@@ -24,10 +25,10 @@ const Stake: React.FC<IProps> = () => {
           <Notification
             type="warning"
             text={
-              <div>
+              <Text>
                 Your have low PUZZLE balance.{" "}
                 <Link to={buyPuzzleRoute}>Buy PUZZLE</Link> to stake it.
-              </div>
+              </Text>
             }
           />
           <SizedBox height={24} />
@@ -40,9 +41,15 @@ const Stake: React.FC<IProps> = () => {
         <Text textAlign="right">0.005 WAVES</Text>
       </Row>
       <SizedBox height={24} />
-      <Button fixed onClick={vm.stake} disabled={!vm.canStake}>
-        Stake Puzzle
-      </Button>
+      {!vm.loading ? (
+        <Button fixed onClick={vm.stake} disabled={!vm.canStake}>
+          Stake Puzzle
+        </Button>
+      ) : (
+        <Button disabled fixed>
+          Transaction in progress <Loading />
+        </Button>
+      )}
     </>
   );
 };

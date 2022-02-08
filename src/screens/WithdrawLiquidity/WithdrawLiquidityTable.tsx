@@ -10,6 +10,7 @@ import { Row } from "@components/Flex";
 import WithdrawTokenRow from "./WithdrawTokenRow";
 import { useWithdrawLiquidityVM } from "@screens/WithdrawLiquidity/WithdrawLiquidityVM";
 import { observer } from "mobx-react-lite";
+import { Loading } from "@components/Loading";
 
 interface IProps {}
 
@@ -20,6 +21,7 @@ const Root = styled.div`
 `;
 
 const AdaptiveRowWithPadding = styled(Row)`
+  box-sizing: border-box;
   padding: 16px;
   @media (min-width: 880px) {
     padding: 24px;
@@ -83,15 +85,21 @@ const WithdrawLiquidityTable: React.FC<IProps> = () => {
         <SizedBox height={56} />
       </HideDesktop>
       <FixedMobileBlock>
-        <Button
-          fixed
-          disabled={
-            vm.percentToWithdraw.eq(0) || vm.totalAmountToWithdraw.eq(0)
-          }
-          onClick={vm.withdraw}
-        >
-          Withdraw {vm.totalAmountToWithdrawDisplay}
-        </Button>
+        {!vm.loading ? (
+          <Button
+            fixed
+            disabled={
+              vm.percentToWithdraw.eq(0) || vm.totalAmountToWithdraw.eq(0)
+            }
+            onClick={vm.withdraw}
+          >
+            Withdraw {vm.totalAmountToWithdrawDisplay}
+          </Button>
+        ) : (
+          <Button fixed disabled>
+            Transaction in progress <Loading />
+          </Button>
+        )}
       </FixedMobileBlock>
     </Root>
   );

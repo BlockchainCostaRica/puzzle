@@ -6,8 +6,7 @@ import Text from "@components/Text";
 import { useTradeVM } from "@screens/TradeInterface/TradeVM";
 import { useNavigate } from "react-router-dom";
 import { Loading } from "@components/Loading";
-import { useStores } from "@stores";
-import { IToken, TOKENS } from "@src/constants";
+import { TOKENS } from "@src/constants";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {}
 

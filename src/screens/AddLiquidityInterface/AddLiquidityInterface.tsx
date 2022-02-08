@@ -14,6 +14,7 @@ import BaseTokenAddLiquidityAmount from "./BaseTokenAddLiquidityAmount";
 import { useStores } from "@stores";
 import ShortPoolInfoCard from "@components/ShortPoolInfoCard";
 import { useNavigate } from "react-router-dom";
+import DialogNotification from "@components/Dialog/DialogNotification";
 
 interface IProps {
   poolId: string;
@@ -30,6 +31,7 @@ const Root = styled.div`
   margin-top: 40px;
   width: 100%;
   max-width: calc(560px + 32px);
+  box-sizing: border-box;
   @media (min-width: 880px) {
     margin-top: 56px;
   }
@@ -82,6 +84,16 @@ const AddLiquidityInterfaceImpl = () => {
             {window.location.pathname.includes(addOneTokenRoute) && (
               <BaseTokenAddLiquidityAmount />
             )}
+            <DialogNotification
+              onClose={() => vm.setNotificationParams(null)}
+              title={vm.notificationParams?.title ?? ""}
+              description={vm.notificationParams?.description}
+              buttonsDirection={vm.notificationParams?.buttonsDirection}
+              type={vm.notificationParams?.type}
+              buttons={vm.notificationParams?.buttons}
+              style={{ maxWidth: 360 }}
+              visible={vm.notificationParams != null}
+            />
           </Root>
         )}
       </Observer>
