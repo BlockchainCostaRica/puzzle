@@ -180,6 +180,7 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
 
 export const MAINNET_CONTRACTS_ADDRESSES = {
   staking: "3PFTbywqxtFfukX3HyT881g4iW5K4QL3FAS",
+  ultraStaking: "3PKUxbZaSYfsR7wu2HaAgiirHYwAMupDrYW",
   aggregator: "3PGFHzVGT4NTigwCKP1NcwoXkodVZwvBuuU",
 };
 

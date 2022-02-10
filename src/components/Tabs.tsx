@@ -38,7 +38,7 @@ const Tabs: React.FC<IProps> = ({ tabs, activeTab, setActive }) => {
         >
           <Text weight={500}>
             {name}
-            {additionalInfo != null && additionalInfo != 0 && (
+            {additionalInfo != null && additionalInfo !== 0 && (
               <span style={{ color: "#8082C5", marginLeft: 10 }}>
                 {additionalInfo}
               </span>

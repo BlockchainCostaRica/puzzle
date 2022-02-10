@@ -38,7 +38,7 @@ const AccountNfts: React.FC<IProps> = () => {
   if (vm.accountArtworks.length === 0)
     return (
       <NoNfts
-        text="You have no NFT on your wallet yet.Go to the market tab to buy one."
+        text={`You have no NFT on your wallet yet.\nGo to the market tab to buy one.`}
         btnText="Go to Market"
         onBtnClick={() => vm.setNftDisplayState(0)}
       />
