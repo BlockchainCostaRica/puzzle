@@ -14,6 +14,7 @@ import BN from "@src/utils/BN";
 import { useStores } from "@stores";
 import LiquidityTokenRow from "@screens/AddLiquidityInterface/MultipleTokensAddLiquidity/LiquidityTokenRow";
 import MultipleTokensNotifications from "@screens/AddLiquidityInterface/MultipleTokensAddLiquidity/MultipleTokensNotifications";
+import { Loading } from "@components/Loading";
 
 interface IProps {}
 
@@ -113,13 +114,19 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
         <SizedBox height={56} />
       </HideDesktop>
       <FixedMobileBlock>
-        <Button
-          fixed
-          disabled={!vm.canMultipleDeposit}
-          onClick={vm.depositMultiply}
-        >
-          Deposit {vm.totalAmountToDeposit}
-        </Button>
+        {!vm.loading ? (
+          <Button
+            fixed
+            disabled={!vm.canMultipleDeposit}
+            onClick={vm.depositMultiply}
+          >
+            Deposit {vm.totalAmountToDeposit ?? "$ 0.0"}
+          </Button>
+        ) : (
+          <Button disabled fixed>
+            Transaction in progress <Loading />
+          </Button>
+        )}
       </FixedMobileBlock>
     </Root>
   );

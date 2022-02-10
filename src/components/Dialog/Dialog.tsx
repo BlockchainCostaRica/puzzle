@@ -10,7 +10,7 @@ interface IProps extends IDialogPropTypes {}
 const Dialog: React.FC<IProps> = ({ children, ...rest }) => {
   return (
     <RcDialog
-      closeIcon={<CloseIcon />}
+      closeIcon={<CloseIcon style={{ marginTop: 8 }} />}
       animation="zoom"
       maskAnimation="fade"
       {...rest}

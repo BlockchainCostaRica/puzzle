@@ -12,6 +12,7 @@ import { useStakingVM } from "@screens/Staking/StakingVM";
 import BN from "@src/utils/BN";
 import { useStores } from "@stores";
 import dayjs from "dayjs";
+import { Loading } from "@components/Loading";
 
 const Root = styled.div`
   display: flex;
@@ -69,14 +70,20 @@ const LoggedInRewardInfo: React.FC = () => {
         </Column>
       </Row>
       <SizedBox height={18} />
-      <Button
-        fixed
-        size="medium"
-        onClick={vm.claimReward}
-        disabled={!vm.canClaim}
-      >
-        Claim reward
-      </Button>
+      {!vm.loading ? (
+        <Button
+          fixed
+          size="medium"
+          onClick={vm.claimReward}
+          disabled={!vm.canClaim}
+        >
+          Claim reward
+        </Button>
+      ) : (
+        <Button size="medium" disabled fixed>
+          Transaction in progress <Loading />
+        </Button>
+      )}
     </Root>
   );
 };
