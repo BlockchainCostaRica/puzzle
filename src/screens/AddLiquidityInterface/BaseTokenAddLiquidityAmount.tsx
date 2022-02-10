@@ -25,6 +25,17 @@ const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
   const vm = useAddLiquidityInterfaceVM();
   const buyBaseTokenRoute = buildBuyTokenRoute("trade", vm.baseToken.assetId);
 
+  const handleCallDepositBaseToken = async () => {
+    const slippagePercent = vm.baseTokenSlippage;
+    console.log(slippagePercent.times(100).toFormat(2));
+    vm.setNotificationParams(null);
+    if (slippagePercent.times(100).gte(5)) {
+      vm.showHighSlippageWarning();
+    } else {
+      await vm.depositBaseToken();
+    }
+  };
+
   return (
     <Root>
       <Text weight={500} type="secondary">
@@ -74,7 +85,7 @@ const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
         (!vm.loading ? (
           <Button
             fixed
-            onClick={vm.callDepositBaseToken}
+            onClick={handleCallDepositBaseToken}
             disabled={!vm.canDepositBaseToken}
           >
             Deposit

@@ -37,8 +37,7 @@ const ButtonsContainer = styled.div<{ direction?: "row" | "column" }>`
   margin: -4px;
 
   & > * {
-    ${({ direction }) =>
-      direction === "row" ? "margin-right: 4px" : "margin: 4px"}
+    margin: 4px;
   }
 `;
 

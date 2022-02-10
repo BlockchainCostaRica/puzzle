@@ -239,33 +239,23 @@ class AddLiquidityInterfaceVM {
       .finally(() => this._setLoading(false));
   };
 
-  callDepositBaseToken = async () => {
+  showHighSlippageWarning = () => {
     const slippagePercent = this.baseTokenSlippage;
-    this.setNotificationParams(null);
-    if (slippagePercent.times(100).gte(5)) {
-      const { baseToken, baseTokenAmount } = this;
-      const slippage = BN.formatUnits(
-        baseTokenAmount.times(slippagePercent),
-        baseToken.decimals
-      ).toFormat(2);
-      this.setNotificationParams(
-        buildWarningLiquidityDialogParams({
-          title: "High slippage rate",
-          description: `You will lose ${slippage} ${
-            baseToken.symbol
-          } (${slippagePercent
-            .times(100)
-            .toFormat(
-              2
-            )} % of the total amount) on this operation due to slippage. Are you sure you want to add liquidity?`,
-          onContinue: this.depositBaseToken,
-          continueText: "Add liquidity",
-          onCancel: () => this.setNotificationParams(null),
-        })
-      );
-    } else {
-      await this.depositBaseToken();
-    }
+    const { baseToken, baseTokenAmount } = this;
+    const slippage = BN.formatUnits(
+      baseTokenAmount.times(slippagePercent),
+      baseToken.decimals
+    ).toFormat(2);
+    const formatSlippagePercent = slippagePercent.times(100).toFormat(2);
+    this.setNotificationParams(
+      buildWarningLiquidityDialogParams({
+        title: "High slippage rate",
+        description: `You will lose ${slippage} ${baseToken.symbol} (${formatSlippagePercent} % of the total amount) on this operation due to slippage. Are you sure you want to add liquidity?`,
+        onContinue: this.depositBaseToken,
+        continueText: "Add liquidity",
+        onCancel: () => this.setNotificationParams(null),
+      })
+    );
   };
 
   get baseTokenSlippage(): BN {
