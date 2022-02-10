@@ -22,6 +22,7 @@ export interface IDialogNotificationProps extends IDialogPropTypes {
 
 const Root = styled(Column)`
   text-align: center;
+
   & > .title {
     font-weight: 500;
     font-size: 24px;
@@ -29,11 +30,15 @@ const Root = styled(Column)`
   }
 `;
 
-const ButtonsContainer = styled(Column)`
+const ButtonsContainer = styled.div<{ direction?: "row" | "column" }>`
+  display: flex;
+  flex-direction: ${({ direction }) => direction ?? "column"};
   width: 100%;
   margin: -4px;
+
   & > * {
-    margin: 4px;
+    ${({ direction }) =>
+      direction === "row" ? "margin-right: 4px" : "margin: 4px"}
   }
 `;
 
@@ -139,6 +144,40 @@ export const buildErrorLiquidityDialogParams = ({
       () => (
         <Button size="medium" fixed onClick={onTryAgain}>
           Try again
+        </Button>
+      ),
+    ],
+  };
+};
+type TBuildWarningLiquidityDialogParamsProps = {
+  title: string;
+  description: string;
+  onContinue: () => void;
+  continueText: string;
+  onCancel: () => void;
+};
+
+export const buildWarningLiquidityDialogParams = ({
+  title,
+  description,
+  onContinue,
+  continueText,
+  onCancel,
+}: TBuildWarningLiquidityDialogParamsProps): IDialogNotificationProps => {
+  return {
+    title,
+    description,
+    type: "warning",
+    buttonsDirection: "row",
+    buttons: [
+      () => (
+        <Button size="medium" fixed onClick={onCancel} kind="secondary">
+          Cancel
+        </Button>
+      ),
+      () => (
+        <Button size="medium" fixed onClick={onContinue}>
+          {continueText}
         </Button>
       ),
     ],
