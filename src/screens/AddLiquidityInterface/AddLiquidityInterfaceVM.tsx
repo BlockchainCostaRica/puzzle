@@ -8,6 +8,7 @@ import { IPoolStats30Days } from "@stores/PoolsStore";
 import {
   buildErrorLiquidityDialogParams,
   buildSuccessLiquidityDialogParams,
+  buildWarningLiquidityDialogParams,
   IDialogNotificationProps,
 } from "@components/Dialog/DialogNotification";
 
@@ -238,9 +239,42 @@ class AddLiquidityInterfaceVM {
       .finally(() => this._setLoading(false));
   };
 
+  showHighSlippageWarning = () => {
+    const slippagePercent = this.baseTokenSlippage;
+    const { baseToken, baseTokenAmount } = this;
+    const slippage = BN.formatUnits(
+      baseTokenAmount.times(slippagePercent),
+      baseToken.decimals
+    ).toFormat(2);
+    const formatSlippagePercent = slippagePercent.times(100).toFormat(2);
+    this.setNotificationParams(
+      buildWarningLiquidityDialogParams({
+        title: "High slippage rate",
+        description: `You will lose ${slippage} ${baseToken.symbol} (${formatSlippagePercent} % of the total amount) on this operation due to slippage. Are you sure you want to add liquidity?`,
+        onContinue: this.depositBaseToken,
+        continueText: "Add liquidity",
+        onCancel: () => this.setNotificationParams(null),
+      })
+    );
+  };
+
+  get baseTokenSlippage(): BN {
+    const { pool, baseToken } = this;
+    if (pool == null || pool.liquidity == null || baseToken == null)
+      return BN.ZERO;
+    const liquidity = pool.liquidity[this.baseToken.assetId];
+    return new BN(1).minus(liquidity.div(liquidity.plus(this.baseTokenAmount)));
+  }
+
   depositBaseToken = async () => {
-    if (this.pool?.contractAddress == null || this.pool.layer2Address == null)
+    if (
+      this.pool?.contractAddress == null ||
+      this.pool.layer2Address == null ||
+      !this.canDepositBaseToken
+    ) {
+      this.setNotificationParams(null);
       return;
+    }
     const { accountStore } = this.rootStore;
     this._setLoading(true);
     this.setNotificationParams(null);
