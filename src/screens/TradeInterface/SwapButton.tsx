@@ -10,7 +10,7 @@ interface IProps {}
 const SwapButton: React.FC<IProps> = () => {
   const { accountStore } = useStores();
   const vm = useTradeVM();
-  const { amount0, token0, balance0, amount1, synchronizing } = vm;
+  const { amount0, token0, balance0, amount1, synchronizing, loading } = vm;
   switch (true) {
     case accountStore.address == null:
       return (
@@ -22,6 +22,12 @@ const SwapButton: React.FC<IProps> = () => {
       return (
         <Button disabled fixed>
           Please wait <Loading />
+        </Button>
+      );
+    case loading:
+      return (
+        <Button disabled fixed>
+          Transaction in progress <Loading />
         </Button>
       );
     case amount0 == null || amount1 == null || amount0.eq(0):

@@ -31,8 +31,14 @@ class InvestToPoolInterfaceVM {
   public poolId: string;
   public rootStore: RootStore;
 
+  loading: boolean = false;
+  private _setLoading = (l: boolean) => (this.loading = l);
+
   public stats: IPoolStats30Days | null = null;
-  private setStats = (stats: IPoolStats30Days | null) => (this.stats = stats);
+  private setStats = (stats: IPoolStats30Days | null) => {
+    console.log(stats);
+    this.stats = stats;
+  };
 
   public accountLiquidity: BN | null = null;
   private setAccountLiquidity = (value: BN) => (this.accountLiquidity = value);
@@ -209,22 +215,35 @@ class InvestToPoolInterfaceVM {
   }
 
   claimRewards = async () => {
-    if (this.totalRewardToClaim.eq(0)) {
-      // errorMessage({ message: "There is nothing to claim" });
-      return;
-    }
-    if (this.pool.layer2Address == null) {
-      // errorMessage({ message: "There is nothing to claim" });
-      return;
-    }
-    return this.rootStore.accountStore.invoke({
-      dApp: this.pool.contractAddress,
-      payment: [],
-      call: {
-        function: "claimIndexRewards",
-        args: [],
-      },
-    });
+    if (this.totalRewardToClaim.eq(0)) return;
+    if (this.pool.layer2Address == null) return;
+    this._setLoading(true);
+    const { accountStore, notificationStore } = this.rootStore;
+    accountStore
+      .invoke({
+        dApp: this.pool.contractAddress,
+        payment: [],
+        call: {
+          function: "claimIndexRewards",
+          args: [],
+        },
+      })
+      .then((txId) => {
+        notificationStore.notify(`Your rewards was claimed`, {
+          type: "success",
+          title: `Success`,
+          link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
+          linkTitle: "View on Explorer",
+        });
+      })
+      .catch((e) => {
+        notificationStore.notify(e.message ?? e.toString(), {
+          type: "error",
+          title: "Transaction is not completed",
+        });
+      })
+      .then(this.updateRewardInfo)
+      .finally(() => this._setLoading(false));
   };
 
   get isThereRewardToClaim() {

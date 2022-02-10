@@ -12,10 +12,13 @@ import BN from "@src/utils/BN";
 
 interface IProps {}
 
-const Root = styled.div`
+const Root = styled.div<{ disabled?: boolean }>`
   display: flex;
   flex-direction: column;
   padding-top: 24px;
+  transition: 0.4s;
+  height: ${({ disabled }) => (disabled ? 0 : 320)}px;
+  overflow: hidden;
   .recharts-tooltip-item-name,
   .recharts-tooltip-item-separator {
     display: none;
@@ -50,9 +53,8 @@ const TradesVolume: React.FC<IProps> = () => {
   const data = vm.stats?.volume
     .slice()
     .sort((a, b) => (a.date < b.date ? -1 : 1));
-
   return (
-    <Root>
+    <Root disabled={data == null || data.length < 2}>
       <Text weight={500} type="secondary">
         Trades volume
       </Text>

@@ -257,15 +257,7 @@ class AccountStore {
     const tx = await window.WavesKeeper.signAndPublishTransaction({
       type: 16,
       data,
-    } as any).catch((error: any) => {
-      console.error({ error, data });
-      this.rootStore.notificationStore.notify(error.data, {
-        type: "error",
-        title: "Transaction is not completed",
-      });
-      return null;
-    });
-    if (tx === null) return null;
+    } as any);
 
     const txId = JSON.parse(tx).id;
     await waitForTx(txId, {

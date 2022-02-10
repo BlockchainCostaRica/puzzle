@@ -35,7 +35,7 @@ class TradeVM {
   }
 
   price: BN = BN.ZERO;
-  @action.bound private _setPrice = (price: BN) => (this.price = price);
+  private _setPrice = (price: BN) => (this.price = price);
 
   @action.bound
   private _calculatePrice(
@@ -49,24 +49,25 @@ class TradeVM {
   }
 
   parameters: string | null = null;
-  @action.bound private _setParameters = (parameters: string | null) =>
+  private _setParameters = (parameters: string | null) =>
     (this.parameters = parameters);
 
   synchronizing: boolean = false;
-  @action.bound private _setSynchronizing = (synchronizing: boolean) =>
+  private _setSynchronizing = (synchronizing: boolean) =>
     (this.synchronizing = synchronizing);
 
+  loading: boolean = false;
+  private _setLoading = (l: boolean) => (this.loading = l);
+
   priceImpact: BN = BN.ZERO;
-  @action.bound private _setPriceImpact = (priceImpact: BN) =>
+  private _setPriceImpact = (priceImpact: BN) =>
     (this.priceImpact = priceImpact);
 
   route: Array<TCalcRoute> = [];
-  @action.bound private _setRoute = (route: Array<TCalcRoute>) =>
-    (this.route = route);
+  private _setRoute = (route: Array<TCalcRoute>) => (this.route = route);
 
   aggregatedProfit: BN = BN.ZERO;
-  @action.bound private _setAggregatedProfit = (value: BN) =>
-    (this.aggregatedProfit = value);
+  private _setAggregatedProfit = (value: BN) => (this.aggregatedProfit = value);
 
   assetId0: string;
   @action.bound setAssetId0 = (assetId: string) => (this.assetId0 = assetId);
@@ -85,14 +86,14 @@ class TradeVM {
   }
 
   amount1: BN = BN.ZERO;
-  @action.bound private _setAmount1 = (amount: BN) => (this.amount1 = amount);
+  private _setAmount1 = (amount: BN) => (this.amount1 = amount);
 
   routingModalOpened: boolean = false;
   @action.bound setRoutingModalState = (state: boolean) =>
     (this.routingModalOpened = state);
 
   //todo cun out kludge with invalidAmount
-  @action.bound private _syncAmount1 = (quiet = false) => {
+  private _syncAmount1 = (quiet = false) => {
     const { amount0, assetId0, assetId1 } = this;
     const invalidAmount = amount0 == null || amount0.isNaN() || amount0.lte(0);
     if (amount0 != null && amount0.eq(0)) {
@@ -205,6 +206,7 @@ class TradeVM {
     if (this.synchronizing || parameters == null) return;
     if (token0 == null || amount0.eq(0)) return;
     if (minimumToReceive == null) return;
+    this._setLoading(true);
     accountStore
       .invoke({
         dApp: CONTRACT_ADDRESSES.aggregator,
@@ -226,7 +228,6 @@ class TradeVM {
         },
       })
       .then((txId) => {
-        if (txId == null) return;
         notificationStore.notify(
           "You can view the details of it in Waves Explorer",
           {
@@ -236,7 +237,15 @@ class TradeVM {
             linkTitle: "View on Explorer",
           }
         );
-      });
+      })
+      .catch((e) => {
+        notificationStore.notify(e.message ?? e.toString(), {
+          type: "error",
+          title: "Transaction is not completed",
+        });
+      })
+      .then(accountStore.updateAccountAssets)
+      .finally(() => this._setLoading(false));
   };
 
   get totalLiquidity() {

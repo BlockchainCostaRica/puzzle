@@ -10,6 +10,7 @@ export enum MAINNET_POOL_ID {
   defi = "defi",
   puzzle = "puzzle",
   race = "race",
+  egg = "egg",
 }
 
 export const MAINNET_ROUTES = {
@@ -23,6 +24,7 @@ export const MAINNET_ROUTES = {
     farms2: `${MAINNET_POOL_ID.farmsPool2}/withdraw`,
     race: `${MAINNET_POOL_ID.race}/withdraw`,
     defi: `${MAINNET_POOL_ID.defi}/withdraw`,
+    egg: `${MAINNET_POOL_ID.egg}/withdraw`,
   },
   pools: {
     farms: MAINNET_POOL_ID.farmsPool1,
@@ -30,24 +32,28 @@ export const MAINNET_ROUTES = {
     defi: MAINNET_POOL_ID.defi,
     race: MAINNET_POOL_ID.race,
     puzzle: MAINNET_POOL_ID.puzzle,
+    egg: MAINNET_POOL_ID.egg,
   },
   addLiquidity: {
     farms: `${MAINNET_POOL_ID.farmsPool1}/addLiquidity`,
     farms2: `${MAINNET_POOL_ID.farmsPool2}/addLiquidity`,
     race: `${MAINNET_POOL_ID.race}/addLiquidity`,
     defi: `${MAINNET_POOL_ID.defi}/addLiquidity`,
+    egg: `${MAINNET_POOL_ID.egg}/addLiquidity`,
   },
   addOneToken: {
     farms: `${MAINNET_POOL_ID.farmsPool1}/addOneToken`,
     farms2: `${MAINNET_POOL_ID.farmsPool2}/addOneToken`,
     race: `${MAINNET_POOL_ID.race}/addOneToken`,
     defi: `${MAINNET_POOL_ID.defi}/addOneToken`,
+    egg: `${MAINNET_POOL_ID.egg}/addOneToken`,
   },
   invest: {
     farms: `${MAINNET_POOL_ID.farmsPool1}/invest`,
     farms2: `${MAINNET_POOL_ID.farmsPool2}/invest`,
     race: `${MAINNET_POOL_ID.race}/invest`,
     defi: `${MAINNET_POOL_ID.defi}/invest`,
+    egg: `${MAINNET_POOL_ID.egg}/invest`,
   },
 };
 
@@ -141,6 +147,19 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
     tokens: [
       { ...mainnetTokens.EGG, shareAmount: 0.4, logo: tokenLogos.EGG },
       { ...mainnetTokens.RACE, shareAmount: 0.4, logo: tokenLogos.RACE },
+      { ...mainnetTokens.USDN, shareAmount: 0.2, logo: tokenLogos.USDN },
+    ],
+  },
+  [MAINNET_POOL_ID.egg]: {
+    contractAddress: "3PMHkdVCzeLAYuCh92FPtusuxdLk5xMB51y",
+    layer2Address: "3P84BhX5dCVs1TCgYnGa57kCHrMz4mUBXyE",
+    baseTokenId: mainnetTokens.EGG.assetId,
+    name: "Egg",
+    logo: tokenLogos.EGG,
+    defaultAssetId0: mainnetTokens.USDN.assetId,
+    defaultAssetId1: mainnetTokens.EGG.assetId,
+    tokens: [
+      { ...mainnetTokens.EGG, shareAmount: 0.8, logo: tokenLogos.EGG },
       { ...mainnetTokens.USDN, shareAmount: 0.2, logo: tokenLogos.USDN },
     ],
   },

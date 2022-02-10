@@ -5,6 +5,12 @@ import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import Balance from "@src/entities/Balance";
 import { IPoolStats30Days } from "@stores/PoolsStore";
+import {
+  buildErrorLiquidityDialogParams,
+  buildSuccessLiquidityDialogParams,
+  buildWarningLiquidityDialogParams,
+  IDialogNotificationProps,
+} from "@components/Dialog/DialogNotification";
 
 const ctx = React.createContext<AddLiquidityInterfaceVM | null>(null);
 
@@ -31,6 +37,13 @@ class AddLiquidityInterfaceVM {
 
   public stats: IPoolStats30Days | null = null;
   private setStats = (stats: IPoolStats30Days | null) => (this.stats = stats);
+
+  loading: boolean = false;
+  private _setLoading = (l: boolean) => (this.loading = l);
+
+  public notificationParams: IDialogNotificationProps | null = null;
+  public setNotificationParams = (params: IDialogNotificationProps | null) =>
+    (this.notificationParams = params);
 
   providedPercentOfPool: BN = new BN(50);
   @action.bound setProvidedPercentOfPool = (value: number) =>
@@ -161,43 +174,6 @@ class AddLiquidityInterfaceVM {
     return !total.isNaN() ? "$ " + total.toFormat(2) : null;
   }
 
-  depositMultiply = async () => {
-    const { accountStore, notificationStore } = this.rootStore;
-    if (this.pool?.contractAddress == null) return;
-    if (this.tokensToDepositAmounts == null || this.pool.layer2Address == null)
-      return;
-
-    const payment = Object.entries(this.tokensToDepositAmounts).reduce(
-      (acc, [assetId, value]) => [
-        ...acc,
-        { assetId, amount: value.toSignificant(0).toString() },
-      ],
-      [] as Array<{ assetId: string; amount: string }>
-    );
-
-    accountStore
-      .invoke({
-        dApp: this.pool.layer2Address,
-        payment,
-        call: {
-          function: "generateIndexAndStake",
-          args: [],
-        },
-      })
-      .then((txId) => {
-        if (txId == null) return;
-        notificationStore.notify(
-          `Liquidity successfully provided to the ${this.pool?.name}. You can track your reward on the pool page.`,
-          {
-            type: "success",
-            title: "Successfully provided",
-            link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
-            linkTitle: "View on Explorer",
-          }
-        );
-      });
-  };
-
   get baseTokenBalance() {
     return this.rootStore.accountStore.findBalanceByAssetId(
       this.baseToken.assetId
@@ -217,11 +193,92 @@ class AddLiquidityInterfaceVM {
       userTokenBalance.balance &&
       this.setBaseTokenAmount(userTokenBalance.balance);
   };
-  depositBaseToken = async () => {
-    if (this.pool?.contractAddress == null || this.pool.layer2Address == null)
-      return;
 
-    this.rootStore.accountStore
+  depositMultiply = async () => {
+    const { accountStore } = this.rootStore;
+    if (this.pool?.contractAddress == null) return;
+    if (this.tokensToDepositAmounts == null || this.pool.layer2Address == null)
+      return;
+    this._setLoading(true);
+    this.setNotificationParams(null);
+    const payment = Object.entries(this.tokensToDepositAmounts).reduce(
+      (acc, [assetId, value]) => [
+        ...acc,
+        { assetId, amount: value.toSignificant(0).toString() },
+      ],
+      [] as Array<{ assetId: string; amount: string }>
+    );
+    accountStore
+      .invoke({
+        dApp: this.pool.layer2Address,
+        payment,
+        call: {
+          function: "generateIndexAndStake",
+          args: [],
+        },
+      })
+      .then((txId) => {
+        this.setNotificationParams(
+          buildSuccessLiquidityDialogParams({
+            accountStore,
+            poolId: this.poolId,
+            txId: txId ?? "",
+          })
+        );
+      })
+      .catch((e) =>
+        this.setNotificationParams(
+          buildErrorLiquidityDialogParams({
+            title: "Transaction is not completed",
+            description: e.message ?? e.toString(),
+            onTryAgain: this.depositMultiply,
+          })
+        )
+      )
+      .then(accountStore.updateAccountAssets)
+      .finally(() => this._setLoading(false));
+  };
+
+  showHighSlippageWarning = () => {
+    const slippagePercent = this.baseTokenSlippage;
+    const { baseToken, baseTokenAmount } = this;
+    const slippage = BN.formatUnits(
+      baseTokenAmount.times(slippagePercent),
+      baseToken.decimals
+    ).toFormat(2);
+    const formatSlippagePercent = slippagePercent.times(100).toFormat(2);
+    this.setNotificationParams(
+      buildWarningLiquidityDialogParams({
+        title: "High slippage rate",
+        description: `You will lose ${slippage} ${baseToken.symbol} (${formatSlippagePercent} % of the total amount) on this operation due to slippage. Are you sure you want to add liquidity?`,
+        onContinue: this.depositBaseToken,
+        continueText: "Add liquidity",
+        onCancel: () => this.setNotificationParams(null),
+      })
+    );
+  };
+
+  get baseTokenSlippage(): BN {
+    const { pool, baseToken } = this;
+    if (pool == null || pool.liquidity == null || baseToken == null)
+      return BN.ZERO;
+    const liquidity = pool.liquidity[this.baseToken.assetId];
+    return new BN(1).minus(liquidity.div(liquidity.plus(this.baseTokenAmount)));
+  }
+
+  depositBaseToken = async () => {
+    if (
+      this.pool?.contractAddress == null ||
+      this.pool.layer2Address == null ||
+      !this.canDepositBaseToken
+    ) {
+      this.setNotificationParams(null);
+      return;
+    }
+    const { accountStore } = this.rootStore;
+    this._setLoading(true);
+    this.setNotificationParams(null);
+    return accountStore
       .invoke({
         dApp: this.pool.layer2Address,
         payment: [
@@ -230,13 +287,27 @@ class AddLiquidityInterfaceVM {
             amount: this.baseTokenAmount.toString(),
           },
         ],
-        call: {
-          function: "generateIndexWithOneTokenAndStake",
-          args: [],
-        },
+        call: { function: "generateIndexWithOneTokenAndStake", args: [] },
       })
       .then((txId) => {
-        if (txId == null) return;
-      });
+        this.setNotificationParams(
+          buildSuccessLiquidityDialogParams({
+            accountStore,
+            poolId: this.poolId,
+            txId: txId ?? "",
+          })
+        );
+      })
+      .catch((e) =>
+        this.setNotificationParams(
+          buildErrorLiquidityDialogParams({
+            title: "Transaction is not completed",
+            description: e.message ?? e.toString(),
+            onTryAgain: this.depositBaseToken,
+          })
+        )
+      )
+      .then(accountStore.updateAccountAssets)
+      .finally(() => this._setLoading(false));
   };
 }

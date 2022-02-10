@@ -1,7 +1,8 @@
-import React from "react";
+import React, { HTMLAttributes } from "react";
 import { useEffect, useState } from "react";
+interface IProps extends HTMLAttributes<HTMLSpanElement> {}
 
-export function Loading() {
+export const Loading: React.FC<IProps> = ({ ...rest }) => {
   const [length, setLength] = useState(3);
   useEffect(() => {
     const interval = setInterval(() => {
@@ -10,8 +11,8 @@ export function Loading() {
     return () => clearInterval(interval);
   });
   return (
-    <span style={{ width: 1 }}>
+    <span {...rest} style={{ width: 1, ...rest.style }}>
       {Array.from({ length }, () => ".").join("")}
     </span>
   );
-}
+};

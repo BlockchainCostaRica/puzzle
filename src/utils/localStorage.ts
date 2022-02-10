@@ -7,7 +7,7 @@ export const loadState = (): ISerializedRootStore | undefined => {
     );
     return state || undefined;
   } catch (error) {
-    console.log(error);
+    console.dir(error);
     return undefined;
   }
 };
