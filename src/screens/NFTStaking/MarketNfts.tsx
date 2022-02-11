@@ -19,7 +19,6 @@ const Root = styled.div`
 `;
 const MarketNfts: React.FC<IProps> = () => {
   const vm = useNFTStakingVM();
-  console.log(vm);
   const arr = Array.from({ length: 4 });
   return (
     <Root>

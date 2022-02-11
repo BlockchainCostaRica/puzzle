@@ -36,6 +36,10 @@ class NFTStakingVM {
       () => rootStore.accountStore.address != null,
       this.updateAddressStakingInfo
     );
+    when(
+      () => rootStore.accountStore.address != null,
+      this.getAccountNFTsOnStaking
+    );
   }
 
   public nftDisplayState: number = 0;
@@ -61,15 +65,16 @@ class NFTStakingVM {
     const nfts = await nodeService.getAddressNfts(address);
     //todo ArtID: contains
   };
+
   getAccountNFTsOnStaking = async () => {
     const { address, chainId } = this.rootStore.accountStore;
     if (address == null) return;
     const match = `address_${address}_nft_(.*)`;
+    console.log(this.contractAddress, match);
     const reply = await nodeRequest(chainId, this.contractAddress, match);
     if (reply == null) return;
     const stakedNftIds = reply?.reduce((acc, v) => {
       const data = v.key.split("_");
-      //get assetId of nft
       return data[3];
     }, {});
     console.log(stakedNftIds);
