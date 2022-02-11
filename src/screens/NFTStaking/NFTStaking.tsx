@@ -37,7 +37,7 @@ const NFTStakingImpl: React.FC = () => {
       <Observer>
         {() => {
           const marketNftAmount = vm.artworks?.length;
-          const accountNftAmount = vm.accountArtworks.length;
+          const accountNftAmount = vm.accountNFTs?.length;
           return (
             <Root>
               <GoBack link="/stake" text="Back to Staking" />

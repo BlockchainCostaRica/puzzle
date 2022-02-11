@@ -4,7 +4,7 @@ import { action, makeAutoObservable, when } from "mobx";
 import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import statsService, { IArtWork } from "@src/services/statsService";
-import nodeService from "@src/services/nodeService";
+import nodeService, { INFT } from "@src/services/nodeService";
 import nodeRequest from "@src/utils/nodeRequest";
 
 const ctx = React.createContext<NFTStakingVM | null>(null);
@@ -31,14 +31,14 @@ class NFTStakingVM {
     const { accountStore } = this.rootStore;
     this._setContractAddress(accountStore.CONTRACT_ADDRESSES.ultraStaking);
     statsService.getArtworks().then((d) => this._setArtworks(d));
-    when(() => rootStore.accountStore.address != null, this.getAccountNFTs);
     when(
       () => rootStore.accountStore.address != null,
-      this.updateAddressStakingInfo
-    );
-    when(
-      () => rootStore.accountStore.address != null,
-      this.getAccountNFTsOnStaking
+      () =>
+        Promise.all([
+          this.updateAddressStakingInfo(),
+          this.getAccountNFTs(),
+          this.getAccountNFTsOnStaking(),
+        ])
     );
   }
 
@@ -50,9 +50,13 @@ class NFTStakingVM {
   public lastClaimDate: BN = BN.ZERO;
 
   public artworks: IArtWork[] | null = null;
-  public accountArtworks: IArtWork[] = [];
   private _setArtworks = (v: IArtWork[]) => (this.artworks = v);
-  private _setAccountArtworks = (v: IArtWork[]) => (this.artworks = v);
+
+  public accountNFTs: INFT[] | null = null;
+  private _setAccountNFTs = (v: INFT[]) => (this.accountNFTs = v);
+
+  public stakedAccountNFTs: INFT[] | null = null;
+  private _setStakedAccountNFTs = (v: INFT[]) => (this.accountNFTs = v);
 
   private _setClaimedReward = (v: BN) => (this.claimedReward = v);
   private _setAvailableToClaim = (v: BN) => (this.availableToClaim = v);
@@ -61,23 +65,34 @@ class NFTStakingVM {
   //todo!
   getAccountNFTs = async () => {
     const { address } = this.rootStore.accountStore;
-    if (address == null) return;
+    const { artworks } = this;
+    if (address == null || artworks == null) return;
     const nfts = await nodeService.getAddressNfts(address);
-    //todo ArtID: contains
+    const supportedPuzzleNft = nfts.filter(({ description }) =>
+      artworks.some(({ typeId }) => typeId && description.includes(typeId))
+    );
+    supportedPuzzleNft.length > 0 && this._setAccountNFTs(supportedPuzzleNft);
   };
 
   getAccountNFTsOnStaking = async () => {
+    const { contractAddress: ultra } = this;
     const { address, chainId } = this.rootStore.accountStore;
     if (address == null) return;
     const match = `address_${address}_nft_(.*)`;
-    console.log(this.contractAddress, match);
-    const reply = await nodeRequest(chainId, this.contractAddress, match);
-    if (reply == null) return;
-    const stakedNftIds = reply?.reduce((acc, v) => {
-      const data = v.key.split("_");
-      return data[3];
-    }, {});
-    console.log(stakedNftIds);
+
+    const allNftOnStaking = await nodeService.getAddressNfts(ultra);
+    const addressStakingNft = await nodeRequest(chainId, ultra, match);
+
+    if (addressStakingNft == null || allNftOnStaking == null) return;
+    const stakedNftIds = addressStakingNft?.reduce<string[]>(
+      (acc, { key }) => [...acc, key.split("_")[3]],
+      []
+    );
+
+    const supportedPuzzleNft = allNftOnStaking.filter(({ assetId }) =>
+      stakedNftIds?.some((id) => id === assetId)
+    );
+    console.log(supportedPuzzleNft);
   };
 
   private updateAddressStakingInfo = async () => {

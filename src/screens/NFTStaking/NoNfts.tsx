@@ -73,7 +73,7 @@ const NoNfts: React.FC<IProps> = ({ text, btnText, onBtnClick }) => {
   const { width } = useWindowSize();
   return (
     <Root>
-      {Array.from({ length: width && width > 880 ? 4 : 1 }).map((index) => (
+      {Array.from({ length: width && width > 880 ? 4 : 1 }).map((v, index) => (
         <Card key={index + "empty-card"} />
       ))}
       <Actions>

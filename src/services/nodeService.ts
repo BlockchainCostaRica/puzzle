@@ -30,7 +30,7 @@ export interface IStakingStatsResponse {
   ultra: { apy: number };
 }
 
-interface INFT {
+export interface INFT {
   assetId: string;
   decimals: number;
   description: string;
