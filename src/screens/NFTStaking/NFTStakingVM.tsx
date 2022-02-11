@@ -18,11 +18,8 @@ export const NFTStakingVMProvider: React.FC = ({ children }) => {
 export const useNFTStakingVM = () => useVM(ctx);
 
 class NFTStakingVM {
-  private stakingContractAddress: string = "";
-  private _setStakingAddress = (v: string) => (this.stakingContractAddress = v);
-
-  //чтобы получить застейканые карточки с контракта
-  //https://wavesducks.wavesnodes.com/addresses/data/3PKUxbZaSYfsR7wu2HaAgiirHYwAMupDrYW?matches=address_3PMcMiMEs6w56NRGacksXtFG5zS7doE9fpL_nft_(.*)
+  private contractAddress: string = "";
+  private _setContractAddress = (v: string) => (this.contractAddress = v);
 
   //чтобы получить незастейканые то фильтровать по typeId
 
@@ -32,7 +29,7 @@ class NFTStakingVM {
   constructor(private rootStore: RootStore) {
     makeAutoObservable(this);
     const { accountStore } = this.rootStore;
-    this._setStakingAddress(accountStore.CONTRACT_ADDRESSES.ultraStaking);
+    this._setContractAddress(accountStore.CONTRACT_ADDRESSES.ultraStaking);
     statsService.getArtworks().then((d) => this._setArtworks(d));
     when(() => rootStore.accountStore.address != null, this.getAccountNFTs);
     when(
@@ -62,20 +59,29 @@ class NFTStakingVM {
     const { address } = this.rootStore.accountStore;
     if (address == null) return;
     const nfts = await nodeService.getAddressNfts(address);
-    // const description =
-    //   "Creator: 3P3iV85eXfkcA3Dd13EpZBYvs1vkKX6AYEN,\n ArtID: Dn3tGwyg8AerfmUjhCixamPcyjy5FSAE2rguKinH9VCH,\n SignID: 5GMCJkjbahpJcbRgjZUp6coxTwhasDLNig3bAbHCdoN,\n Artwork name: Puzzle,\n Issue: 1/1";
-    // const our = nfts.filter((n) => n.description === description);
-    console.log(nfts);
+    //todo ArtID: contains
+  };
+  getAccountNFTsOnStaking = async () => {
+    const { address, chainId } = this.rootStore.accountStore;
+    if (address == null) return;
+    const match = `address_${address}_nft_(.*)`;
+    const reply = await nodeRequest(chainId, this.contractAddress, match);
+    if (reply == null) return;
+    const stakedNftIds = reply?.reduce((acc, v) => {
+      const data = v.key.split("_");
+      //get assetId of nft
+      return data[3];
+    }, {});
+    console.log(stakedNftIds);
   };
 
   private updateAddressStakingInfo = async () => {
-    //все тоже самое только адрес другой ++
     const { chainId, address, TOKENS } = this.rootStore.accountStore;
-    const { stakingContractAddress } = this;
+    const { contractAddress } = this;
 
     const [globalValues, addressValues] = await Promise.all([
-      nodeRequest(chainId, stakingContractAddress, `global_(.*)`),
-      nodeRequest(chainId, stakingContractAddress, `${address}_(.*)`),
+      nodeRequest(chainId, contractAddress, `global_(.*)`),
+      nodeRequest(chainId, contractAddress, `${address}_(.*)`),
     ]);
 
     const keysArray = {
@@ -86,7 +92,6 @@ class NFTStakingVM {
       addressLastCheckInterest: `${address}_lastCheck_${TOKENS.USDN.assetId}_interest`,
       lastClaimDate: `${address}_${TOKENS.USDN.assetId}_lastClaim`,
     };
-    //todo вынести в отдельную фунцию
     const parsedNodeResponse = [
       ...(globalValues ?? []),
       ...(addressValues ?? []),
