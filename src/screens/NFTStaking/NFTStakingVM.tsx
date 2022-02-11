@@ -35,6 +35,10 @@ class NFTStakingVM {
     this._setStakingAddress(accountStore.CONTRACT_ADDRESSES.ultraStaking);
     statsService.getArtworks().then((d) => this._setArtworks(d));
     when(() => rootStore.accountStore.address != null, this.getAccountNFTs);
+    when(
+      () => rootStore.accountStore.address != null,
+      this.updateAddressStakingInfo
+    );
   }
 
   public nftDisplayState: number = 0;
@@ -44,7 +48,7 @@ class NFTStakingVM {
   public availableToClaim: BN | null = null;
   public lastClaimDate: BN = BN.ZERO;
 
-  public artworks: IArtWork[] = [];
+  public artworks: IArtWork[] | null = null;
   public accountArtworks: IArtWork[] = [];
   private _setArtworks = (v: IArtWork[]) => (this.artworks = v);
   private _setAccountArtworks = (v: IArtWork[]) => (this.artworks = v);

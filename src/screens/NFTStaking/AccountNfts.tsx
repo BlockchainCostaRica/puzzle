@@ -2,14 +2,7 @@ import styled from "@emotion/styled";
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { useNFTStakingVM } from "@screens/NFTStaking/NFTStakingVM";
-import Artefact from "@screens/NFTStaking/Artefact";
-import Button from "@components/Button";
 import { useStores } from "@stores";
-import { ReactComponent as LinkIcon } from "@src/assets/icons/link.svg";
-import { Row } from "@components/Flex";
-import SizedBox from "@components/SizedBox";
-import Text from "@components/Text";
-import DetailsButton from "@components/DetailsButton";
 import NoNfts from "@screens/NFTStaking/NoNfts";
 
 interface IProps {}
@@ -45,32 +38,32 @@ const AccountNfts: React.FC<IProps> = () => {
     );
   return (
     <Root>
-      {vm.artworks.map((art, index) => (
-        <Artefact
-          key={index}
-          {...art}
-          buttons={
-            <>
-              <Button size="medium" fixed>
-                Stake
-              </Button>
-              <DetailsButton style={{ marginLeft: 8 }}>
-                <Row alignItems="center">
-                  <LinkIcon />
-                  <SizedBox width={8} />
-                  <Text>View on SignArt</Text>
-                </Row>
-                <SizedBox height={20} />
-                <Row alignItems="center">
-                  <LinkIcon />
-                  <SizedBox width={8} />
-                  <Text>View on Waves Explorer</Text>
-                </Row>
-              </DetailsButton>
-            </>
-          }
-        />
-      ))}
+      {/*{vm.artworks.map((art, index) => (*/}
+      {/*  <Artefact*/}
+      {/*    key={index}*/}
+      {/*    {...art}*/}
+      {/*    buttons={*/}
+      {/*      <>*/}
+      {/*        <Button size="medium" fixed>*/}
+      {/*          Stake*/}
+      {/*        </Button>*/}
+      {/*        <DetailsButton style={{ marginLeft: 8 }}>*/}
+      {/*          <Row alignItems="center">*/}
+      {/*            <LinkIcon />*/}
+      {/*            <SizedBox width={8} />*/}
+      {/*            <Text>View on SignArt</Text>*/}
+      {/*          </Row>*/}
+      {/*          <SizedBox height={20} />*/}
+      {/*          <Row alignItems="center">*/}
+      {/*            <LinkIcon />*/}
+      {/*            <SizedBox width={8} />*/}
+      {/*            <Text>View on Waves Explorer</Text>*/}
+      {/*          </Row>*/}
+      {/*        </DetailsButton>*/}
+      {/*      </>*/}
+      {/*    }*/}
+      {/*  />*/}
+      {/*))}*/}
     </Root>
   );
 };

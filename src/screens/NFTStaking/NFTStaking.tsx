@@ -36,7 +36,7 @@ const NFTStakingImpl: React.FC = () => {
     <Layout>
       <Observer>
         {() => {
-          const marketNftAmount = vm.artworks.length;
+          const marketNftAmount = vm.artworks?.length;
           const accountNftAmount = vm.accountArtworks.length;
           return (
             <Root>

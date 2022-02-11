@@ -7,6 +7,10 @@ import { Column, Row } from "@src/components/Flex";
 import income from "@src/assets/icons/income.svg";
 import wallet from "@src/assets/icons/wallet.svg";
 import Text from "@components/Text";
+import { useNFTStakingVM } from "@screens/NFTStaking/NFTStakingVM";
+import BN from "@src/utils/BN";
+import { useStores } from "@stores";
+import dayjs from "dayjs";
 
 const Root = styled.div`
   display: grid;
@@ -32,13 +36,39 @@ const AvailableToClaim = styled(Row)`
     padding-top: 0;
   }
 `;
+const LastClaimDate = styled(Text)`
+  position: absolute;
+  @media (min-width: 880px) {
+    right: 24px;
+  }
+`;
 const LoggedInRewardInfo: React.FC = () => {
-  // const { accountStore } = useStores();
-  const availableToClaim = "—";
-  const claimedReward = "—";
+  const { accountStore } = useStores();
+  const { TOKENS } = accountStore;
+  const vm = useNFTStakingVM();
+  const availableToClaim =
+    vm.availableToClaim != null
+      ? BN.formatUnits(vm.availableToClaim, 18).toFormat(2).concat(" USDN")
+      : "—";
+  const claimedReward =
+    vm.claimedReward != null
+      ? BN.formatUnits(vm.claimedReward, TOKENS.USDN.decimals)
+          .toFormat(2)
+          .concat(" USDN")
+      : "—";
+  const date = dayjs(vm.lastClaimDate?.toNumber() ?? 0);
+  const format = date.format("D MMM YYYY");
   return (
     <Root>
-      <Row justifyContent="space-between">
+      <Row justifyContent="space-between" style={{ position: "relative" }}>
+        <LastClaimDate
+          type="secondary"
+          textAlign="right"
+          size="medium"
+          style={{ position: "absolute" }}
+        >
+          {!vm.lastClaimDate.eq(0) && "Last claim " + format}
+        </LastClaimDate>
         <Row>
           <Icon src={income} alt="income" />
           <SizedBox width={8} />

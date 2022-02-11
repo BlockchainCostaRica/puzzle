@@ -5,6 +5,7 @@ import Text from "@components/Text";
 import { Column, Row } from "@src/components/Flex";
 import { IArtWork } from "@src/services/statsService";
 import noPic from "@src/assets/noCard.png";
+import BN from "@src/utils/BN";
 
 interface IProps extends IArtWork {
   buttons?: JSX.Element;
@@ -32,7 +33,6 @@ const Bottom = styled.div`
 const Buttons = styled.div`
   display: flex;
 `;
-
 const Artefact: React.FC<IProps> = ({
   name,
   apy,
@@ -40,43 +40,32 @@ const Artefact: React.FC<IProps> = ({
   floorPrice,
   buttons,
 }) => {
-  const price = floorPrice && floorPrice / 100000;
+  const boostApy = new BN(apy ?? 0);
+  const price = floorPrice && floorPrice / 1000000;
   return (
     <Root>
       <Img src={imageLink ?? noPic} alt="nft" />
       <Bottom>
         <Row mainAxisSize="stretch" justifyContent="space-between">
-          <Column>
-            <Text>{name}</Text>
-            <Text type="secondary">{apy} boost APY</Text>
-          </Column>
-          <Column>
-            <Text type="secondary">Floor price</Text>
-            <Text type="secondary">{price}</Text>
+          <Column crossAxisSize="max">
+            <Row justifyContent="space-between">
+              <Text size="small">{name ?? "Name"}</Text>
+              <Text type="secondary" size="small" textAlign="right">
+                Floor price
+              </Text>
+            </Row>
+            <Row justifyContent="space-between">
+              <Text size="medium" weight={500}>
+                {apy ? `~${boostApy.toFormat(2)}% APY` : "—"}
+              </Text>
+              <Text size="medium" textAlign="right">
+                {floorPrice ? `~${price}$` : "—"}
+              </Text>
+            </Row>
           </Column>
         </Row>
         <SizedBox height={16} />
-        <Buttons>
-          {buttons}
-          {/*<Button size="medium" fixed>*/}
-          {/*  Buy on SignArt*/}
-          {/*</Button>*/}
-          {/*{isInOwn && (*/}
-          {/*<DetailsButton style={{ marginLeft: 8 }}>*/}
-          {/*  <Row alignItems="center">*/}
-          {/*    <LinkIcon />*/}
-          {/*    <SizedBox width={8} />*/}
-          {/*    <Text>View on SignArt</Text>*/}
-          {/*  </Row>*/}
-          {/*  <SizedBox height={20} />*/}
-          {/*  <Row alignItems="center">*/}
-          {/*    <LinkIcon />*/}
-          {/*    <SizedBox width={8} />*/}
-          {/*    <Text>View on Waves Explorer</Text>*/}
-          {/*  </Row>*/}
-          {/*</DetailsButton>*/}
-          {/*)}*/}
-        </Buttons>
+        <Buttons>{buttons}</Buttons>
       </Bottom>
     </Root>
   );
