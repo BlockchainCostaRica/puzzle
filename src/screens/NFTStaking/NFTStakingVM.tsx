@@ -21,6 +21,11 @@ class NFTStakingVM {
   private stakingContractAddress: string = "";
   private _setStakingAddress = (v: string) => (this.stakingContractAddress = v);
 
+  //чтобы получить застейканые карточки с контракта
+  //https://wavesducks.wavesnodes.com/addresses/data/3PKUxbZaSYfsR7wu2HaAgiirHYwAMupDrYW?matches=address_3PMcMiMEs6w56NRGacksXtFG5zS7doE9fpL_nft_(.*)
+
+  //чтобы получить незастейканые то фильтровать по typeId
+
   loading: boolean = false;
   private _setLoading = (l: boolean) => (this.loading = l);
 
@@ -53,13 +58,14 @@ class NFTStakingVM {
     const { address } = this.rootStore.accountStore;
     if (address == null) return;
     const nfts = await nodeService.getAddressNfts(address);
-    const description =
-      "Creator: 3P3iV85eXfkcA3Dd13EpZBYvs1vkKX6AYEN,\n ArtID: Dn3tGwyg8AerfmUjhCixamPcyjy5FSAE2rguKinH9VCH,\n SignID: 5GMCJkjbahpJcbRgjZUp6coxTwhasDLNig3bAbHCdoN,\n Artwork name: Puzzle,\n Issue: 1/1";
-    const our = nfts.filter((n) => n.description === description);
-    console.log(our);
+    // const description =
+    //   "Creator: 3P3iV85eXfkcA3Dd13EpZBYvs1vkKX6AYEN,\n ArtID: Dn3tGwyg8AerfmUjhCixamPcyjy5FSAE2rguKinH9VCH,\n SignID: 5GMCJkjbahpJcbRgjZUp6coxTwhasDLNig3bAbHCdoN,\n Artwork name: Puzzle,\n Issue: 1/1";
+    // const our = nfts.filter((n) => n.description === description);
+    console.log(nfts);
   };
 
   private updateAddressStakingInfo = async () => {
+    //все тоже самое только адрес другой ++
     const { chainId, address, TOKENS } = this.rootStore.accountStore;
     const { stakingContractAddress } = this;
 
@@ -99,7 +105,6 @@ class NFTStakingVM {
     const lastClaimDate = parsedNodeResponse["lastClaimDate"];
 
     this._setClaimedReward(claimedReward);
-    this._setClaimedReward(claimedReward);
     const availableToClaim = globalLastCheckInterest
       .minus(addressLastCheckInterest)
       .times(addressStaked);
@@ -117,7 +122,7 @@ class NFTStakingVM {
     const { accountStore, notificationStore } = this.rootStore;
     await accountStore
       .invoke({
-        dApp: accountStore.CONTRACT_ADDRESSES.staking!,
+        dApp: accountStore.CONTRACT_ADDRESSES.ultraStaking,
         payment: [],
         call: {
           function: "claimReward",
@@ -134,12 +139,14 @@ class NFTStakingVM {
       .then(this.updateAddressStakingInfo)
       .finally(() => this._setLoading(false));
   };
+  //todo stake конкретной карточки
   stake = async () => {
     const { accountStore, notificationStore } = this.rootStore;
     this._setLoading(true);
     await accountStore
       .invoke({
         dApp: this.rootStore.accountStore.CONTRACT_ADDRESSES.staking ?? "",
+        //amount 1, assetId - id орла
         payment: [],
         call: {
           function: "stake",
@@ -163,10 +170,16 @@ class NFTStakingVM {
     await accountStore
       .invoke({
         dApp: this.rootStore.accountStore.CONTRACT_ADDRESSES.staking ?? "",
+        // amount 1, assetId - id орла
         payment: [],
         call: {
           function: "unStake",
-          args: [],
+          args: [
+            {
+              type: "integer",
+              value: "id орла",
+            },
+          ],
         },
       })
       .then((txId) => {
