@@ -28,6 +28,7 @@ class NFTStakingVM {
     makeAutoObservable(this);
     const { accountStore } = this.rootStore;
     this._setContractAddress(accountStore.CONTRACT_ADDRESSES.ultraStaking);
+    statsService.getStakingStats().then((d) => this._setStats(d));
     statsService.getArtworks().then((d) => this._setArtworks(d));
     when(
       () => rootStore.accountStore.address != null,
@@ -45,6 +46,9 @@ class NFTStakingVM {
   public claimedReward: BN | null = null;
   public availableToClaim: BN | null = null;
   public lastClaimDate: BN = BN.ZERO;
+
+  public stats: any = null;
+  private _setStats = (v: any) => (this.stats = v);
 
   public artworks: IArtWork[] | null = null;
   private _setArtworks = (v: IArtWork[]) => (this.artworks = v);

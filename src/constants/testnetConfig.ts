@@ -52,5 +52,3 @@ export const TESTNET_CONTRACTS_ADDRESSES = {
   ultraStaking: "",
   aggregator: "",
 };
-
-export const TESTNET_NFT_ISSUERS_WHITELIST = [];

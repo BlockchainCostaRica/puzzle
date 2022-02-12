@@ -183,7 +183,3 @@ export const MAINNET_CONTRACTS_ADDRESSES = {
   ultraStaking: "3PKUxbZaSYfsR7wu2HaAgiirHYwAMupDrYW",
   aggregator: "3PGFHzVGT4NTigwCKP1NcwoXkodVZwvBuuU",
 };
-
-export const MAINNET_NFT_ISSUERS_WHITELIST = [
-  "3PDBLdsUrcsiPxNbt8g2gQVoefKgzt3kJzV",
-];

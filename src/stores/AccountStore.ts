@@ -84,7 +84,6 @@ class AccountStore {
       this.setupWavesKeeper();
     }
 
-    // this.setAddress("3PMcMiMEs6w56NRGacksXtFG5zS7doE9fpL");
     if (initState) {
       if (initState.loginType === LOGIN_TYPE.KEEPER) {
         this.setLoginType(initState.loginType);

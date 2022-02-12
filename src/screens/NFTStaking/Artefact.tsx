@@ -77,7 +77,6 @@ const Artefact: React.FC<IProps> = ({
 export const ArtefactSkeleton = () => (
   <Root>
     <Img src={noPic} alt="nft" />
-
     <Bottom>
       <Row mainAxisSize="stretch" justifyContent="space-between">
         <Column crossAxisSize="max">

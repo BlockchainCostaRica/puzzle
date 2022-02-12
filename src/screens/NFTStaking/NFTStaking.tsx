@@ -37,6 +37,7 @@ const NFTStakingImpl: React.FC = () => {
     <Layout>
       <Observer>
         {() => {
+          const apy = vm.stats?.ultra?.apy ?? "-";
           const { artworks, accountNFTs, stakedAccountNFTs } = vm;
           const marketNftAmount = artworks?.length;
           const accountNftAmount =
@@ -52,7 +53,7 @@ const NFTStakingImpl: React.FC = () => {
               <Text type="secondary" className="title">
                 Stake Puzzle NFT to share the rewards pool from Puzzle
                 aggregator fees and boost your staking rewards up to
-                <b style={{ color: "#35A15A" }}> 45.3 %</b>. You can stake one
+                <b style={{ color: "#35A15A" }}> {apy}%</b>. You can stake one
                 of each type of NFTs.
               </Text>
               <Reward />
