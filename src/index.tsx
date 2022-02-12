@@ -9,6 +9,9 @@ import { loadState, saveState } from "@src/utils/localStorage";
 import { autorun } from "mobx";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import "rc-notification/assets/index.css";
+import "react-loading-skeleton/dist/skeleton.css";
+import "rc-slider/assets/index.css";
+import "rc-dialog/assets/index.css";
 
 const initState = loadState();
 

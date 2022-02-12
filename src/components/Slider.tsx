@@ -1,5 +1,4 @@
 import RCSlider from "rc-slider";
-import "rc-slider/assets/index.css";
 import React from "react";
 import { SliderProps } from "rc-slider/lib/Slider";
 import styled from "@emotion/styled";

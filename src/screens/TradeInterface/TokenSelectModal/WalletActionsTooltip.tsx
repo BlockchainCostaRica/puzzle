@@ -6,6 +6,7 @@ import Divider from "@components/Divider";
 import copy from "copy-to-clipboard";
 import { observer } from "mobx-react-lite";
 import { useStores } from "@stores";
+import { Anchor } from "@components/Anchor";
 
 interface IProps {
   address: string;
@@ -48,14 +49,12 @@ const WalletActionsTooltip: React.FC<IProps> = ({ address }) => {
       <Text onClick={handleCopyAddress} className="menu-item">
         Copy address
       </Text>
-      <a
+      <Anchor
         style={{ padding: "10px 0" }}
-        rel="noopener noreferrer"
-        target="_blank"
         href={`${accountStore.EXPLORER_LINK}/address/${address}`}
       >
         <Text>View in Waves Explorer</Text>
-      </a>
+      </Anchor>
       <Divider className="divider" />
       <Text onClick={handleLogout} className="menu-item">
         Disconnect

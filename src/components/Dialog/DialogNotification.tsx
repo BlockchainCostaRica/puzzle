@@ -11,6 +11,7 @@ import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import Button from "@components/Button";
 import { AccountStore } from "@stores";
+import { Anchor } from "@components/Anchor";
 
 export interface IDialogNotificationProps extends IDialogPropTypes {
   title: string;
@@ -109,16 +110,11 @@ export const buildSuccessLiquidityDialogParams = ({
         </Link>
       ),
       () => (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href={txLink}
-          style={{ width: "100%" }}
-        >
+        <Anchor href={txLink} style={{ width: "100%" }}>
           <Button key="explorer" size="medium" kind="secondary" fixed>
             View on Waves Explorer
           </Button>
-        </a>
+        </Anchor>
       ),
     ],
   };
