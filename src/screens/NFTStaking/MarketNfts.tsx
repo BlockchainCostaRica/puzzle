@@ -4,8 +4,7 @@ import { observer } from "mobx-react-lite";
 import { useNFTStakingVM } from "@screens/NFTStaking/NFTStakingVM";
 import Artefact, { ArtefactSkeleton } from "@screens/NFTStaking/Artefact";
 import Button from "@components/Button";
-import { Loading } from "@components/Loading";
-import useWindowSize from "@src/hooks/useWindowSize";
+import { Anchor } from "@components/Anchor";
 
 interface IProps {}
 
@@ -20,8 +19,6 @@ const Root = styled.div`
 `;
 const MarketNfts: React.FC<IProps> = () => {
   const vm = useNFTStakingVM();
-  const { width } = useWindowSize();
-  const arr = Array.from({ length: width && width > 880 ? 4 : 1 });
 
   return (
     <Root>
@@ -31,20 +28,17 @@ const MarketNfts: React.FC<IProps> = () => {
               key={index}
               {...art}
               buttons={
-                <a
-                  style={{ width: "100%" }}
-                  href={art.marketLink}
-                  rel="noreferrer noopener"
-                  target="_blank"
-                >
+                <Anchor style={{ width: "100%" }} href={art.marketLink}>
                   <Button size="medium" fixed>
                     Buy on SignArt
                   </Button>
-                </a>
+                </Anchor>
               }
             />
           ))
-        : arr.map((v, index) => <ArtefactSkeleton key={index} />)}
+        : Array.from({ length: 2 }).map((v, index) => (
+            <ArtefactSkeleton key={index} />
+          ))}
     </Root>
   );
 };

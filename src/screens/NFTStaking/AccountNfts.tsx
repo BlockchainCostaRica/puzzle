@@ -11,18 +11,20 @@ import { Row } from "@src/components/Flex";
 import SizedBox from "@src/components/SizedBox";
 import { ReactComponent as LinkIcon } from "@src/assets/icons/link.svg";
 import Text from "@components/Text";
+import { Anchor } from "@components/Anchor";
 
 interface IProps {}
 
 const Root = styled.div`
   display: grid;
   row-gap: 16px;
-  grid-template-columns: 1fr;
-  @media (min-width: 604px) {
+  grid-template-columns: repeat(auto-fill);
+  @media (min-width: 880px) {
     grid-template-columns: repeat(auto-fill, 278px);
     column-gap: 16px;
   }
 `;
+
 const AccountNfts: React.FC<IProps> = () => {
   const { accountStore } = useStores();
   const vm = useNFTStakingVM();
@@ -62,7 +64,11 @@ const AccountNfts: React.FC<IProps> = () => {
             key={index + "accountNFT"}
             buttons={
               <>
-                <Button size="medium" fixed>
+                <Button
+                  size="medium"
+                  onClick={() => vm.stake(nft.assetId)}
+                  fixed
+                >
                   Stake
                 </Button>
                 <DetailsButton style={{ marginLeft: 8 }}>
@@ -89,64 +95,37 @@ const AccountNfts: React.FC<IProps> = () => {
             key={index + "accountNFT"}
             buttons={
               <>
-                <Button kind="secondary" size="medium" fixed>
+                <Button
+                  kind="secondary"
+                  size="medium"
+                  fixed
+                  onClick={() => vm.unStake(nft.assetId)}
+                >
                   Unstake
                 </Button>
                 <DetailsButton style={{ marginLeft: 8 }}>
-                  <a
-                    href={nft.marketLink}
-                    rel="noreferrer noopener"
-                    target="_blank"
-                  >
+                  <Anchor href={nft.marketLink}>
                     <Row alignItems="center">
                       <LinkIcon />
                       <SizedBox width={8} />
                       <Text>View on SignArt</Text>
                     </Row>
-                  </a>
+                  </Anchor>
                   <SizedBox height={20} />
-                  <a
+                  <Anchor
                     href={`${accountStore.EXPLORER_LINK}/asset/${nft.assetId}`}
-                    rel="noreferrer noopener"
-                    target="_blank"
                   >
                     <Row alignItems="center">
                       <LinkIcon />
                       <SizedBox width={8} />
                       <Text>View on Waves Explorer</Text>
                     </Row>
-                  </a>
+                  </Anchor>
                 </DetailsButton>
               </>
             }
           />
         ))}
-      {/*{vm.artworks.map((art, index) => (*/}
-      {/*  <Artefact*/}
-      {/*    key={index}*/}
-      {/*    {...art}*/}
-      {/*    buttons={*/}
-      {/*      <>*/}
-      {/*        <Button size="medium" fixed>*/}
-      {/*          Stake*/}
-      {/*        </Button>*/}
-      {/*        <DetailsButton style={{ marginLeft: 8 }}>*/}
-      {/*          <Row alignItems="center">*/}
-      {/*            <LinkIcon />*/}
-      {/*            <SizedBox width={8} />*/}
-      {/*            <Text>View on SignArt</Text>*/}
-      {/*          </Row>*/}
-      {/*          <SizedBox height={20} />*/}
-      {/*          <Row alignItems="center">*/}
-      {/*            <LinkIcon />*/}
-      {/*            <SizedBox width={8} />*/}
-      {/*            <Text>View on Waves Explorer</Text>*/}
-      {/*          </Row>*/}
-      {/*        </DetailsButton>*/}
-      {/*      </>*/}
-      {/*    }*/}
-      {/*  />*/}
-      {/*))}*/}
     </Root>
   );
 };

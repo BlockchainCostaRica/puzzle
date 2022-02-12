@@ -26,6 +26,7 @@ const Tab = styled.div<{ active?: boolean }>`
   border-bottom: ${({ active }) =>
     active ? "4px solid #7075e9" : "4px solid transparent"};
   margin-bottom: -1px;
+  user-select: none;
 `;
 const Tabs: React.FC<IProps> = ({ tabs, activeTab, setActive }) => {
   return (

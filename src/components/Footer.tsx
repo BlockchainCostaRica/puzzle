@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import puzzleLogoFooter from "@src/old_components/img/puzzle-logo-footer.svg";
 import { useStores } from "@stores";
+import { Anchor } from "@components/Anchor";
 
 interface IProps {}
 
@@ -22,55 +23,19 @@ const Footer: React.FC<IProps> = () => {
       <div className="footer__rc">
         <div className="footer__rc--column">
           <p className="landing__subtitle">Tools</p>
-          <a
-            rel="noopener noreferrer"
-            href="https://puzzlescan.com"
-            target="_blank"
-          >
-            Puzzle Explorer
-          </a>
+          <Anchor href="https://puzzlescan.com">Puzzle Explorer</Anchor>
 
-          <a
-            rel="noopener noreferrer"
-            href="https://t.me/puzzle_swap"
-            target="_blank"
-          >
-            Notifications bot
-          </a>
+          <Anchor href="https://t.me/puzzle_swap">Notifications bot</Anchor>
 
-          <a
-            rel="noopener noreferrer"
-            href="https://dxd-team.xyz/puzzle/"
-            target="_blank"
-          >
-            Charts
-          </a>
+          <Anchor href="https://dxd-team.xyz/puzzle/">Charts</Anchor>
         </div>
         <div className="footer__rc--column">
           <p className="landing__subtitle">Community</p>
-          <a
-            rel="noopener noreferrer"
-            href="https://t.me/puzzleswap"
-            target="_blank"
-          >
-            Telegram chat
-          </a>
+          <Anchor href="https://t.me/puzzleswap">Telegram chat</Anchor>
 
-          <a
-            rel="noopener noreferrer"
-            href="https://twitter.com/puzzle_swap"
-            target="_blank"
-          >
-            Twitter
-          </a>
+          <Anchor href="https://twitter.com/puzzle_swap">Twitter</Anchor>
 
-          <a
-            rel="noopener noreferrer"
-            href="https://medium.com/@puzzleswap"
-            target="_blank"
-          >
-            Medium
-          </a>
+          <Anchor href="https://medium.com/@puzzleswap">Medium</Anchor>
         </div>
         <div className="footer__rc--column">
           <div className="landing__subtitle" onClick={accountStore.logout}>

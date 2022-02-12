@@ -12,6 +12,7 @@ import BN from "@src/utils/BN";
 import { useStores } from "@stores";
 import dayjs from "dayjs";
 import Skeleton from "react-loading-skeleton";
+import { Loading } from "@components/Loading";
 
 const Root = styled.div`
   display: grid;
@@ -95,9 +96,16 @@ const LoggedInRewardInfo: React.FC = () => {
           <Text weight={500}>{availableToClaim}</Text>
         </Column>
       </AvailableToClaim>
-      <Button fixed size="medium">
-        Claim reward
-      </Button>
+      {vm.loading ? (
+        <Button fixed size="medium" disabled>
+          In progress
+          <Loading />
+        </Button>
+      ) : (
+        <Button fixed size="medium" disabled={!vm.canClaim} onClick={vm.claim}>
+          Claim reward
+        </Button>
+      )}
     </Root>
   );
 };

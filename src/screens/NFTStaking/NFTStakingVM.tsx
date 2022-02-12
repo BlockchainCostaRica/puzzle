@@ -21,8 +21,6 @@ class NFTStakingVM {
   private contractAddress: string = "";
   private _setContractAddress = (v: string) => (this.contractAddress = v);
 
-  //чтобы получить незастейканые то фильтровать по typeId
-
   loading: boolean = false;
   private _setLoading = (l: boolean) => (this.loading = l);
 
@@ -63,9 +61,7 @@ class NFTStakingVM {
   private _setAvailableToClaim = (v: BN) => (this.availableToClaim = v);
   private _setLastClaimDate = (v: BN) => (this.lastClaimDate = v);
 
-  //todo!
   getAccountNFTs = async () => {
-    console.log("getAccountNFTs", this.artworks?.length);
     const { address } = this.rootStore.accountStore;
     const { artworks } = this;
     if (address == null || artworks == null) return;
@@ -81,12 +77,10 @@ class NFTStakingVM {
         ) ?? []),
       }));
 
-    supportedPuzzleNft.length > 0 && this._setAccountNFTs(supportedPuzzleNft);
+    this._setAccountNFTs(supportedPuzzleNft);
   };
 
-  //todo!
   getAccountNFTsOnStaking = async () => {
-    console.log("getAccountNFTsOnStaking", this.artworks?.length);
     const { contractAddress: ultra, artworks } = this;
     const { address, chainId } = this.rootStore.accountStore;
     if (address == null) return;
@@ -100,6 +94,10 @@ class NFTStakingVM {
       (acc, { key }) => [...acc, key.split("_")[3]],
       []
     );
+    if (stakedNftIds?.length === 0) {
+      this._setStakedAccountNFTs([]);
+      return;
+    }
     const supportedPuzzleNft = allNftOnStaking
       .filter(({ assetId }) => stakedNftIds?.some((id) => id === assetId))
       .map((nft) => ({
@@ -108,8 +106,7 @@ class NFTStakingVM {
           ({ typeId }) => typeId && nft.description.includes(typeId)
         ) ?? []),
       }));
-    supportedPuzzleNft.length > 0 &&
-      this._setStakedAccountNFTs(supportedPuzzleNft);
+    this._setStakedAccountNFTs(supportedPuzzleNft);
   };
 
   private updateAddressStakingInfo = async () => {
@@ -150,16 +147,22 @@ class NFTStakingVM {
       parsedNodeResponse["addressLastCheckInterest"];
     const lastClaimDate = parsedNodeResponse["lastClaimDate"];
 
+    if (addressStaked == null) {
+      this._setAvailableToClaim(BN.ZERO);
+      this._setClaimedReward(BN.ZERO);
+      return;
+    }
+
     this._setClaimedReward(claimedReward);
     const availableToClaim = globalLastCheckInterest
       .minus(addressLastCheckInterest)
       .times(addressStaked);
-    addressStaked && this._setAvailableToClaim(availableToClaim);
+    this._setAvailableToClaim(availableToClaim);
     lastClaimDate && this._setLastClaimDate(lastClaimDate);
   };
 
   get canClaim(): boolean {
-    return this.availableToClaim !== null && this.availableToClaim.gt(0);
+    return this.availableToClaim != null && this.availableToClaim.gt(0);
   }
 
   claim = async () => {
@@ -168,14 +171,20 @@ class NFTStakingVM {
     const { accountStore, notificationStore } = this.rootStore;
     await accountStore
       .invoke({
-        dApp: accountStore.CONTRACT_ADDRESSES.ultraStaking,
+        dApp: this.contractAddress,
         payment: [],
-        call: {
-          function: "claimReward",
-          args: [],
-        },
+        call: { function: "claimReward", args: [] },
       })
-      .then(() => notificationStore.notify(""))
+      .then(
+        (txId) =>
+          txId &&
+          notificationStore.notify(``, {
+            type: "success",
+            title: `Your rewards was claimed`,
+            link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
+            linkTitle: "View on Explorer",
+          })
+      )
       .catch((e) => {
         notificationStore.notify(e.message ?? e.toString(), {
           type: "error",
@@ -185,59 +194,70 @@ class NFTStakingVM {
       .then(this.updateAddressStakingInfo)
       .finally(() => this._setLoading(false));
   };
-  //todo stake конкретной карточки
-  stake = async () => {
+
+  stake = async (assetId?: string) => {
+    if (assetId == null) return;
     const { accountStore, notificationStore } = this.rootStore;
     this._setLoading(true);
     await accountStore
       .invoke({
-        dApp: this.rootStore.accountStore.CONTRACT_ADDRESSES.staking ?? "",
-        //amount 1, assetId - id орла
-        payment: [],
-        call: {
-          function: "stake",
-          args: [],
-        },
+        dApp: this.contractAddress,
+        payment: [{ assetId, amount: "1" }],
+        call: { function: "stake", args: [] },
       })
-      .then(() => notificationStore.notify(""))
+      .then(
+        (txId) =>
+          txId &&
+          notificationStore.notify(``, {
+            type: "success",
+            title: `Your have unstaked you rewards nft`,
+            link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
+            linkTitle: "View on Explorer",
+          })
+      )
       .catch((e) => {
         notificationStore.notify(e.message ?? e.toString(), {
           type: "error",
           title: "Transaction is not completed",
         });
       })
-      .then(this.updateAddressStakingInfo)
+      .then(this.getAccountNFTsOnStaking)
+      .then(this.getAccountNFTs)
       .finally(() => this._setLoading(false));
   };
-  unStake = async () => {
+
+  unStake = async (assetId?: string) => {
+    if (assetId == null) return;
     this._setLoading(true);
     const { rootStore } = this;
     const { accountStore, notificationStore } = rootStore;
     await accountStore
       .invoke({
-        dApp: this.rootStore.accountStore.CONTRACT_ADDRESSES.staking ?? "",
-        // amount 1, assetId - id орла
+        dApp: this.contractAddress,
         payment: [],
         call: {
           function: "unStake",
-          args: [
-            {
-              type: "integer",
-              value: "id орла",
-            },
-          ],
+          args: [{ type: "integer", value: assetId }],
         },
       })
-      .then((txId) => {
-        notificationStore.notify("");
-      })
+      .then(
+        (txId) =>
+          txId &&
+          notificationStore.notify(``, {
+            type: "success",
+            title: `Your have staked your nft`,
+            link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
+            linkTitle: "View on Explorer",
+          })
+      )
       .catch((e) => {
         notificationStore.notify(e.message ?? e.toString(), {
           type: "error",
           title: "Transaction is not completed",
         });
       })
-      .then(this.updateAddressStakingInfo)
+      .then(this.getAccountNFTsOnStaking)
+      .then(this.getAccountNFTs)
       .finally(() => this._setLoading(false));
   };
 }

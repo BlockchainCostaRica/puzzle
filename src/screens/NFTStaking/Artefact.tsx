@@ -8,7 +8,6 @@ import noPic from "@src/assets/noCard.png";
 import BN from "@src/utils/BN";
 import Skeleton from "react-loading-skeleton";
 import Button from "@components/Button";
-import { Loading } from "@components/Loading";
 
 interface IProps extends IArtWork {
   buttons?: JSX.Element;
@@ -96,7 +95,7 @@ export const ArtefactSkeleton = () => (
       </Row>
       <SizedBox height={16} />
       <Buttons>
-        <Button size="medium" fixed />
+        <Button size="medium" fixed disabled />
       </Buttons>
     </Bottom>
   </Root>

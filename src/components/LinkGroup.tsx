@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import React, { HTMLAttributes } from "react";
 import { Link } from "react-router-dom";
 import Text from "@components/Text";
+import { Anchor } from "@components/Anchor";
 
 interface ILinkGroupItem {
   name: string;
@@ -32,7 +33,7 @@ const StyledLink = styled(Link)`
   color: #363870;
 `;
 
-const StyledAnchor = styled.a`
+const StyledAnchor = styled(Anchor)`
   font-size: 16px;
   line-height: 24px;
   color: #363870;
@@ -44,12 +45,7 @@ const LinkGroup: React.FC<IProps> = ({ title, links, ...rest }) => {
       <Text type="secondary">{title}</Text>
       {links.map(({ name, link, outer }, key) =>
         outer ? (
-          <StyledAnchor
-            target="_blank"
-            rel="noopener noreferrer"
-            href={link}
-            key={key}
-          >
+          <StyledAnchor href={link} key={key}>
             {name}
           </StyledAnchor>
         ) : (

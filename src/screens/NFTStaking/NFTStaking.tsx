@@ -32,12 +32,15 @@ const Root = styled.div`
 `;
 const NFTStakingImpl: React.FC = () => {
   const vm = useNFTStakingVM();
+
   return (
     <Layout>
       <Observer>
         {() => {
-          const marketNftAmount = vm.artworks?.length;
-          const accountNftAmount = vm.accountNFTs?.length;
+          const { artworks, accountNFTs, stakedAccountNFTs } = vm;
+          const marketNftAmount = artworks?.length;
+          const accountNftAmount =
+            (accountNFTs?.length ?? 0) + (stakedAccountNFTs?.length ?? 0);
           return (
             <Root>
               <GoBack link="/stake" text="Back to Staking" />
