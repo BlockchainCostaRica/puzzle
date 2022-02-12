@@ -6,6 +6,9 @@ import { Column, Row } from "@src/components/Flex";
 import { IArtWork } from "@src/services/statsService";
 import noPic from "@src/assets/noCard.png";
 import BN from "@src/utils/BN";
+import Skeleton from "react-loading-skeleton";
+import Button from "@components/Button";
+import { Loading } from "@components/Loading";
 
 interface IProps extends IArtWork {
   buttons?: JSX.Element;
@@ -33,6 +36,7 @@ const Bottom = styled.div`
 const Buttons = styled.div`
   display: flex;
 `;
+
 const Artefact: React.FC<IProps> = ({
   name,
   apy,
@@ -70,4 +74,32 @@ const Artefact: React.FC<IProps> = ({
     </Root>
   );
 };
+
+export const ArtefactSkeleton = () => (
+  <Root>
+    <Img src={noPic} alt="nft" />
+
+    <Bottom>
+      <Row mainAxisSize="stretch" justifyContent="space-between">
+        <Column crossAxisSize="max">
+          <Row justifyContent="space-between">
+            <Skeleton height={12} width={80} />
+            <Text type="secondary" size="small" textAlign="right">
+              Floor price
+            </Text>
+          </Row>
+          <Row justifyContent="space-between">
+            <Skeleton height={14} width={130} />
+            <Skeleton height={14} width={50} />
+          </Row>
+        </Column>
+      </Row>
+      <SizedBox height={16} />
+      <Buttons>
+        <Button size="medium" fixed />
+      </Buttons>
+    </Bottom>
+  </Root>
+);
+
 export default Artefact;

@@ -4,6 +4,13 @@ import { observer } from "mobx-react-lite";
 import { useNFTStakingVM } from "@screens/NFTStaking/NFTStakingVM";
 import { useStores } from "@stores";
 import NoNfts from "@screens/NFTStaking/NoNfts";
+import Artefact, { ArtefactSkeleton } from "@screens/NFTStaking/Artefact";
+import Button from "@components/Button";
+import DetailsButton from "@src/components/DetailsButton";
+import { Row } from "@src/components/Flex";
+import SizedBox from "@src/components/SizedBox";
+import { ReactComponent as LinkIcon } from "@src/assets/icons/link.svg";
+import Text from "@components/Text";
 
 interface IProps {}
 
@@ -28,7 +35,13 @@ const AccountNfts: React.FC<IProps> = () => {
         onBtnClick={() => accountStore.setWalletModalOpened(true)}
       />
     );
-  if (vm.accountNFTs == null)
+
+  if (
+    vm.accountNFTs &&
+    vm.accountNFTs.length === 0 &&
+    vm.stakedAccountNFTs &&
+    vm.stakedAccountNFTs.length === 0
+  )
     return (
       <NoNfts
         text={`You have no NFT on your wallet yet.\nGo to the market tab to buy one.`}
@@ -36,8 +49,78 @@ const AccountNfts: React.FC<IProps> = () => {
         onBtnClick={() => vm.setNftDisplayState(0)}
       />
     );
+
   return (
     <Root>
+      {vm.accountNFTs == null && vm.stakedAccountNFTs == null && (
+        <ArtefactSkeleton />
+      )}
+      {vm.accountNFTs &&
+        vm.accountNFTs.map((nft, index) => (
+          <Artefact
+            {...nft}
+            key={index + "accountNFT"}
+            buttons={
+              <>
+                <Button size="medium" fixed>
+                  Stake
+                </Button>
+                <DetailsButton style={{ marginLeft: 8 }}>
+                  <Row alignItems="center">
+                    <LinkIcon />
+                    <SizedBox width={8} />
+                    <Text>View on SignArt</Text>
+                  </Row>
+                  <SizedBox height={20} />
+                  <Row alignItems="center">
+                    <LinkIcon />
+                    <SizedBox width={8} />
+                    <Text>View on Waves Explorer</Text>
+                  </Row>
+                </DetailsButton>
+              </>
+            }
+          />
+        ))}
+      {vm.stakedAccountNFTs &&
+        vm.stakedAccountNFTs.map((nft, index) => (
+          <Artefact
+            {...nft}
+            key={index + "accountNFT"}
+            buttons={
+              <>
+                <Button kind="secondary" size="medium" fixed>
+                  Unstake
+                </Button>
+                <DetailsButton style={{ marginLeft: 8 }}>
+                  <a
+                    href={nft.marketLink}
+                    rel="noreferrer noopener"
+                    target="_blank"
+                  >
+                    <Row alignItems="center">
+                      <LinkIcon />
+                      <SizedBox width={8} />
+                      <Text>View on SignArt</Text>
+                    </Row>
+                  </a>
+                  <SizedBox height={20} />
+                  <a
+                    href={`${accountStore.EXPLORER_LINK}/asset/${nft.assetId}`}
+                    rel="noreferrer noopener"
+                    target="_blank"
+                  >
+                    <Row alignItems="center">
+                      <LinkIcon />
+                      <SizedBox width={8} />
+                      <Text>View on Waves Explorer</Text>
+                    </Row>
+                  </a>
+                </DetailsButton>
+              </>
+            }
+          />
+        ))}
       {/*{vm.artworks.map((art, index) => (*/}
       {/*  <Artefact*/}
       {/*    key={index}*/}

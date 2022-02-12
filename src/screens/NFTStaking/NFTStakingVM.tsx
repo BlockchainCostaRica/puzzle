@@ -33,12 +33,11 @@ class NFTStakingVM {
     statsService.getArtworks().then((d) => this._setArtworks(d));
     when(
       () => rootStore.accountStore.address != null,
-      () =>
-        Promise.all([
-          this.updateAddressStakingInfo(),
-          this.getAccountNFTs(),
-          this.getAccountNFTsOnStaking(),
-        ])
+      this.updateAddressStakingInfo
+    );
+    when(
+      () => rootStore.accountStore.address != null && this.artworks != null,
+      () => Promise.all([this.getAccountNFTs(), this.getAccountNFTsOnStaking()])
     );
   }
 
@@ -52,11 +51,13 @@ class NFTStakingVM {
   public artworks: IArtWork[] | null = null;
   private _setArtworks = (v: IArtWork[]) => (this.artworks = v);
 
-  public accountNFTs: INFT[] | null = null;
-  private _setAccountNFTs = (v: INFT[]) => (this.accountNFTs = v);
+  public accountNFTs: Array<IArtWork & Partial<INFT>> | null = null;
+  private _setAccountNFTs = (v: Array<IArtWork & Partial<INFT>>) =>
+    (this.accountNFTs = v);
 
-  public stakedAccountNFTs: INFT[] | null = null;
-  private _setStakedAccountNFTs = (v: INFT[]) => (this.accountNFTs = v);
+  public stakedAccountNFTs: Array<IArtWork & Partial<INFT>> | null = null;
+  private _setStakedAccountNFTs = (v: Array<IArtWork & Partial<INFT>>) =>
+    (this.stakedAccountNFTs = v);
 
   private _setClaimedReward = (v: BN) => (this.claimedReward = v);
   private _setAvailableToClaim = (v: BN) => (this.availableToClaim = v);
@@ -64,18 +65,29 @@ class NFTStakingVM {
 
   //todo!
   getAccountNFTs = async () => {
+    console.log("getAccountNFTs", this.artworks?.length);
     const { address } = this.rootStore.accountStore;
     const { artworks } = this;
     if (address == null || artworks == null) return;
     const nfts = await nodeService.getAddressNfts(address);
-    const supportedPuzzleNft = nfts.filter(({ description }) =>
-      artworks.some(({ typeId }) => typeId && description.includes(typeId))
-    );
+    const supportedPuzzleNft = nfts
+      .filter(({ description }) =>
+        artworks.some(({ typeId }) => typeId && description.includes(typeId))
+      )
+      .map((nft) => ({
+        ...nft,
+        ...(artworks.find(
+          ({ typeId }) => typeId && nft.description.includes(typeId)
+        ) ?? []),
+      }));
+
     supportedPuzzleNft.length > 0 && this._setAccountNFTs(supportedPuzzleNft);
   };
 
+  //todo!
   getAccountNFTsOnStaking = async () => {
-    const { contractAddress: ultra } = this;
+    console.log("getAccountNFTsOnStaking", this.artworks?.length);
+    const { contractAddress: ultra, artworks } = this;
     const { address, chainId } = this.rootStore.accountStore;
     if (address == null) return;
     const match = `address_${address}_nft_(.*)`;
@@ -83,16 +95,21 @@ class NFTStakingVM {
     const allNftOnStaking = await nodeService.getAddressNfts(ultra);
     const addressStakingNft = await nodeRequest(chainId, ultra, match);
 
-    if (addressStakingNft == null || allNftOnStaking == null) return;
+    if (addressStakingNft == null) return;
     const stakedNftIds = addressStakingNft?.reduce<string[]>(
       (acc, { key }) => [...acc, key.split("_")[3]],
       []
     );
-
-    const supportedPuzzleNft = allNftOnStaking.filter(({ assetId }) =>
-      stakedNftIds?.some((id) => id === assetId)
-    );
-    console.log(supportedPuzzleNft);
+    const supportedPuzzleNft = allNftOnStaking
+      .filter(({ assetId }) => stakedNftIds?.some((id) => id === assetId))
+      .map((nft) => ({
+        ...nft,
+        ...(artworks?.find(
+          ({ typeId }) => typeId && nft.description.includes(typeId)
+        ) ?? []),
+      }));
+    supportedPuzzleNft.length > 0 &&
+      this._setStakedAccountNFTs(supportedPuzzleNft);
   };
 
   private updateAddressStakingInfo = async () => {

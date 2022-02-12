@@ -11,6 +11,7 @@ import { useNFTStakingVM } from "@screens/NFTStaking/NFTStakingVM";
 import BN from "@src/utils/BN";
 import { useStores } from "@stores";
 import dayjs from "dayjs";
+import Skeleton from "react-loading-skeleton";
 
 const Root = styled.div`
   display: grid;
@@ -47,15 +48,19 @@ const LoggedInRewardInfo: React.FC = () => {
   const { TOKENS } = accountStore;
   const vm = useNFTStakingVM();
   const availableToClaim =
-    vm.availableToClaim != null
-      ? BN.formatUnits(vm.availableToClaim, 18).toFormat(2).concat(" USDN")
-      : "—";
+    vm.availableToClaim != null ? (
+      BN.formatUnits(vm.availableToClaim, 18).toFormat(2).concat(" USDN")
+    ) : (
+      <Skeleton height={16} width={90} />
+    );
   const claimedReward =
-    vm.claimedReward != null
-      ? BN.formatUnits(vm.claimedReward, TOKENS.USDN.decimals)
-          .toFormat(2)
-          .concat(" USDN")
-      : "—";
+    vm.claimedReward != null ? (
+      BN.formatUnits(vm.claimedReward, TOKENS.USDN.decimals)
+        .toFormat(2)
+        .concat(" USDN")
+    ) : (
+      <Skeleton height={16} width={90} />
+    );
   const date = dayjs(vm.lastClaimDate?.toNumber() ?? 0);
   const format = date.format("D MMM YYYY");
   return (
