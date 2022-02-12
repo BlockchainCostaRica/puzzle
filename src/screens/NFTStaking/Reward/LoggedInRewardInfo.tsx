@@ -48,20 +48,6 @@ const LoggedInRewardInfo: React.FC = () => {
   const { accountStore } = useStores();
   const { TOKENS } = accountStore;
   const vm = useNFTStakingVM();
-  const availableToClaim =
-    vm.availableToClaim != null ? (
-      BN.formatUnits(vm.availableToClaim, 18).toFormat(2).concat(" USDN")
-    ) : (
-      <Skeleton height={16} width={90} />
-    );
-  const claimedReward =
-    vm.claimedReward != null ? (
-      BN.formatUnits(vm.claimedReward, TOKENS.USDN.decimals)
-        .toFormat(2)
-        .concat(" USDN")
-    ) : (
-      <Skeleton height={16} width={90} />
-    );
   const date = dayjs(vm.lastClaimDate?.toNumber() ?? 0);
   const format = date.format("D MMM YYYY");
   return (
@@ -82,7 +68,15 @@ const LoggedInRewardInfo: React.FC = () => {
             <Text type="secondary" size="medium">
               Claimed reward
             </Text>
-            <Text weight={500}>{claimedReward}</Text>
+            <Text weight={500}>
+              {vm.claimedReward != null ? (
+                BN.formatUnits(vm.claimedReward, TOKENS.USDN.decimals)
+                  .toFormat(2)
+                  .concat(" USDN")
+              ) : (
+                <Skeleton height={16} width={90} />
+              )}
+            </Text>
           </Column>
         </Row>
       </Row>
@@ -93,7 +87,15 @@ const LoggedInRewardInfo: React.FC = () => {
           <Text type="secondary" size="medium">
             Available to claim
           </Text>
-          <Text weight={500}>{availableToClaim}</Text>
+          <Text weight={500}>
+            {vm.availableToClaim != null ? (
+              BN.formatUnits(vm.availableToClaim, 18)
+                .toFormat(2)
+                .concat(" USDN")
+            ) : (
+              <Skeleton height={16} width={90} />
+            )}
+          </Text>
         </Column>
       </AvailableToClaim>
       {vm.loading ? (

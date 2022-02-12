@@ -6,7 +6,7 @@ import { StakingVMProvider } from "./StakingVM";
 import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
 import Reward from "./Reward";
-import NFTStaking from "./NFTStaking";
+import NFTStakingBanner from "./NFTStakingBanner";
 import Overview from "@screens/Staking/Overview";
 import MyBalances from "@screens/Staking/MyBalances";
 import StakeUnstake from "./StakeUnstake";
@@ -78,7 +78,7 @@ const StakingImpl: React.FC = () => {
               <MainBlock>
                 <RightBlockMobile>
                   <Reward />
-                  <NFTStaking />
+                  <NFTStakingBanner />
                 </RightBlockMobile>
                 <Overview />
                 <MyBalances />
@@ -86,7 +86,7 @@ const StakingImpl: React.FC = () => {
               </MainBlock>
               <RightBlock>
                 <Reward />
-                <NFTStaking />
+                <NFTStakingBanner />
               </RightBlock>
             </Body>
           </Root>

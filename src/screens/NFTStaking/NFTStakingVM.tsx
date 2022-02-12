@@ -182,9 +182,9 @@ class NFTStakingVM {
       .then(
         (txId) =>
           txId &&
-          notificationStore.notify(``, {
+          notificationStore.notify(`Your rewards was claimed`, {
             type: "success",
-            title: `Your rewards was claimed`,
+            title: `Success`,
             link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
             linkTitle: "View on Explorer",
           })
@@ -212,9 +212,9 @@ class NFTStakingVM {
       .then(
         (txId) =>
           txId &&
-          notificationStore.notify(``, {
+          notificationStore.notify(`Your have unstaked you rewards nft`, {
             type: "success",
-            title: `Your have unstaked you rewards nft`,
+            title: `Success`,
             link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
             linkTitle: "View on Explorer",
           })
@@ -247,9 +247,9 @@ class NFTStakingVM {
       .then(
         (txId) =>
           txId &&
-          notificationStore.notify(``, {
+          notificationStore.notify(`Your have staked your nft`, {
             type: "success",
-            title: `Your have staked your nft`,
+            title: `Success`,
             link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
             linkTitle: "View on Explorer",
           })

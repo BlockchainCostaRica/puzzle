@@ -136,9 +136,7 @@ class StakingVM {
   syncStats = async () => {
     const data = await statsService.getStakingStats();
     const formattedData = Object.entries(data).reduce(
-      (acc, [name, { apy }]) => {
-        return { ...acc, [name]: new BN(apy) };
-      },
+      (acc, [name, { apy }]) => ({ ...acc, [name]: new BN(apy) }),
       {} as IStakingStats
     );
     this._setStats(formattedData);

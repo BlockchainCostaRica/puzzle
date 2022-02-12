@@ -32,7 +32,7 @@ const Title = styled(Text)`
   font-size: 24px;
   line-height: 32px;
 `;
-const NFTStaking: React.FC = () => {
+const NFTStakingBanner: React.FC = () => {
   const { accountStore } = useStores();
   const vm = useStakingVM();
   return (
@@ -47,7 +47,7 @@ const NFTStaking: React.FC = () => {
           <Title type="light">NFT Staking</Title>
           <Text type="light" style={{ maxWidth: 195 }}>
             Buy and stake NFTs to get APY boost up to{" "}
-            {vm.stats == null ? "—" : vm.stats?.ultra.toFormat(2).concat(" %")}
+            {vm.stats != null ? vm.stats?.ultra.toFormat(2).concat(" %") : "—"}
           </Text>
           <SizedBox height={16} />
           <Link to={accountStore.ROUTES.ULTRASTAKE}>
@@ -61,4 +61,4 @@ const NFTStaking: React.FC = () => {
     </Root>
   );
 };
-export default observer(NFTStaking);
+export default observer(NFTStakingBanner);

@@ -36,9 +36,9 @@ const Overview: React.FC = () => {
             Weekly based APY
           </Text>
           <Text style={{ fontSize: 20 }}>
-            {vm.stats == null
-              ? "—"
-              : vm.stats?.classic.toFormat(2).concat(" %")}
+            {vm.stats != null
+              ? vm.stats?.classic.toFormat(2).concat(" %")
+              : "—"}
           </Text>
         </Column>
         <Column>
