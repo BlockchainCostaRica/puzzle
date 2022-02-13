@@ -212,7 +212,7 @@ class NFTStakingVM {
       .then(
         (txId) =>
           txId &&
-          notificationStore.notify(`Your have unstaked you rewards nft`, {
+          notificationStore.notify(`Your have staked you rewards nft`, {
             type: "success",
             title: `Success`,
             link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
@@ -225,8 +225,10 @@ class NFTStakingVM {
           title: "Transaction is not completed",
         });
       })
-      .then(this.getAccountNFTsOnStaking)
-      .then(this.getAccountNFTs)
+      .then(async () => {
+        await this.getAccountNFTs();
+        await this.getAccountNFTsOnStaking();
+      })
       .finally(() => this._setLoading(false));
   };
 
@@ -241,13 +243,13 @@ class NFTStakingVM {
         payment: [],
         call: {
           function: "unStake",
-          args: [{ type: "integer", value: assetId }],
+          args: [{ type: "string", value: assetId }],
         },
       })
       .then(
         (txId) =>
           txId &&
-          notificationStore.notify(`Your have staked your nft`, {
+          notificationStore.notify(`Your have unstaked your nft`, {
             type: "success",
             title: `Success`,
             link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
@@ -260,8 +262,10 @@ class NFTStakingVM {
           title: "Transaction is not completed",
         });
       })
-      .then(this.getAccountNFTsOnStaking)
-      .then(this.getAccountNFTs)
+      .then(async () => {
+        await this.getAccountNFTs();
+        await this.getAccountNFTsOnStaking();
+      })
       .finally(() => this._setLoading(false));
   };
 }

@@ -12,7 +12,7 @@ const Root = styled.div`
   display: grid;
   row-gap: 16px;
   grid-template-columns: repeat(auto-fill);
-  @media (min-width: 880px) {
+  @media (min-width: 604px) {
     grid-template-columns: repeat(auto-fill, 278px);
     column-gap: 16px;
   }

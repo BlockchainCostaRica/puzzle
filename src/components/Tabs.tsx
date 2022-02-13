@@ -27,6 +27,10 @@ const Tab = styled.div<{ active?: boolean }>`
     active ? "4px solid #7075e9" : "4px solid transparent"};
   margin-bottom: -1px;
   user-select: none;
+
+  :hover {
+    border-bottom: 4px solid #c6c9f4;
+  }
 `;
 const Tabs: React.FC<IProps> = ({ tabs, activeTab, setActive }) => {
   return (

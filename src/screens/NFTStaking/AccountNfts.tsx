@@ -19,7 +19,7 @@ const Root = styled.div`
   display: grid;
   row-gap: 16px;
   grid-template-columns: repeat(auto-fill);
-  @media (min-width: 880px) {
+  @media (min-width: 604px) {
     grid-template-columns: repeat(auto-fill, 278px);
     column-gap: 16px;
   }
@@ -28,7 +28,6 @@ const Root = styled.div`
 const AccountNfts: React.FC<IProps> = () => {
   const { accountStore } = useStores();
   const vm = useNFTStakingVM();
-
   if (accountStore.address == null)
     return (
       <NoNfts
@@ -58,74 +57,90 @@ const AccountNfts: React.FC<IProps> = () => {
         <ArtefactSkeleton />
       )}
       {vm.accountNFTs &&
-        vm.accountNFTs.map((nft, index) => (
-          <Artefact
-            {...nft}
-            key={index + "accountNFT"}
-            buttons={
-              <>
-                <Button
-                  size="medium"
-                  onClick={() => vm.stake(nft.assetId)}
-                  fixed
-                >
-                  Stake
-                </Button>
-                <DetailsButton style={{ marginLeft: 8 }}>
-                  <Row alignItems="center">
-                    <LinkIcon />
-                    <SizedBox width={8} />
-                    <Text>View on SignArt</Text>
-                  </Row>
-                  <SizedBox height={20} />
-                  <Row alignItems="center">
-                    <LinkIcon />
-                    <SizedBox width={8} />
-                    <Text>View on Waves Explorer</Text>
-                  </Row>
-                </DetailsButton>
-              </>
-            }
-          />
-        ))}
-      {vm.stakedAccountNFTs &&
-        vm.stakedAccountNFTs.map((nft, index) => (
-          <Artefact
-            {...nft}
-            key={index + "accountNFT"}
-            buttons={
-              <>
-                <Button
-                  kind="secondary"
-                  size="medium"
-                  fixed
-                  onClick={() => vm.unStake(nft.assetId)}
-                >
-                  Unstake
-                </Button>
-                <DetailsButton style={{ marginLeft: 8 }}>
-                  <Anchor href={nft.marketLink}>
+        vm.accountNFTs.map((nft, index) => {
+          const searchTerm = "Issue: ";
+          const searchIndex = nft.description?.indexOf(searchTerm) ?? 0;
+          const strOut = nft.description?.substr(
+            searchIndex + searchTerm.length
+          );
+          return (
+            <Artefact
+              {...nft}
+              key={index + "accountNFT"}
+              name={`${nft.name} #${strOut}`}
+              buttons={
+                <>
+                  <Button
+                    size="medium"
+                    onClick={() => vm.stake(nft.assetId)}
+                    fixed
+                  >
+                    Stake
+                  </Button>
+                  <DetailsButton style={{ marginLeft: 8 }}>
                     <Row alignItems="center">
                       <LinkIcon />
                       <SizedBox width={8} />
                       <Text>View on SignArt</Text>
                     </Row>
-                  </Anchor>
-                  <SizedBox height={20} />
-                  <Anchor
-                    href={`${accountStore.EXPLORER_LINK}/asset/${nft.assetId}`}
-                  >
+                    <SizedBox height={20} />
                     <Row alignItems="center">
                       <LinkIcon />
                       <SizedBox width={8} />
                       <Text>View on Waves Explorer</Text>
                     </Row>
-                  </Anchor>
-                </DetailsButton>
-              </>
-            }
-          />
-        ))}
+                  </DetailsButton>
+                </>
+              }
+            />
+          );
+        })}
+      {vm.stakedAccountNFTs &&
+        vm.stakedAccountNFTs.map((nft, index) => {
+          const searchTerm = "Issue: ";
+          const searchIndex = nft.description?.indexOf(searchTerm) ?? 0;
+          const strOut = nft.description?.substr(
+            searchIndex + searchTerm.length
+          );
+          return (
+            <Artefact
+              {...nft}
+              name={`${nft.name}# ${strOut}`}
+              key={index + "accountNFT"}
+              buttons={
+                <>
+                  <Button
+                    kind="secondary"
+                    size="medium"
+                    fixed
+                    onClick={() => vm.unStake(nft.assetId)}
+                  >
+                    Unstake
+                  </Button>
+                  <DetailsButton style={{ marginLeft: 8 }}>
+                    <Anchor href={nft.marketLink}>
+                      <Row alignItems="center">
+                        <LinkIcon />
+                        <SizedBox width={8} />
+                        <Text>View on SignArt</Text>
+                      </Row>
+                    </Anchor>
+                    <SizedBox height={20} />
+                    <Anchor
+                      href={`${accountStore.EXPLORER_LINK}/asset/${nft.assetId}`}
+                    >
+                      <Row alignItems="center">
+                        <LinkIcon />
+                        <SizedBox width={8} />
+                        <Text>View on Waves Explorer</Text>
+                      </Row>
+                    </Anchor>
+                  </DetailsButton>
+                </>
+              }
+            />
+          );
+        })}
     </Root>
   );
 };
