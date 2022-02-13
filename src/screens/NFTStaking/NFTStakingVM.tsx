@@ -54,11 +54,11 @@ class NFTStakingVM {
   private _setArtworks = (v: IArtWork[]) => (this.artworks = v);
 
   public accountNFTs: Array<IArtWork & Partial<INFT>> | null = null;
-  private _setAccountNFTs = (v: Array<IArtWork & Partial<INFT>>) =>
+  private _setAccountNFTs = (v: Array<IArtWork & Partial<INFT>> | null) =>
     (this.accountNFTs = v);
 
   public stakedAccountNFTs: Array<IArtWork & Partial<INFT>> | null = null;
-  private _setStakedAccountNFTs = (v: Array<IArtWork & Partial<INFT>>) =>
+  private _setStakedAccountNFTs = (v: Array<IArtWork & Partial<INFT>> | null) =>
     (this.stakedAccountNFTs = v);
 
   private _setClaimedReward = (v: BN) => (this.claimedReward = v);
@@ -226,8 +226,12 @@ class NFTStakingVM {
         });
       })
       .then(async () => {
-        await this.getAccountNFTs();
-        await this.getAccountNFTsOnStaking();
+        this._setAccountNFTs(null);
+        this._setStakedAccountNFTs(null);
+        await Promise.all([
+          this.getAccountNFTs(),
+          this.getAccountNFTsOnStaking(),
+        ]);
       })
       .finally(() => this._setLoading(false));
   };
@@ -263,8 +267,12 @@ class NFTStakingVM {
         });
       })
       .then(async () => {
-        await this.getAccountNFTs();
-        await this.getAccountNFTsOnStaking();
+        this._setAccountNFTs(null);
+        this._setStakedAccountNFTs(null);
+        await Promise.all([
+          this.getAccountNFTs(),
+          this.getAccountNFTsOnStaking(),
+        ]);
       })
       .finally(() => this._setLoading(false));
   };

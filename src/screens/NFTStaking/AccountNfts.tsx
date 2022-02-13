@@ -12,6 +12,7 @@ import SizedBox from "@src/components/SizedBox";
 import { ReactComponent as LinkIcon } from "@src/assets/icons/link.svg";
 import Text from "@components/Text";
 import { Anchor } from "@components/Anchor";
+import { Loading } from "@components/Loading";
 
 interface IProps {}
 
@@ -70,13 +71,19 @@ const AccountNfts: React.FC<IProps> = () => {
               name={`${nft.name} #${strOut}`}
               buttons={
                 <>
-                  <Button
-                    size="medium"
-                    onClick={() => vm.stake(nft.assetId)}
-                    fixed
-                  >
-                    Stake
-                  </Button>
+                  {!vm.loading ? (
+                    <Button
+                      size="medium"
+                      onClick={() => vm.stake(nft.assetId)}
+                      fixed
+                    >
+                      Stake
+                    </Button>
+                  ) : (
+                    <Button size="medium" disabled fixed>
+                      In progress <Loading />
+                    </Button>
+                  )}
                   <DetailsButton style={{ marginLeft: 8 }}>
                     <Row alignItems="center">
                       <LinkIcon />
@@ -105,18 +112,24 @@ const AccountNfts: React.FC<IProps> = () => {
           return (
             <Artefact
               {...nft}
-              name={`${nft.name}# ${strOut}`}
+              name={`${nft.name} #${strOut}`}
               key={index + "accountNFT"}
               buttons={
                 <>
-                  <Button
-                    kind="secondary"
-                    size="medium"
-                    fixed
-                    onClick={() => vm.unStake(nft.assetId)}
-                  >
-                    Unstake
-                  </Button>
+                  {!vm.loading ? (
+                    <Button
+                      kind="secondary"
+                      size="medium"
+                      fixed
+                      onClick={() => vm.unStake(nft.assetId)}
+                    >
+                      Unstake
+                    </Button>
+                  ) : (
+                    <Button kind="secondary" size="medium" disabled fixed>
+                      In progress <Loading />
+                    </Button>
+                  )}
                   <DetailsButton style={{ marginLeft: 8 }}>
                     <Anchor href={nft.marketLink}>
                       <Row alignItems="center">

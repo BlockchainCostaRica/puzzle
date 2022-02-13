@@ -233,7 +233,11 @@ class AccountStore {
         call: txParams.call,
       });
 
-      return ttx.broadcast().then((tx: any) => tx.id);
+      const txId = await ttx.broadcast().then((tx: any) => tx.id);
+      await waitForTx(txId, {
+        apiBase: NODE_URL_MAP[this.chainId],
+      });
+      return txId;
     } catch (e: any) {
       console.warn(e);
       this.rootStore.notificationStore.notify(e.toString(), {
