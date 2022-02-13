@@ -212,7 +212,7 @@ class NFTStakingVM {
       .then(
         (txId) =>
           txId &&
-          notificationStore.notify(`Your have staked you rewards nft`, {
+          notificationStore.notify(`Your have staked your nft`, {
             type: "success",
             title: `Success`,
             link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
