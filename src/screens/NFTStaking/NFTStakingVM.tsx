@@ -231,6 +231,7 @@ class NFTStakingVM {
         await Promise.all([
           this.getAccountNFTs(),
           this.getAccountNFTsOnStaking(),
+          this.updateAddressStakingInfo(),
         ]);
       })
       .finally(() => this._setLoading(false));
