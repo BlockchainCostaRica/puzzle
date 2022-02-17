@@ -14,6 +14,8 @@ import WithdrawLiquidityInterface from "@screens/WithdrawLiquidity";
 import TradeInterface from "@screens/TradeInterface";
 import Staking from "@screens/Staking";
 import NFTStaking from "@screens/NFTStaking";
+import MultiSwapInterface from "@screens/MultiSwapInterface";
+import { TPoolId } from "@src/constants";
 
 const Root = styled(Column)`
   width: 100%;
@@ -33,6 +35,15 @@ const App: React.FC = () => {
         <Route path={ROUTES.ROOT} element={<Landing />} />
         {/* Stake */}
         <Route path={ROUTES.STAKE} element={<Staking />} />
+
+        {/* Swap routes */}
+        {Object.entries(ROUTES.pools).map(([poolId, path]) => (
+          <Route
+            key={path}
+            path={path}
+            element={<MultiSwapInterface poolId={poolId as TPoolId} />}
+          />
+        ))}
 
         {/* Trade */}
         <Route path={ROUTES.TRADE} element={<TradeInterface />} />

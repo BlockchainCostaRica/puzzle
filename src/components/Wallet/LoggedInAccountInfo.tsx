@@ -13,8 +13,6 @@ import { observer } from "mobx-react-lite";
 import BN from "@src/utils/BN";
 import WalletBalancesTooltip from "@src/screens/TradeInterface/TokenSelectModal/WalletBalancesTooltip";
 import WalletActionsTooltip from "@src/screens/TradeInterface/TokenSelectModal/WalletActionsTooltip";
-// import WalletActionsTooltip from "@screens/TradeInterface/TokenSelectModal/WalletActionsTooltip";
-// import WalletBalancesTooltip from "@screens/TradeInterface/TokenSelectModal/WalletBalancesTooltip";
 
 interface IProps {}
 
@@ -25,6 +23,7 @@ const Root = styled(Row)`
   @media (min-width: 880px) {
     justify-content: flex-end;
   }
+
   .balances {
     display: flex;
     align-items: center;
@@ -43,6 +42,7 @@ const AddressContainer = styled.div<{ expanded: boolean }>`
   border-radius: 10px;
   cursor: pointer;
   background: ${({ expanded }) => (expanded ? "#f1f2fe" : "#fff")};
+
   :hover {
     background: #f1f2fe;
   }
@@ -54,6 +54,7 @@ const AddressContainer = styled.div<{ expanded: boolean }>`
     border-radius: 50%;
     margin-right: 8px;
   }
+
   .menu-arrow {
     transition: 0.4s;
     transform: ${({ expanded }) =>
