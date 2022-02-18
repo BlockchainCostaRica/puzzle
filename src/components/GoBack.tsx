@@ -26,7 +26,7 @@ const GoBack: React.FC<IProps> = ({ link, text }) => {
       <img src={arrow} alt="back" />
       <SizedBox width={8} />
       <Link to={link}>
-        <Text weight={500} type="secondary">
+        <Text weight={500} type="blue500">
           {text}
         </Text>
       </Link>

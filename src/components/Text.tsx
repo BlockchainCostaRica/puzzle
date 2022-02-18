@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-type TTextType = "primary" | "secondary" | "light";
+type TTextType = "primary" | "secondary" | "light" | "blue500";
 type TTextSize = "small" | "medium" | "large";
 type TTextAlign = "center" | "left" | "right" | "justify";
 
@@ -23,6 +23,8 @@ const Text = styled.div<{
           return "color: #363870;";
         case "secondary":
           return "color: #8082C5;";
+        case "blue500":
+          return "color: #7075E9;";
         case "light":
           return "color: #ffffff;";
         default:
