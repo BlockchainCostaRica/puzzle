@@ -44,6 +44,10 @@ const GridTable = styled.div<{
         desktopTemplate ?? "6fr 2fr 1fr"};
       margin: 0 24px;
     }
+
+    :last-of-type {
+      border-bottom: none;
+    }
   }
 `;
 

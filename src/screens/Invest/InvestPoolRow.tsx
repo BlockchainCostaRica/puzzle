@@ -68,17 +68,6 @@ const InvestPoolRow: React.FC<IProps> = ({ pool, stats }) => {
             <Text fitContent style={{ whiteSpace: "nowrap" }} weight={500}>
               {pool.name}
             </Text>
-            <AdaptiveRow>
-              {pool.baseToken && (
-                <Tag
-                  style={{ marginLeft: 8 }}
-                  type="primary"
-                  className="desktop"
-                >
-                  Provide {pool.baseToken.symbol} only
-                </Tag>
-              )}
-            </AdaptiveRow>
           </Row>
           <SharesContainer>
             {pool.tokens.map(({ symbol, shareAmount, assetId }) => {

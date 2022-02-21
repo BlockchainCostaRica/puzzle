@@ -228,15 +228,16 @@ class TradeVM {
         },
       })
       .then((txId) => {
-        notificationStore.notify(
-          "You can view the details of it in Waves Explorer",
-          {
-            type: "success",
-            title: "Transaction is completed",
-            link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
-            linkTitle: "View on Explorer",
-          }
-        );
+        txId &&
+          notificationStore.notify(
+            "You can view the details of it in Waves Explorer",
+            {
+              type: "success",
+              title: "Transaction is completed",
+              link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
+              linkTitle: "View on Explorer",
+            }
+          );
       })
       .catch((e) => {
         notificationStore.notify(e.message ?? e.toString(), {
