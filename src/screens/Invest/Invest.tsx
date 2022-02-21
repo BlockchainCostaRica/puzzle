@@ -43,16 +43,6 @@ const Invest: React.FC<IProps> = () => {
   const [sortApy, setSortApy] = useState<boolean>(true);
   const filteredPools = poolsStore.poolDataWithApy
     .sort((a, b) => {
-      if (a.globalLiquidity != null && b.globalLiquidity != null) {
-        if (a.globalLiquidity.lt(b.globalLiquidity)) {
-          return -1;
-        } else {
-          return 1;
-        }
-      }
-      return 1;
-    })
-    .sort((a, b) => {
       if (a.apy != null && b.apy != null) {
         if (a.apy.lt(b.apy)) {
           return sortApy ? 1 : -1;
