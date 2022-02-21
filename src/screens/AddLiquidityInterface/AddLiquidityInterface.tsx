@@ -105,6 +105,7 @@ const AddLiquidityInterfaceImpl = () => {
               visible={vm.notificationParams != null}
             />
             <ChangePoolModal
+              activePoolId={vm.poolId}
               onClose={() => vm.setChangePoolModalOpen(false)}
               visible={vm.changePoolModalOpen}
               onChange={(id) =>

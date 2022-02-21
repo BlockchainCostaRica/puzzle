@@ -80,6 +80,7 @@ const WithdrawLiquidityInterfaceImpl = () => {
               </Button>
             )}
             <ChangePoolModal
+              activePoolId={vm.poolId}
               onClose={() => vm.setChangePoolModalOpen(false)}
               visible={vm.changePoolModalOpen}
               onChange={(id) => navigate(`/${routes.withdraw[id]}`)}

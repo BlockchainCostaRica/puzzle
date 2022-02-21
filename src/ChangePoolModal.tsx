@@ -16,19 +16,35 @@ interface IProps {
   activePoolId?: string;
 }
 
-const Pool = styled.div`
+const Pool = styled.div<{ active?: boolean }>`
+  position: relative;
   display: flex;
+  cursor: ${({ active }) => (!active ? "pointer" : "not-allowed")};
   justify-content: space-between;
-  cursor: pointer;
   width: 100%;
   padding: 10px 24px;
   box-sizing: border-box;
 
   :hover {
-    background: #f1f2fe;
+    ${({ active }) => !active && "background: #f1f2fe;"};
   }
 `;
-const ChangePoolModal: React.FC<IProps> = ({ onChange, ...rest }) => {
+
+const Gradient = styled.div`
+  display: flex;
+  bottom: 0;
+  left: 0;
+  top: 0;
+  width: 100%;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.5);
+  z-index: 10;
+`;
+const ChangePoolModal: React.FC<IProps> = ({
+  onChange,
+  activePoolId,
+  ...rest
+}) => {
   const { poolsStore, accountStore } = useStores();
   const [searchValue, setSearchValue] = useState<string>("");
   const filteredPools = poolsStore.pools
@@ -60,7 +76,11 @@ const ChangePoolModal: React.FC<IProps> = ({ onChange, ...rest }) => {
         <Column crossAxisSize="max" style={{ maxHeight: 352 }}>
           {filteredPools && filteredPools.length > 0 ? (
             filteredPools.map((pool) => (
-              <Pool onClick={() => onChange(pool.id)}>
+              <Pool
+                onClick={() => onChange(pool.id)}
+                active={pool.id === activePoolId}
+              >
+                {pool.id === activePoolId && <Gradient />}
                 <Row>
                   <SquareTokenIcon src={pool.logo} size="small" />
                   <SizedBox width={8} />
