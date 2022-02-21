@@ -14,8 +14,6 @@ import SquareTokenIcon from "@components/SquareTokenIcon";
 import RoundTokenIcon from "@components/RoundTokenIcon";
 import useWindowSize from "@src/hooks/useWindowSize";
 import { Loading } from "@components/Loading";
-import BN from "@src/utils/BN";
-import { rewards } from "@waves/waves-transactions/dist/nodeInteraction";
 
 interface IProps {}
 
