@@ -40,6 +40,10 @@ class WithdrawLiquidityVM {
   public loading: boolean = false;
   private _setLoading = (l: boolean) => (this.loading = l);
 
+  public changePoolModalOpen: boolean = false;
+  setChangePoolModalOpen = (value: boolean) =>
+    (this.changePoolModalOpen = value);
+
   percentToWithdraw: BN = new BN(50);
   @action.bound setPercentToWithdraw = (value: number) =>
     (this.percentToWithdraw = new BN(value));

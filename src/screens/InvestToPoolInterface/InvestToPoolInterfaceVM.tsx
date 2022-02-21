@@ -35,10 +35,7 @@ class InvestToPoolInterfaceVM {
   private _setLoading = (l: boolean) => (this.loading = l);
 
   public stats: IPoolStats30Days | null = null;
-  private setStats = (stats: IPoolStats30Days | null) => {
-    console.log(stats);
-    this.stats = stats;
-  };
+  private setStats = (stats: IPoolStats30Days | null) => (this.stats = stats);
 
   public accountLiquidity: BN | null = null;
   private setAccountLiquidity = (value: BN) => (this.accountLiquidity = value);
@@ -212,6 +209,21 @@ class InvestToPoolInterfaceVM {
         },
       ];
     }, []);
+  }
+
+  get rewardToClaimTable() {
+    if (this.pool.tokens == null) return [];
+    return this.pool?.tokens
+      .map((token) => {
+        const reward = this.rewardsToClaim
+          ? this.rewardsToClaim[token.assetId].reward
+          : BN.ZERO;
+        const usd = this.rewardsToClaim
+          ? this.rewardsToClaim[token.assetId].usdEquivalent
+          : BN.ZERO;
+        return { ...token, reward, usd };
+      })
+      .sort((a, b) => (a.usd!.gt(b.usd!) ? -1 : 1));
   }
 
   claimRewards = async () => {

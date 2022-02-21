@@ -35,6 +35,10 @@ class AddLiquidityInterfaceVM {
   @action.bound public setBaseTokenAmount = (value: BN) =>
     (this.baseTokenAmount = value);
 
+  public changePoolModalOpen: boolean = false;
+  setChangePoolModalOpen = (value: boolean) =>
+    (this.changePoolModalOpen = value);
+
   public stats: IPoolStats30Days | null = null;
   private setStats = (stats: IPoolStats30Days | null) => (this.stats = stats);
 

@@ -26,9 +26,11 @@ const SharesContainer = styled(Row)`
   padding-top: 8px;
   flex-wrap: wrap;
   margin: -2px;
+
   & > * {
     margin: 2px;
   }
+
   min-width: 125px;
   @media (min-width: 430px) {
     min-width: 210px;
@@ -37,16 +39,28 @@ const SharesContainer = styled(Row)`
     min-width: 325px;
   }
 `;
+const Root = styled(Link)`
+  margin: 0 !important;
 
+  :hover {
+    background: #f8f8ff;
+  }
+`;
+const StyledRow = styled(Row)`
+  margin: 0 16px;
+  @media (min-width: 880px) {
+    margin: 0 24px;
+  }
+`;
 const InvestPoolRow: React.FC<IProps> = ({ pool, stats }) => {
   const { accountStore } = useStores();
   const apy = stats?.apy != null ? stats.apy.toFormat(2) : "—";
   return (
-    <Link
+    <Root
       to={`/${(accountStore.ROUTES.invest as any)[pool.id]}`}
       className="gridRow"
     >
-      <Row>
+      <StyledRow>
         <Icon src={pool.logo} alt="logo" />
         <SizedBox width={8} />
         <Column crossAxisSize="max">
@@ -54,17 +68,6 @@ const InvestPoolRow: React.FC<IProps> = ({ pool, stats }) => {
             <Text fitContent style={{ whiteSpace: "nowrap" }} weight={500}>
               {pool.name}
             </Text>
-            <AdaptiveRow>
-              {pool.baseToken && (
-                <Tag
-                  style={{ marginLeft: 8 }}
-                  type="primary"
-                  className="desktop"
-                >
-                  Provide {pool.baseToken.symbol} only
-                </Tag>
-              )}
-            </AdaptiveRow>
           </Row>
           <SharesContainer>
             {pool.tokens.map(({ symbol, shareAmount, assetId }) => {
@@ -84,7 +87,7 @@ const InvestPoolRow: React.FC<IProps> = ({ pool, stats }) => {
             })}
           </SharesContainer>
         </Column>
-      </Row>
+      </StyledRow>
       <AdaptiveRow>
         <Text style={{ whiteSpace: "nowrap" }} className="desktop">
           $ {pool.globalLiquidity.toFormat(2)}
@@ -98,7 +101,7 @@ const InvestPoolRow: React.FC<IProps> = ({ pool, stats }) => {
           {apy} %
         </Text>
       </AdaptiveRow>
-    </Link>
+    </Root>
   );
 };
 export default observer(InvestPoolRow);

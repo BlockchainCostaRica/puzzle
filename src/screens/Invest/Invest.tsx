@@ -11,10 +11,11 @@ import { useStores } from "@stores";
 import PoolNotFound from "@screens/Invest/PoolNotFound";
 import GridTable from "@components/GridTable";
 import InvestPoolRow from "@screens/Invest/InvestPoolRow";
+import { ReactComponent as Group } from "@src/assets/icons/group.svg";
 
 interface IProps {}
 
-const Root = styled.div`
+const Root = styled.div<{ desc?: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,14 +31,27 @@ const Root = styled.div`
   @media (min-width: 880px) {
     margin-top: 56px;
   }
+
+  .group {
+    transform: ${({ desc }) => (desc ? "scale(1)" : "scale(1, -1)")};
+  }
 `;
 
 const Invest: React.FC<IProps> = () => {
   const { poolsStore, accountStore } = useStores();
   const [searchValue, setSearchValue] = useState<string>("");
-  const stats = poolsStore.poolsStats;
-  const filteredPools = poolsStore.pools
-    .slice()
+  const [sortApy, setSortApy] = useState<boolean>(true);
+  const filteredPools = poolsStore.poolDataWithApy
+    .sort((a, b) => {
+      if (a.apy != null && b.apy != null) {
+        if (a.apy.lt(b.apy)) {
+          return sortApy ? 1 : -1;
+        } else {
+          return sortApy ? -1 : 1;
+        }
+      }
+      return 1;
+    })
     .filter(({ id }) =>
       Object.keys(accountStore.ROUTES.invest).some((key) => key === id)
     )
@@ -51,7 +65,7 @@ const Invest: React.FC<IProps> = () => {
 
   return (
     <Layout>
-      <Root>
+      <Root desc={sortApy}>
         <Text weight={500} size="large">
           Invest in Puzzle Mega Pools
         </Text>
@@ -86,17 +100,33 @@ const Invest: React.FC<IProps> = () => {
                 <div>Pool name</div>
                 <AdaptiveRow>
                   <div className="desktop">Liquidity</div>
-                  <div className="mobile">APY</div>
+                  <div className="mobile" style={{ cursor: "pointer" }}>
+                    <Text size="medium">APY</Text>
+                    <Group
+                      className="group"
+                      onClick={() => setSortApy(!sortApy)}
+                    />
+                  </div>
                 </AdaptiveRow>
                 <AdaptiveRow>
-                  <div className="desktop">APY</div>
+                  <div className="desktop" style={{ cursor: "pointer" }}>
+                    <Text size="medium">APY</Text>
+                    <Group
+                      className="group"
+                      onClick={() => setSortApy(!sortApy)}
+                    />
+                  </div>
                 </AdaptiveRow>
               </div>
               {filteredPools.map((pool, i) => (
                 <InvestPoolRow
                   key={i}
-                  pool={pool}
-                  stats={stats ? stats[pool.id] : undefined}
+                  pool={pool as any}
+                  stats={
+                    poolsStore.poolsStats
+                      ? poolsStore.poolsStats[pool.id]
+                      : undefined
+                  }
                 />
               ))}
             </GridTable>

@@ -7,7 +7,6 @@ import { observer } from "mobx-react-lite";
 import Button from "@components/Button";
 import { Column, Row } from "@components/Flex";
 import SquareTokenIcon from "@components/SquareTokenIcon";
-import { Link } from "react-router-dom";
 
 interface IProps {
   title: string;
@@ -86,16 +85,17 @@ const DepositToPool: React.FC<IProps> = ({
             </Text>
           </Column>
         </Row>
-        <Link to="/invest">
-          <Button
-            kind="secondary"
-            size="medium"
-            onClick={onChangePool}
-            style={{ whiteSpace: "nowrap" }}
-          >
-            Change pool
-          </Button>
-        </Link>
+        <Button
+          kind="secondary"
+          size="medium"
+          onClick={() => {
+            console.log("vm.changePoolModalOpen");
+            onChangePool && onChangePool();
+          }}
+          style={{ whiteSpace: "nowrap" }}
+        >
+          Change pool
+        </Button>
       </Card>
     </Root>
   );
