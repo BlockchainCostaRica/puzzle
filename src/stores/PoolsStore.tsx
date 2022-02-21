@@ -91,7 +91,7 @@ export default class PoolsStore {
     return this.pools.map((p) => {
       const apy =
         this.poolsStats != null ? this.poolsStats[p.id]?.apy : BN.ZERO;
-      return { ...p, apy };
+      return { ...p, logo: p.logo, baseToken: p.baseToken, apy };
     });
   }
 

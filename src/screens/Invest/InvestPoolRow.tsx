@@ -8,10 +8,11 @@ import Tag from "@components/Tag";
 import { useStores } from "@stores";
 import { observer } from "mobx-react-lite";
 import Pool from "@src/entities/Pool";
-import BN from "@src/utils/BN";
+import { IStatsPoolItem } from "@stores/PoolsStore";
 
-interface IProps extends Pool {
-  apy: BN;
+interface IProps {
+  stats?: IStatsPoolItem;
+  pool: Pool;
 }
 
 const Icon = styled.img`
@@ -38,45 +39,49 @@ const SharesContainer = styled(Row)`
     min-width: 325px;
   }
 `;
+const Root = styled(Link)`
+  margin: 0 !important;
 
-const InvestPoolRow: React.FC<IProps> = ({
-  tokens,
-  logo,
-  name,
-  baseToken,
-  globalLiquidity,
-  apy,
-  id,
-}) => {
-  console.log(logo);
+  :hover {
+    background: #f8f8ff;
+  }
+`;
+const StyledRow = styled(Row)`
+  margin: 0 16px;
+  @media (min-width: 880px) {
+    margin: 0 24px;
+  }
+`;
+const InvestPoolRow: React.FC<IProps> = ({ pool, stats }) => {
   const { accountStore } = useStores();
+  const apy = stats?.apy != null ? stats.apy.toFormat(2) : "—";
   return (
-    <Link
-      to={`/${(accountStore.ROUTES.invest as any)[id]}`}
+    <Root
+      to={`/${(accountStore.ROUTES.invest as any)[pool.id]}`}
       className="gridRow"
     >
-      <Row>
-        <Icon src={logo} alt="logo" />
+      <StyledRow>
+        <Icon src={pool.logo} alt="logo" />
         <SizedBox width={8} />
         <Column crossAxisSize="max">
           <Row alignItems="center">
             <Text fitContent style={{ whiteSpace: "nowrap" }} weight={500}>
-              {name}
+              {pool.name}
             </Text>
             <AdaptiveRow>
-              {baseToken && (
+              {pool.baseToken && (
                 <Tag
                   style={{ marginLeft: 8 }}
                   type="primary"
                   className="desktop"
                 >
-                  Provide {baseToken.symbol} only
+                  Provide {pool.baseToken.symbol} only
                 </Tag>
               )}
             </AdaptiveRow>
           </Row>
           <SharesContainer>
-            {tokens.map(({ symbol, shareAmount, assetId }) => {
+            {pool.tokens.map(({ symbol, shareAmount, assetId }) => {
               const assetBalance = accountStore.findBalanceByAssetId(assetId);
               const isActive =
                 assetBalance &&
@@ -93,21 +98,21 @@ const InvestPoolRow: React.FC<IProps> = ({
             })}
           </SharesContainer>
         </Column>
-      </Row>
+      </StyledRow>
       <AdaptiveRow>
         <Text style={{ whiteSpace: "nowrap" }} className="desktop">
-          $ {globalLiquidity.toFormat(2)}
+          $ {pool.globalLiquidity.toFormat(2)}
         </Text>
         <Text className="mobile" style={{ whiteSpace: "nowrap" }}>
-          {apy.toFormat(2)} %
+          {apy} %
         </Text>
       </AdaptiveRow>
       <AdaptiveRow>
         <Text className="desktop" style={{ whiteSpace: "nowrap" }}>
-          {apy.toFormat(2)} %
+          {apy} %
         </Text>
       </AdaptiveRow>
-    </Link>
+    </Root>
   );
 };
 export default observer(InvestPoolRow);
