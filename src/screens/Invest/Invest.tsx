@@ -11,6 +11,7 @@ import { useStores } from "@stores";
 import PoolNotFound from "@screens/Invest/PoolNotFound";
 import GridTable from "@components/GridTable";
 import InvestPoolRow from "@screens/Invest/InvestPoolRow";
+import BN from "@src/utils/BN";
 
 interface IProps {}
 
@@ -35,9 +36,30 @@ const Root = styled.div`
 const Invest: React.FC<IProps> = () => {
   const { poolsStore, accountStore } = useStores();
   const [searchValue, setSearchValue] = useState<string>("");
-  const stats = poolsStore.poolsStats;
-  const filteredPools = poolsStore.pools
-    .slice()
+  const [sortLiquidity, setSortLiquidity] = useState<boolean>(true);
+  const [sortApy, setSortApy] = useState<boolean>(true);
+  const filteredPools = poolsStore.poolDataWithApy
+    .sort((a, b) => {
+      if (a.globalLiquidity != null && b.globalLiquidity != null) {
+        if (a.globalLiquidity.lt(b.globalLiquidity)) {
+          return -1;
+        } else {
+          return 1;
+        }
+      }
+      return 1;
+    })
+    .sort((a, b) => {
+      if (a.apy != null && b.apy != null) {
+        if (a.apy.lt(b.apy)) {
+          return -1;
+        } else {
+          return 1;
+        }
+      }
+      return 1;
+    })
+    // .sort((a, b) => (a.apy.lt(b.apy) ? -1 : 1))
     .filter(({ id }) =>
       Object.keys(accountStore.ROUTES.invest).some((key) => key === id)
     )
@@ -93,11 +115,7 @@ const Invest: React.FC<IProps> = () => {
                 </AdaptiveRow>
               </div>
               {filteredPools.map((pool, i) => (
-                <InvestPoolRow
-                  key={i}
-                  pool={pool}
-                  stats={stats ? stats[pool.id] : undefined}
-                />
+                <InvestPoolRow key={i} {...(pool as any)} />
               ))}
             </GridTable>
           ) : (

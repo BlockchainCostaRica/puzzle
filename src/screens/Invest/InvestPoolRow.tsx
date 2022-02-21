@@ -8,11 +8,10 @@ import Tag from "@components/Tag";
 import { useStores } from "@stores";
 import { observer } from "mobx-react-lite";
 import Pool from "@src/entities/Pool";
-import { IStatsPoolItem } from "@stores/PoolsStore";
+import BN from "@src/utils/BN";
 
-interface IProps {
-  stats?: IStatsPoolItem;
-  pool: Pool;
+interface IProps extends Pool {
+  apy: BN;
 }
 
 const Icon = styled.img`
@@ -26,9 +25,11 @@ const SharesContainer = styled(Row)`
   padding-top: 8px;
   flex-wrap: wrap;
   margin: -2px;
+
   & > * {
     margin: 2px;
   }
+
   min-width: 125px;
   @media (min-width: 430px) {
     min-width: 210px;
@@ -38,36 +39,44 @@ const SharesContainer = styled(Row)`
   }
 `;
 
-const InvestPoolRow: React.FC<IProps> = ({ pool, stats }) => {
+const InvestPoolRow: React.FC<IProps> = ({
+  tokens,
+  logo,
+  name,
+  baseToken,
+  globalLiquidity,
+  apy,
+  id,
+}) => {
+  console.log(logo);
   const { accountStore } = useStores();
-  const apy = stats?.apy != null ? stats.apy.toFormat(2) : "—";
   return (
     <Link
-      to={`/${(accountStore.ROUTES.invest as any)[pool.id]}`}
+      to={`/${(accountStore.ROUTES.invest as any)[id]}`}
       className="gridRow"
     >
       <Row>
-        <Icon src={pool.logo} alt="logo" />
+        <Icon src={logo} alt="logo" />
         <SizedBox width={8} />
         <Column crossAxisSize="max">
           <Row alignItems="center">
             <Text fitContent style={{ whiteSpace: "nowrap" }} weight={500}>
-              {pool.name}
+              {name}
             </Text>
             <AdaptiveRow>
-              {pool.baseToken && (
+              {baseToken && (
                 <Tag
                   style={{ marginLeft: 8 }}
                   type="primary"
                   className="desktop"
                 >
-                  Provide {pool.baseToken.symbol} only
+                  Provide {baseToken.symbol} only
                 </Tag>
               )}
             </AdaptiveRow>
           </Row>
           <SharesContainer>
-            {pool.tokens.map(({ symbol, shareAmount, assetId }) => {
+            {tokens.map(({ symbol, shareAmount, assetId }) => {
               const assetBalance = accountStore.findBalanceByAssetId(assetId);
               const isActive =
                 assetBalance &&
@@ -87,15 +96,15 @@ const InvestPoolRow: React.FC<IProps> = ({ pool, stats }) => {
       </Row>
       <AdaptiveRow>
         <Text style={{ whiteSpace: "nowrap" }} className="desktop">
-          $ {pool.globalLiquidity.toFormat(2)}
+          $ {globalLiquidity.toFormat(2)}
         </Text>
         <Text className="mobile" style={{ whiteSpace: "nowrap" }}>
-          {apy} %
+          {apy.toFormat(2)} %
         </Text>
       </AdaptiveRow>
       <AdaptiveRow>
         <Text className="desktop" style={{ whiteSpace: "nowrap" }}>
-          {apy} %
+          {apy.toFormat(2)} %
         </Text>
       </AdaptiveRow>
     </Link>

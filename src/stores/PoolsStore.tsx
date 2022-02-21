@@ -87,6 +87,14 @@ export default class PoolsStore {
     this.setPoolStats(formattedData);
   };
 
+  get poolDataWithApy() {
+    return this.pools.map((p) => {
+      const apy =
+        this.poolsStats != null ? this.poolsStats[p.id]?.apy : BN.ZERO;
+      return { ...p, apy };
+    });
+  }
+
   get30DaysPoolStats = async (poolId: string): Promise<IPoolStats30Days> => {
     const data = await statsService.getStatsByPoolAndPeriod(poolId);
     return Object.entries(data).reduce((acc, [propertyName, propertyValue]) => {
