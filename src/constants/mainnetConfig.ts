@@ -58,6 +58,23 @@ export const MAINNET_ROUTES = {
 };
 
 export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
+  [MAINNET_POOL_ID.btcPool]: {
+    contractAddress: "3P4bSEVNM3xdmFaefX5nc9qT4fDtbwo9Dx4",
+    layer2Address: "3PMhFeQfhAVsUB71DGN8ZdwMzRVkMGM5T3n",
+    baseTokenId: mainnetTokens.BTC.assetId,
+    name: "BTC",
+    logo: tokenLogos.BTC,
+    defaultAssetId0: mainnetTokens.BTC.assetId,
+    defaultAssetId1: mainnetTokens.USDN.assetId,
+    tokens: [
+      { ...mainnetTokens.BTC, shareAmount: 0.2, logo: tokenLogos.BTC },
+      { ...mainnetTokens.ETH, shareAmount: 0.15, logo: tokenLogos.ETH },
+      { ...mainnetTokens.LTC, shareAmount: 0.05, logo: tokenLogos.LTC },
+      { ...mainnetTokens.USDC, shareAmount: 0.2, logo: tokenLogos.USDC },
+      { ...mainnetTokens.USDT, shareAmount: 0.2, logo: tokenLogos.USDT },
+      { ...mainnetTokens.USDN, shareAmount: 0.2, logo: tokenLogos.USDN },
+    ],
+  },
   [MAINNET_POOL_ID.farmsPool1]: {
     contractAddress: "3PPRHHF9JKvDLkAc3aHD3Kd5tRZp1CoqAJa",
     layer2Address: "3PDVDYZiwJzK3pu8vcknuLiKCYBPx6XZntG",
