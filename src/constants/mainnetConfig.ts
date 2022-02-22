@@ -26,7 +26,7 @@ export const MAINNET_ROUTES = {
     race: `${MAINNET_POOL_ID.race}/withdraw`,
     defi: `${MAINNET_POOL_ID.defi}/withdraw`,
     egg: `${MAINNET_POOL_ID.egg}/withdraw`,
-    btc: `${MAINNET_POOL_ID.btc}/withdraw`,
+//     btc: `${MAINNET_POOL_ID.btc}/withdraw`,
   },
   pools: {
     farms: MAINNET_POOL_ID.farmsPool1,
@@ -35,7 +35,7 @@ export const MAINNET_ROUTES = {
     race: MAINNET_POOL_ID.race,
     puzzle: MAINNET_POOL_ID.puzzle,
     egg: MAINNET_POOL_ID.egg,
-    btc: MAINNET_POOL_ID.btc,
+//     btc: MAINNET_POOL_ID.btc,
   },
   addLiquidity: {
     farms: `${MAINNET_POOL_ID.farmsPool1}/addLiquidity`,
@@ -43,7 +43,7 @@ export const MAINNET_ROUTES = {
     race: `${MAINNET_POOL_ID.race}/addLiquidity`,
     defi: `${MAINNET_POOL_ID.defi}/addLiquidity`,
     egg: `${MAINNET_POOL_ID.egg}/addLiquidity`,
-    btc: `${MAINNET_POOL_ID.btc}/addLiquidity`,
+//     btc: `${MAINNET_POOL_ID.btc}/addLiquidity`,
   },
   addOneToken: {
     farms: `${MAINNET_POOL_ID.farmsPool1}/addOneToken`,
@@ -51,7 +51,7 @@ export const MAINNET_ROUTES = {
     race: `${MAINNET_POOL_ID.race}/addOneToken`,
     defi: `${MAINNET_POOL_ID.defi}/addOneToken`,
     egg: `${MAINNET_POOL_ID.egg}/addOneToken`,
-    btc: `${MAINNET_POOL_ID.btc}/addOneToken`,
+//     btc: `${MAINNET_POOL_ID.btc}/addOneToken`,
   },
   invest: {
     farms: `${MAINNET_POOL_ID.farmsPool1}/invest`,
@@ -59,7 +59,7 @@ export const MAINNET_ROUTES = {
     race: `${MAINNET_POOL_ID.race}/invest`,
     defi: `${MAINNET_POOL_ID.defi}/invest`,
     egg: `${MAINNET_POOL_ID.egg}/invest`,
-    btc: `${MAINNET_POOL_ID.btc}/invest`,
+//     btc: `${MAINNET_POOL_ID.btc}/invest`,
   },
 };
 
