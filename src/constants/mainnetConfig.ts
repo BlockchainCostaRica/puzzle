@@ -11,7 +11,7 @@ export enum MAINNET_POOL_ID {
   puzzle = "puzzle",
   race = "race",
   egg = "egg",
-  btc = "btc",
+//   btc = "btc",
 }
 
 export const MAINNET_ROUTES = {
