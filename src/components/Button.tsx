@@ -8,7 +8,6 @@ const Button = styled.button<{
   size?: TButtonSize;
   fixed?: boolean;
 }>`
-  margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -36,6 +35,7 @@ const Button = styled.button<{
       }
     })()}
   :hover {
+    cursor: pointer;
     background: ${({ kind }) => (kind === "secondary" ? "#F1F2FE" : "#6563dd")};
     border: 1px solid
       ${({ kind }) => (kind === "secondary" ? "#F1F2FE" : "#6563dd")};

@@ -3,11 +3,13 @@ import React from "react";
 import { Observer } from "mobx-react-lite";
 import Layout from "@components/Layout";
 import Text from "@components/Text";
-import { NFTStakingVMProvider } from "./NFTStakingVM";
+import { NFTStakingVMProvider, useNFTStakingVM } from "./NFTStakingVM";
 import GoBack from "@components/GoBack";
 import SizedBox from "@components/SizedBox";
-import NFTCard from "@screens/NFTStaking/NFTCard";
-import eagle from "@src/assets/nfts/eagle.png";
+import Reward from "./Reward";
+import Tabs from "@components/Tabs";
+import MarketNfts from "@screens/NFTStaking/MarketNfts";
+import AccountNfts from "@screens/NFTStaking/AccountNfts";
 
 const Root = styled.div`
   display: flex;
@@ -23,92 +25,52 @@ const Root = styled.div`
   text-align: left;
   @media (min-width: 880px) {
     margin-top: 56px;
+    .title {
+      max-width: 560px;
+    }
   }
 `;
-const NFTContainer = styled.div`
-  display: grid;
-  row-gap: 16px;
-  grid-template-columns: 1fr;
-  @media (min-width: 604px) {
-    //grid-template-columns: repeat(4, 1fr);
-    grid-template-columns: repeat(auto-fill, 278px);
-    column-gap: 16px;
-  }
-`;
-const array = [
-  {
-    src: eagle,
-    price: "~ 3,099 $",
-    boostAPY: 10.11,
-    name: "Early eagle",
-    isInOwn: true,
-  },
-  {
-    src: eagle,
-    price: "~ 3,099 $",
-    boostAPY: 10.11,
-    name: "Early eagle",
-    isInOwn: true,
-  },
-  {
-    src: eagle,
-    price: "~ 3,099 $",
-    boostAPY: 10.11,
-    name: "Early eagle",
-    isInOwn: true,
-  },
-  {
-    src: eagle,
-    price: "~ 3,099 $",
-    boostAPY: 10.11,
-    name: "Early eagle",
-    isInOwn: true,
-  },
-  {
-    src: eagle,
-    price: "~ 3,099 $",
-    boostAPY: 10.11,
-    name: "Early eagle",
-    isInOwn: true,
-  },
-  {
-    src: eagle,
-    price: "~ 3,099 $",
-    boostAPY: 10.11,
-    name: "Early eagle",
-    isInOwn: true,
-  },
-];
 const NFTStakingImpl: React.FC = () => {
+  const vm = useNFTStakingVM();
+
   return (
     <Layout>
       <Observer>
-        {() => (
-          <Root>
-            <GoBack link="/stake" text="Back to Staking" />
-            <SizedBox height={24} />
-            <Text weight={500} size="large">
-              NFT-Staking
-            </Text>
-            <SizedBox height={8} />
-            <Text type="secondary">
-              Stake Puzzle NFT to share the rewards pool from Puzzle aggregator
-              fees and boost your staking rewards up to
-              <b style={{ color: "#35A15A" }}> 45.3 %</b>. You can stake one of
-              each type of NFTs.
-            </Text>
-            <SizedBox height={24} />
-            <Text weight={500} type="secondary">
-              NFT to stake
-            </Text>
-            <SizedBox height={8} />
-            <NFTContainer>
-              {array.map((i, index) => (
-                <NFTCard {...i} key={index} typeId="12312" />
-              ))}
-            </NFTContainer>
-          </Root>
-        )}
+        {() => {
+          const apy = vm.stats?.ultra?.apy ?? "-";
+          const { artworks, accountNFTs, stakedAccountNFTs } = vm;
+          const marketNftAmount = artworks?.length;
+          const accountNftAmount =
+            (accountNFTs?.length ?? 0) + (stakedAccountNFTs?.length ?? 0);
+          return (
+            <Root>
+              <GoBack link="/stake" text="Back to Staking" />
+              <SizedBox height={24} />
+              <Text weight={500} size="large">
+                NFT-Staking
+              </Text>
+              <SizedBox height={8} />
+              <Text type="secondary" className="title">
+                Stake Puzzle NFT to share the rewards pool from Puzzle
+                aggregator fees and boost your staking rewards up to
+                <b style={{ color: "#35A15A" }}> {apy}%</b>. You can stake one
+                of each type of NFTs.
+              </Text>
+              <Reward />
+              <SizedBox height={40} />
+              <Tabs
+                tabs={[
+                  { name: "Market", additionalInfo: marketNftAmount },
+                  { name: "On my wallet", additionalInfo: accountNftAmount },
+                ]}
+                activeTab={vm.nftDisplayState}
+                setActive={vm.setNftDisplayState}
+              />
+              <SizedBox height={16} />
+              {vm.nftDisplayState === 0 ? <MarketNfts /> : <AccountNfts />}
+            </Root>
+          );
+        }}
       </Observer>
     </Layout>
   );

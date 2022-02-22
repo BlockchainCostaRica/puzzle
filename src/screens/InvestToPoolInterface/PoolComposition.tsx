@@ -81,6 +81,7 @@ const PoolComposition: React.FC<IProps> = () => {
               </div>
             ))}
         </GridTable>
+        <SizedBox height={16} />
       </Card>
     </Root>
   );

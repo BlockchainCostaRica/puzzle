@@ -49,5 +49,6 @@ export const TESTNET_POOL_CONFIG: Record<TESTNET_POOL_ID, IPoolConfig> = {
 
 export const TESTNET_CONTRACTS_ADDRESSES = {
   staking: "",
+  ultraStaking: "",
   aggregator: "",
 };

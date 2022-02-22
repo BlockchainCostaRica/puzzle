@@ -75,15 +75,13 @@ const RewardToClaim: React.FC<IProps> = () => {
           Reward composition
         </Title>
         <GridTable desktopTemplate="1fr 1fr" mobileTemplate="1fr 1fr">
-          {vm.pool?.tokens.map((token, i) => {
-            const reward =
-              vm.rewardsToClaim &&
-              !vm.rewardsToClaim[token.assetId].reward.eq(0)
-                ? vm.rewardsToClaim[token.assetId].reward.toFormat(5)
-                : "0";
-            const usd = vm.rewardsToClaim
-              ? vm.rewardsToClaim[token.assetId].usdEquivalent.toFormat(2)
-              : "0";
+          {vm.rewardToClaimTable.map((token, i) => {
+            const reward = token.reward.gte(0.01)
+              ? token.reward.toFormat(2)
+              : token.reward.toFormat(6);
+            const usd = token.usd.gte(0.01)
+              ? token.usd.toFormat(2)
+              : token.usd.toFormat(6);
             return (
               <div
                 className="gridRow"
@@ -131,6 +129,7 @@ const RewardToClaim: React.FC<IProps> = () => {
             );
           })}
         </GridTable>
+        <SizedBox height={24} />
       </Card>
     </Root>
   );

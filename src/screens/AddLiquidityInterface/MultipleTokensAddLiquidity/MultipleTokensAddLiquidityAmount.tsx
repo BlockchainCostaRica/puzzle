@@ -23,8 +23,8 @@ const MultipleTokensAddLiquidityAmount: React.FC<IProps> = () => {
       </Text>
       <SizedBox height={8} />
       <Card>
-        <Text type="secondary" style={{ textAlign: "center" }}>
-          Select the percentage of your asset
+        <Text type="secondary" style={{ textAlign: "center" }} size="medium">
+          Select the percentage of your assets
         </Text>
         <SizedBox height={16} />
         <Text type="primary" size="large" style={{ textAlign: "center" }}>

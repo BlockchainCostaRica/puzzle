@@ -4,6 +4,7 @@ import { Column, Row } from "@src/components/Flex";
 import SizedBox from "@components/SizedBox";
 import Text from "@components/Text";
 import Balance from "@src/entities/Balance";
+import SquareTokenIcon from "@components/SquareTokenIcon";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   token: Balance;
@@ -29,11 +30,6 @@ const DefaultIcon = styled.div`
   border: 1px solid #f1f2fe;
   border-radius: 8px;
 `;
-const Icon = styled.img`
-  width: 40px;
-  border: 1px solid #f1f2fe;
-  border-radius: 8px;
-`;
 const Name = styled.div`
   font-style: normal;
   font-weight: normal;
@@ -53,7 +49,11 @@ const TokenInfo: React.FC<IProps> = ({ token, ...rest }) => {
   return (
     <Root {...rest}>
       <Row>
-        {token.logo ? <Icon src={token.logo} /> : <DefaultIcon />}
+        {token.logo ? (
+          <SquareTokenIcon size="small" src={token.logo} />
+        ) : (
+          <DefaultIcon />
+        )}
         <SizedBox width={8} />
         <Column>
           <Name>{token.name}</Name>

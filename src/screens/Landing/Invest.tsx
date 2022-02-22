@@ -6,6 +6,7 @@ import Button from "@components/Button";
 import Text from "@components/Text";
 import { Link } from "react-router-dom";
 import { useStores } from "@stores";
+import { Anchor } from "@components/Anchor";
 
 interface IProps {}
 
@@ -111,13 +112,9 @@ const Invest: React.FC<IProps> = () => {
               Earn passive income for staking your portfolio and exchange fees
               from puzzle volume at the same time.
               <br />
-              <a
-                href="https://medium.com/@izhur27/what-is-puzzle-swap-1e4b4af4ed17"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <Anchor href="https://medium.com/@izhur27/what-is-puzzle-swap-1e4b4af4ed17">
                 Learn more on our Medium.
-              </a>
+              </Anchor>
             </Subtitle>
           </Row>
           <BtnContainer>

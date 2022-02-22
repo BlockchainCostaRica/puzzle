@@ -25,6 +25,10 @@ import wavesLogo from "@src/assets/tokens/waves-logo.svg";
 import usdnLogo from "@src/assets/tokens/usdn-logo.svg";
 import raceLogo from "@src/assets/tokens/race-logo.svg";
 import unknownLogo from "@src/assets/tokens/unknown-logo.svg";
+import btcLogo from "@src/assets/tokens/bitcoin.svg";
+import ltcLogo from "@src/assets/tokens/ltc.svg";
+import ethLogo from "@src/assets/tokens/ethereum.svg";
+import usdcLogo from "@src/assets/tokens/usdc.svg";
 
 const tokenLogos: Record<string, string> = {
   DUXPLORER: duxplorerLogo,
@@ -53,6 +57,10 @@ const tokenLogos: Record<string, string> = {
   PUZZLE: puzzleLogo,
   USDT: usdtLogo,
   RACE: raceLogo,
+  BTC: btcLogo,
+  ETH: ethLogo,
+  LTC: ltcLogo,
+  USDC: usdcLogo,
   UNKNOWN: unknownLogo,
 };
 

@@ -19,7 +19,8 @@ export const StakingVMProvider: React.FC = ({ children }) => {
 export const useStakingVM = () => useVM(ctx);
 
 export interface IStakingStats {
-  apy: BN;
+  classic: BN;
+  ultra: BN;
 }
 
 class StakingVM {
@@ -134,9 +135,10 @@ class StakingVM {
 
   syncStats = async () => {
     const data = await statsService.getStakingStats();
-    const formattedData = Object.entries(data).reduce((acc, [field, value]) => {
-      return { ...acc, [field]: new BN(value) };
-    }, {} as IStakingStats);
+    const formattedData = Object.entries(data).reduce(
+      (acc, [name, { apy }]) => ({ ...acc, [name]: new BN(apy) }),
+      {} as IStakingStats
+    );
     this._setStats(formattedData);
   };
 

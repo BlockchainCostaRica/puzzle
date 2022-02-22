@@ -83,18 +83,10 @@ class AccountStore {
     if (this.isBrowserSupportsWavesKeeper) {
       this.setupWavesKeeper();
     }
+
     if (initState) {
-      if (initState.loginType === LOGIN_TYPE.KEEPER) {
-        this.setLoginType(initState.loginType);
-        this.setAddress(initState.address);
-      }
-      // initState.loginType != null &&
-      //   this.login(initState.loginType)
-      //     .then(this.updateAccountAssets)
-      //     .catch(async (e) => {
-      //       await new Promise((r) => setTimeout(r, 100));
-      //       errorMessage({ message: e.toString() });
-      //     });
+      this.setLoginType(initState.loginType);
+      this.setAddress(initState.address);
     }
 
     setInterval(this.updateAccountAssets, 5000);
@@ -106,7 +98,7 @@ class AccountStore {
   }
 
   login = async (loginType: LOGIN_TYPE) => {
-    this.loginType = loginType;
+    this.setLoginType(loginType);
     switch (loginType) {
       case LOGIN_TYPE.KEEPER:
         this.setSigner(new Signer());
@@ -218,6 +210,9 @@ class AccountStore {
     txParams: IInvokeTxParams
   ): Promise<string | null> => {
     if (this.signer == null) {
+      await this.login(this.loginType ?? LOGIN_TYPE.SIGNER_EMAIL);
+    }
+    if (this.signer == null) {
       this.rootStore.notificationStore.notify("You need to login firstly", {
         title: "Error",
         type: "error",
@@ -232,7 +227,11 @@ class AccountStore {
         call: txParams.call,
       });
 
-      return ttx.broadcast().then((tx: any) => tx.id);
+      const txId = await ttx.broadcast().then((tx: any) => tx.id);
+      await waitForTx(txId, {
+        apiBase: NODE_URL_MAP[this.chainId],
+      });
+      return txId;
     } catch (e: any) {
       console.warn(e);
       this.rootStore.notificationStore.notify(e.toString(), {
