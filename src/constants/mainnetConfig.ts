@@ -64,23 +64,23 @@ export const MAINNET_ROUTES = {
 };
 
 export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
-  [MAINNET_POOL_ID.btc]: {
-    contractAddress: "3P4bSEVNM3xdmFaefX5nc9qT4fDtbwo9Dx4",
-    layer2Address: "3PMhFeQfhAVsUB71DGN8ZdwMzRVkMGM5T3n",
-    baseTokenId: mainnetTokens.BTC.assetId,
-    name: "BTC",
-    logo: tokenLogos.BTC,
-    defaultAssetId0: mainnetTokens.BTC.assetId,
-    defaultAssetId1: mainnetTokens.USDN.assetId,
-    tokens: [
-      { ...mainnetTokens.BTC, shareAmount: 0.2, logo: tokenLogos.BTC },
-      { ...mainnetTokens.ETH, shareAmount: 0.15, logo: tokenLogos.ETH },
-      { ...mainnetTokens.LTC, shareAmount: 0.05, logo: tokenLogos.LTC },
-      { ...mainnetTokens.USDC, shareAmount: 0.2, logo: tokenLogos.USDC },
-      { ...mainnetTokens.USDT, shareAmount: 0.2, logo: tokenLogos.USDT },
-      { ...mainnetTokens.USDN, shareAmount: 0.2, logo: tokenLogos.USDN },
-    ],
-  },
+//   [MAINNET_POOL_ID.btc]: {
+//     contractAddress: "3P4bSEVNM3xdmFaefX5nc9qT4fDtbwo9Dx4",
+//     layer2Address: "3PMhFeQfhAVsUB71DGN8ZdwMzRVkMGM5T3n",
+//     baseTokenId: mainnetTokens.BTC.assetId,
+//     name: "BTC",
+//     logo: tokenLogos.BTC,
+//     defaultAssetId0: mainnetTokens.BTC.assetId,
+//     defaultAssetId1: mainnetTokens.USDN.assetId,
+//     tokens: [
+//       { ...mainnetTokens.BTC, shareAmount: 0.2, logo: tokenLogos.BTC },
+//       { ...mainnetTokens.ETH, shareAmount: 0.15, logo: tokenLogos.ETH },
+//       { ...mainnetTokens.LTC, shareAmount: 0.05, logo: tokenLogos.LTC },
+//       { ...mainnetTokens.USDC, shareAmount: 0.2, logo: tokenLogos.USDC },
+//       { ...mainnetTokens.USDT, shareAmount: 0.2, logo: tokenLogos.USDT },
+//       { ...mainnetTokens.USDN, shareAmount: 0.2, logo: tokenLogos.USDN },
+//     ],
+//   },
   [MAINNET_POOL_ID.defi]: {
     contractAddress: "3PDrYPF6izza2sXWffzTPF7e2Fcir2CMpki",
     layer2Address: "3PJAg4A4gPQXtSLKQNAf5VxbXV2QVM9wPei",
