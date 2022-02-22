@@ -64,7 +64,7 @@ export const MAINNET_ROUTES = {
 };
 
 export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
-  [MAINNET_POOL_ID.btcPool]: {
+  [MAINNET_POOL_ID.btc]: {
     contractAddress: "3P4bSEVNM3xdmFaefX5nc9qT4fDtbwo9Dx4",
     layer2Address: "3PMhFeQfhAVsUB71DGN8ZdwMzRVkMGM5T3n",
     baseTokenId: mainnetTokens.BTC.assetId,
