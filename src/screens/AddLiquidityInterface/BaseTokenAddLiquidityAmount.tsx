@@ -76,7 +76,7 @@ const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
       </Card>
       <SizedBox height={24} />
       {accountStore.address == null && (
-        <Button fixed onClick={() => accountStore.setWalletModalOpened(true)}>
+        <Button fixed onClick={() => accountStore.setLoginModalOpened(true)}>
           Connect to deposit
         </Button>
       )}

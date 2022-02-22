@@ -51,6 +51,10 @@ class AccountStore {
   @action.bound setWavesKeeperInstalled = (state: boolean) =>
     (this.isWavesKeeperInstalled = state);
 
+  loginModalOpened: boolean = false;
+  @action.bound setLoginModalOpened = (state: boolean) =>
+    (this.loginModalOpened = state);
+
   walletModalOpened: boolean = false;
   @action.bound setWalletModalOpened = (state: boolean) =>
     (this.walletModalOpened = state);

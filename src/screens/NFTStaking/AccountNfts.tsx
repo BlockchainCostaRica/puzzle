@@ -34,7 +34,7 @@ const AccountNfts: React.FC<IProps> = () => {
       <NoNfts
         text="Connect your wallet to see your NFTs"
         btnText="Connect wallet"
-        onBtnClick={() => accountStore.setWalletModalOpened(true)}
+        onBtnClick={() => accountStore.setLoginModalOpened(true)}
       />
     );
 
