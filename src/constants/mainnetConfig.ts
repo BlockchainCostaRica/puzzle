@@ -64,6 +64,7 @@ export const MAINNET_ROUTES = {
     race: `${MAINNET_POOL_ID.race}/invest`,
     defi: `${MAINNET_POOL_ID.defi}/invest`,
     egg: `${MAINNET_POOL_ID.egg}/invest`,
+    winter: `${MAINNET_POOL_ID.winter}/invest`,
 //     btc: `${MAINNET_POOL_ID.btc}/invest`,
   },
 };
@@ -90,19 +91,19 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
     contractAddress: "3PEZe3Z2FqaVbMTjWJUpnQGxhWh2JRptujM",
     layer2Address: "3PNBamg45irg9R58gMBM6UvBaUhX5bVys2r",
     baseTokenId: mainnetTokens.USDN.assetId,
-    name: "Warm Winter",
+    name: "Warm Winter Pool ❄️",
     logo: tokenLogos.USDC,
     defaultAssetId0: mainnetTokens.EURN.assetId,
     defaultAssetId1: mainnetTokens.USDN.assetId,
     tokens: [
-      { ...mainnetTokens.USDC, shareAmount: 0.30, logo: tokenLogos.WAVES },
-      { ...mainnetTokens.USDT, shareAmount: 0.10, logo: tokenLogos.EGG },
-      { ...mainnetTokens.USDN, shareAmount: 0.20, logo: tokenLogos.SWOP },
-      { ...mainnetTokens.PUZZLE, shareAmount: 0.22, logo: tokenLogos.VIRES },
-      { ...mainnetTokens.VIRES, shareAmount: 0.08, logo: tokenLogos.NSBT },
-      { ...mainnetTokens.EURN, shareAmount: 0.10, logo: tokenLogos.ENNO }
+      { ...mainnetTokens.USDC, shareAmount: 0.30, logo: tokenLogos.USDC },
+      { ...mainnetTokens.USDT, shareAmount: 0.10, logo: tokenLogos.USDT },
+      { ...mainnetTokens.USDN, shareAmount: 0.20, logo: tokenLogos.USDN },
+      { ...mainnetTokens.PUZZLE, shareAmount: 0.22, logo: tokenLogos.PUZZLE },
+      { ...mainnetTokens.VIRES, shareAmount: 0.08, logo: tokenLogos.VIRES },
+      { ...mainnetTokens.EURN, shareAmount: 0.10, logo: tokenLogos.EURN },
     ],
-  }
+  }, 
   [MAINNET_POOL_ID.defi]: {
     contractAddress: "3PDrYPF6izza2sXWffzTPF7e2Fcir2CMpki",
     layer2Address: "3PJAg4A4gPQXtSLKQNAf5VxbXV2QVM9wPei",
