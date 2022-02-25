@@ -55,7 +55,7 @@ class AccountStore {
   @action.bound setLoginModalOpened = (state: boolean) =>
     (this.loginModalOpened = state);
 
-  walletModalOpened: boolean = false;
+  walletModalOpened: boolean = true;
   @action.bound setWalletModalOpened = (state: boolean) =>
     (this.walletModalOpened = state);
 

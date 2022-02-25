@@ -16,6 +16,7 @@ import Staking from "@screens/Staking";
 import NFTStaking from "@screens/NFTStaking";
 import MultiSwapInterface from "@screens/MultiSwapInterface";
 import { TPoolId } from "@src/constants";
+import WalletModal from "@components/Wallet/WalletModal";
 
 const Root = styled(Column)`
   width: 100%;
@@ -85,6 +86,10 @@ const App: React.FC = () => {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <WalletModal
+        onClose={() => accountStore.setWalletModalOpened(false)}
+        visible={accountStore.walletModalOpened}
+      />
     </Root>
   );
 };

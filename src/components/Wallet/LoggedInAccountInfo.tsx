@@ -90,10 +90,6 @@ const LoggedInAccountInfo: React.FC<IProps> = () => {
           <img src={arrowIcon} className="menu-arrow" alt="arrow" />
         </AddressContainer>
       </Tooltip>
-      <WalletModal
-        onClose={() => accountStore.setWalletModalOpened(false)}
-        visible={accountStore.walletModalOpened}
-      />
     </Root>
   );
 };

@@ -5,24 +5,32 @@ import { Column } from "@components/Flex";
 import Text from "@components/Text";
 import BN from "@src/utils/BN";
 import { useStores } from "@stores";
-import copy from "copy-to-clipboard";
 import { ReactComponent as Copy } from "@src/assets/icons/copy.svg";
 import { ReactComponent as Link } from "@src/assets/icons/link.svg";
 import { ReactComponent as Disconnect } from "@src/assets/icons/disconnect.svg";
 import { observer } from "mobx-react-lite";
+import { useWalletVM } from "@components/Wallet/WalletModal/WalletVM";
 
 interface IProps {}
 
-const Root = styled.div`
-  display: flex;
-  flex-direction: column;
+const Root = styled(Column)<{ headerExpanded: boolean }>`
   align-items: center;
   justify-content: center;
+  width: 100%;
+  transition: 0.4s;
+  overflow: hidden;
+  padding: 0 24px;
+  box-sizing: border-box;
+  height: ${({ headerExpanded }) => (headerExpanded ? "212px" : "0px")};
+  @media (min-width: 560px) {
+    height: ${({ headerExpanded }) => (headerExpanded ? "212px" : "0px")};
+  }
 `;
 const Actions = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   column-gap: 8px;
+  width: 100%;
 `;
 const Action = styled.div`
   display: flex;
@@ -32,30 +40,23 @@ const Action = styled.div`
   background: rgba(255, 255, 255, 0.12);
   border-radius: 8px;
   cursor: pointer;
-  padding: 10px;
   height: 60px;
+  box-sizing: border-box;
 
   .img {
     height: 24px;
-    width: 24px;
+    min-width: 24px;
   }
 `;
 
 const WalletModalHeader: React.FC<IProps> = () => {
-  const { accountStore, notificationStore } = useStores();
-  const assetBalances = [...accountStore.assetBalances];
-  const handleCopyAddress = () => {
-    copy(accountStore.address ?? "");
-    notificationStore.notify("Your address was copied", {
-      type: "success",
-      title: "Congratulations!",
-    });
-  };
+  const { accountStore } = useStores();
+  const vm = useWalletVM();
   const action = [
     {
       icon: <Copy className="img" />,
       text: "Copy address",
-      onClick: handleCopyAddress,
+      onClick: vm.handleCopyAddress,
     },
     {
       icon: <Link className="img" />,
@@ -68,17 +69,15 @@ const WalletModalHeader: React.FC<IProps> = () => {
       onClick: () => accountStore.logout(),
     },
   ];
-  // const loginType = accountStore.loginType;
   return (
-    <Root>
-      {/*<SizedBox height={48} />*/}
-      <Column alignItems="center">
-        <Text fitContent type="light">
+    <Root headerExpanded={vm.headerExpanded}>
+      <Column alignItems="center" crossAxisSize="max">
+        <Text fitContent size="medium" type="light">
           Keeper: 3PA…4sZ
         </Text>
         <Text fitContent type="light" size="large">
           $&nbsp;
-          {assetBalances
+          {vm.balances
             .reduce((acc, b) => acc.plus(b.usdnEquivalent ?? "0"), BN.ZERO)
             .toFormat(2)}
         </Text>
@@ -88,7 +87,7 @@ const WalletModalHeader: React.FC<IProps> = () => {
             <Action onClick={onClick}>
               {icon}
               <SizedBox height={6} />
-              <Text type="light" fitContent>
+              <Text size="small" type="light" fitContent>
                 {text}
               </Text>
             </Action>

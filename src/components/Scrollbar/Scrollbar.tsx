@@ -1,9 +1,9 @@
-import React, { HTMLAttributes } from 'react';
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import React, { HTMLAttributes } from "react";
+import PerfectScrollbar, { ScrollBarProps } from "react-perfect-scrollbar";
 
-import { ScrollbarRoot } from './styles';
+import { ScrollbarRoot } from "./styles";
 
-interface IScrollbarProps extends HTMLAttributes<HTMLDivElement> {
+interface IScrollbarProps extends ScrollBarProps {
   onScrollX?: (ref: any) => void;
   suppressScrollX?: boolean;
   suppressScrollY?: boolean;
