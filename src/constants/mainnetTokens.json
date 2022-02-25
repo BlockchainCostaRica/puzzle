@@ -47,6 +47,12 @@
     "symbol": "USDC",
     "decimals": 6
   },
+  "EURN": {
+    "assetId": "DUk2YTxhRoAqMJLus4G2b3fR8hMHVh6eiyFx5r29VR6t",
+    "name": "Neutrino EUR",
+    "symbol": "EURN",
+    "decimals": 6
+  },
   "NSBT": {
     "assetId": "6nSpVyNH7yM69eg446wrQR94ipbbcmZMU1ENPwanC97g",
     "name": "NSBT",
