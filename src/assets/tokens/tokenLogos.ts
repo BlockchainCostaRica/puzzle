@@ -29,6 +29,7 @@ import btcLogo from "@src/assets/tokens/bitcoin.svg";
 import ltcLogo from "@src/assets/tokens/ltc.svg";
 import ethLogo from "@src/assets/tokens/ethereum.svg";
 import usdcLogo from "@src/assets/tokens/usdc.svg";
+import eurn from "@src/assets/tokens/eurn.svg";
 
 const tokenLogos: Record<string, string> = {
   DUXPLORER: duxplorerLogo,
@@ -61,6 +62,7 @@ const tokenLogos: Record<string, string> = {
   ETH: ethLogo,
   LTC: ltcLogo,
   USDC: usdcLogo,
+  EURN: eurn,
   UNKNOWN: unknownLogo,
 };
 

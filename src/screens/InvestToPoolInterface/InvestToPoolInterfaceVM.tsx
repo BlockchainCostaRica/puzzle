@@ -3,8 +3,9 @@ import { useVM } from "@src/hooks/useVM";
 import { makeAutoObservable, when } from "mobx";
 import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
-import { IToken } from "@src/constants";
+import { IToken, NODE_URL_MAP } from "@src/constants";
 import { IPoolStats30Days } from "@stores/PoolsStore";
+import axios from "axios";
 
 const ctx = React.createContext<InvestToPoolInterfaceVM | null>(null);
 
@@ -52,11 +53,16 @@ class InvestToPoolInterfaceVM {
   private setTotalRewardToClaim = (value: BN) =>
     (this.totalRewardToClaim = value);
 
+  public poolAssetBalances: { assetId: string; balance: BN }[] = [];
+  private setPoolAssetBalances = (value: { assetId: string; balance: BN }[]) =>
+    (this.poolAssetBalances = value);
+
   constructor(rootStore: RootStore, poolId: string) {
     this.poolId = poolId;
     this.rootStore = rootStore;
     makeAutoObservable(this);
     this.updateStats();
+    this.updatePoolTokenBalances();
     when(
       () => rootStore.accountStore.address != null,
       this.updateAccountLiquidityInfo
@@ -92,7 +98,9 @@ class InvestToPoolInterfaceVM {
   ): Promise<IReward & { assetId: string }> => {
     const { accountStore } = this.rootStore;
     const { address } = accountStore;
-    const assetBalance = accountStore.findBalanceByAssetId(token.assetId);
+    const assetBalance = this.poolAssetBalances.find(
+      ({ assetId }) => assetId === token.assetId
+    );
     const realBalance = assetBalance?.balance ?? BN.ZERO;
 
     const [globalValues, addressValues] = await Promise.all([
@@ -262,4 +270,31 @@ class InvestToPoolInterfaceVM {
     if (this.accountLiquidity == null) return false;
     return !this.accountLiquidity.eq(0);
   }
+
+  updatePoolTokenBalances = async () => {
+    const { rootStore, pool } = this;
+    const { accountStore } = rootStore;
+    const { chainId } = accountStore;
+    const { data }: { data: TContractAssetBalancesResponse } = await axios.get(
+      `${NODE_URL_MAP[chainId]}/assets/balance/${pool.contractAddress}`
+    );
+    const value = data.balances.map((token) => {
+      return { assetId: token.assetId, balance: new BN(token.balance) };
+    });
+    this.setPoolAssetBalances(value);
+  };
 }
+
+type TContractAssetBalancesResponse = {
+  address: string;
+  balances: IPoolTokenBalance[];
+};
+type IPoolTokenBalance = {
+  assetId: string;
+  balance: number;
+  issueTransaction: null | any;
+  minSponsoredAssetFee: number;
+  quantity: number;
+  reissuable: boolean;
+  sponsorBalance: number;
+};
