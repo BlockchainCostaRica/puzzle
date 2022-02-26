@@ -1,12 +1,13 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useState } from "react";
 import { Column, Row } from "@components/Flex";
-import TokenInfo from "@screens/TradeInterface/TokenSelectModal/TokenInfo";
-import Balance from "@src/entities/Balance";
 import { observer } from "mobx-react-lite";
 import Scrollbar from "@components/Scrollbar";
 import { useWalletVM } from "@components/Wallet/WalletModal/WalletVM";
 import SizedBox from "@components/SizedBox";
+import Tabs from "@components/Tabs";
+import AssetsBalances from "@components/Wallet/WalletModal/AssetsBalances";
+import PoolsBalances from "@components/Wallet/WalletModal/PoolsBalances";
 
 interface IProps {}
 
@@ -14,6 +15,7 @@ const Root = styled(Column)`
   width: 100%;
   box-sizing: border-box;
   background: #fff;
+
   & > * {
     width: 100%;
   }
@@ -43,14 +45,23 @@ const WalletModalBody: React.FC<IProps> = () => {
   const handleScroll = (container: HTMLElement) => {
     vm.setHeaderExpanded(container.scrollTop === 0);
   };
+  const [activeTab, setActiveTab] = useState<number>(0);
+
   return (
     <Root>
-      <TabsWrapper></TabsWrapper>
+      <TabsWrapper>
+        <Tabs
+          tabs={[{ name: "Assets" }, { name: "Investments" }, { name: "NFTs" }]}
+          activeTab={activeTab}
+          setActive={(v) => setActiveTab(v)}
+          style={{ justifyContent: "space-evenly", paddingTop: 16 }}
+          tabStyle={{ flex: 1, marginRight: 0 }}
+        />
+      </TabsWrapper>
       <Scrollbar onScrollY={handleScroll}>
         <ListWrapper headerExpanded={vm.headerExpanded}>
-          {vm.balances.map((t) => (
-            <TokenInfo key={t.assetId} token={new Balance(t)} />
-          ))}
+          {activeTab === 0 && <AssetsBalances />}
+          {activeTab === 1 && <PoolsBalances />}
           <SizedBox height={64} width={1} />
         </ListWrapper>
       </Scrollbar>

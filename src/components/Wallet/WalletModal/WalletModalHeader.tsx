@@ -6,7 +6,7 @@ import Text from "@components/Text";
 import BN from "@src/utils/BN";
 import { useStores } from "@stores";
 import { ReactComponent as Copy } from "@src/assets/icons/copy.svg";
-import { ReactComponent as Link } from "@src/assets/icons/link.svg";
+import { ReactComponent as Link } from "@src/assets/icons/whiteLink.svg";
 import { ReactComponent as Disconnect } from "@src/assets/icons/disconnect.svg";
 import { observer } from "mobx-react-lite";
 import { useWalletVM } from "@components/Wallet/WalletModal/WalletVM";
@@ -51,6 +51,7 @@ const Action = styled.div`
 
 const WalletModalHeader: React.FC<IProps> = () => {
   const { accountStore } = useStores();
+  const { EXPLORER_LINK, address } = accountStore;
   const vm = useWalletVM();
   const action = [
     {
@@ -61,7 +62,7 @@ const WalletModalHeader: React.FC<IProps> = () => {
     {
       icon: <Link className="img" />,
       text: "View on Explorer",
-      onClick: () => window.open("https://google.com", "_blank"),
+      onClick: () => window.open(`${EXPLORER_LINK}/${address}`, "_blank"),
     },
     {
       icon: <Disconnect className="img" />,
@@ -73,13 +74,14 @@ const WalletModalHeader: React.FC<IProps> = () => {
     <Root headerExpanded={vm.headerExpanded}>
       <Column alignItems="center" crossAxisSize="max">
         <Text fitContent size="medium" type="light">
-          Keeper: 3PA…4sZ
+          {vm.signInInfo}
         </Text>
         <Text fitContent type="light" size="large">
           $&nbsp;
-          {vm.balances
-            .reduce((acc, b) => acc.plus(b.usdnEquivalent ?? "0"), BN.ZERO)
-            .toFormat(2)}
+          {/*{vm.balances*/}
+          {/*  .reduce((acc, b) => acc.plus(b.usdnEquivalent ?? "0"), BN.ZERO)*/}
+          {/*  .toFormat(2)}*/}
+          {BN.ZERO.toFormat(2)}
         </Text>
         <SizedBox height={16} />
         <Actions>
