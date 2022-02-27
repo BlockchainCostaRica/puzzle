@@ -24,9 +24,8 @@ class WalletVM {
   headerExpanded: boolean = true;
   setHeaderExpanded = (state: boolean) => (this.headerExpanded = state);
 
-  poolsLiquidity: Record<string, BN> | null = null;
-  private _setPoolsLiquidity = (v: Record<string, BN>) =>
-    (this.poolsLiquidity = v);
+  poolsLiquidity: any[] | null = null;
+  private _setPoolsLiquidity = (v: []) => (this.poolsLiquidity = v);
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
@@ -87,8 +86,20 @@ class WalletVM {
     const { address } = this.rootStore.accountStore;
     if (address == null) return;
     const v = await Promise.all(
-      pools.map((pool) => pool.getAccountLiquidityInfo(address))
+      pools.map((p) => p.getAccountLiquidityInfo(address))
     );
-    console.log(v);
+    // const value = v.reduce((acc, value) => {
+    //   console.log(value);
+    //   return [ ...acc,  ];
+    // }, []);
+    // for (let i = 0; i < pools.length; i++) {
+    //   const p = pools[i];
+    //   const poolValues = await p.getAccountLiquidityInfo(address);
+    //   if (poolValues.liquidity.gt(0)) {
+    //     values = { ...values, [p.id]: new BN(100) };
+    //   }
+    // }
+    // console.log(value);
+    this._setPoolsLiquidity([]);
   };
 }

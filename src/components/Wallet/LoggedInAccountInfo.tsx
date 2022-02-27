@@ -11,7 +11,6 @@ import { useStores } from "@stores";
 import Tooltip from "@components/Tooltip";
 import { observer } from "mobx-react-lite";
 import WalletActionsTooltip from "@src/screens/TradeInterface/TokenSelectModal/WalletActionsTooltip";
-import WalletModal from "@components/Wallet/WalletModal";
 
 interface IProps {}
 

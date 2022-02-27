@@ -1,9 +1,8 @@
-import styled from "@emotion/styled";
 import React from "react";
 import { useWalletVM } from "@components/Wallet/WalletModal/WalletVM";
 import { observer } from "mobx-react-lite";
 import { useStores } from "@stores";
-import SquareTokenIcon from "@components/SquareTokenIcon";
+import InvestRow from "@src/components/InvestRow";
 
 interface IProps {}
 
@@ -13,7 +12,18 @@ const PoolsBalances: React.FC<IProps> = () => {
   return (
     <>
       {poolsStore.pools.map((pool) => {
-        return <SquareTokenIcon src={pool.logo} />;
+        // const r = vm.poolsLiquidity && vm.poolsLiquidity[pool.id];
+        // console.log(r?.toSignificant(2));
+        return (
+          <InvestRow
+            key={pool.id}
+            logo={pool.logo}
+            topLeftInfo={pool.name}
+            // topRightInfo={"123.112 DEFI-lp"}
+            // bottomLeftInfo={"$ 26.89  -1.23%"}
+            // bottomRightInfo={"$ 3,952.00"}
+          />
+        );
       })}
     </>
   );

@@ -1,4 +1,4 @@
-import React, { HTMLAttributes } from "react";
+import React from "react";
 import PerfectScrollbar, { ScrollBarProps } from "react-perfect-scrollbar";
 
 import { ScrollbarRoot } from "./styles";

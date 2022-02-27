@@ -86,7 +86,7 @@ const WalletModalHeader: React.FC<IProps> = () => {
         <SizedBox height={16} />
         <Actions>
           {action.map(({ text, icon, onClick }) => (
-            <Action onClick={onClick}>
+            <Action onClick={onClick} key={text}>
               {icon}
               <SizedBox height={6} />
               <Text size="small" type="light" fitContent>

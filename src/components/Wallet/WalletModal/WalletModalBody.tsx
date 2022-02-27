@@ -60,6 +60,7 @@ const WalletModalBody: React.FC<IProps> = () => {
       </TabsWrapper>
       <Scrollbar onScrollY={handleScroll}>
         <ListWrapper headerExpanded={vm.headerExpanded}>
+          <SizedBox height={8} />
           {activeTab === 0 && <AssetsBalances />}
           {activeTab === 1 && <PoolsBalances />}
           <SizedBox height={64} width={1} />
