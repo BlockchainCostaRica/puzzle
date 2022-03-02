@@ -62,6 +62,7 @@ class WalletVM {
         const balance = accountStore.findBalanceByAssetId(t.assetId);
         return balance ?? new Balance(t);
       })
+      .filter(({ balance }) => balance && !balance.eq(0))
       .sort((a, b) => {
         if (a.usdnEquivalent == null && b.usdnEquivalent == null) return 0;
         if (a.usdnEquivalent == null && b.usdnEquivalent != null) return 1;

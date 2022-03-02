@@ -9,6 +9,7 @@ import Tabs from "@components/Tabs";
 import AssetsBalances from "@components/Wallet/WalletModal/AssetsBalances";
 import PoolsBalances from "@components/Wallet/WalletModal/PoolsBalances";
 import NFTs from "@components/Wallet/WalletModal/NFTs";
+import useElementSize from "@src/hooks/useElementSize";
 
 interface IProps {}
 
@@ -31,6 +32,8 @@ const TabsWrapper = styled(Row)`
 
 const ListWrapper = styled.div<{ headerExpanded: boolean }>`
   width: 100%;
+  display: flex;
+  flex-direction: column;
   transition: 0.4s;
   height: ${({ headerExpanded }) =>
     headerExpanded ? "calc(100vh - 212px)" : "calc(100vh - 96px)"};
@@ -44,9 +47,11 @@ const ListWrapper = styled.div<{ headerExpanded: boolean }>`
 const WalletModalBody: React.FC<IProps> = () => {
   const vm = useWalletVM();
   const handleScroll = (container: HTMLElement) => {
+    console.log(container.scrollTop);
     vm.setHeaderExpanded(container.scrollTop === 0);
   };
-  const [activeTab, setActiveTab] = useState<number>(0);
+  const [activeTab, setActiveTab] = useState<number>(2);
+  const [squareRef] = useElementSize();
 
   return (
     <Root>
