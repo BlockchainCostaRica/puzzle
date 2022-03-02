@@ -12,6 +12,7 @@ interface IProps extends HTMLAttributes<HTMLDivElement> {
   topRightInfo?: string;
   bottomLeftInfo?: string;
   bottomRightInfo?: string;
+  withClickLogic?: boolean;
 }
 
 const Root = styled.div<{ withClickLogic?: boolean }>`
@@ -40,10 +41,11 @@ const InvestRow: React.FC<IProps> = ({
   topRightInfo,
   bottomLeftInfo,
   bottomRightInfo,
+  withClickLogic,
   ...rest
 }) => {
   return (
-    <Root {...rest}>
+    <Root withClickLogic={withClickLogic} {...rest}>
       <Row>
         {logo ? <SquareTokenIcon size="small" src={logo} /> : <DefaultIcon />}
         <SizedBox width={8} />

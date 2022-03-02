@@ -53,8 +53,6 @@ export const EXPLORER_URL_MAP: Record<TChainId, string> = {
 export const SLIPPAGE = 0.95; //if puzzle slippage = 0
 export const TRADE_FEE = 0.95;
 
-export const CASHBACK_PERCENT = 0.004;
-
 export interface IToken {
   assetId: string;
   name: string;
@@ -71,5 +69,6 @@ export interface IPoolConfig {
   defaultAssetId0: string;
   defaultAssetId1: string;
   tokens: Array<IToken & { shareAmount: number } & { claimReward?: string }>;
+  poolTokenName?: string;
   logo?: string;
 }

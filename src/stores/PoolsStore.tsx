@@ -1,6 +1,6 @@
 import { RootStore } from "./index";
-import { action, makeAutoObservable, reaction } from "mobx";
-import Pool from "@src/entities/Pool";
+import { action, makeAutoObservable, reaction, when } from "mobx";
+import Pool, { IShortPoolInfo } from "@src/entities/Pool";
 import { TPoolId } from "@src/constants";
 import BN from "@src/utils/BN";
 import statsService, {
@@ -28,6 +28,10 @@ export default class PoolsStore {
   public poolsStats: Record<string, IStatsPoolItem> | null = null;
   private setPoolStats = (value: Record<string, IStatsPoolItem>) =>
     (this.poolsStats = value);
+
+  accountPoolsLiquidity: IShortPoolInfo[] | null = null;
+  private _setAccountPoolsLiquidity = (v: IShortPoolInfo[]) =>
+    (this.accountPoolsLiquidity = v);
 
   findPoolStatsByPoolId = (poolId: string) =>
     this.poolsStats && this.poolsStats[poolId];
@@ -58,9 +62,13 @@ export default class PoolsStore {
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
-    setInterval(this.syncPoolsStats, 5000);
+    setInterval(this.syncPoolsStats, 15000);
     this.syncPools();
     reaction(() => this.rootStore.accountStore.chainId, this.syncPools);
+    when(
+      () => rootStore.accountStore.address != null,
+      () => this.getAccountPoolsLiquidityInfo()
+    );
   }
 
   syncPools = () => {
@@ -103,5 +111,15 @@ export default class PoolsStore {
         : new BN(propertyValue);
       return { ...acc, [propertyName]: value };
     }, {} as IPoolStats30Days);
+  };
+
+  getAccountPoolsLiquidityInfo = async () => {
+    const { address } = this.rootStore.accountStore;
+    if (address == null) return;
+    const poolsInfo = await Promise.all(
+      this.pools.map((p) => p.getAccountLiquidityInfo(address))
+    );
+    // const able = poolsInfo.filter(({ liquidity }) => liquidity.gt(0));
+    this._setAccountPoolsLiquidity(poolsInfo);
   };
 }

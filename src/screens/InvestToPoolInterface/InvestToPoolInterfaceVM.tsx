@@ -88,8 +88,8 @@ class InvestToPoolInterfaceVM {
       const info = await this.pool.getAccountLiquidityInfo(
         this.rootStore.accountStore.address
       );
-      this.setAccountShareOfPool(info.percent);
-      this.setAccountLiquidity(info.liquidity);
+      this.setAccountShareOfPool(info.shareOfPool);
+      this.setAccountLiquidity(info.liquidityInUsdn);
     }
   };
 

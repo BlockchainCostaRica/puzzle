@@ -19,18 +19,21 @@ const Root = styled.div`
 
 const AssetsBalances: React.FC<IProps> = () => {
   const vm = useWalletVM();
+  // const [tokenToSend, sentTokenToSent] = useState<Token | undefined>();
   return (
     <Root>
       {vm.balances.length !== 0 ? (
-        vm.balances.map((t) => {
+        vm.balances.map((b) => {
           return (
             <InvestRow
-              key={t.assetId}
-              logo={t.logo}
-              topLeftInfo={t.name}
-              topRightInfo={t.formatBalance}
-              bottomLeftInfo={t.symbol}
-              bottomRightInfo={t.formatUsdnEquivalent}
+              key={b.assetId}
+              logo={b.logo}
+              topLeftInfo={b.name}
+              topRightInfo={b.formatBalance}
+              bottomLeftInfo={b.symbol}
+              bottomRightInfo={b.formatUsdnEquivalent}
+              withClickLogic
+              onClick={() => vm.setTokenToSend(b)}
             />
           );
         })
