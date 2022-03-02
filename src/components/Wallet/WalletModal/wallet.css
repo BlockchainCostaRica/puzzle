@@ -24,7 +24,6 @@
 
 
 .wallet-dialog .rc-dialog-content {
-    /*background: #FFFFFF;*/
     border-radius: 0;
     background: #7075E9;;
     border: 0;
@@ -43,7 +42,6 @@
 
 .wallet-dialog .rc-dialog-header {
     border-bottom: 1px solid #F1F2FE;
-    /*padding: 16px 24px;*/
     padding: 0;
     max-height: 56px;
 }

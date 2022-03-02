@@ -48,14 +48,6 @@ class NFTStakingVM {
   public artworks: IArtWork[] | null = null;
   private _setArtworks = (v: IArtWork[] | null) => (this.artworks = v);
 
-  // public accountNFTs: Array<IArtWork & Partial<INFT>> | null = null;
-  // private _setAccountNFTs = (v: Array<IArtWork & Partial<INFT>> | null) =>
-  //   (this.accountNFTs = v);
-
-  // public stakedAccountNFTs: Array<IArtWork & Partial<INFT>> | null = null;
-  // private _setStakedAccountNFTs = (v: Array<IArtWork & Partial<INFT>> | null) =>
-  //   (this.stakedAccountNFTs = v);
-
   private _setClaimedReward = (v: BN) => (this.claimedReward = v);
   private _setAvailableToClaim = (v: BN) => (this.availableToClaim = v);
   private _setLastClaimDate = (v: BN) => (this.lastClaimDate = v);
