@@ -119,7 +119,6 @@ export default class PoolsStore {
     const poolsInfo = await Promise.all(
       this.pools.map((p) => p.getAccountLiquidityInfo(address))
     );
-    // const able = poolsInfo.filter(({ liquidity }) => liquidity.gt(0));
     this._setAccountPoolsLiquidity(poolsInfo);
   };
 }

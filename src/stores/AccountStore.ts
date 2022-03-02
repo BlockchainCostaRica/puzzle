@@ -109,7 +109,7 @@ class AccountStore {
       this.setAddress(initState.address);
     }
 
-    setInterval(this.updateAccountAssets, 15000);
+    setInterval(this.updateAccountAssets, 5 * 100);
   }
 
   get isBrowserSupportsWavesKeeper(): boolean {

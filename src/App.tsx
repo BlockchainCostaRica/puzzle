@@ -85,10 +85,6 @@ const App: React.FC = () => {
 
         <Route path={ROUTES.ULTRASTAKE} element={<NFTStaking />} />
 
-        {/*<Route path={ROUTES.WALLET} element={<WalletModal visible />} />*/}
-
-        {/*<Route path={ROUTES.TRANSFER} element={<SendAssetModal visible />} />*/}
-
         <Route path="*" element={<NotFound />} />
       </Routes>
       <WalletModal

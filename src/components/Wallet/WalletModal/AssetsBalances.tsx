@@ -21,7 +21,6 @@ const Root = styled.div`
 const AssetsBalances: React.FC<IProps> = () => {
   const vm = useWalletVM();
   const { accountStore } = useStores();
-  // const [tokenToSend, sentTokenToSent] = useState<Token | undefined>();
   return (
     <Root>
       {vm.balances.length !== 0 ? (

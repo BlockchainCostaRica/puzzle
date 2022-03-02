@@ -1,8 +1,10 @@
 import styled from "@emotion/styled";
 import React, { ChangeEvent, HTMLAttributes, useState } from "react";
 import Text from "@components/Text";
+import { ReactComponent as SearchIcon } from "@src/assets/icons/search.svg";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
+  icon?: string;
   value?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   suffix?: JSX.Element;
@@ -54,12 +56,14 @@ const Input: React.FC<IProps> = ({
   placeholder,
   error,
   errorText,
+  icon,
   ...rest
 }) => {
   const [focused, setFocused] = useState(false);
   return (
     <>
       <Root focused={focused} error={error} {...rest}>
+        {icon === "search" && <SearchIcon style={{ marginRight: 16 }} />}
         <input
           onChange={onChange}
           value={value}
