@@ -65,8 +65,6 @@ const LoggedInAccountInfo: React.FC<IProps> = () => {
   const { address } = accountStore;
   const avatar = address && identityImg.create(address, { size: 24 * 3 });
   const [accountOpened, setAccountOpened] = useState<boolean>(false);
-
-  // const assetBalances = [...accountStore.assetBalances];
   return (
     <Root>
       <WalletIcon

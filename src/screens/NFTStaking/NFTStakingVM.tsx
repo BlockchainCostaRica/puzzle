@@ -4,7 +4,6 @@ import { action, makeAutoObservable, when } from "mobx";
 import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import statsService, { IArtWork } from "@src/services/statsService";
-import nodeService, { INFT } from "@src/services/nodeService";
 import nodeRequest from "@src/utils/nodeRequest";
 
 const ctx = React.createContext<NFTStakingVM | null>(null);
@@ -34,10 +33,6 @@ class NFTStakingVM {
       () => rootStore.accountStore.address != null,
       this.updateAddressStakingInfo
     );
-    when(
-      () => rootStore.accountStore.address != null && this.artworks != null,
-      () => Promise.all([this.getAccountNFTs(), this.getAccountNFTsOnStaking()])
-    );
   }
 
   public nftDisplayState: number = 0;
@@ -51,67 +46,19 @@ class NFTStakingVM {
   private _setStats = (v: any) => (this.stats = v);
 
   public artworks: IArtWork[] | null = null;
-  private _setArtworks = (v: IArtWork[]) => (this.artworks = v);
+  private _setArtworks = (v: IArtWork[] | null) => (this.artworks = v);
 
-  public accountNFTs: Array<IArtWork & Partial<INFT>> | null = null;
-  private _setAccountNFTs = (v: Array<IArtWork & Partial<INFT>> | null) =>
-    (this.accountNFTs = v);
+  // public accountNFTs: Array<IArtWork & Partial<INFT>> | null = null;
+  // private _setAccountNFTs = (v: Array<IArtWork & Partial<INFT>> | null) =>
+  //   (this.accountNFTs = v);
 
-  public stakedAccountNFTs: Array<IArtWork & Partial<INFT>> | null = null;
-  private _setStakedAccountNFTs = (v: Array<IArtWork & Partial<INFT>> | null) =>
-    (this.stakedAccountNFTs = v);
+  // public stakedAccountNFTs: Array<IArtWork & Partial<INFT>> | null = null;
+  // private _setStakedAccountNFTs = (v: Array<IArtWork & Partial<INFT>> | null) =>
+  //   (this.stakedAccountNFTs = v);
 
   private _setClaimedReward = (v: BN) => (this.claimedReward = v);
   private _setAvailableToClaim = (v: BN) => (this.availableToClaim = v);
   private _setLastClaimDate = (v: BN) => (this.lastClaimDate = v);
-
-  getAccountNFTs = async () => {
-    const { address } = this.rootStore.accountStore;
-    const { artworks } = this;
-    if (address == null || artworks == null) return;
-    const nfts = await nodeService.getAddressNfts(address);
-    const supportedPuzzleNft = nfts
-      .filter(({ description }) =>
-        artworks.some(({ typeId }) => typeId && description.includes(typeId))
-      )
-      .map((nft) => ({
-        ...nft,
-        ...(artworks.find(
-          ({ typeId }) => typeId && nft.description.includes(typeId)
-        ) ?? []),
-      }));
-
-    this._setAccountNFTs(supportedPuzzleNft);
-  };
-
-  getAccountNFTsOnStaking = async () => {
-    const { contractAddress: ultra, artworks } = this;
-    const { address, chainId } = this.rootStore.accountStore;
-    if (address == null) return;
-    const match = `address_${address}_nft_(.*)`;
-
-    const allNftOnStaking = await nodeService.getAddressNfts(ultra);
-    const addressStakingNft = await nodeRequest(chainId, ultra, match);
-
-    if (addressStakingNft == null) return;
-    const stakedNftIds = addressStakingNft?.reduce<string[]>(
-      (acc, { key }) => [...acc, key.split("_")[3]],
-      []
-    );
-    if (stakedNftIds?.length === 0) {
-      this._setStakedAccountNFTs([]);
-      return;
-    }
-    const supportedPuzzleNft = allNftOnStaking
-      .filter(({ assetId }) => stakedNftIds?.some((id) => id === assetId))
-      .map((nft) => ({
-        ...nft,
-        ...(artworks?.find(
-          ({ typeId }) => typeId && nft.description.includes(typeId)
-        ) ?? []),
-      }));
-    this._setStakedAccountNFTs(supportedPuzzleNft);
-  };
 
   private updateAddressStakingInfo = async () => {
     const { chainId, address, TOKENS } = this.rootStore.accountStore;
@@ -226,11 +173,11 @@ class NFTStakingVM {
         });
       })
       .then(async () => {
-        this._setAccountNFTs(null);
-        this._setStakedAccountNFTs(null);
+        this.rootStore.nftStore.setAccountNFTs(null);
+        this.rootStore.nftStore.setStakedAccountNFTs(null);
         await Promise.all([
-          this.getAccountNFTs(),
-          this.getAccountNFTsOnStaking(),
+          this.rootStore.nftStore.getAccountNFTs(),
+          this.rootStore.nftStore.getAccountNFTsOnStaking(),
           this.updateAddressStakingInfo(),
         ]);
       })
@@ -268,11 +215,11 @@ class NFTStakingVM {
         });
       })
       .then(async () => {
-        this._setAccountNFTs(null);
-        this._setStakedAccountNFTs(null);
+        this.rootStore.nftStore.setAccountNFTs(null);
+        this.rootStore.nftStore.setStakedAccountNFTs(null);
         await Promise.all([
-          this.getAccountNFTs(),
-          this.getAccountNFTsOnStaking(),
+          this.rootStore.nftStore.getAccountNFTs(),
+          this.rootStore.nftStore.getAccountNFTsOnStaking(),
           this.updateAddressStakingInfo(),
         ]);
       })

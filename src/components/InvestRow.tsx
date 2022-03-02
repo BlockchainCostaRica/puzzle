@@ -4,6 +4,7 @@ import { Column, Row } from "@src/components/Flex";
 import SizedBox from "@components/SizedBox";
 import Text from "@components/Text";
 import SquareTokenIcon from "@components/SquareTokenIcon";
+import Skeleton from "react-loading-skeleton";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   logo?: string;
@@ -76,4 +77,18 @@ const InvestRow: React.FC<IProps> = ({
     </Root>
   );
 };
+
 export default InvestRow;
+
+export const InvestRowSkeleton = () => (
+  <Root>
+    <Row>
+      <DefaultIcon />
+      <SizedBox width={8} />
+      <Column>
+        <Skeleton height={14} width={260} />
+        <Skeleton height={14} width={260} />
+      </Column>
+    </Row>
+  </Root>
+);

@@ -23,6 +23,13 @@ interface IPoolCreationParams {
   config: IPoolConfig;
 }
 
+export interface IShortPoolInfo {
+  liquidity: BN;
+  percent: BN;
+  poolId: string;
+  indexTokenRate: BN;
+}
+
 class Pool implements IPoolConfig {
   public readonly chainId: TChainId;
   public readonly contractAddress: string;
@@ -136,11 +143,13 @@ class Pool implements IPoolConfig {
 
   @action.bound public getAccountLiquidityInfo = async (
     address: string
-  ): Promise<{ liquidity: BN; percent: BN; poolId: string }> => {
-    const [address_indexStaked, global_indexStaked] = await Promise.all([
-      this.contractRequest(`${address}_indexStaked`),
-      this.contractRequest(`global_indexStaked`),
-    ]);
+  ): Promise<IShortPoolInfo> => {
+    const [address_indexStaked, global_indexStaked, global_pool_token_amount] =
+      await Promise.all([
+        this.contractRequest(`${address}_indexStaked`),
+        this.contractRequest(`global_indexStaked`),
+        this.contractRequest(`global_poolToken_amount`),
+      ]);
 
     //poolLiquidity * ADDRESS_indexStaked / global_indexStaked
     const addressIndexStaked =
@@ -153,11 +162,19 @@ class Pool implements IPoolConfig {
         ? new BN(global_indexStaked[0].value)
         : BN.ZERO;
 
+    const globalPoolTokenAmount =
+      global_pool_token_amount && global_pool_token_amount.length >= 1
+        ? new BN(global_pool_token_amount[0].value)
+        : BN.ZERO;
+
+    const indexTokenRate = this.globalLiquidity.div(globalPoolTokenAmount);
+
     if (addressIndexStaked.eq(0)) {
       return {
         liquidity: BN.ZERO,
         percent: BN.ZERO,
         poolId: this.id,
+        indexTokenRate,
       };
     }
     const liquidity = this.globalLiquidity
@@ -169,6 +186,7 @@ class Pool implements IPoolConfig {
       liquidity: liquidity,
       percent: percent,
       poolId: this.id,
+      indexTokenRate,
     };
   };
 

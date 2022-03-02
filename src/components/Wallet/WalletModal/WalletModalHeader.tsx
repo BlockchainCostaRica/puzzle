@@ -3,7 +3,6 @@ import React from "react";
 import SizedBox from "@components/SizedBox";
 import { Column } from "@components/Flex";
 import Text from "@components/Text";
-import BN from "@src/utils/BN";
 import { useStores } from "@stores";
 import { ReactComponent as Copy } from "@src/assets/icons/copy.svg";
 import { ReactComponent as Link } from "@src/assets/icons/whiteLink.svg";
@@ -78,10 +77,7 @@ const WalletModalHeader: React.FC<IProps> = () => {
         </Text>
         <Text fitContent type="light" size="large">
           $&nbsp;
-          {/*{vm.balances*/}
-          {/*  .reduce((acc, b) => acc.plus(b.usdnEquivalent ?? "0"), BN.ZERO)*/}
-          {/*  .toFormat(2)}*/}
-          {BN.ZERO.toFormat(2)}
+          {vm.totalInvestmentAmount}
         </Text>
         <SizedBox height={16} />
         <Actions>

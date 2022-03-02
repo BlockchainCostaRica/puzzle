@@ -27,8 +27,10 @@ const Root = styled.div`
 `;
 
 const AccountNfts: React.FC<IProps> = () => {
-  const { accountStore } = useStores();
+  const { accountStore, nftStore } = useStores();
+  const { accountNFTs, stakedAccountNFTs } = nftStore;
   const vm = useNFTStakingVM();
+  console.log(accountNFTs);
   if (accountStore.address == null)
     return (
       <NoNfts
@@ -39,10 +41,10 @@ const AccountNfts: React.FC<IProps> = () => {
     );
 
   if (
-    vm.accountNFTs &&
-    vm.accountNFTs.length === 0 &&
-    vm.stakedAccountNFTs &&
-    vm.stakedAccountNFTs.length === 0
+    accountNFTs &&
+    accountNFTs.length === 0 &&
+    stakedAccountNFTs &&
+    stakedAccountNFTs.length === 0
   )
     return (
       <NoNfts
@@ -54,11 +56,9 @@ const AccountNfts: React.FC<IProps> = () => {
 
   return (
     <Root>
-      {vm.accountNFTs == null && vm.stakedAccountNFTs == null && (
-        <ArtefactSkeleton />
-      )}
-      {vm.accountNFTs &&
-        vm.accountNFTs.map((nft, index) => {
+      {accountNFTs == null && stakedAccountNFTs == null && <ArtefactSkeleton />}
+      {accountNFTs &&
+        accountNFTs.map((nft, index) => {
           const searchTerm = "Issue: ";
           const searchIndex = nft.description?.indexOf(searchTerm) ?? 0;
           const strOut = nft.description?.substr(
@@ -102,8 +102,8 @@ const AccountNfts: React.FC<IProps> = () => {
             />
           );
         })}
-      {vm.stakedAccountNFTs &&
-        vm.stakedAccountNFTs.map((nft, index) => {
+      {stakedAccountNFTs &&
+        stakedAccountNFTs.map((nft, index) => {
           const searchTerm = "Issue: ";
           const searchIndex = nft.description?.indexOf(searchTerm) ?? 0;
           const strOut = nft.description?.substr(

@@ -1,11 +1,12 @@
 import React, { useMemo } from "react";
 import { useVM } from "@src/hooks/useVM";
-import { makeAutoObservable, when } from "mobx";
+import { makeAutoObservable } from "mobx";
 import { RootStore, useStores } from "@stores";
 import copy from "copy-to-clipboard";
 import Balance from "@src/entities/Balance";
 import { LOGIN_TYPE } from "@src/stores/AccountStore";
 import centerEllipsis from "@src/utils/centerEllipsis";
+import { IShortPoolInfo } from "@src/entities/Pool";
 import BN from "@src/utils/BN";
 
 const ctx = React.createContext<WalletVM | null>(null);
@@ -24,16 +25,14 @@ class WalletVM {
   headerExpanded: boolean = true;
   setHeaderExpanded = (state: boolean) => (this.headerExpanded = state);
 
-  poolsLiquidity: any[] | null = null;
-  private _setPoolsLiquidity = (v: []) => (this.poolsLiquidity = v);
+  poolsLiquidity: IShortPoolInfo[] | null = null;
+  private _setPoolsLiquidity = (v: IShortPoolInfo[]) =>
+    (this.poolsLiquidity = v);
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
-    when(
-      () => rootStore.accountStore.address != null,
-      this.getPoolsLiquidityInfo
-    );
+    setInterval(this.getPoolsLiquidityInfo, 5000);
   }
 
   handleCopyAddress = () => {
@@ -71,35 +70,60 @@ class WalletVM {
       });
   }
 
-  get investmentBalances() {
-    return [];
+  get totalInvestmentAmount() {
+    const balancesAmount = this.balances.reduce(
+      (acc, b) => acc.plus(b.usdnEquivalent ?? 0),
+      BN.ZERO
+    );
+    const poolsAmount = this.poolsLiquidity?.reduce(
+      (acc, b) => acc.plus(b.liquidity ?? 0),
+      BN.ZERO
+    );
+    return balancesAmount.plus(poolsAmount ?? BN.ZERO).toFormat(2);
   }
 
-  // get poolsLiquidity() {
-  //   const { pools } = this.rootStore.poolsStore;
-  //   for ()
-  //   return "";
-  // }
+  get investments() {
+    const poolsData =
+      this.poolsLiquidity?.map(({ poolId, liquidity, indexTokenRate }) => {
+        const pool = this.rootStore.poolsStore.pools.find(
+          ({ id }) => poolId === id
+        );
+        const usdnEquivalent = liquidity.times(indexTokenRate);
+        return {
+          logo: pool?.logo,
+          amount: liquidity.toFormat(2) + "-lp",
+          name: pool?.name,
+          nuclearValue: "$ " + indexTokenRate.toFormat(2),
+          usdnEquivalent: "$ " + usdnEquivalent.toFormat(2),
+        };
+      }) ?? [];
+    const stakedNftData = this.stakedNfts.map(
+      ({ imageLink, floorPrice, name }) => {
+        return {
+          logo: imageLink,
+          amount: "1 NFT",
+          name,
+          nuclearValue: floorPrice?.toString(),
+          usdnEquivalent: floorPrice?.toString(),
+        };
+      }
+    );
+    return [...stakedNftData, ...poolsData];
+  }
+
+  get stakedNfts() {
+    const { nftStore } = this.rootStore;
+    return nftStore.stakedAccountNFTs ?? [];
+  }
+
   getPoolsLiquidityInfo = async () => {
-    console.log("getPoolsLiquidityInfo");
     const { pools } = this.rootStore.poolsStore;
     const { address } = this.rootStore.accountStore;
     if (address == null) return;
-    const v = await Promise.all(
+    const poolsInfo = await Promise.all(
       pools.map((p) => p.getAccountLiquidityInfo(address))
     );
-    // const value = v.reduce((acc, value) => {
-    //   console.log(value);
-    //   return [ ...acc,  ];
-    // }, []);
-    // for (let i = 0; i < pools.length; i++) {
-    //   const p = pools[i];
-    //   const poolValues = await p.getAccountLiquidityInfo(address);
-    //   if (poolValues.liquidity.gt(0)) {
-    //     values = { ...values, [p.id]: new BN(100) };
-    //   }
-    // }
-    // console.log(value);
-    this._setPoolsLiquidity([]);
+    const able = poolsInfo.filter(({ liquidity }) => liquidity.gt(0));
+    this._setPoolsLiquidity(able);
   };
 }
