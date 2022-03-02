@@ -29,11 +29,35 @@ class SendAssetVM {
   };
 
   get recipientError() {
-    return this.recipientAddress.startsWith("3P");
+    return (
+      this.recipientAddress.length > 0 &&
+      !this.recipientAddress.startsWith("3P")
+    );
+  }
+
+  get amountError() {
+    return this.amount.gt(
+      this.rootStore.accountStore.assetToSend?.balance ?? 0
+    );
   }
 
   get recipientErrorText() {
     return "Outside of Waves. Try an address starting with “3P”.";
+  }
+
+  get canTransfer() {
+    const { assetToSend } = this.rootStore.accountStore;
+    return this.amount.lt(assetToSend?.balance ?? 0) && !this.amount.eq(0);
+  }
+
+  get buttonText() {
+    const { assetToSend } = this.rootStore.accountStore;
+    if (this.amount.gt(assetToSend?.balance ?? 0))
+      return `Insufficient ${assetToSend?.symbol} balance`;
+    if (this.amount.eq(0)) return "Enter amount";
+    return `Send ${BN.formatUnits(this.amount, assetToSend?.decimals)} ${
+      assetToSend?.symbol
+    }`;
   }
 
   constructor(rootStore: RootStore) {

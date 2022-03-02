@@ -47,21 +47,19 @@ const NFTs: React.FC<IProps> = () => {
     <Root>
       <Grid>
         {accountNFTs == null &&
-          Array.from({ length: 2 }).map(() => (
-            <Skeleton height={156} width={156} />
+          Array.from({ length: 2 }).map((_, index) => (
+            <Skeleton height={156} width={156} key={index + "skeleton-row"} />
           ))}
         {accountNFTs &&
-          accountNFTs.map(({ name, imageLink }) => {
-            return (
-              <Card img={imageLink}>
-                <Tag>
-                  <Text size="small" type="light">
-                    {name}
-                  </Text>
-                </Tag>
-              </Card>
-            );
-          })}
+          accountNFTs.map(({ name, imageLink }, index) => (
+            <Card img={imageLink} key={index + "nft-card-wallet"}>
+              <Tag>
+                <Text size="small" type="light">
+                  {name}
+                </Text>
+              </Tag>
+            </Card>
+          ))}
       </Grid>
       {accountNFTs != null && accountNFTs.length === 0 && (
         <Column justifyContent="center" alignItems="center">

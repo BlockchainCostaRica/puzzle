@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Text from "@components/Text";
 import { observer } from "mobx-react-lite";
 import BN from "@src/utils/BN";
@@ -49,20 +49,20 @@ const InputContainer = styled.div<{
   }
 
   border: 1px solid
-    ${({ focused, readOnly }) => (focused && !readOnly ? "#7075E9" : "#f1f2fe")};
+    ${({ focused, readOnly, error }) =>
+      error ? "#ED827E" : focused && !readOnly ? "#7075E9" : "#f1f2fe"};
 
   :hover {
-    border-color: ${({ readOnly, focused }) =>
-      !readOnly && !focused ? "#C6C9F4" : focused ?? "#7075E9"};
+    border-color: ${({ readOnly, focused, error }) =>
+      error
+        ? "#ED827E"
+        : !readOnly && !focused
+        ? "#C6C9F4"
+        : focused ?? "#7075E9"};
   }
 `;
 const LightTokenInput: React.FC<IProps> = (props) => {
   const [focused, setFocused] = useState(false);
-  const [amount, setAmount] = useState<BN>(props.amount);
-
-  useEffect(() => {
-    props.amount && setAmount(props.amount);
-  }, [props.amount]);
 
   return (
     <Root>
@@ -81,7 +81,11 @@ const LightTokenInput: React.FC<IProps> = (props) => {
         </Text>
       </Row>
       <SizedBox height={4} />
-      <InputContainer focused={focused} readOnly={!props.setAmount}>
+      <InputContainer
+        focused={focused}
+        readOnly={!props.setAmount}
+        error={props.error}
+      >
         <BigNumberInput
           renderInput={(props, ref) => (
             <AmountInput
@@ -99,8 +103,8 @@ const LightTokenInput: React.FC<IProps> = (props) => {
           )}
           autofocus={focused}
           decimals={props.decimals}
-          value={amount}
-          onChange={(v) => setAmount(v)}
+          value={props.amount}
+          onChange={(v) => props.setAmount && props.setAmount(v)}
           placeholder="0.00"
           readOnly={!props.setAmount}
         />
