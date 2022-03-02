@@ -8,6 +8,7 @@ import SizedBox from "@components/SizedBox";
 import WalletModalHeader from "./WalletModalHeader";
 import WalletModalBody from "@components/Wallet/WalletModal/WalletModalBody";
 import { WalletVMProvider } from "@components/Wallet/WalletModal/WalletVM";
+import { observer } from "mobx-react-lite";
 
 interface IProps extends IDialogPropTypes {}
 
@@ -38,4 +39,4 @@ const WalletModal: React.FC<IProps> = ({ ...rest }) => (
     </WalletVMProvider>
   </RcDialog>
 );
-export default WalletModal;
+export default observer(WalletModal);

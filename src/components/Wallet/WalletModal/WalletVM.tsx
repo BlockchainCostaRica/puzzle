@@ -84,7 +84,6 @@ class WalletVM {
           const pool = this.rootStore.poolsStore.pools.find(
             ({ id }) => poolId === id
           );
-          console.log("liquidityInUsdn", liquidityInUsdn.toFormat(2));
           return {
             logo: pool?.logo,
             name: pool?.name,

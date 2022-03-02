@@ -17,6 +17,7 @@ import NFTStaking from "@screens/NFTStaking";
 import MultiSwapInterface from "@screens/MultiSwapInterface";
 import { TPoolId } from "@src/constants";
 import WalletModal from "@components/Wallet/WalletModal";
+import SendAssetModal from "@components/Wallet/SendAssetModal";
 
 const Root = styled(Column)`
   width: 100%;
@@ -84,11 +85,19 @@ const App: React.FC = () => {
 
         <Route path={ROUTES.ULTRASTAKE} element={<NFTStaking />} />
 
+        {/*<Route path={ROUTES.WALLET} element={<WalletModal visible />} />*/}
+
+        {/*<Route path={ROUTES.TRANSFER} element={<SendAssetModal visible />} />*/}
+
         <Route path="*" element={<NotFound />} />
       </Routes>
       <WalletModal
         onClose={() => accountStore.setWalletModalOpened(false)}
         visible={accountStore.walletModalOpened}
+      />
+      <SendAssetModal
+        onClose={() => accountStore.setSendAssetModalOpened(false)}
+        visible={accountStore.sendAssetModalOpened}
       />
     </Root>
   );

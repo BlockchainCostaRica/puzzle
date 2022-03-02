@@ -12,7 +12,7 @@ export enum MAINNET_POOL_ID {
   race = "race",
   egg = "egg",
   winter = "winter",
-//   btc = "btc",
+  //   btc = "btc",
 }
 
 export const MAINNET_ROUTES = {
@@ -21,6 +21,8 @@ export const MAINNET_ROUTES = {
   TRADE: "/trade",
   INVEST: "/invest",
   ULTRASTAKE: "/ultrastake",
+  WALLET: "/wallet",
+  TRANSFER: "/transfer",
   withdraw: {
     farms: `${MAINNET_POOL_ID.farmsPool1}/withdraw`,
     farms2: `${MAINNET_POOL_ID.farmsPool2}/withdraw`,
@@ -28,7 +30,7 @@ export const MAINNET_ROUTES = {
     defi: `${MAINNET_POOL_ID.defi}/withdraw`,
     egg: `${MAINNET_POOL_ID.egg}/withdraw`,
     winter: `${MAINNET_POOL_ID.winter}/withdraw`,
-//     btc: `${MAINNET_POOL_ID.btc}/withdraw`,
+    //     btc: `${MAINNET_POOL_ID.btc}/withdraw`,
   },
   pools: {
     farms: MAINNET_POOL_ID.farmsPool1,
@@ -38,16 +40,16 @@ export const MAINNET_ROUTES = {
     puzzle: MAINNET_POOL_ID.puzzle,
     egg: MAINNET_POOL_ID.egg,
     winter: MAINNET_POOL_ID.winter,
-//     btc: MAINNET_POOL_ID.btc,
+    //     btc: MAINNET_POOL_ID.btc,
   },
   addLiquidity: {
     farms: `${MAINNET_POOL_ID.farmsPool1}/addLiquidity`,
     farms2: `${MAINNET_POOL_ID.farmsPool2}/addLiquidity`,
     race: `${MAINNET_POOL_ID.race}/addLiquidity`,
     defi: `${MAINNET_POOL_ID.defi}/addLiquidity`,
-    egg: `${MAINNET_POOL_ID.egg}/addLiquidity`,    
+    egg: `${MAINNET_POOL_ID.egg}/addLiquidity`,
     winter: `${MAINNET_POOL_ID.winter}/addLiquidity`,
-//     btc: `${MAINNET_POOL_ID.btc}/addLiquidity`,
+    //     btc: `${MAINNET_POOL_ID.btc}/addLiquidity`,
   },
   addOneToken: {
     farms: `${MAINNET_POOL_ID.farmsPool1}/addOneToken`,
@@ -56,7 +58,7 @@ export const MAINNET_ROUTES = {
     defi: `${MAINNET_POOL_ID.defi}/addOneToken`,
     egg: `${MAINNET_POOL_ID.egg}/addOneToken`,
     winter: `${MAINNET_POOL_ID.winter}/addOneToken`,
-//     btc: `${MAINNET_POOL_ID.btc}/addOneToken`,
+    //     btc: `${MAINNET_POOL_ID.btc}/addOneToken`,
   },
   invest: {
     farms: `${MAINNET_POOL_ID.farmsPool1}/invest`,
@@ -65,28 +67,28 @@ export const MAINNET_ROUTES = {
     defi: `${MAINNET_POOL_ID.defi}/invest`,
     egg: `${MAINNET_POOL_ID.egg}/invest`,
     winter: `${MAINNET_POOL_ID.winter}/invest`,
-//     btc: `${MAINNET_POOL_ID.btc}/invest`,
+    //     btc: `${MAINNET_POOL_ID.btc}/invest`,
   },
 };
 
 export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
-//   [MAINNET_POOL_ID.btc]: {
-//     contractAddress: "3P4bSEVNM3xdmFaefX5nc9qT4fDtbwo9Dx4",
-//     layer2Address: "3PMhFeQfhAVsUB71DGN8ZdwMzRVkMGM5T3n",
-//     baseTokenId: mainnetTokens.BTC.assetId,
-//     name: "BTC",
-//     logo: tokenLogos.BTC,
-//     defaultAssetId0: mainnetTokens.BTC.assetId,
-//     defaultAssetId1: mainnetTokens.USDN.assetId,
-//     tokens: [
-//       { ...mainnetTokens.BTC, shareAmount: 0.2, logo: tokenLogos.BTC },
-//       { ...mainnetTokens.ETH, shareAmount: 0.15, logo: tokenLogos.ETH },
-//       { ...mainnetTokens.LTC, shareAmount: 0.05, logo: tokenLogos.LTC },
-//       { ...mainnetTokens.USDC, shareAmount: 0.2, logo: tokenLogos.USDC },
-//       { ...mainnetTokens.USDT, shareAmount: 0.2, logo: tokenLogos.USDT },
-//       { ...mainnetTokens.USDN, shareAmount: 0.2, logo: tokenLogos.USDN },
-//     ],
-//   },
+  //   [MAINNET_POOL_ID.btc]: {
+  //     contractAddress: "3P4bSEVNM3xdmFaefX5nc9qT4fDtbwo9Dx4",
+  //     layer2Address: "3PMhFeQfhAVsUB71DGN8ZdwMzRVkMGM5T3n",
+  //     baseTokenId: mainnetTokens.BTC.assetId,
+  //     name: "BTC",
+  //     logo: tokenLogos.BTC,
+  //     defaultAssetId0: mainnetTokens.BTC.assetId,
+  //     defaultAssetId1: mainnetTokens.USDN.assetId,
+  //     tokens: [
+  //       { ...mainnetTokens.BTC, shareAmount: 0.2, logo: tokenLogos.BTC },
+  //       { ...mainnetTokens.ETH, shareAmount: 0.15, logo: tokenLogos.ETH },
+  //       { ...mainnetTokens.LTC, shareAmount: 0.05, logo: tokenLogos.LTC },
+  //       { ...mainnetTokens.USDC, shareAmount: 0.2, logo: tokenLogos.USDC },
+  //       { ...mainnetTokens.USDT, shareAmount: 0.2, logo: tokenLogos.USDT },
+  //       { ...mainnetTokens.USDN, shareAmount: 0.2, logo: tokenLogos.USDN },
+  //     ],
+  //   },
   [MAINNET_POOL_ID.winter]: {
     contractAddress: "3PEZe3Z2FqaVbMTjWJUpnQGxhWh2JRptujM",
     layer2Address: "3PNBamg45irg9R58gMBM6UvBaUhX5bVys2r",
@@ -96,14 +98,14 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
     defaultAssetId0: mainnetTokens.EURN.assetId,
     defaultAssetId1: mainnetTokens.USDN.assetId,
     tokens: [
-      { ...mainnetTokens.USDC, shareAmount: 0.30, logo: tokenLogos.USDC },
-      { ...mainnetTokens.USDT, shareAmount: 0.10, logo: tokenLogos.USDT },
-      { ...mainnetTokens.USDN, shareAmount: 0.20, logo: tokenLogos.USDN },
+      { ...mainnetTokens.USDC, shareAmount: 0.3, logo: tokenLogos.USDC },
+      { ...mainnetTokens.USDT, shareAmount: 0.1, logo: tokenLogos.USDT },
+      { ...mainnetTokens.USDN, shareAmount: 0.2, logo: tokenLogos.USDN },
       { ...mainnetTokens.PUZZLE, shareAmount: 0.22, logo: tokenLogos.PUZZLE },
       { ...mainnetTokens.VIRES, shareAmount: 0.08, logo: tokenLogos.VIRES },
-      { ...mainnetTokens.EURN, shareAmount: 0.10, logo: tokenLogos.EURN },
+      { ...mainnetTokens.EURN, shareAmount: 0.1, logo: tokenLogos.EURN },
     ],
-  }, 
+  },
   [MAINNET_POOL_ID.defi]: {
     contractAddress: "3PDrYPF6izza2sXWffzTPF7e2Fcir2CMpki",
     layer2Address: "3PJAg4A4gPQXtSLKQNAf5VxbXV2QVM9wPei",

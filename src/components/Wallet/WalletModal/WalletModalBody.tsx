@@ -46,7 +46,6 @@ const ListWrapper = styled.div<{ headerExpanded: boolean }>`
 const WalletModalBody: React.FC<IProps> = () => {
   const vm = useWalletVM();
   const handleScroll = (container: HTMLElement) => {
-    console.log(container.scrollTop);
     vm.setHeaderExpanded(container.scrollTop === 0);
   };
   const [activeTab, setActiveTab] = useState<number>(2);

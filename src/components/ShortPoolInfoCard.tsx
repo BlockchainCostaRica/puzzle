@@ -89,7 +89,6 @@ const DepositToPool: React.FC<IProps> = ({
           kind="secondary"
           size="medium"
           onClick={() => {
-            console.log("vm.changePoolModalOpen");
             onChangePool && onChangePool();
           }}
           style={{ whiteSpace: "nowrap" }}

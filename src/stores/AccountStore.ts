@@ -59,6 +59,14 @@ class AccountStore {
   @action.bound setWalletModalOpened = (state: boolean) =>
     (this.walletModalOpened = state);
 
+  sendAssetModalOpened: boolean = false;
+  @action.bound setSendAssetModalOpened = (state: boolean) =>
+    (this.sendAssetModalOpened = state);
+
+  assetToSend: Balance | null = null;
+  @action.bound setAssetToSend = (state: Balance | null) =>
+    (this.assetToSend = state);
+
   changePoolModalOpened: boolean = false;
   @action.bound setChangePoolModalOpened = (state: boolean) =>
     (this.changePoolModalOpened = state);
