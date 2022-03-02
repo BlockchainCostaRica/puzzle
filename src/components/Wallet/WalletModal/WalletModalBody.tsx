@@ -48,7 +48,7 @@ const WalletModalBody: React.FC<IProps> = () => {
   const handleScroll = (container: HTMLElement) => {
     vm.setHeaderExpanded(container.scrollTop === 0);
   };
-  const [activeTab, setActiveTab] = useState<number>(2);
+  const [activeTab, setActiveTab] = useState<number>(0);
   return (
     <Root>
       <TabsWrapper>

@@ -17,7 +17,7 @@ const FixedBlock = styled.div`
   position: fixed;
   width: calc(100% - 48px);
   justify-content: center;
-  bottom: 0;
+  bottom: 80px;
   padding: 0 24px 24px;
   margin: 0 24px;
   @media (min-width: calc(560px)) {
@@ -60,7 +60,7 @@ const RecipientInfo: React.FC<IProps> = () => {
         <Text textAlign="right">0.005 WAVES</Text>
       </Row>
       <FixedBlock>
-        <Button fixed disabled={!vm.canTransfer}>
+        <Button fixed disabled={!vm.canTransfer} onClick={vm.sendAssets}>
           {vm.buttonText}
         </Button>
       </FixedBlock>
