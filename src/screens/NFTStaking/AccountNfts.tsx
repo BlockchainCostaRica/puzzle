@@ -30,7 +30,6 @@ const AccountNfts: React.FC<IProps> = () => {
   const { accountStore, nftStore } = useStores();
   const { accountNFTs, stakedAccountNFTs } = nftStore;
   const vm = useNFTStakingVM();
-  console.log(accountNFTs);
   if (accountStore.address == null)
     return (
       <NoNfts

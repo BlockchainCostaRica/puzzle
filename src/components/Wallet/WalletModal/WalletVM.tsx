@@ -6,7 +6,6 @@ import copy from "copy-to-clipboard";
 import Balance from "@src/entities/Balance";
 import { LOGIN_TYPE } from "@src/stores/AccountStore";
 import centerEllipsis from "@src/utils/centerEllipsis";
-import { IShortPoolInfo } from "@src/entities/Pool";
 import BN from "@src/utils/BN";
 
 const ctx = React.createContext<WalletVM | null>(null);
@@ -25,14 +24,12 @@ class WalletVM {
   headerExpanded: boolean = true;
   setHeaderExpanded = (state: boolean) => (this.headerExpanded = state);
 
-  poolsLiquidity: IShortPoolInfo[] | null = null;
-  private _setPoolsLiquidity = (v: IShortPoolInfo[]) =>
-    (this.poolsLiquidity = v);
+  tokenToSend: Balance | null = null;
+  public setTokenToSend = (v: Balance) => (this.tokenToSend = v);
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
-    setInterval(this.getPoolsLiquidityInfo, 5000);
   }
 
   handleCopyAddress = () => {
@@ -76,36 +73,33 @@ class WalletVM {
       (acc, b) => acc.plus(b.usdnEquivalent ?? 0),
       BN.ZERO
     );
-    const poolsAmount = this.poolsLiquidity?.reduce(
-      (acc, b) => acc.plus(b.liquidity ?? 0),
-      BN.ZERO
-    );
-    return balancesAmount.plus(poolsAmount ?? BN.ZERO).toFormat(2);
+    return balancesAmount.plus(BN.ZERO).toFormat(2);
   }
 
   get investments() {
     const poolsData =
-      this.poolsLiquidity?.map(({ poolId, liquidity, indexTokenRate }) => {
-        const pool = this.rootStore.poolsStore.pools.find(
-          ({ id }) => poolId === id
-        );
-        const usdnEquivalent = liquidity.times(indexTokenRate);
-        return {
-          logo: pool?.logo,
-          amount: liquidity.toFormat(2) + "-lp",
-          name: pool?.name,
-          nuclearValue: "$ " + indexTokenRate.toFormat(2),
-          usdnEquivalent: "$ " + usdnEquivalent.toFormat(2),
-        };
-      }) ?? [];
+      this.rootStore.poolsStore.accountPoolsLiquidity
+        ?.filter(({ liquidityInUsdn }) => !liquidityInUsdn.eq(0))
+        .map(({ poolId, addressStaked, indexTokenRate, liquidityInUsdn }) => {
+          const pool = this.rootStore.poolsStore.pools.find(
+            ({ id }) => poolId === id
+          );
+          return {
+            logo: pool?.logo,
+            name: pool?.name,
+            amount: addressStaked.toFormat(2) + "-lp",
+            nuclearValue: "$ " + indexTokenRate.toFormat(2),
+            usdnEquivalent: "$ " + liquidityInUsdn.toFormat(2),
+          };
+        }) ?? [];
     const stakedNftData = this.stakedNfts.map(
-      ({ imageLink, floorPrice, name }) => {
+      ({ imageLink, marketPrice, name }) => {
         return {
           logo: imageLink,
           amount: "1 NFT",
           name,
-          nuclearValue: floorPrice?.toString(),
-          usdnEquivalent: floorPrice?.toString(),
+          nuclearValue: "$ " + new BN(marketPrice ?? 0).toFormat(),
+          usdnEquivalent: "$ " + new BN(marketPrice ?? 0).toFormat(),
         };
       }
     );
@@ -116,15 +110,4 @@ class WalletVM {
     const { nftStore } = this.rootStore;
     return nftStore.stakedAccountNFTs ?? [];
   }
-
-  getPoolsLiquidityInfo = async () => {
-    const { pools } = this.rootStore.poolsStore;
-    const { address } = this.rootStore.accountStore;
-    if (address == null) return;
-    const poolsInfo = await Promise.all(
-      pools.map((p) => p.getAccountLiquidityInfo(address))
-    );
-    const able = poolsInfo.filter(({ liquidity }) => liquidity.gt(0));
-    this._setPoolsLiquidity(able);
-  };
 }

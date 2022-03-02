@@ -8,6 +8,7 @@ import Text from "@components/Text";
 import Button from "@components/Button";
 import { ReactComponent as NotFoundIcon } from "@src/assets/notFound.svg";
 import styled from "@emotion/styled";
+import { useStores } from "@stores";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -19,18 +20,24 @@ const Root = styled.div`
 
 const AssetsBalances: React.FC<IProps> = () => {
   const vm = useWalletVM();
+  const { accountStore } = useStores();
   return (
     <Root>
       {vm.balances.length !== 0 ? (
-        vm.balances.map((t) => {
+        vm.balances.map((b) => {
           return (
             <InvestRow
-              key={t.assetId}
-              logo={t.logo}
-              topLeftInfo={t.name}
-              topRightInfo={t.formatBalance}
-              bottomLeftInfo={t.symbol}
-              bottomRightInfo={t.formatUsdnEquivalent}
+              key={b.assetId}
+              logo={b.logo}
+              topLeftInfo={b.name}
+              topRightInfo={b.formatBalance}
+              bottomLeftInfo={b.symbol}
+              bottomRightInfo={b.formatUsdnEquivalent}
+              withClickLogic
+              onClick={() => {
+                accountStore.setAssetToSend(b);
+                accountStore.setSendAssetModalOpened(true);
+              }}
             />
           );
         })

@@ -18,6 +18,7 @@ export interface IStatsByPoolAndPeriodResponse extends IStatsPoolItemResponse {
 
 export interface IArtWork {
   floorPrice?: number;
+  marketPrice?: number;
   name?: string;
   imageLink?: string;
   marketLink?: string;

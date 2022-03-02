@@ -1,20 +1,28 @@
 import styled from "@emotion/styled";
 import React, { ChangeEvent, HTMLAttributes, useState } from "react";
+import Text from "@components/Text";
 import { ReactComponent as SearchIcon } from "@src/assets/icons/search.svg";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
+  icon?: string;
   value?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   suffix?: JSX.Element;
   suffixCondition?: boolean;
+  error?: boolean;
+  errorText?: string;
 }
 
-const Root = styled.div<{ focused?: boolean }>`
+const Root = styled.div<{ focused?: boolean; error?: boolean }>`
+  width: 100%;
   background: ${({ focused }) => (focused ? "#fffff" : "#f1f2fe")};
-  border: 1px solid ${({ focused }) => (focused ? "#7075E9" : "#f1f2fe")};
+  border: 1px solid
+    ${({ focused, error }) =>
+      error ? "#ED827E" : focused ? "#7075E9" : "#f1f2fe"};
 
   :hover {
-    border-color: ${({ focused }) => (!focused ? "#C6C9F4" : "#7075E9")};
+    border-color: ${({ focused, error }) =>
+      error ? "#ED827E" : !focused ? "#C6C9F4" : "#7075E9"};
   }
 
   border-radius: 12px;
@@ -40,27 +48,37 @@ const Root = styled.div<{ focused?: boolean }>`
   }
 `;
 
-const SearchInput: React.FC<IProps> = ({
+const Input: React.FC<IProps> = ({
   value,
   onChange,
   suffix,
   suffixCondition,
   placeholder,
+  error,
+  errorText,
+  icon,
   ...rest
 }) => {
   const [focused, setFocused] = useState(false);
   return (
-    <Root focused={focused} {...rest}>
-      <SearchIcon style={{ marginRight: 16 }} />
-      <input
-        onChange={onChange}
-        value={value}
-        placeholder={placeholder}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-      />
-      {suffixCondition && suffix}
-    </Root>
+    <>
+      <Root focused={focused} error={error} {...rest}>
+        {icon === "search" && <SearchIcon style={{ marginRight: 16 }} />}
+        <input
+          onChange={onChange}
+          value={value}
+          placeholder={placeholder}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+        />
+        {suffixCondition && suffix}
+      </Root>
+      {error && (
+        <Text size="small" type="error" style={{ paddingTop: 4 }}>
+          {errorText}
+        </Text>
+      )}
+    </>
   );
 };
-export default SearchInput;
+export default Input;

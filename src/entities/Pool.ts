@@ -24,9 +24,10 @@ interface IPoolCreationParams {
 }
 
 export interface IShortPoolInfo {
-  liquidity: BN;
-  percent: BN;
   poolId: string;
+  liquidityInUsdn: BN;
+  addressStaked: BN;
+  shareOfPool: BN;
   indexTokenRate: BN;
 }
 
@@ -81,7 +82,7 @@ class Pool implements IPoolConfig {
     this.chainId = params.chainId;
 
     this.syncLiquidity().then();
-    setInterval(this.syncLiquidity, 5000);
+    setInterval(this.syncLiquidity, 15000);
     makeAutoObservable(this);
   }
 
@@ -135,7 +136,6 @@ class Pool implements IPoolConfig {
     const liquidity0 = this.liquidity[assetId0];
     const liquidity1 = this.liquidity[assetId1];
     if (liquidity0 == null || liquidity1 == null) return null;
-    //(Balance Out / Weight Out) / (Balance In / Weight In)
     const topValue = BN.formatUnits(liquidity1, decimals1).div(shareAmount1);
     const bottomValue = BN.formatUnits(liquidity0, decimals0).div(shareAmount0);
     return topValue.div(bottomValue).times(coefficient);
@@ -144,47 +144,53 @@ class Pool implements IPoolConfig {
   @action.bound public getAccountLiquidityInfo = async (
     address: string
   ): Promise<IShortPoolInfo> => {
-    const [address_indexStaked, global_indexStaked, global_pool_token_amount] =
-      await Promise.all([
-        this.contractRequest(`${address}_indexStaked`),
-        this.contractRequest(`global_indexStaked`),
-        this.contractRequest(`global_poolToken_amount`),
-      ]);
+    const [globalValues, addressValues] = await Promise.all([
+      this.contractRequest(`global_(.*)`),
+      this.contractRequest(`${address}_indexStaked`),
+    ]);
+    const keysArray = {
+      addressIndexStaked: `${address}_indexStaked`,
+      globalIndexStaked: `global_indexStaked`,
+      globalPoolTokenAmount: "global_poolToken_amount",
+    };
 
-    //poolLiquidity * ADDRESS_indexStaked / global_indexStaked
-    const addressIndexStaked =
-      address_indexStaked && address_indexStaked.length >= 1
-        ? new BN(address_indexStaked[0].value)
-        : BN.ZERO;
-
-    const globalIndexStaked =
-      global_indexStaked && global_indexStaked.length >= 1
-        ? new BN(global_indexStaked[0].value)
-        : BN.ZERO;
-
-    const globalPoolTokenAmount =
-      global_pool_token_amount && global_pool_token_amount.length >= 1
-        ? new BN(global_pool_token_amount[0].value)
-        : BN.ZERO;
-
+    const parsedNodeResponse = [
+      ...(globalValues ?? []),
+      ...(addressValues ?? []),
+    ].reduce<Record<string, BN>>((acc, { key, value }) => {
+      Object.entries(keysArray).forEach(([regName, regValue]) => {
+        const regexp = new RegExp(regValue);
+        if (regexp.test(key)) {
+          acc[regName] = new BN(value);
+        }
+      });
+      return acc;
+    }, {});
+    const addressIndexStaked = parsedNodeResponse["addressIndexStaked"];
+    const globalIndexStaked = parsedNodeResponse["globalIndexStaked"];
+    const globalPoolTokenAmount = parsedNodeResponse["globalPoolTokenAmount"];
     const indexTokenRate = this.globalLiquidity.div(globalPoolTokenAmount);
 
-    if (addressIndexStaked.eq(0)) {
+    if (addressIndexStaked == null || addressIndexStaked.eq(0)) {
       return {
-        liquidity: BN.ZERO,
-        percent: BN.ZERO,
+        addressStaked: BN.ZERO,
+        liquidityInUsdn: BN.ZERO,
+        shareOfPool: BN.ZERO,
         poolId: this.id,
         indexTokenRate,
       };
     }
-    const liquidity = this.globalLiquidity
+    const liquidityInUsdn = this.globalLiquidity
       .times(addressIndexStaked)
       .div(globalIndexStaked);
-    const percent = liquidity.times(new BN(100)).div(this.globalLiquidity);
+    const percent = liquidityInUsdn
+      .times(new BN(100))
+      .div(this.globalLiquidity);
 
     return {
-      liquidity: liquidity,
-      percent: percent,
+      liquidityInUsdn,
+      addressStaked: addressIndexStaked,
+      shareOfPool: percent,
       poolId: this.id,
       indexTokenRate,
     };

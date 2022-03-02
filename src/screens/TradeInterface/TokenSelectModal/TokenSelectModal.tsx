@@ -1,6 +1,5 @@
 import React, { createRef, useState } from "react";
 import useOnClickOutside from "@src/hooks/useOnClickOutside";
-import SearchInput from "@components/SearchInput";
 import Dialog from "@components/Dialog";
 import Scrollbar from "@src/components/Scrollbar";
 import { Column } from "@src/components/Flex";
@@ -9,6 +8,7 @@ import { observer } from "mobx-react-lite";
 import Text from "@components/Text";
 import Balance from "@src/entities/Balance";
 import TokenInfo from "@screens/TradeInterface/TokenSelectModal/TokenInfo";
+import Input from "@components/Input";
 
 interface IProps {
   onClose: () => void;
@@ -67,7 +67,8 @@ const TokenSelectModal: React.FC<IProps> = ({
       onClose={onClose}
       title="Select a token"
     >
-      <SearchInput
+      <Input
+        icon="search"
         value={searchValue}
         onChange={handleSearch}
         placeholder="Search by name or ticker…"

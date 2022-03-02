@@ -25,7 +25,7 @@ export default class NftStore {
     setInterval(
       () =>
         Promise.all([this.getAccountNFTs(), this.getAccountNFTsOnStaking()]),
-      5000
+      5 * 1000
     );
   }
 

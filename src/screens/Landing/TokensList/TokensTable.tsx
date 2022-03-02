@@ -98,7 +98,7 @@ const TokensTable: React.FC<IProps> = () => {
             {} as Record<string, string>
           )
         ),
-      5000
+      15000
     );
     return () => clearInterval(interval);
   }, [balances, poolsStore]);

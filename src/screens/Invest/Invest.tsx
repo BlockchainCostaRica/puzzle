@@ -4,7 +4,6 @@ import { observer } from "mobx-react-lite";
 import Layout from "@components/Layout";
 import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
-import SearchInput from "@components/SearchInput";
 import Card from "@components/Card";
 import { AdaptiveRow } from "@components/Flex";
 import { useStores } from "@stores";
@@ -12,6 +11,7 @@ import PoolNotFound from "@screens/Invest/PoolNotFound";
 import GridTable from "@components/GridTable";
 import InvestPoolRow from "@screens/Invest/InvestPoolRow";
 import { ReactComponent as Group } from "@src/assets/icons/group.svg";
+import Input from "@components/Input";
 
 interface IProps {}
 
@@ -74,7 +74,8 @@ const Invest: React.FC<IProps> = () => {
           Select a pool to invest
         </Text>
         <SizedBox height={24} />
-        <SearchInput
+        <Input
+          icon="search"
           placeholder="Asset or pool name"
           style={{ background: "#fff", width: "100%" }}
           className="mobile"
