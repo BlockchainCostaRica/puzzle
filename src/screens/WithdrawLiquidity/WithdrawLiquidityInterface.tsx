@@ -74,7 +74,7 @@ const WithdrawLiquidityInterfaceImpl = () => {
             ) : (
               <Button
                 fixed
-                onClick={() => accountStore.setWalletModalOpened(true)}
+                onClick={() => accountStore.setLoginModalOpened(true)}
               >
                 Connect wallet to withdraw
               </Button>

@@ -3,12 +3,15 @@ import React, { HTMLAttributes } from "react";
 import { Column, Row } from "@src/components/Flex";
 import SizedBox from "@components/SizedBox";
 import Text from "@components/Text";
-import Balance from "@src/entities/Balance";
 import SquareTokenIcon from "@components/SquareTokenIcon";
+import Skeleton from "react-loading-skeleton";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
-  token: Balance;
-  withClickLogic?: boolean;
+  logo?: string;
+  topLeftInfo?: string;
+  topRightInfo?: string;
+  bottomLeftInfo?: string;
+  bottomRightInfo?: string;
 }
 
 const Root = styled.div<{ withClickLogic?: boolean }>`
@@ -18,7 +21,7 @@ const Root = styled.div<{ withClickLogic?: boolean }>`
   box-sizing: border-box;
   width: 100%;
   cursor: ${({ withClickLogic }) => (withClickLogic ? "pointer" : "default")};
-  padding: 10px 24px;
+  padding: 8px 24px;
 
   :hover {
     background: ${({ withClickLogic }) => withClickLogic && "#f1f2fe;"};
@@ -31,39 +34,36 @@ const DefaultIcon = styled.div`
   border: 1px solid #f1f2fe;
   border-radius: 8px;
 `;
-const Name = styled.div`
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 20px;
-  color: #363870;
-`;
-const Symbol = styled.div`
-  font-style: normal;
-  font-weight: normal;
-  font-size: 12px;
-  line-height: 16px;
-  color: #8082c5;
-  text-transform: uppercase;
-`;
-const TokenInfo: React.FC<IProps> = ({ token, ...rest }) => {
+const InvestRow: React.FC<IProps> = ({
+  logo,
+  topLeftInfo,
+  topRightInfo,
+  bottomLeftInfo,
+  bottomRightInfo,
+  ...rest
+}) => {
   return (
     <Root {...rest}>
       <Row>
-        {token.logo ? (
-          <SquareTokenIcon size="small" src={token.logo} />
-        ) : (
-          <DefaultIcon />
-        )}
+        {logo ? <SquareTokenIcon size="small" src={logo} /> : <DefaultIcon />}
         <SizedBox width={8} />
         <Column>
-          <Name>{token.name}</Name>
-          <Symbol>{token.symbol}</Symbol>
+          <Text weight={500} size="medium">
+            {topLeftInfo}
+          </Text>
+          <Text size="medium" type="secondary">
+            {bottomLeftInfo}
+          </Text>
         </Column>
       </Row>
       <Column alignItems="flex-end">
-        <Text style={{ whiteSpace: "nowrap" }} textAlign="right">
-          {token.formatBalance}
+        <Text
+          weight={500}
+          size="medium"
+          style={{ whiteSpace: "nowrap" }}
+          textAlign="right"
+        >
+          {topRightInfo}
         </Text>
         <Text
           style={{ whiteSpace: "nowrap" }}
@@ -71,10 +71,24 @@ const TokenInfo: React.FC<IProps> = ({ token, ...rest }) => {
           type="secondary"
           size="small"
         >
-          {token.formatUsdnEquivalent}
+          {bottomRightInfo}
         </Text>
       </Column>
     </Root>
   );
 };
-export default TokenInfo;
+
+export default InvestRow;
+
+export const InvestRowSkeleton = () => (
+  <Root>
+    <Row>
+      <DefaultIcon />
+      <SizedBox width={8} />
+      <Column>
+        <Skeleton height={14} width={260} />
+        <Skeleton height={14} width={260} />
+      </Column>
+    </Row>
+  </Root>
+);

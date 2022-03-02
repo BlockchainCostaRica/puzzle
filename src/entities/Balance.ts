@@ -36,7 +36,7 @@ class Balance implements IAssetBalance {
   }
   get formatUsdnEquivalent() {
     return this.usdnEquivalent
-      ? `~ $ ${this.usdnEquivalent?.toFormat(2)}`
+      ? `~ ${this.usdnEquivalent?.toFormat(2)} $`
       : "—";
   }
 

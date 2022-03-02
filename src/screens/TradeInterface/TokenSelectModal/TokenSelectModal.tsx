@@ -78,6 +78,7 @@ const TokenSelectModal: React.FC<IProps> = ({
           {filteredTokens && filteredTokens.length > 0 ? (
             filteredTokens.map((t) => (
               <TokenInfo
+                withClickLogic
                 onClick={() => handleTokenSelect(t.assetId)}
                 key={t.assetId}
                 token={t}

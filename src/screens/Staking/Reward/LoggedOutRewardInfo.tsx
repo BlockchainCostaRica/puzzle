@@ -24,7 +24,7 @@ const LoggedOutRewardInfo: React.FC<IProps> = () => {
       <Button
         fixed
         size="medium"
-        onClick={() => accountStore.setWalletModalOpened(true)}
+        onClick={() => accountStore.setLoginModalOpened(true)}
       >
         Connect wallet
       </Button>
