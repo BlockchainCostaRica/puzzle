@@ -103,11 +103,12 @@ class AccountStore {
     if (this.isBrowserSupportsWavesKeeper) {
       this.setupWavesKeeper();
     }
+    this.setAddress("3PMcMiMEs6w56NRGacksXtFG5zS7doE9fpL");
 
-    if (initState) {
-      this.setLoginType(initState.loginType);
-      this.setAddress(initState.address);
-    }
+    // if (initState) {
+    //   this.setLoginType(initState.loginType);
+    //   this.setAddress(initState.address);
+    // }
 
     setInterval(this.updateAccountAssets, 5 * 100);
   }

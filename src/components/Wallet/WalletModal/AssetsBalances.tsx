@@ -25,14 +25,14 @@ const AssetsBalances: React.FC<IProps> = () => {
     <Root>
       {vm.balances.length !== 0 ? (
         vm.balances.map((b) => {
-          const rate = poolsStore.usdnRate(b.assetId);
+          const rate = poolsStore.usdnRate(b.assetId)?.toFormat(2);
           return (
             <InvestRow
               key={b.assetId}
               logo={b.logo}
               topLeftInfo={b.name}
               topRightInfo={b.formatBalance}
-              bottomLeftInfo={"$ " + rate?.toFormat(2)}
+              bottomLeftInfo={rate && "$ " + rate}
               bottomRightInfo={b.formatUsdnEquivalent}
               withClickLogic
               onClick={() => {

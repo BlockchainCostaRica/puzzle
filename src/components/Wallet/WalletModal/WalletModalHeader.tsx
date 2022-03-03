@@ -61,7 +61,8 @@ const WalletModalHeader: React.FC<IProps> = () => {
     {
       icon: <Link className="img" />,
       text: "View on Explorer",
-      onClick: () => window.open(`${EXPLORER_LINK}/${address}`, "_blank"),
+      onClick: () =>
+        window.open(`${EXPLORER_LINK}/address/${address}`, "_blank"),
     },
     {
       icon: <Disconnect className="img" />,
