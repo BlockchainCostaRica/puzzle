@@ -153,7 +153,8 @@ class Pool implements IPoolConfig {
       ]);
 
     const staticPoolDomain =
-      staticPoolDomainValue && staticPoolDomainValue[0].value;
+      staticPoolDomainValue?.length === 1 ? staticPoolDomainValue[0].value : "";
+
     const keysArray = {
       addressIndexStaked: `${address}_indexStaked`,
       globalIndexStaked: `global_indexStaked`,
@@ -172,7 +173,6 @@ class Pool implements IPoolConfig {
       });
       return acc;
     }, {});
-    console.log(parsedNodeResponse);
     const addressIndexStaked = parsedNodeResponse["addressIndexStaked"];
     const globalIndexStaked = parsedNodeResponse["globalIndexStaked"];
     const globalPoolTokenAmount = parsedNodeResponse["globalPoolTokenAmount"];
@@ -203,7 +203,7 @@ class Pool implements IPoolConfig {
       shareOfPool: percent,
       poolId: this.id,
       indexTokenRate,
-      indexTokenName: "PZ" + staticPoolDomain,
+      indexTokenName: " PZ " + staticPoolDomain,
     };
   };
 
