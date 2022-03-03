@@ -40,7 +40,7 @@ const Tag = styled.div`
   left: 8px;
 `;
 const NFTs: React.FC<IProps> = () => {
-  const { nftStore, accountStore } = useStores();
+  const { nftStore } = useStores();
   const { accountNFTs } = nftStore;
 
   return (

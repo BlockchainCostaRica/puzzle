@@ -9,7 +9,6 @@ import Text from "@components/Text";
 import Button from "@components/Button";
 import { Column } from "@components/Flex";
 import { useStores } from "@stores";
-import { Link } from "react-router-dom";
 
 interface IProps {}
 
