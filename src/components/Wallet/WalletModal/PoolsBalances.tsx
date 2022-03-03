@@ -8,16 +8,19 @@ import { ReactComponent as NotFoundIcon } from "@src/assets/notFound.svg";
 import Text from "@components/Text";
 import Button from "@components/Button";
 import { Column } from "@components/Flex";
+import { useStores } from "@stores";
+import { Link } from "react-router-dom";
 
 interface IProps {}
 
 const Root = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 360px;
+  min-height: 400px;
 `;
 
 const PoolsBalances: React.FC<IProps> = () => {
+  const { accountStore } = useStores();
   const vm = useWalletVM();
   const { stakedNfts, investments } = vm;
   return (
@@ -43,9 +46,11 @@ const PoolsBalances: React.FC<IProps> = () => {
             get rewards, or stake puzzle on the Stake page.
           </Text>
           <SizedBox height={16} />
-          <Button size="medium" kind="secondary">
-            Go to Invest
-          </Button>
+          <Link to={accountStore.ROUTES.INVEST}>
+            <Button size="medium" kind="secondary">
+              Go to Invest
+            </Button>
+          </Link>
           <SizedBox height={100} />
         </Column>
       )}

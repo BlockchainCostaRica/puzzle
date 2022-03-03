@@ -17,12 +17,10 @@ const FixedBlock = styled.div`
   position: fixed;
   width: calc(100% - 48px);
   justify-content: center;
-  bottom: 80px;
-  padding: 0 24px 24px;
-  margin: 0 24px;
+  bottom: 24px;
   @media (min-width: calc(560px)) {
     width: 320px;
-    bottom: 72px;
+    bottom: 125px;
   }
 `;
 
@@ -51,7 +49,7 @@ const RecipientInfo: React.FC<IProps> = () => {
         amount={vm.amount}
         setAmount={vm.setAmount}
         onMaxClick={vm.onMaxClick}
-        usdnEquivalent={assetToSend?.usdnEquivalent?.toFormat(2)}
+        usdnEquivalent={"$ " + assetToSend?.usdnEquivalent?.toFormat(2)}
         error={vm.amountError}
       />
       <SizedBox height={16} />

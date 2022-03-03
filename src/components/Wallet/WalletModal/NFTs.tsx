@@ -14,7 +14,7 @@ interface IProps {}
 const Root = styled.div`
   display: flex;
   justify-content: center;
-  min-height: 360px;
+  min-height: 400px;
 `;
 const Grid = styled.div`
   display: grid;
