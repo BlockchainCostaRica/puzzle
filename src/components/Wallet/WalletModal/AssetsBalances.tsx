@@ -15,7 +15,7 @@ interface IProps extends HTMLAttributes<HTMLDivElement> {}
 const Root = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 360px;
+  min-height: 400px;
 `;
 
 const AssetsBalances: React.FC<IProps> = () => {

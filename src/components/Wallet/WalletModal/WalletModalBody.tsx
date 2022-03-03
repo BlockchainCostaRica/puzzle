@@ -39,7 +39,7 @@ const ListWrapper = styled.div<{ headerExpanded: boolean }>`
 
   @media (min-width: 560px) {
     height: ${({ headerExpanded }) =>
-      headerExpanded ? "calc(520px - 212px)" : "calc(520px - 96px)"};
+      headerExpanded ? "calc(560px - 212px)" : "calc(560px - 96px)"};
   }
 `;
 

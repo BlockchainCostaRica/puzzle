@@ -52,7 +52,7 @@ class SendAssetVM {
   get canTransfer() {
     const { assetToSend } = this.rootStore.accountStore;
     return (
-      this.amount.lt(assetToSend?.balance ?? 0) &&
+      this.amount.lte(assetToSend?.balance ?? 0) &&
       !this.amount.eq(0) &&
       !this.loading
     );
