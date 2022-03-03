@@ -30,6 +30,9 @@ import ltcLogo from "@src/assets/tokens/ltc.svg";
 import ethLogo from "@src/assets/tokens/ethereum.svg";
 import usdcLogo from "@src/assets/tokens/usdc.svg";
 import eurn from "@src/assets/tokens/eurn.svg";
+import wxLogo from "@src/assets/tokens/WX.svg";
+import westLogo from "@src/assets/tokens/WEST.svg";
+import wctLogo from "@src/assets/tokens/WCT.svg";
 
 const tokenLogos: Record<string, string> = {
   DUXPLORER: duxplorerLogo,
@@ -63,6 +66,9 @@ const tokenLogos: Record<string, string> = {
   LTC: ltcLogo,
   USDC: usdcLogo,
   EURN: eurn,
+  WX: wxLogo,
+  WEST: westLogo,
+  WCT: wctLogo,
   UNKNOWN: unknownLogo,
 };
 
