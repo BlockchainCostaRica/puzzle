@@ -5,12 +5,11 @@ body {
     -moz-osx-font-smoothing: grayscale;
     background: #fff;
 }
+
 body.noscroll {
     overflow-y: hidden;
 }
-iframe{
- display: none !important;
-}
+
 a {
     text-decoration: none;
 }
