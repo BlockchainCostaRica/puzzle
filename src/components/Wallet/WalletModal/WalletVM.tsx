@@ -85,7 +85,7 @@ class WalletVM {
             ({ id }) => poolId === id
           );
           const amount = BN.formatUnits(addressStaked, 8);
-          const nuclearValue = BN.formatUnits(indexTokenRate, 8);
+          const nuclearValue = BN.parseUnits(indexTokenRate, 8);
           console.log(indexTokenRate.toFormat());
           return {
             logo: pool?.logo,
@@ -93,11 +93,7 @@ class WalletVM {
             amount:
               (amount.gte(0.0001) ? amount.toFormat(4) : amount.toFormat(8)) +
               "-lp",
-            nuclearValue:
-              "$ " +
-              (nuclearValue.gte(0.0001)
-                ? nuclearValue.toFormat(4)
-                : nuclearValue.toFormat(10)),
+            nuclearValue: "$ " + nuclearValue.toFormat(0),
             usdnEquivalent: "$ " + liquidityInUsdn.toFormat(2),
           };
         }) ?? [];
