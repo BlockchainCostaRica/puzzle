@@ -101,7 +101,7 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
     layer2Address: "3PFF8UuNfvAGk6KvgyeD4HfZ4TRmHgtgt5W",
     baseTokenId: mainnetTokens.WX.assetId,
     name: "WWW Pool 🔥",
-    logo: tokenLogos.USDC,
+    logo: tokenLogos.WX,
     defaultAssetId0: mainnetTokens.WX.assetId,
     defaultAssetId1: mainnetTokens.USDN.assetId,
     tokens: [
