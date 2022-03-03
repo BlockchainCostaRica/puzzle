@@ -60,6 +60,7 @@ class SendAssetVM {
 
   get buttonText() {
     const { assetToSend } = this.rootStore.accountStore;
+    if (this.recipientAddress.length === 0) return "Enter address";
     if (this.loading) return "In progress...";
     if (this.amount.gt(assetToSend?.balance ?? 0))
       return `Insufficient ${assetToSend?.symbol} balance`;

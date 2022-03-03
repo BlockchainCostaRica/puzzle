@@ -7,7 +7,7 @@ import Skeleton from "react-loading-skeleton";
 import Button from "@components/Button";
 import SizedBox from "@components/SizedBox";
 import { Column } from "@src/components/Flex";
-import pics from "@src/assets/icons/picsUnion.svg";
+import { ReactComponent as Pics } from "@src/assets/icons/picsUnion.svg";
 
 interface IProps {}
 
@@ -64,18 +64,16 @@ const NFTs: React.FC<IProps> = () => {
       {accountNFTs != null && accountNFTs.length === 0 && (
         <Column justifyContent="center" alignItems="center">
           <SizedBox height={16} />
-          <img src={pics} style={{ width: 120, height: 120 }} alt="no-nft" />
+          <Pics />
           <Text type="secondary" size="medium" textAlign="center">
             You don’t have any NFTs yet.
             <br />
             Explore Puzzle Market to buy one!
           </Text>
           <SizedBox height={16} />
-          <a href={accountStore.ROUTES.ULTRASTAKE}>
-            <Button size="medium" kind="secondary">
-              Go to Puzzle Market
-            </Button>
-          </a>
+          <Button size="medium" kind="secondary">
+            Coming soon...
+          </Button>
           <SizedBox height={100} />
         </Column>
       )}

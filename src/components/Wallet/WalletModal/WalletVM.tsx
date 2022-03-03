@@ -80,27 +80,33 @@ class WalletVM {
     const poolsData =
       this.rootStore.poolsStore.accountPoolsLiquidity
         ?.filter(({ liquidityInUsdn }) => !liquidityInUsdn.eq(0))
-        .map(({ poolId, addressStaked, indexTokenRate, liquidityInUsdn }) => {
-          const pool = this.rootStore.poolsStore.pools.find(
-            ({ id }) => poolId === id
-          );
-          const amount = BN.formatUnits(addressStaked, 8);
-          const nuclearValue = BN.formatUnits(indexTokenRate, 8);
-          console.log(indexTokenRate.toFormat());
-          return {
-            logo: pool?.logo,
-            name: pool?.name,
-            amount:
-              (amount.gte(0.0001) ? amount.toFormat(4) : amount.toFormat(8)) +
-              "-lp",
-            nuclearValue:
-              "$ " +
-              (nuclearValue.gte(0.0001)
-                ? nuclearValue.toFormat(4)
-                : nuclearValue.toFormat(10)),
-            usdnEquivalent: "$ " + liquidityInUsdn.toFormat(2),
-          };
-        }) ?? [];
+        .map(
+          ({
+            poolId,
+            addressStaked,
+            indexTokenRate,
+            liquidityInUsdn,
+            indexTokenName,
+          }) => {
+            const pool = this.rootStore.poolsStore.pools.find(
+              ({ id }) => poolId === id
+            );
+            const amount = BN.formatUnits(addressStaked, 8);
+            return {
+              logo: pool?.logo,
+              name: pool?.name,
+              amount:
+                (amount.gte(0.0001) ? amount.toFormat(4) : amount.toFormat(8)) +
+                indexTokenName,
+              nuclearValue:
+                "$ " +
+                (indexTokenRate.gte(0.0001)
+                  ? indexTokenRate.toFormat(4)
+                  : indexTokenRate.toFormat(10)),
+              usdnEquivalent: "$ " + liquidityInUsdn.toFormat(2),
+            };
+          }
+        ) ?? [];
     const stakedNftData = this.stakedNfts.map(
       ({ imageLink, marketPrice, name }) => {
         return {

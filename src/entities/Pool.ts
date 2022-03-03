@@ -29,6 +29,7 @@ export interface IShortPoolInfo {
   addressStaked: BN;
   shareOfPool: BN;
   indexTokenRate: BN;
+  indexTokenName: string;
 }
 
 class Pool implements IPoolConfig {
@@ -144,10 +145,15 @@ class Pool implements IPoolConfig {
   @action.bound public getAccountLiquidityInfo = async (
     address: string
   ): Promise<IShortPoolInfo> => {
-    const [globalValues, addressValues] = await Promise.all([
-      this.contractRequest(`global_(.*)`),
-      this.contractRequest(`${address}_indexStaked`),
-    ]);
+    const [globalValues, addressValues, staticPoolDomainValue] =
+      await Promise.all([
+        this.contractRequest(`global_(.*)`),
+        this.contractRequest(`${address}_indexStaked`),
+        this.contractRequest(`static_poolDomain`),
+      ]);
+
+    const staticPoolDomain =
+      staticPoolDomainValue && staticPoolDomainValue[0].value;
     const keysArray = {
       addressIndexStaked: `${address}_indexStaked`,
       globalIndexStaked: `global_indexStaked`,
@@ -166,10 +172,13 @@ class Pool implements IPoolConfig {
       });
       return acc;
     }, {});
+    console.log(parsedNodeResponse);
     const addressIndexStaked = parsedNodeResponse["addressIndexStaked"];
     const globalIndexStaked = parsedNodeResponse["globalIndexStaked"];
     const globalPoolTokenAmount = parsedNodeResponse["globalPoolTokenAmount"];
-    const indexTokenRate = this.globalLiquidity.div(globalPoolTokenAmount);
+    const indexTokenRate = this.globalLiquidity.div(
+      BN.formatUnits(globalPoolTokenAmount, 8)
+    );
 
     if (addressIndexStaked == null || addressIndexStaked.eq(0)) {
       return {
@@ -178,6 +187,7 @@ class Pool implements IPoolConfig {
         shareOfPool: BN.ZERO,
         poolId: this.id,
         indexTokenRate,
+        indexTokenName: "PZ" + staticPoolDomain,
       };
     }
     const liquidityInUsdn = this.globalLiquidity
@@ -193,6 +203,7 @@ class Pool implements IPoolConfig {
       shareOfPool: percent,
       poolId: this.id,
       indexTokenRate,
+      indexTokenName: "PZ" + staticPoolDomain,
     };
   };
 

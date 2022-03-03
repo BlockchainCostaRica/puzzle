@@ -19,7 +19,7 @@ const Root = styled.div`
   min-height: 400px;
 `;
 
-const PoolsBalances: React.FC<IProps> = () => {
+const Investments: React.FC<IProps> = () => {
   const { accountStore } = useStores();
   const vm = useWalletVM();
   const { stakedNfts, investments } = vm;
@@ -41,20 +41,29 @@ const PoolsBalances: React.FC<IProps> = () => {
         <Column justifyContent="center" alignItems="center" crossAxisSize="max">
           <SizedBox height={16} />
           <NotFoundIcon />
-          <Text type="secondary" size="medium" textAlign="center">
-            You didn’t invest yet. Go to Invest page to provide liquidity and
-            get rewards, or stake puzzle on the Stake page.
+          <Text
+            type="secondary"
+            size="medium"
+            textAlign="center"
+            style={{ whiteSpace: "pre-wrap" }}
+          >
+            {`You didn’t invest yet.Go to Invest page\nto provide liquidity and get rewards,\n or stake puzzle on the Stake page.`}
           </Text>
           <SizedBox height={16} />
-          <Link to={accountStore.ROUTES.INVEST}>
-            <Button size="medium" kind="secondary">
-              Go to Invest
-            </Button>
-          </Link>
+          <Button
+            size="medium"
+            kind="secondary"
+            onClick={() => {
+              window.open(accountStore.ROUTES.INVEST);
+              accountStore.setWalletModalOpened(false);
+            }}
+          >
+            Go to Invest
+          </Button>
           <SizedBox height={100} />
         </Column>
       )}
     </Root>
   );
 };
-export default observer(PoolsBalances);
+export default observer(Investments);

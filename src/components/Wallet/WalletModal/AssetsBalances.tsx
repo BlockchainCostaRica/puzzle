@@ -20,18 +20,19 @@ const Root = styled.div`
 
 const AssetsBalances: React.FC<IProps> = () => {
   const vm = useWalletVM();
-  const { accountStore } = useStores();
+  const { accountStore, poolsStore } = useStores();
   return (
     <Root>
       {vm.balances.length !== 0 ? (
         vm.balances.map((b) => {
+          const rate = poolsStore.usdnRate(b.assetId);
           return (
             <InvestRow
               key={b.assetId}
               logo={b.logo}
               topLeftInfo={b.name}
               topRightInfo={b.formatBalance}
-              bottomLeftInfo={b.symbol}
+              bottomLeftInfo={"$ " + rate?.toFormat(2)}
               bottomRightInfo={b.formatUsdnEquivalent}
               withClickLogic
               onClick={() => {

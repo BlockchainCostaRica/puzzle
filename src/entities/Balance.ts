@@ -32,19 +32,20 @@ class Balance implements IAssetBalance {
   }
 
   get formatBalance() {
-    return BN.formatUnits(this.balance ?? 0, this.decimals).toFormat(2) ?? "—";
-  }
-  get formatUsdnEquivalent() {
-    return this.usdnEquivalent
-      ? `~ ${this.usdnEquivalent?.toFormat(2)} $`
-      : "—";
+    if (this.balance == null) return "—";
+    const value = BN.formatUnits(this.balance ?? 0, this.decimals);
+    return value.gt(0.01) ? value.toFormat(2) : value.toFormat(6);
   }
 
-  // gt = (b: Balance) => {
-  //   if (this.usdnEquivalent == null && b.usdnEquivalent == null) return 0;
-  //   if (this.usdnEquivalent == null && b.usdnEquivalent != null) return 1;
-  //   if (this.usdnEquivalent == null && b.usdnEquivalent == null) return -1;
-  //   return this.usdnEquivalent!.lt(b.usdnEquivalent!) ? 1 : -1;
-  // };
+  get formatUsdnEquivalent() {
+    if (this.usdnEquivalent == null) {
+      return "—";
+    }
+    const v = this.usdnEquivalent.gt(0.01)
+      ? this.usdnEquivalent.toFormat(2)
+      : this.usdnEquivalent.toFormat(6);
+    return `~ ${v} $`;
+  }
 }
+
 export default Balance;
