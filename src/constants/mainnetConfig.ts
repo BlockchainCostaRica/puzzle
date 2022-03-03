@@ -12,6 +12,7 @@ export enum MAINNET_POOL_ID {
   race = "race",
   egg = "egg",
   winter = "winter",
+  www = "www",
   //   btc = "btc",
 }
 
@@ -30,6 +31,7 @@ export const MAINNET_ROUTES = {
     defi: `${MAINNET_POOL_ID.defi}/withdraw`,
     egg: `${MAINNET_POOL_ID.egg}/withdraw`,
     winter: `${MAINNET_POOL_ID.winter}/withdraw`,
+    www: `${MAINNET_POOL_ID.www}/withdraw`,
     //     btc: `${MAINNET_POOL_ID.btc}/withdraw`,
   },
   pools: {
@@ -40,6 +42,8 @@ export const MAINNET_ROUTES = {
     puzzle: MAINNET_POOL_ID.puzzle,
     egg: MAINNET_POOL_ID.egg,
     winter: MAINNET_POOL_ID.winter,
+    
+    www: MAINNET_POOL_ID.www,
     //     btc: MAINNET_POOL_ID.btc,
   },
   addLiquidity: {
@@ -49,6 +53,7 @@ export const MAINNET_ROUTES = {
     defi: `${MAINNET_POOL_ID.defi}/addLiquidity`,
     egg: `${MAINNET_POOL_ID.egg}/addLiquidity`,
     winter: `${MAINNET_POOL_ID.winter}/addLiquidity`,
+    www: `${MAINNET_POOL_ID.www}/addLiquidity`,
     //     btc: `${MAINNET_POOL_ID.btc}/addLiquidity`,
   },
   addOneToken: {
@@ -58,6 +63,7 @@ export const MAINNET_ROUTES = {
     defi: `${MAINNET_POOL_ID.defi}/addOneToken`,
     egg: `${MAINNET_POOL_ID.egg}/addOneToken`,
     winter: `${MAINNET_POOL_ID.winter}/addOneToken`,
+    www: `${MAINNET_POOL_ID.www}/addOneToken`,
     //     btc: `${MAINNET_POOL_ID.btc}/addOneToken`,
   },
   invest: {
@@ -67,6 +73,7 @@ export const MAINNET_ROUTES = {
     defi: `${MAINNET_POOL_ID.defi}/invest`,
     egg: `${MAINNET_POOL_ID.egg}/invest`,
     winter: `${MAINNET_POOL_ID.winter}/invest`,
+    www: `${MAINNET_POOL_ID.www}/invest`,
     //     btc: `${MAINNET_POOL_ID.btc}/invest`,
   },
 };
@@ -89,6 +96,21 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
   //       { ...mainnetTokens.USDN, shareAmount: 0.2, logo: tokenLogos.USDN },
   //     ],
   //   },
+  [MAINNET_POOL_ID.www]: {
+    contractAddress: "3PAviuHPCX8fD7M5fGpFTQZb4HchWCJb3ct",
+    layer2Address: "3PFF8UuNfvAGk6KvgyeD4HfZ4TRmHgtgt5W",
+    baseTokenId: mainnetTokens.WX.assetId,
+    name: "WWW Pool 🔥",
+    logo: tokenLogos.USDC,
+    defaultAssetId0: mainnetTokens.WX.assetId,
+    defaultAssetId1: mainnetTokens.USDN.assetId,
+    tokens: [
+      { ...mainnetTokens.WX, shareAmount: 0.6, logo: tokenLogos.WX },
+      { ...mainnetTokens.WCT, shareAmount: 0.1, logo: tokenLogos.WCT },
+      { ...mainnetTokens.WEST, shareAmount: 0.1, logo: tokenLogos.WEST },
+      { ...mainnetTokens.USDN, shareAmount: 0.2, logo: tokenLogos.USDN },
+    ],
+  },
   [MAINNET_POOL_ID.winter]: {
     contractAddress: "3PEZe3Z2FqaVbMTjWJUpnQGxhWh2JRptujM",
     layer2Address: "3PNBamg45irg9R58gMBM6UvBaUhX5bVys2r",
