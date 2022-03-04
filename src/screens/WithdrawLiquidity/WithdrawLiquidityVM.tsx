@@ -177,18 +177,19 @@ class WithdrawLiquidityVM {
         },
       })
       .then((txId) => {
-        notificationStore.notify(
-          `Liquidity is successfully withdrawn from the ${this.pool?.name}.`,
-          {
-            type: "success",
-            title: "Successfully withdrawn",
-            link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
-            linkTitle: "View on Explorer",
-          }
-        );
+        txId &&
+          notificationStore.notify(
+            `Liquidity is successfully withdrawn from the ${this.pool?.name}.`,
+            {
+              type: "success",
+              title: "Successfully withdrawn",
+              link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
+              linkTitle: "View on Explorer",
+            }
+          );
       })
       .catch((e) => {
-        notificationStore.notify(e.message ?? e.toString(), {
+        notificationStore.notify(e.message ?? JSON.stringify(e), {
           type: "error",
           title: "Transaction is not completed",
         });

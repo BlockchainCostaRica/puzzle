@@ -27,6 +27,11 @@ class SendAssetVM {
   loading: boolean = false;
   private _setLoading = (l: boolean) => (this.loading = l);
 
+  constructor(rootStore: RootStore) {
+    this.rootStore = rootStore;
+    makeAutoObservable(this);
+  }
+
   @action.bound onMaxClick = () => {
     const { assetToSend } = this.rootStore.accountStore;
     this.setAmount(assetToSend!.balance ?? BN.ZERO);
@@ -103,8 +108,7 @@ class SendAssetVM {
           );
       })
       .catch((e) => {
-        console.log(e.message);
-        notificationStore.notify(e.message ?? e.toString(), {
+        notificationStore.notify(e.message ?? JSON.stringify(e), {
           type: "error",
           title: "Transaction is not completed",
         });
@@ -115,9 +119,4 @@ class SendAssetVM {
         this._setLoading(false);
       });
   };
-
-  constructor(rootStore: RootStore) {
-    this.rootStore = rootStore;
-    makeAutoObservable(this);
-  }
 }

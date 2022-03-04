@@ -77,22 +77,23 @@ class WalletVM {
   }
 
   get investments() {
+    const { poolsStore, stakeStore, accountStore } = this.rootStore;
     const poolsData =
-      this.rootStore.poolsStore.accountPoolsLiquidity
+      poolsStore.accountPoolsLiquidity
         ?.filter(({ liquidityInUsdn }) => !liquidityInUsdn.eq(0))
         .map(
           ({
-            poolId,
+            pool,
             addressStaked,
             indexTokenRate,
             liquidityInUsdn,
             indexTokenName,
           }) => {
-            const pool = this.rootStore.poolsStore.pools.find(
-              ({ id }) => poolId === id
-            );
             const amount = BN.formatUnits(addressStaked, 8);
+            // @ts-ignore
+            const path = accountStore.ROUTES.invest[pool.id];
             return {
+              onClickPath: path,
               logo: pool?.logo,
               name: pool?.name,
               amount:
@@ -115,6 +116,7 @@ class WalletVM {
             : "$ " + new BN(marketPrice ?? 0).toFormat();
 
         return {
+          onClickPath: accountStore.ROUTES.ULTRASTAKE,
           logo: imageLink,
           amount: "1 NFT",
           name,
@@ -123,7 +125,8 @@ class WalletVM {
         };
       }
     );
-    return [...stakedNftData, ...poolsData];
+    const stakedPuzzle = stakeStore.puzzleWallet;
+    return [...stakedNftData, ...poolsData, ...stakedPuzzle];
   }
 
   get stakedNfts() {

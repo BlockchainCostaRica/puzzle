@@ -129,7 +129,7 @@ class NFTStakingVM {
           })
       )
       .catch((e) => {
-        notificationStore.notify(e.message ?? e.toString(), {
+        notificationStore.notify(e.message ?? JSON.stringify(e), {
           type: "error",
           title: "Transaction is not completed",
         });
@@ -159,7 +159,7 @@ class NFTStakingVM {
           })
       )
       .catch((e) => {
-        notificationStore.notify(e.message ?? e.toString(), {
+        notificationStore.notify(e.message ?? JSON.stringify(e), {
           type: "error",
           title: "Transaction is not completed",
         });
@@ -201,7 +201,7 @@ class NFTStakingVM {
           })
       )
       .catch((e) => {
-        notificationStore.notify(e.message ?? e.toString(), {
+        notificationStore.notify(e.message ?? JSON.stringify(e), {
           type: "error",
           title: "Transaction is not completed",
         });

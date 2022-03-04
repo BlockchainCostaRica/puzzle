@@ -14,7 +14,7 @@ import {
   ROUTES,
   TOKENS,
 } from "@src/constants";
-import { action, autorun, makeAutoObservable } from "mobx";
+import { action, autorun, makeAutoObservable, reaction } from "mobx";
 import Balance from "@src/entities/Balance";
 import axios from "axios";
 import { getCurrentBrowser } from "@src/utils/getCurrentBrowser";
@@ -108,7 +108,11 @@ class AccountStore {
       this.setAddress(initState.address);
     }
 
-    setInterval(this.updateAccountAssets, 5 * 100);
+    setInterval(this.updateAccountAssets, 5 * 1000);
+    reaction(
+      () => this.rootStore.accountStore?.address,
+      this.updateAccountAssets
+    );
   }
 
   get isBrowserSupportsWavesKeeper(): boolean {
@@ -299,27 +303,18 @@ class AccountStore {
       });
       return null;
     }
-    try {
-      const ttx = this.signer.invoke({
-        dApp: txParams.dApp,
-        fee: 500000,
-        payment: txParams.payment,
-        call: txParams.call,
-      });
+    const ttx = this.signer.invoke({
+      dApp: txParams.dApp,
+      fee: 500000,
+      payment: txParams.payment,
+      call: txParams.call,
+    });
 
-      const txId = await ttx.broadcast().then((tx: any) => tx.id);
-      await waitForTx(txId, {
-        apiBase: NODE_URL_MAP[this.chainId],
-      });
-      return txId;
-    } catch (e: any) {
-      console.warn(e);
-      this.rootStore.notificationStore.notify(e.toString(), {
-        type: "error",
-        title: "Transaction is not completed",
-      });
-      return null;
-    }
+    const txId = await ttx.broadcast().then((tx: any) => tx.id);
+    await waitForTx(txId, {
+      apiBase: NODE_URL_MAP[this.chainId],
+    });
+    return txId;
   };
 
   private invokeWithKeeper = async (

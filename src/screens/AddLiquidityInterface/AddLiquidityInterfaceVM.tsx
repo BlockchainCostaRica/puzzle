@@ -222,19 +222,20 @@ class AddLiquidityInterfaceVM {
         },
       })
       .then((txId) => {
-        this.setNotificationParams(
-          buildSuccessLiquidityDialogParams({
-            accountStore,
-            poolId: this.poolId,
-            txId: txId ?? "",
-          })
-        );
+        txId &&
+          this.setNotificationParams(
+            buildSuccessLiquidityDialogParams({
+              accountStore,
+              poolId: this.poolId,
+              txId: txId,
+            })
+          );
       })
       .catch((e) =>
         this.setNotificationParams(
           buildErrorLiquidityDialogParams({
             title: "Transaction is not completed",
-            description: e.message ?? e.toString(),
+            description: e.message ?? JSON.stringify(e),
             onTryAgain: this.depositMultiply,
           })
         )
@@ -294,23 +295,24 @@ class AddLiquidityInterfaceVM {
         call: { function: "generateIndexWithOneTokenAndStake", args: [] },
       })
       .then((txId) => {
+        txId &&
+          this.setNotificationParams(
+            buildSuccessLiquidityDialogParams({
+              accountStore,
+              poolId: this.poolId,
+              txId: txId ?? "",
+            })
+          );
+      })
+      .catch((e) => {
         this.setNotificationParams(
-          buildSuccessLiquidityDialogParams({
-            accountStore,
-            poolId: this.poolId,
-            txId: txId ?? "",
+          buildErrorLiquidityDialogParams({
+            title: "Transaction is not completed хуета",
+            description: e.message + ` ${e.data}` ?? JSON.stringify(e),
+            onTryAgain: this.depositBaseToken,
           })
         );
       })
-      .catch((e) =>
-        this.setNotificationParams(
-          buildErrorLiquidityDialogParams({
-            title: "Transaction is not completed",
-            description: e.message ?? e.toString(),
-            onTryAgain: this.depositBaseToken,
-          })
-        )
-      )
       .then(accountStore.updateAccountAssets)
       .finally(() => this._setLoading(false));
   };
