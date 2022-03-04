@@ -109,12 +109,17 @@ class WalletVM {
         ) ?? [];
     const stakedNftData = this.stakedNfts.map(
       ({ imageLink, marketPrice, name }) => {
+        const price =
+          marketPrice == null
+            ? "-"
+            : "$ " + new BN(marketPrice ?? 0).toFormat();
+
         return {
           logo: imageLink,
           amount: "1 NFT",
           name,
-          nuclearValue: "$ " + new BN(marketPrice ?? 0).toFormat(),
-          usdnEquivalent: "$ " + new BN(marketPrice ?? 0).toFormat(),
+          nuclearValue: price,
+          usdnEquivalent: price,
         };
       }
     );
