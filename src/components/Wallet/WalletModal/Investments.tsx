@@ -27,11 +27,10 @@ const Investments: React.FC<IProps> = () => {
     <Root>
       {investments != null || stakedNfts == null
         ? investments.map((item, index) => (
-            <Link to={item.onClickPath}>
+            <Link to={item.onClickPath} key={index + "investment"}>
               <InvestRow
                 withClickLogic
                 onClick={() => accountStore.setWalletModalOpened(false)}
-                key={index + "investment"}
                 logo={item.logo}
                 topLeftInfo={item.name}
                 topRightInfo={item.amount}

@@ -110,7 +110,7 @@ class AccountStore {
 
     setInterval(this.updateAccountAssets, 5 * 1000);
     reaction(
-      () => this.rootStore.accountStore.address,
+      () => this.rootStore.accountStore?.address,
       this.updateAccountAssets
     );
   }
