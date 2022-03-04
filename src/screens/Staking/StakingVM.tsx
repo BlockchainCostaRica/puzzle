@@ -165,7 +165,7 @@ class StakingVM {
         });
       })
       .catch((e) => {
-        notificationStore.notify(e.message ?? e.toString(), {
+        notificationStore.notify(e.message ?? JSON.stringify(e), {
           type: "error",
           title: "Transaction is not completed",
         });
@@ -211,7 +211,7 @@ class StakingVM {
         );
       })
       .catch((e) => {
-        notificationStore.notify(e.message ?? e.toString(), {
+        notificationStore.notify(e.message ?? JSON.stringify(e), {
           type: "error",
           title: "Transaction is not completed",
         });
@@ -243,22 +243,24 @@ class StakingVM {
         },
       })
       .then((txId) => {
-        this._setAddressStaked(
-          this.addressStaked?.minus(this.puzzleAmountToUnstake ?? BN.ZERO) ??
-            BN.ZERO
-        );
-        notificationStore.notify(
-          `You can track your available to trade PUZZLE balance in the header section`,
-          {
-            type: "success",
-            title: `${puzzleAmount} PUZZLE successfully unstaked`,
-            link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
-            linkTitle: "View on Explorer",
-          }
-        );
+        txId &&
+          this._setAddressStaked(
+            this.addressStaked?.minus(this.puzzleAmountToUnstake ?? BN.ZERO) ??
+              BN.ZERO
+          );
+        txId &&
+          notificationStore.notify(
+            `You can track your available to trade PUZZLE balance in the header section`,
+            {
+              type: "success",
+              title: `${puzzleAmount} PUZZLE successfully unstaked`,
+              link: `${accountStore.EXPLORER_LINK}/tx/${txId}`,
+              linkTitle: "View on Explorer",
+            }
+          );
       })
       .catch((e) => {
-        notificationStore.notify(e.message ?? e.toString(), {
+        notificationStore.notify(e.message ?? JSON.stringify(e), {
           type: "error",
           title: "Transaction is not completed",
         });

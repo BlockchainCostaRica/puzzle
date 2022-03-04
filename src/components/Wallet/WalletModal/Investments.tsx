@@ -9,6 +9,7 @@ import Text from "@components/Text";
 import Button from "@components/Button";
 import { Column } from "@components/Flex";
 import { useStores } from "@stores";
+import { Link } from "react-router-dom";
 
 interface IProps {}
 
@@ -26,14 +27,18 @@ const Investments: React.FC<IProps> = () => {
     <Root>
       {investments != null || stakedNfts == null
         ? investments.map((item, index) => (
-            <InvestRow
-              key={index + "investment"}
-              logo={item.logo}
-              topLeftInfo={item.name}
-              topRightInfo={item.amount}
-              bottomRightInfo={item.usdnEquivalent}
-              bottomLeftInfo={item.nuclearValue}
-            />
+            <Link to={item.onClickPath}>
+              <InvestRow
+                withClickLogic
+                onClick={() => accountStore.setWalletModalOpened(false)}
+                key={index + "investment"}
+                logo={item.logo}
+                topLeftInfo={item.name}
+                topRightInfo={item.amount}
+                bottomRightInfo={item.usdnEquivalent}
+                bottomLeftInfo={item.nuclearValue}
+              />
+            </Link>
           ))
         : Array.from({ length: 2 }).map(() => <InvestRowSkeleton />)}
       {investments != null && investments.length === 0 && (
