@@ -51,11 +51,13 @@ class NotificationStore {
       top: 80,
       right: 16,
       left: 16,
+      zIndex: "1000000000000000000",
     };
     const desktopStyle = {
       top: 96,
       right: 16,
       left: width - 320 - 16,
+      zIndex: "1000000000000000000",
     };
     this.rootStore = rootStore;
     notification.newInstance(

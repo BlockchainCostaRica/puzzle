@@ -10,6 +10,7 @@ import Reward from "./Reward";
 import Tabs from "@components/Tabs";
 import MarketNfts from "@screens/NFTStaking/MarketNfts";
 import AccountNfts from "@screens/NFTStaking/AccountNfts";
+import { useStores } from "@stores";
 
 const Root = styled.div`
   display: flex;
@@ -31,6 +32,8 @@ const Root = styled.div`
   }
 `;
 const NFTStakingImpl: React.FC = () => {
+  const { nftStore } = useStores();
+  const { stakedAccountNFTs, accountNFTs, artworks } = nftStore;
   const vm = useNFTStakingVM();
 
   return (
@@ -38,10 +41,10 @@ const NFTStakingImpl: React.FC = () => {
       <Observer>
         {() => {
           const apy = vm.stats?.ultra?.apy ?? "-";
-          const { artworks, accountNFTs, stakedAccountNFTs } = vm;
           const marketNftAmount = artworks?.length;
           const accountNftAmount =
             (accountNFTs?.length ?? 0) + (stakedAccountNFTs?.length ?? 0);
+
           return (
             <Root>
               <GoBack link="/stake" text="Back to Staking" />

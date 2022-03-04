@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Dialog from "@components/Dialog";
-import SearchInput from "@components/SearchInput";
 import { useStores } from "@stores";
 import SquareTokenIcon from "@components/SquareTokenIcon";
 import SizedBox from "@components/SizedBox";
@@ -8,6 +7,7 @@ import styled from "@emotion/styled";
 import { Column, Row } from "@components/Flex";
 import Text from "@components/Text";
 import Scrollbar from "./components/Scrollbar";
+import Input from "@components/Input";
 
 interface IProps {
   onChange: (id: string) => void;
@@ -66,7 +66,8 @@ const ChangePoolModal: React.FC<IProps> = ({
       title="Select a pool"
       {...rest}
     >
-      <SearchInput
+      <Input
+        icon="search"
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
         placeholder="Search by name or ticker…"

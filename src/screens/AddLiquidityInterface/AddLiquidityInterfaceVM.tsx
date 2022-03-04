@@ -254,7 +254,7 @@ class AddLiquidityInterfaceVM {
     this.setNotificationParams(
       buildWarningLiquidityDialogParams({
         title: "High slippage rate",
-        description: `You will lose ${slippage} ${baseToken.symbol} (${formatSlippagePercent} % of the total amount) on this operation due to slippage. Are you sure you want to add liquidity?`,
+        description: `You might lose up to ${slippage} ${baseToken.symbol} (${formatSlippagePercent} % of the total amount) on this operation due to slippage. We recommend to cancel this operation and use several transactions to split your deposit to smaller parts.`,
         onContinue: this.depositBaseToken,
         continueText: "Add liquidity",
         onCancel: () => this.setNotificationParams(null),

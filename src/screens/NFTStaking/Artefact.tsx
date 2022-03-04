@@ -40,11 +40,11 @@ const Artefact: React.FC<IProps> = ({
   name,
   apy,
   imageLink,
-  floorPrice,
+  marketPrice,
   buttons,
 }) => {
   const boostApy = new BN(apy ?? 0);
-  const price = new BN(floorPrice ?? 0).div(1000000);
+  const price = new BN(marketPrice ?? 0);
   return (
     <Root>
       <Img src={imageLink ?? noPic} alt="nft" />
@@ -62,7 +62,7 @@ const Artefact: React.FC<IProps> = ({
                 {apy ? `~${boostApy.toFormat(2)}% APY` : "—"}
               </Text>
               <Text size="medium" textAlign="right">
-                {floorPrice ? `~${price.toFormat()}$` : "—"}
+                {marketPrice ? `~${price.toFormat()}$` : "—"}
               </Text>
             </Row>
           </Column>

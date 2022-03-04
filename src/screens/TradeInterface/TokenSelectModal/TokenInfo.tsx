@@ -8,19 +8,20 @@ import SquareTokenIcon from "@components/SquareTokenIcon";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   token: Balance;
+  withClickLogic?: boolean;
 }
 
-const Root = styled.div`
+const Root = styled.div<{ withClickLogic?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
   width: 100%;
-  cursor: pointer;
+  cursor: ${({ withClickLogic }) => (withClickLogic ? "pointer" : "default")};
   padding: 10px 24px;
 
   :hover {
-    background: #f1f2fe;
+    background: ${({ withClickLogic }) => withClickLogic && "#f1f2fe;"};
   }
 `;
 const DefaultIcon = styled.div`

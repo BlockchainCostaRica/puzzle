@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { CSSProperties } from "react";
 import Text from "@src/components/Text";
 
 type ITab = {
@@ -11,14 +11,18 @@ interface IProps {
   tabs: ITab[];
   activeTab: number;
   setActive: (index: number) => void;
+  style?: CSSProperties;
+  tabStyle?: CSSProperties;
 }
 
 const Root = styled.div`
   display: flex;
   border-bottom: 1px solid #c6c9f4;
+  width: 100%;
 `;
 const Tab = styled.div<{ active?: boolean }>`
   transition: all 0.3s ease;
+  text-align: center;
   margin-right: 24px;
   padding-bottom: 12px;
   border-bottom: 4px solid #7075e9;
@@ -33,14 +37,21 @@ const Tab = styled.div<{ active?: boolean }>`
   }
 }
 `;
-const Tabs: React.FC<IProps> = ({ tabs, activeTab, setActive }) => {
+const Tabs: React.FC<IProps> = ({
+  tabs,
+  activeTab,
+  setActive,
+  style,
+  tabStyle,
+}) => {
   return (
-    <Root>
+    <Root style={style}>
       {tabs.map(({ additionalInfo, name }, index) => (
         <Tab
           key={index}
           active={index === activeTab}
           onClick={() => setActive(index)}
+          style={tabStyle}
         >
           <Text weight={500}>
             {name}

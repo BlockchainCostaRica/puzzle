@@ -5,6 +5,12 @@
     "symbol": "WAVES",
     "decimals": 8
   },
+  "USDN": {
+    "assetId": "DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p",
+    "name": "Neutrino USD",
+    "symbol": "USDN",
+    "decimals": 6
+  },
   "EGG": {
     "assetId": "C1iWsKGqLwjHUndiQ7iXpdmPum9PeCDFfyXBdJJosDRS",
     "name": "Waves Ducks",
@@ -52,6 +58,24 @@
     "name": "Neutrino EUR",
     "symbol": "EURN",
     "decimals": 6
+  },
+  "WX": {
+    "assetId": "Atqv59EYzjFGuitKVnMRk6H8FukjoV3ktPorbEys25on",
+    "name": "Waves Exchange",
+    "symbol": "WX",
+    "decimals": 8
+  },
+  "WCT": {
+    "assetId": "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
+    "name": "Waves Community",
+    "symbol": "WCT",
+    "decimals": 2
+  },
+  "WEST": {
+    "assetId": "4LHHvYGNKJUg5hj65aGD5vgScvCBmLpdRFtjokvCjSL8",
+    "name": "Waves Enterprise",
+    "symbol": "WEST",
+    "decimals": 8
   },
   "NSBT": {
     "assetId": "6nSpVyNH7yM69eg446wrQR94ipbbcmZMU1ENPwanC97g",
@@ -115,7 +139,7 @@
   },
   "PESOLATINO": {
     "assetId": "5JQ8yUY4vnB19s4bXSGVYsNEyA9Bag6jbMtVEgFHvYM7",
-    "name": "PESOLATINO",
+    "name": "TEAM LATAM",
     "symbol": "PESOLATINO",
     "decimals": 8
   },
@@ -136,12 +160,6 @@
     "name": "EGGPOINT",
     "symbol": "EGGPOINT",
     "decimals": 8
-  },
-  "USDN": {
-    "assetId": "DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p",
-    "name": "Neutrino USD",
-    "symbol": "USDN",
-    "decimals": 6
   },
   "ENDO": {
     "assetId": "6muMrLavuvuSZXgy1cQrvYm92rGbprNXGdj6Bg7HAtTV",

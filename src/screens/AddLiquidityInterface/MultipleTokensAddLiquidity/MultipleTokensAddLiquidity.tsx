@@ -57,7 +57,7 @@ const MultipleTokensAddLiquidity: React.FC<IProps> = () => {
   const { accountStore } = useStores();
   const vm = useAddLiquidityInterfaceVM();
   const tokens = vm.pool?.tokens ?? [];
-  const handleConnectToWallet = () => accountStore.setWalletModalOpened(true);
+  const handleConnectToWallet = () => accountStore.setLoginModalOpened(true);
   if (accountStore.address == null)
     return (
       <Button fixed onClick={handleConnectToWallet}>

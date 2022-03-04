@@ -37,6 +37,14 @@ export interface IInvokeTxParams {
   };
 }
 
+export interface ITransferParams {
+  recipient: string;
+  amount: string;
+  assetId?: string;
+  attachment?: string;
+  feeAssetId?: string;
+}
+
 export interface ISerializedAccountStore {
   address: string | null;
   loginType: LOGIN_TYPE | null;
@@ -51,9 +59,21 @@ class AccountStore {
   @action.bound setWavesKeeperInstalled = (state: boolean) =>
     (this.isWavesKeeperInstalled = state);
 
+  loginModalOpened: boolean = false;
+  @action.bound setLoginModalOpened = (state: boolean) =>
+    (this.loginModalOpened = state);
+
   walletModalOpened: boolean = false;
   @action.bound setWalletModalOpened = (state: boolean) =>
     (this.walletModalOpened = state);
+
+  sendAssetModalOpened: boolean = false;
+  @action.bound setSendAssetModalOpened = (state: boolean) =>
+    (this.sendAssetModalOpened = state);
+
+  assetToSend: Balance | null = null;
+  @action.bound setAssetToSend = (state: Balance | null) =>
+    (this.assetToSend = state);
 
   changePoolModalOpened: boolean = false;
   @action.bound setChangePoolModalOpened = (state: boolean) =>
@@ -83,13 +103,12 @@ class AccountStore {
     if (this.isBrowserSupportsWavesKeeper) {
       this.setupWavesKeeper();
     }
-
     if (initState) {
       this.setLoginType(initState.loginType);
       this.setAddress(initState.address);
     }
 
-    setInterval(this.updateAccountAssets, 5000);
+    setInterval(this.updateAccountAssets, 5 * 100);
   }
 
   get isBrowserSupportsWavesKeeper(): boolean {
@@ -200,6 +219,67 @@ class AccountStore {
       });
     this.setAssetBalances(assetBalances);
   };
+
+  ///------------------transfer
+  public transfer = async (trParams: ITransferParams) =>
+    this.loginType === LOGIN_TYPE.KEEPER
+      ? this.transferWithKeeper(trParams)
+      : this.transferWithSigner(trParams);
+
+  private transferWithSigner = async (
+    data: ITransferParams
+  ): Promise<string | null> => {
+    if (this.signer == null) {
+      await this.login(this.loginType ?? LOGIN_TYPE.SIGNER_EMAIL);
+    }
+    if (this.signer == null) {
+      this.rootStore.notificationStore.notify("You need to login firstly", {
+        title: "Error",
+        type: "error",
+      });
+      return null;
+    }
+    try {
+      const ttx = this.signer.transfer(data);
+      const txId = await ttx.broadcast().then((tx: any) => tx.id);
+      await waitForTx(txId, {
+        apiBase: NODE_URL_MAP[this.chainId],
+      });
+      return txId;
+    } catch (e: any) {
+      console.warn(e);
+      this.rootStore.notificationStore.notify(e.toString(), {
+        type: "error",
+        title: "Transaction is not completed",
+      });
+      return null;
+    }
+  };
+
+  private transferWithKeeper = async (
+    data: ITransferParams
+  ): Promise<string | null> => {
+    const tokenAmount = BN.formatUnits(
+      data.amount,
+      this.assetToSend?.decimals
+    ).toString();
+    const tx = await window.WavesKeeper.signAndPublishTransaction({
+      type: 4,
+      data: {
+        amount: { tokens: tokenAmount, assetId: data.assetId },
+        fee: { tokens: "0.001", assetId: "WAVES" },
+        recipient: data.recipient,
+      },
+    } as any);
+
+    const txId = JSON.parse(tx).id;
+    await waitForTx(txId, {
+      apiBase: NODE_URL_MAP[this.chainId],
+    });
+    return txId;
+  };
+
+  ///////////------------invoke
 
   public invoke = async (txParams: IInvokeTxParams) =>
     this.loginType === LOGIN_TYPE.KEEPER

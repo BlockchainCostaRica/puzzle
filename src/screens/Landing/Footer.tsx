@@ -73,7 +73,7 @@ const Footer: React.FC<IProps> = () => {
             secondary
             onClick={() => {
               accountStore.address == null
-                ? accountStore.setWalletModalOpened(true)
+                ? accountStore.setLoginModalOpened(true)
                 : accountStore.logout();
             }}
           >

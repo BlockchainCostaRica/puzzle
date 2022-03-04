@@ -28,7 +28,7 @@ const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
   const handleCallDepositBaseToken = async () => {
     const slippagePercent = vm.baseTokenSlippage;
     vm.setNotificationParams(null);
-    if (slippagePercent.times(100).gte(5)) {
+    if (slippagePercent.times(100).gte(10)) {
       vm.showHighSlippageWarning();
     } else {
       await vm.depositBaseToken();
@@ -76,7 +76,7 @@ const BaseTokenAddLiquidityAmount: React.FC<IProps> = () => {
       </Card>
       <SizedBox height={24} />
       {accountStore.address == null && (
-        <Button fixed onClick={() => accountStore.setWalletModalOpened(true)}>
+        <Button fixed onClick={() => accountStore.setLoginModalOpened(true)}>
           Connect to deposit
         </Button>
       )}
