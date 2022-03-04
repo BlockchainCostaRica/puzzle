@@ -24,7 +24,7 @@ interface IPoolCreationParams {
 }
 
 export interface IShortPoolInfo {
-  poolId: string;
+  pool: IPoolConfig;
   liquidityInUsdn: BN;
   addressStaked: BN;
   shareOfPool: BN;
@@ -185,7 +185,7 @@ class Pool implements IPoolConfig {
         addressStaked: BN.ZERO,
         liquidityInUsdn: BN.ZERO,
         shareOfPool: BN.ZERO,
-        poolId: this.id,
+        pool: this,
         indexTokenRate,
         indexTokenName: "PZ" + staticPoolDomain,
       };
@@ -201,7 +201,7 @@ class Pool implements IPoolConfig {
       liquidityInUsdn,
       addressStaked: addressIndexStaked,
       shareOfPool: percent,
-      poolId: this.id,
+      pool: this,
       indexTokenRate,
       indexTokenName: " PZ " + staticPoolDomain,
     };

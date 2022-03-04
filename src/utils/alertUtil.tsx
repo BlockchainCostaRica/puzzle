@@ -43,7 +43,11 @@ const getAlert = (
               {title}
             </Text>
           )}
-          <Text size="small" type="secondary" style={{ marginTop: 2 }}>
+          <Text
+            size="small"
+            type="secondary"
+            style={{ marginTop: 2, width: "100%", wordBreak: "break-word" }}
+          >
             {content}
           </Text>
           {link && (

@@ -2,7 +2,7 @@ import statsService, { IArtWork } from "@src/services/statsService";
 import RootStore from "@stores/RootStore";
 import nodeService, { INFT } from "@src/services/nodeService";
 import nodeRequest from "@src/utils/nodeRequest";
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, reaction } from "mobx";
 
 export default class NftStore {
   public rootStore: RootStore;
@@ -22,10 +22,14 @@ export default class NftStore {
     this.rootStore = rootStore;
     makeAutoObservable(this);
     statsService.getArtworks().then((d) => this._setArtworks(d));
+    reaction(
+      () => this.rootStore.accountStore.address,
+      () => Promise.all([this.getAccountNFTs(), this.getAccountNFTsOnStaking()])
+    );
     setInterval(
       () =>
         Promise.all([this.getAccountNFTs(), this.getAccountNFTsOnStaking()]),
-      5 * 1000
+      10 * 1000
     );
   }
 
