@@ -89,9 +89,6 @@ class WalletVM {
             liquidityInUsdn,
             indexTokenName,
           }) => {
-            // const pool = this.rootStore.poolsStore.pools.find(
-            //   ({ id }) => poolId === id
-            // );
             const amount = BN.formatUnits(addressStaked, 8);
             // @ts-ignore
             const path = accountStore.ROUTES.invest[pool.id];

@@ -303,7 +303,6 @@ class AccountStore {
       });
       return null;
     }
-    // try {
     const ttx = this.signer.invoke({
       dApp: txParams.dApp,
       fee: 500000,
@@ -316,14 +315,6 @@ class AccountStore {
       apiBase: NODE_URL_MAP[this.chainId],
     });
     return txId;
-    // } catch (e: any) {
-    //   console.warn(e);
-    //   this.rootStore.notificationStore.notify(e.toString(), {
-    //     type: "error",
-    //     title: "Transaction is not completed",
-    //   });
-    //   return null;
-    // }
   };
 
   private invokeWithKeeper = async (
