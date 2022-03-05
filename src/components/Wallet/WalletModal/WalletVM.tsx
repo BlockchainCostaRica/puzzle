@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useVM } from "@src/hooks/useVM";
-import { makeAutoObservable, when } from "mobx";
+import { makeAutoObservable, reaction, when } from "mobx";
 import { RootStore, useStores } from "@stores";
 import copy from "copy-to-clipboard";
 import Balance from "@src/entities/Balance";
@@ -37,8 +37,9 @@ class WalletVM {
     makeAutoObservable(this);
     when(
       () => this.rootStore.accountStore.assetBalances.length > 0,
-      () => this.getAssetsStats()
+      this.getAssetsStats
     );
+    reaction(() => this.rootStore.accountStore?.address, this.getAssetsStats);
     setInterval(this.getAssetsStats, 15 * 1000);
   }
 
