@@ -55,6 +55,24 @@ class AccountStore {
 
   chainId: "W" | "T" = "W";
 
+  constructor(rootStore: RootStore, initState?: ISerializedAccountStore) {
+    this.rootStore = rootStore;
+    makeAutoObservable(this);
+    if (this.isBrowserSupportsWavesKeeper) {
+      this.setupWavesKeeper();
+    }
+    if (initState) {
+      this.setLoginType(initState.loginType);
+      this.setAddress(initState.address);
+    }
+
+    setInterval(this.updateAccountAssets, 5 * 1000);
+    reaction(
+      () => this.rootStore.accountStore?.address,
+      this.updateAccountAssets
+    );
+  }
+
   isWavesKeeperInstalled = false;
   @action.bound setWavesKeeperInstalled = (state: boolean) =>
     (this.isWavesKeeperInstalled = state);
@@ -96,24 +114,6 @@ class AccountStore {
 
   public signer: Signer | null = null;
   @action.bound setSigner = (signer: Signer | null) => (this.signer = signer);
-
-  constructor(rootStore: RootStore, initState?: ISerializedAccountStore) {
-    this.rootStore = rootStore;
-    makeAutoObservable(this);
-    if (this.isBrowserSupportsWavesKeeper) {
-      this.setupWavesKeeper();
-    }
-    if (initState) {
-      this.setLoginType(initState.loginType);
-      this.setAddress(initState.address);
-    }
-
-    setInterval(this.updateAccountAssets, 5 * 1000);
-    reaction(
-      () => this.rootStore.accountStore?.address,
-      this.updateAccountAssets
-    );
-  }
 
   get isBrowserSupportsWavesKeeper(): boolean {
     const browser = getCurrentBrowser();

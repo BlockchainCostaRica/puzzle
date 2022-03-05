@@ -5,6 +5,7 @@ import SizedBox from "@components/SizedBox";
 import Text from "@components/Text";
 import SquareTokenIcon from "@components/SquareTokenIcon";
 import Skeleton from "react-loading-skeleton";
+import BN from "@src/utils/BN";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   logo?: string;
@@ -13,6 +14,7 @@ interface IProps extends HTMLAttributes<HTMLDivElement> {
   bottomLeftInfo?: string;
   bottomRightInfo?: string;
   withClickLogic?: boolean;
+  rateChange?: BN | null;
 }
 
 const Root = styled.div<{ withClickLogic?: boolean }>`
@@ -26,6 +28,14 @@ const Root = styled.div<{ withClickLogic?: boolean }>`
 
   :hover {
     background: ${({ withClickLogic }) => withClickLogic && "#f1f2fe;"};
+  }
+
+  .green {
+    color: #35a15a;
+  }
+
+  .red {
+    color: #ed827e;
   }
 `;
 const DefaultIcon = styled.div`
@@ -42,6 +52,7 @@ const InvestRow: React.FC<IProps> = ({
   bottomLeftInfo,
   bottomRightInfo,
   withClickLogic,
+  rateChange,
   ...rest
 }) => {
   return (
@@ -54,7 +65,14 @@ const InvestRow: React.FC<IProps> = ({
             {topLeftInfo}
           </Text>
           <Text size="medium" type="secondary">
-            {bottomLeftInfo}
+            {bottomLeftInfo}&nbsp;
+            {rateChange != null &&
+              !rateChange.eq(0) &&
+              (rateChange.lt(0) ? (
+                <span className="red">{rateChange.toFormat(3)}%</span>
+              ) : (
+                <span className="green">+{rateChange.toFormat(3)}%</span>
+              ))}
           </Text>
         </Column>
       </Row>
