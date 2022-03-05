@@ -16,7 +16,7 @@ export default class StakeStore {
     makeAutoObservable(this);
     setInterval(this.updateStakedInvestments, 5 * 1000);
     reaction(
-      () => this.rootStore.accountStore.address,
+      () => this.rootStore.accountStore?.address,
       this.updateStakedInvestments
     );
   }
@@ -32,7 +32,7 @@ export default class StakeStore {
     );
 
     const addressStaked =
-      addressStakedValue != null
+      addressStakedValue && addressStakedValue?.length > 0
         ? new BN(addressStakedValue[0].value)
         : BN.ZERO;
 
