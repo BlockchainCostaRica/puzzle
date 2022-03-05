@@ -69,9 +69,9 @@ const InvestRow: React.FC<IProps> = ({
             {rateChange != null &&
               !rateChange.eq(0) &&
               (rateChange.lt(0) ? (
-                <span className="red">{rateChange.toFormat(3)}%</span>
+                <span className="red">{rateChange.toFormat(2)}%</span>
               ) : (
-                <span className="green">+{rateChange.toFormat(3)}%</span>
+                <span className="green">+{rateChange.toFormat(2)}%</span>
               ))}
           </Text>
         </Column>

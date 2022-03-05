@@ -63,6 +63,9 @@ class AccountStore {
     }
     if (initState) {
       this.setLoginType(initState.loginType);
+      if (initState.loginType === LOGIN_TYPE.KEEPER) {
+        this.setupSynchronizationWithWavesKeeper();
+      }
       this.setAddress(initState.address);
     }
 
@@ -120,12 +123,26 @@ class AccountStore {
     return ["chrome", "firefox", "opera", "edge"].includes(browser);
   }
 
+  @action
+  setupSynchronizationWithWavesKeeper = () => {
+    window["WavesKeeper"]?.initialPromise
+      .then((keeperApi: any) => keeperApi)
+      .then((keeperApi: { publicState: () => void }) => keeperApi.publicState())
+      .then(() => this.subscribeToWavesKeeperUpdate())
+      .catch((error: IKeeperError) => {
+        if (error.code === "14") {
+          this.subscribeToWavesKeeperUpdate();
+        }
+      });
+  };
+
   login = async (loginType: LOGIN_TYPE) => {
     this.setLoginType(loginType);
     switch (loginType) {
       case LOGIN_TYPE.KEEPER:
         this.setSigner(new Signer());
         const authData = { data: "you know what is the main reason" };
+        this.setupSynchronizationWithWavesKeeper();
         await this.signer?.setProvider(new ProviderKeeper(authData));
         break;
       case LOGIN_TYPE.SIGNER_EMAIL:
@@ -170,9 +187,17 @@ class AccountStore {
           attemptsCount += 1;
         }
       },
-      { scheduler: (run) => setInterval(run, 1000) }
+      { scheduler: (run) => setInterval(run, 5 * 1000) }
     );
   };
+
+  subscribeToWavesKeeperUpdate() {
+    window["WavesKeeper"].on("update", async (publicState: any) => {
+      if (this.address != null) {
+        this.setAddress(publicState.account.address);
+      }
+    });
+  }
 
   serialize = (): ISerializedAccountStore => ({
     address: this.address,
@@ -372,3 +397,9 @@ class AccountStore {
 }
 
 export default AccountStore;
+
+interface IKeeperError {
+  code: string;
+  data: any;
+  message: string;
+}

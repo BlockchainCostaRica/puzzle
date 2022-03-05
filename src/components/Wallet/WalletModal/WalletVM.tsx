@@ -153,7 +153,7 @@ class WalletVM {
     const assetInfo = responses.reduce<Record<string, BN>>((acc, value) => {
       const firstPrice = new BN(value.data?.["firstPrice_usd-n"] ?? 0);
       const lastPrice = new BN(value.data?.["lastPrice_usd-n"] ?? 0);
-      let rate = lastPrice.div(firstPrice).minus(1);
+      let rate = lastPrice.div(firstPrice).minus(1).times(100);
       return { ...acc, [value.id]: rate };
     }, {});
     this.setAssetsStats(assetInfo);
