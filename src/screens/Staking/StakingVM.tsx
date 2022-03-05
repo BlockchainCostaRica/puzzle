@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useVM } from "@src/hooks/useVM";
-import { action, makeAutoObservable, when } from "mobx";
+import { action, makeAutoObservable, reaction, when } from "mobx";
 import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import Balance from "@src/entities/Balance";
@@ -54,6 +54,10 @@ class StakingVM {
     this._setStakingAddress(accountStore.CONTRACT_ADDRESSES.staking);
     makeAutoObservable(this);
     when(() => accountStore.address !== null, this.updateAddressStakingInfo);
+    reaction(
+      () => this.rootStore.accountStore?.address,
+      this.updateAddressStakingInfo
+    );
   }
 
   public puzzleAmountToStake: BN = BN.ZERO;

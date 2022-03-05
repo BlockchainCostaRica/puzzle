@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useVM } from "@src/hooks/useVM";
-import { action, makeAutoObservable, when } from "mobx";
+import { action, makeAutoObservable, reaction, when } from "mobx";
 import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import statsService, { IArtWork } from "@src/services/statsService";
@@ -31,6 +31,10 @@ class NFTStakingVM {
     statsService.getArtworks().then((d) => this._setArtworks(d));
     when(
       () => rootStore.accountStore.address != null,
+      this.updateAddressStakingInfo
+    );
+    reaction(
+      () => this.rootStore.accountStore?.address,
       this.updateAddressStakingInfo
     );
   }

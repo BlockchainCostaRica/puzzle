@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useVM } from "@src/hooks/useVM";
-import { makeAutoObservable, when } from "mobx";
+import { makeAutoObservable, reaction, when } from "mobx";
 import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import { IToken, NODE_URL_MAP } from "@src/constants";
@@ -63,6 +63,13 @@ class InvestToPoolInterfaceVM {
     makeAutoObservable(this);
     this.updateStats();
     this.updatePoolTokenBalances();
+    reaction(
+      () => this.rootStore.accountStore?.address,
+      () => {
+        this.updateRewardInfo();
+        this.updateAccountLiquidityInfo();
+      }
+    );
     when(
       () => rootStore.accountStore.address != null,
       this.updateAccountLiquidityInfo
