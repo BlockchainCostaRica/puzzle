@@ -15,8 +15,8 @@ const wavesCapService = {
       params.append("assetIds[]=", assetsId[i]);
     }
     const url = `https://wavescap.com/api/assets-info.php?${params.toString()}`;
-    const { data } = await axios.get(url);
-    return data.assets != null ? data.assets : [];
+    const response = await axios.get(url);
+    return response.data.assets != null ? response.data.assets : [];
   },
 };
 export default wavesCapService;

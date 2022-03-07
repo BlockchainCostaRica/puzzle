@@ -152,6 +152,7 @@ class WalletVM {
       .reduce<string[]>((acc, v) => [...acc, v.assetId], []);
     const responses = await wavesCapService.getAssetsStats(topAssets);
     const assetInfo = responses.reduce<Record<string, BN>>((acc, value) => {
+      if (value == null) return acc;
       const firstPrice = new BN(value.data?.["firstPrice_usd-n"] ?? 0);
       const lastPrice = new BN(value.data?.["lastPrice_usd-n"] ?? 0);
       let rate = lastPrice.div(firstPrice).minus(1).times(100);
