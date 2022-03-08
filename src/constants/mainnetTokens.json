@@ -53,6 +53,18 @@
     "symbol": "USDC",
     "decimals": 6
   },
+  "BNB": {
+    "assetId": "5UYBPpq4WoU5n4MwpFkgJnW3Fq4B1u3ukpK33ik4QerR",
+    "name": "Binance Coin",
+    "symbol": "BNB",
+    "decimals": 8
+  },
+  "MUNA": {
+    "assetId": "eCNH1aqUnocub8PbNsxLNvZWGeVE98L2Crw3cGY6Gq2",
+    "name": "MUNA",
+    "symbol": "MUNA",
+    "decimals": 8
+  },
   "EURN": {
     "assetId": "DUk2YTxhRoAqMJLus4G2b3fR8hMHVh6eiyFx5r29VR6t",
     "name": "Neutrino EUR",
