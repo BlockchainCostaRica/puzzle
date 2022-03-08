@@ -1,12 +1,13 @@
 import React, { useMemo } from "react";
 import { useVM } from "@src/hooks/useVM";
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, reaction, when } from "mobx";
 import { RootStore, useStores } from "@stores";
 import copy from "copy-to-clipboard";
 import Balance from "@src/entities/Balance";
 import { LOGIN_TYPE } from "@src/stores/AccountStore";
 import centerEllipsis from "@src/utils/centerEllipsis";
 import BN from "@src/utils/BN";
+import wavesCapService from "@src/services/wavesCapService";
 
 const ctx = React.createContext<WalletVM | null>(null);
 
@@ -27,9 +28,19 @@ class WalletVM {
   tokenToSend: Balance | null = null;
   public setTokenToSend = (v: Balance) => (this.tokenToSend = v);
 
+  assetsStats: Record<string, BN> | null = null;
+  public setAssetsStats = (v: Record<string, BN>) => (this.assetsStats = v);
+
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
+    this.getAssetsStats();
     makeAutoObservable(this);
+    when(
+      () => this.rootStore.accountStore.assetBalances.length > 0,
+      this.getAssetsStats
+    );
+    reaction(() => this.rootStore.accountStore?.address, this.getAssetsStats);
+    setInterval(this.getAssetsStats, 15 * 1000);
   }
 
   handleCopyAddress = () => {
@@ -133,4 +144,20 @@ class WalletVM {
     const { nftStore } = this.rootStore;
     return nftStore.stakedAccountNFTs ?? [];
   }
+
+  getAssetsStats = async () => {
+    if (this.balances.length === 0) return;
+    const topAssets = this.balances
+      .slice(0, 10)
+      .reduce<string[]>((acc, v) => [...acc, v.assetId], []);
+    const responses = await wavesCapService.getAssetsStats(topAssets);
+    const assetInfo = responses.reduce<Record<string, BN>>((acc, value) => {
+      if (value == null) return acc;
+      const firstPrice = new BN(value.data?.["firstPrice_usd-n"] ?? 0);
+      const lastPrice = new BN(value.data?.["lastPrice_usd-n"] ?? 0);
+      let rate = lastPrice.div(firstPrice).minus(1).times(100);
+      return { ...acc, [value.id]: rate };
+    }, {});
+    this.setAssetsStats(assetInfo);
+  };
 }

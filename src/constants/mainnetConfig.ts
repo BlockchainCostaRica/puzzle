@@ -13,6 +13,7 @@ export enum MAINNET_POOL_ID {
   egg = "egg",
   winter = "winter",
   www = "www",
+  muna = "muna",
   //   btc = "btc",
 }
 
@@ -32,6 +33,7 @@ export const MAINNET_ROUTES = {
     egg: `${MAINNET_POOL_ID.egg}/withdraw`,
     winter: `${MAINNET_POOL_ID.winter}/withdraw`,
     www: `${MAINNET_POOL_ID.www}/withdraw`,
+    muna: `${MAINNET_POOL_ID.muna}/withdraw`,
     //     btc: `${MAINNET_POOL_ID.btc}/withdraw`,
   },
   pools: {
@@ -41,9 +43,9 @@ export const MAINNET_ROUTES = {
     race: MAINNET_POOL_ID.race,
     puzzle: MAINNET_POOL_ID.puzzle,
     egg: MAINNET_POOL_ID.egg,
-    winter: MAINNET_POOL_ID.winter,
-    
+    winter: MAINNET_POOL_ID.winter,    
     www: MAINNET_POOL_ID.www,
+    muna: MAINNET_POOL_ID.muna,
     //     btc: MAINNET_POOL_ID.btc,
   },
   addLiquidity: {
@@ -54,6 +56,7 @@ export const MAINNET_ROUTES = {
     egg: `${MAINNET_POOL_ID.egg}/addLiquidity`,
     winter: `${MAINNET_POOL_ID.winter}/addLiquidity`,
     www: `${MAINNET_POOL_ID.www}/addLiquidity`,
+    muna: `${MAINNET_POOL_ID.muna}/addLiquidity`,
     //     btc: `${MAINNET_POOL_ID.btc}/addLiquidity`,
   },
   addOneToken: {
@@ -64,6 +67,7 @@ export const MAINNET_ROUTES = {
     egg: `${MAINNET_POOL_ID.egg}/addOneToken`,
     winter: `${MAINNET_POOL_ID.winter}/addOneToken`,
     www: `${MAINNET_POOL_ID.www}/addOneToken`,
+    muna: `${MAINNET_POOL_ID.muna}/addOneToken`,
     //     btc: `${MAINNET_POOL_ID.btc}/addOneToken`,
   },
   invest: {
@@ -74,6 +78,7 @@ export const MAINNET_ROUTES = {
     egg: `${MAINNET_POOL_ID.egg}/invest`,
     winter: `${MAINNET_POOL_ID.winter}/invest`,
     www: `${MAINNET_POOL_ID.www}/invest`,
+    muna: `${MAINNET_POOL_ID.muna}/invest`,
     //     btc: `${MAINNET_POOL_ID.btc}/invest`,
   },
 };
@@ -109,6 +114,20 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
       { ...mainnetTokens.WCT, shareAmount: 0.1, logo: tokenLogos.WCT },
       { ...mainnetTokens.WEST, shareAmount: 0.1, logo: tokenLogos.WEST },
       { ...mainnetTokens.USDN, shareAmount: 0.2, logo: tokenLogos.USDN },
+    ],
+  },
+  [MAINNET_POOL_ID.muna]: {
+    contractAddress: "3P9EydokbUM5XFrHgEUT9bNVgfF7fGmtxLk",
+    layer2Address: "3PLAM86Pm7jR3RTe7JSit2FDf8DnhF8ogG6",
+    baseTokenId: mainnetTokens.MUNA.assetId,
+    name: "Muna BNB Pool",
+    logo: tokenLogos.MUNA,
+    defaultAssetId0: mainnetTokens.MUNA.assetId,
+    defaultAssetId1: mainnetTokens.BNB.assetId,
+    tokens: [
+      { ...mainnetTokens.MUNA, shareAmount: 0.5, logo: tokenLogos.MUNA },
+      { ...mainnetTokens.BNB, shareAmount: 0.25, logo: tokenLogos.BNB },
+      { ...mainnetTokens.USDN, shareAmount: 0.25, logo: tokenLogos.USDN },
     ],
   },
   [MAINNET_POOL_ID.winter]: {

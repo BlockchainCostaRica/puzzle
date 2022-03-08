@@ -26,8 +26,10 @@ const AssetsBalances: React.FC<IProps> = () => {
       {vm.balances.length !== 0 ? (
         vm.balances.map((b) => {
           const rate = poolsStore.usdnRate(b.assetId)?.toFormat(2);
+          const rateChange = vm.assetsStats && vm.assetsStats[b.assetId];
           return (
             <InvestRow
+              rateChange={rateChange}
               key={b.assetId}
               logo={b.logo}
               topLeftInfo={b.name}

@@ -33,6 +33,8 @@ import eurn from "@src/assets/tokens/eurn.svg";
 import wxLogo from "@src/assets/tokens/WX.svg";
 import westLogo from "@src/assets/tokens/WEST.svg";
 import wctLogo from "@src/assets/tokens/WCT.svg";
+import munaLogo from "@src/assets/tokens/MUNA.svg";
+import bnbLogo from "@src/assets/tokens/BNB.svg";
 
 const tokenLogos: Record<string, string> = {
   DUXPLORER: duxplorerLogo,
@@ -69,6 +71,8 @@ const tokenLogos: Record<string, string> = {
   WX: wxLogo,
   WEST: westLogo,
   WCT: wctLogo,
+  MUNA: munaLogo,
+  BNB: bnbLogo,
   UNKNOWN: unknownLogo,
 };
 

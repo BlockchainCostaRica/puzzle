@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
 import React from "react";
-import { Link } from "react-router-dom";
 import { ReactComponent as CloseIcon } from "@src/assets/icons/close.svg";
+import { useStores } from "@stores";
+
 interface IProps {
   closed: boolean;
   setClosed: (v: boolean) => void;
@@ -32,6 +33,7 @@ const Root = styled.div<{ closed: boolean }>`
   color: #c6c9f4;
   position: relative;
   white-space: nowrap;
+
   .close {
     position: absolute;
     cursor: pointer;
@@ -42,22 +44,26 @@ const Root = styled.div<{ closed: boolean }>`
   }
 `;
 
-const StyledLink = styled(Link)`
+const BoldText = styled.div`
   font-size: 16px;
   line-height: 24px;
   font-weight: 500;
   color: #fff;
   padding: 0;
+
   :hover {
     color: #c6c9f4;
   }
 `;
 
 const Banner: React.FC<IProps> = ({ closed, setClosed }) => {
+  const { accountStore } = useStores();
   return (
     <Root closed={closed}>
-      Puzzle staking is live! 🎊&nbsp;
-      <StyledLink to="/stake">Stake PUZZLE</StyledLink>
+      Puzzle Wallet is live! 🎊&nbsp;
+      <BoldText onClick={() => accountStore.setWalletModalOpened(true)}>
+        Manage your crypto
+      </BoldText>
       <CloseIcon className="close" onClick={() => setClosed(true)} />
     </Root>
   );
