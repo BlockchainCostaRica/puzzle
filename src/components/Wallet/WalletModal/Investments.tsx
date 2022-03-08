@@ -11,18 +11,17 @@ import { Column } from "@components/Flex";
 import { useStores } from "@stores";
 import { Link } from "react-router-dom";
 
-interface IProps {}
-
 const Root = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 400px;
 `;
 
-const Investments: React.FC<IProps> = () => {
+const Investments: React.FC = () => {
   const { accountStore } = useStores();
   const vm = useWalletVM();
   const { stakedNfts, investments } = vm;
+
   return (
     <Root>
       {investments != null || stakedNfts == null

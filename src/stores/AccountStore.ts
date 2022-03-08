@@ -64,21 +64,25 @@ class AccountStore {
     if (initState) {
       this.setLoginType(initState.loginType);
       if (initState.loginType === LOGIN_TYPE.KEEPER) {
-        this.setupSynchronizationWithWavesKeeper();
+        this.setupSynchronizationWithKeeper();
       }
       this.setAddress(initState.address);
     }
 
     setInterval(this.updateAccountAssets, 5 * 1000);
     reaction(
-      () => this.rootStore.accountStore?.address,
-      this.updateAccountAssets
+      () => this.address,
+      () => this.updateAccountAssets(true)
     );
   }
 
   isWavesKeeperInstalled = false;
   @action.bound setWavesKeeperInstalled = (state: boolean) =>
     (this.isWavesKeeperInstalled = state);
+
+  assetsBalancesLoading = false;
+  @action.bound setAssetsBalancesLoading = (state: boolean) =>
+    (this.assetsBalancesLoading = state);
 
   loginModalOpened: boolean = false;
   @action.bound setLoginModalOpened = (state: boolean) =>
@@ -123,18 +127,27 @@ class AccountStore {
     return ["chrome", "firefox", "opera", "edge"].includes(browser);
   }
 
-  @action
-  setupSynchronizationWithWavesKeeper = () => {
-    window["WavesKeeper"]?.initialPromise
-      .then((keeperApi: any) => keeperApi)
-      .then((keeperApi: { publicState: () => void }) => keeperApi.publicState())
-      .then(() => this.subscribeToWavesKeeperUpdate())
-      .catch((error: IKeeperError) => {
-        if (error.code === "14") {
-          this.subscribeToWavesKeeperUpdate();
+  setupSynchronizationWithKeeper = () =>
+    new Promise((resolve, reject) => {
+      let attemptsCount = 0;
+      const interval = setInterval(async () => {
+        if (window["WavesKeeper"] == null) {
+          attemptsCount = attemptsCount + 1;
+          if (attemptsCount > 10) {
+            clearInterval(interval);
+            reject("❌ There is no waves keeper");
+          }
+        } else {
+          clearInterval(interval);
         }
-      });
-  };
+
+        const result = await window["WavesKeeper"].initialPromise
+          .then((keeperApi) => keeperApi.publicState())
+          .then(() => this.subscribeToKeeperUpdate())
+          .catch(({ code }) => code === "14" && this.subscribeToKeeperUpdate());
+        resolve(result);
+      }, 500);
+    });
 
   login = async (loginType: LOGIN_TYPE) => {
     this.setLoginType(loginType);
@@ -142,7 +155,7 @@ class AccountStore {
       case LOGIN_TYPE.KEEPER:
         this.setSigner(new Signer());
         const authData = { data: "you know what is the main reason" };
-        this.setupSynchronizationWithWavesKeeper();
+        await this.setupSynchronizationWithKeeper();
         await this.signer?.setProvider(new ProviderKeeper(authData));
         break;
       case LOGIN_TYPE.SIGNER_EMAIL:
@@ -159,16 +172,11 @@ class AccountStore {
     }
     const loginData = await this.signer?.login();
     this.setAddress(loginData?.address ?? null);
-    // localStorage.setItem("authMethod", {LOGIN_TYPE.KEEPER: "keeper", LOGIN_TYPE.SIGNER_EMAIL: "email", LOGIN_TYPE.SIGNER_SEED: "seed"}[loginType]);
   };
 
   logout() {
     this.setAddress(null);
     this.setLoginType(null);
-    // localStorage.removeItem("authMethod");
-    // localStorage.removeItem("userAddress");
-    // localStorage.removeItem("userBalances");
-    // window.location.reload();
   }
 
   setupWavesKeeper = () => {
@@ -178,8 +186,6 @@ class AccountStore {
       (reaction) => {
         if (attemptsCount === 2) {
           reaction.dispose();
-          // errorMessage({ message: "Waves Keeper is not installed" });
-          // alert("keeper is not installed");
         } else if (window["WavesKeeper"]) {
           reaction.dispose();
           this.setWavesKeeperInstalled(true);
@@ -191,32 +197,34 @@ class AccountStore {
     );
   };
 
-  subscribeToWavesKeeperUpdate() {
-    window["WavesKeeper"].on("update", async (publicState: any) => {
-      if (this.address != null) {
-        this.setAddress(publicState.account.address);
-      }
+  subscribeToKeeperUpdate = () =>
+    window["WavesKeeper"].on("update", (publicState) => {
+      this.rootStore.accountStore.setAssetBalances([]);
+      this.rootStore.stakeStore.setStakedAccountPuzzle(null);
+      this.rootStore.poolsStore.setAccountPoolsLiquidity([]);
+      this.setAddress(publicState.account?.address ?? null);
     });
-  }
 
   serialize = (): ISerializedAccountStore => ({
     address: this.address,
     loginType: this.loginType,
   });
 
-  updateAccountAssets = async () => {
+  updateAccountAssets = async (force = false) => {
     if (this.address == null) {
       this.setAssetBalances([]);
       return;
     }
+    if (!force && this.assetsBalancesLoading) return;
+    this.setAssetsBalancesLoading(true);
+
+    const address = this.address;
     const tokens = this.TOKENS;
     const ids = Object.values(tokens).map(({ assetId }) => assetId);
-    const assetsUrl = `${NODE_URL_MAP[this.chainId]}/assets/balance/${
-      this.address
-    }`;
-    const wavesUrl = `${NODE_URL_MAP[this.chainId]}/addresses/balance/details/${
-      this.address
-    }`;
+    const assetsUrl = `${NODE_URL_MAP[this.chainId]}/assets/balance/${address}`;
+    const wavesUrl = `${
+      NODE_URL_MAP[this.chainId]
+    }/addresses/balance/details/${address}`;
     const data = (
       await Promise.all([
         axios.post(assetsUrl, { ids }).then(({ data }) => data),
@@ -247,6 +255,7 @@ class AccountStore {
         return a.usdnEquivalent!.lt(b.usdnEquivalent!) ? 1 : -1;
       });
     this.setAssetBalances(assetBalances);
+    this.setAssetsBalancesLoading(false);
   };
 
   ///------------------transfer
@@ -397,9 +406,3 @@ class AccountStore {
 }
 
 export default AccountStore;
-
-interface IKeeperError {
-  code: string;
-  data: any;
-  message: string;
-}
