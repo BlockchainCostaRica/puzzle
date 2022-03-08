@@ -1,5 +1,5 @@
 import { RootStore } from "./index";
-import { action, makeAutoObservable, reaction, when } from "mobx";
+import { action, makeAutoObservable, reaction } from "mobx";
 import Pool, { IShortPoolInfo } from "@src/entities/Pool";
 import { TPoolId } from "@src/constants";
 import BN from "@src/utils/BN";
@@ -30,8 +30,12 @@ export default class PoolsStore {
     (this.poolsStats = value);
 
   accountPoolsLiquidity: IShortPoolInfo[] | null = null;
-  private _setAccountPoolsLiquidity = (v: IShortPoolInfo[]) =>
+  setAccountPoolsLiquidity = (v: IShortPoolInfo[] | null) =>
     (this.accountPoolsLiquidity = v);
+
+  accountPoolsLiquidityLoading = false;
+  @action.bound setAccountPoolsLiquidityLoading = (state: boolean) =>
+    (this.accountPoolsLiquidityLoading = state);
 
   findPoolStatsByPoolId = (poolId: string) =>
     this.poolsStats && this.poolsStats[poolId];
@@ -62,13 +66,14 @@ export default class PoolsStore {
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
-    setInterval(this.syncPoolsStats, 15000);
     this.syncPools();
+    setInterval(this.syncPoolsStats, 5 * 1000);
     reaction(() => this.rootStore.accountStore.chainId, this.syncPools);
-    when(
-      () => rootStore.accountStore.address != null,
-      () => this.getAccountPoolsLiquidityInfo()
+    reaction(
+      () => this.rootStore.accountStore.address,
+      () => this.getAccountPoolsLiquidityInfo(true)
     );
+    setInterval(this.getAccountPoolsLiquidityInfo, 5 * 1000);
   }
 
   syncPools = () => {
@@ -113,12 +118,18 @@ export default class PoolsStore {
     }, {} as IPoolStats30Days);
   };
 
-  getAccountPoolsLiquidityInfo = async () => {
+  getAccountPoolsLiquidityInfo = async (force = false) => {
     const { address } = this.rootStore.accountStore;
-    if (address == null) return;
+    if (address == null) {
+      this.setAccountPoolsLiquidity(null);
+      return;
+    }
+    if (!force && this.accountPoolsLiquidityLoading) return;
+    this.setAccountPoolsLiquidityLoading(true);
     const poolsInfo = await Promise.all(
       this.pools.map((p) => p.getAccountLiquidityInfo(address))
     );
-    this._setAccountPoolsLiquidity(poolsInfo);
+    this.setAccountPoolsLiquidity(poolsInfo);
+    this.setAccountPoolsLiquidityLoading(false);
   };
 }

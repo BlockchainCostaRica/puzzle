@@ -11,20 +11,31 @@ export default class StakeStore {
   public setStakedAccountPuzzle = (v: BN | null) =>
     (this.stakedAccountPuzzle = v);
 
+  public loading: boolean = false;
+  public setLoading = (v: boolean) => (this.loading = v);
+
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
     setInterval(this.updateStakedInvestments, 5 * 1000);
     reaction(
-      () => this.rootStore.accountStore?.address,
-      this.updateStakedInvestments
+      () => this.rootStore.accountStore.address,
+      () => this.updateStakedInvestments(true)
     );
   }
 
-  updateStakedInvestments = async () => {
-    const { chainId, address, CONTRACT_ADDRESSES } =
-      this.rootStore.accountStore;
-    if (address == null) return;
+  updateStakedInvestments = async (force = false) => {
+    const { address } = this.rootStore.accountStore;
+    if (address === null) {
+      this.setStakedAccountPuzzle(null);
+      return;
+    }
+    if (!force && this.loading) return;
+    this.setLoading(true);
+    const { chainId, CONTRACT_ADDRESSES } = this.rootStore.accountStore;
+    if (this.stakedAccountPuzzle != null) {
+      this.setLoading(true);
+    }
     const addressStakedValue = await nodeRequest(
       chainId,
       CONTRACT_ADDRESSES.staking,
@@ -35,15 +46,20 @@ export default class StakeStore {
       addressStakedValue && addressStakedValue?.length > 0
         ? new BN(addressStakedValue[0].value)
         : BN.ZERO;
-
     this.setStakedAccountPuzzle(addressStaked);
+    this.setLoading(false);
   };
 
   get puzzleWallet() {
-    if (this.stakedAccountPuzzle == null) return [];
+    if (
+      this.stakedAccountPuzzle == null ||
+      this.rootStore.accountStore.address == null
+    )
+      return [];
     const { accountStore, poolsStore } = this.rootStore;
     const puzzle = accountStore.TOKENS.PUZZLE;
 
+    if (this.stakedAccountPuzzle.eq(0)) return [];
     const puzzleStakedAmount = BN.formatUnits(
       this.stakedAccountPuzzle,
       puzzle.decimals

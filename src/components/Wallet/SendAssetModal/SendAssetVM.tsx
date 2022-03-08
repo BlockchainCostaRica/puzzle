@@ -113,7 +113,7 @@ class SendAssetVM {
           title: "Transaction is not completed",
         });
       })
-      .then(this.rootStore.accountStore.updateAccountAssets)
+      .then(() => this.rootStore.accountStore.updateAccountAssets(true))
       .finally(() => {
         accountStore.setSendAssetModalOpened(false);
         this._setLoading(false);

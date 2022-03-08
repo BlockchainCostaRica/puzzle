@@ -240,7 +240,7 @@ class AddLiquidityInterfaceVM {
           })
         )
       )
-      .then(accountStore.updateAccountAssets)
+      .then(() => accountStore.updateAccountAssets(true))
       .finally(() => this._setLoading(false));
   };
 
@@ -313,7 +313,7 @@ class AddLiquidityInterfaceVM {
           })
         );
       })
-      .then(accountStore.updateAccountAssets)
+      .then(() => accountStore.updateAccountAssets(true))
       .finally(() => this._setLoading(false));
   };
 }

@@ -145,6 +145,7 @@ class Pool implements IPoolConfig {
   @action.bound public getAccountLiquidityInfo = async (
     address: string
   ): Promise<IShortPoolInfo> => {
+    // console.log(this.id);
     const [globalValues, addressValues, staticPoolDomainValue] =
       await Promise.all([
         this.contractRequest(`global_(.*)`),
