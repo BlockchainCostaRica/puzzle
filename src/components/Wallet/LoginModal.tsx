@@ -41,7 +41,9 @@ const LoginModal: React.FC<IProps> = ({ onLogin, ...rest }) => {
   return (
     <Dialog style={{ maxWidth: 360 }} title="Connect wallet" {...rest}>
       {loginTypes.map((t) =>
-        t.type === LOGIN_TYPE.KEEPER && isKeeperDisabled ? null : (
+        t.type === LOGIN_TYPE.KEEPER && isKeeperDisabled ? (
+          <LoginType {...t} key={t.type} />
+        ) : (
           <LoginType {...t} key={t.type} onClick={handleLogin(t.type)} />
         )
       )}

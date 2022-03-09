@@ -36,7 +36,7 @@ class WalletVM {
     this.getAssetsStats();
     makeAutoObservable(this);
     when(
-      () => this.rootStore.accountStore.assetBalances.length > 0,
+      () => this.rootStore.accountStore.assetBalances != null,
       this.getAssetsStats
     );
     reaction(() => this.rootStore.accountStore?.address, this.getAssetsStats);
@@ -55,6 +55,16 @@ class WalletVM {
       notificationStore.notify("There is no address", { type: "error" });
     }
   };
+
+  handleLogOut = async () =>
+    Promise.all([
+      this.rootStore.accountStore.setWalletModalOpened(false),
+      this.rootStore.accountStore.setAssetBalances(null),
+      this.rootStore.accountStore.setAddress(null),
+      this.rootStore.accountStore.setLoginType(null),
+      this.rootStore.poolsStore.setAccountPoolsLiquidity(null),
+      this.rootStore.stakeStore.setStakedAccountPuzzle(null),
+    ]);
 
   get signInInfo() {
     const { loginType, address } = this.rootStore.accountStore;

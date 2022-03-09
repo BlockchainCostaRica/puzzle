@@ -67,10 +67,7 @@ const WalletModalHeader: React.FC<IProps> = () => {
     {
       icon: <Disconnect className="img" />,
       text: "Disconnect",
-      onClick: () => {
-        // accountStore.setWalletModalOpened(false);
-        accountStore.logout();
-      },
+      onClick: vm.handleLogOut,
     },
   ];
   return (

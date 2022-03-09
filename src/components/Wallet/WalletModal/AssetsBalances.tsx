@@ -9,6 +9,7 @@ import Button from "@components/Button";
 import { ReactComponent as NotFoundIcon } from "@src/assets/notFound.svg";
 import styled from "@emotion/styled";
 import { useStores } from "@stores";
+import Skeleton from "react-loading-skeleton";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -21,6 +22,12 @@ const Root = styled.div`
 const AssetsBalances: React.FC<IProps> = () => {
   const vm = useWalletVM();
   const { accountStore, poolsStore } = useStores();
+  if (accountStore.assetBalances === null)
+    return (
+      <Root style={{ padding: "0 24px" }}>
+        <Skeleton height={56} style={{ marginBottom: 8 }} count={3} />
+      </Root>
+    );
   return (
     <Root>
       {vm.balances.length !== 0 ? (

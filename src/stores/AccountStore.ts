@@ -68,7 +68,7 @@ class AccountStore {
       }
       this.setAddress(initState.address);
     }
-
+    this.updateAccountAssets().then();
     setInterval(this.updateAccountAssets, 5 * 1000);
     reaction(
       () => this.address,
@@ -104,11 +104,12 @@ class AccountStore {
   @action.bound setChangePoolModalOpened = (state: boolean) =>
     (this.changePoolModalOpened = state);
 
-  public assetBalances: Balance[] = [];
-  @action.bound setAssetBalances = (assetBalances: Balance[]) =>
+  public assetBalances: Balance[] | null = null;
+  @action.bound setAssetBalances = (assetBalances: Balance[] | null) =>
     (this.assetBalances = assetBalances);
 
   findBalanceByAssetId = (assetId: string) =>
+    this.assetBalances &&
     this.assetBalances.find((balance) => balance.assetId === assetId);
 
   public address: string | null = null;
@@ -199,7 +200,7 @@ class AccountStore {
 
   subscribeToKeeperUpdate = () =>
     window["WavesKeeper"].on("update", (publicState) => {
-      this.rootStore.accountStore.setAssetBalances([]);
+      this.rootStore.accountStore.setAssetBalances(null);
       this.rootStore.stakeStore.setStakedAccountPuzzle(null);
       this.rootStore.poolsStore.setAccountPoolsLiquidity([]);
       this.setAddress(publicState.account?.address ?? null);

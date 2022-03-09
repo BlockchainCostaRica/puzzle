@@ -17,6 +17,7 @@ export default class StakeStore {
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
+    this.updateStakedInvestments().then();
     setInterval(this.updateStakedInvestments, 5 * 1000);
     reaction(
       () => this.rootStore.accountStore.address,
@@ -27,7 +28,7 @@ export default class StakeStore {
   updateStakedInvestments = async (force = false) => {
     const { address } = this.rootStore.accountStore;
     if (address === null) {
-      this.setStakedAccountPuzzle(null);
+      this.setStakedAccountPuzzle(BN.ZERO);
       return;
     }
     if (!force && this.loading) return;

@@ -8,7 +8,7 @@ import SquareTokenIcon from "@components/SquareTokenIcon";
 import styled from "@emotion/styled";
 
 interface IProps {
-  availableAmount?: BN;
+  availableAmount?: BN | null;
   depositAmount: BN | null;
   percent: number;
   symbol: string;
