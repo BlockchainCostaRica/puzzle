@@ -54,7 +54,11 @@ const AddLiquidityInterfaceImpl = () => {
       <Observer>
         {() => (
           <Root>
-            <GoBack link="/invest" text="Back to Pools list" />
+            <GoBack
+              //@ts-ignore
+              link={`/${accountStore.ROUTES.invest[vm.pool.id]}`}
+              text="Back to Pool Info"
+            />
             <SizedBox height={24} />
             <Text weight={500} size="large">
               Deposit liquidity
