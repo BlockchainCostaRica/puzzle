@@ -24,11 +24,11 @@ export default class PoolsStore {
     this.rootStore = rootStore;
     makeAutoObservable(this);
     this.syncPools();
-    this.getAccountPoolsLiquidityInfo().then();
-    setInterval(this.getAccountPoolsLiquidityInfo, 15 * 1000);
+    this.updateAccountPoolsLiquidityInfo().then();
+    setInterval(this.updateAccountPoolsLiquidityInfo, 15 * 1000);
     reaction(
       () => this.rootStore.accountStore.address,
-      () => this.getAccountPoolsLiquidityInfo()
+      () => this.updateAccountPoolsLiquidityInfo(true)
     );
     reaction(() => this.rootStore.accountStore.chainId, this.syncPools);
   }
@@ -118,7 +118,7 @@ export default class PoolsStore {
     }, {} as IPoolStats30Days);
   };
 
-  getAccountPoolsLiquidityInfo = async (force = false) => {
+  updateAccountPoolsLiquidityInfo = async (force = false) => {
     const { address } = this.rootStore.accountStore;
     if (address == null) {
       this.setAccountPoolsLiquidity(null);

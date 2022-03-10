@@ -27,10 +27,10 @@ export const TESTNET_ROUTES = {
     farms: `${TESTNET_POOL_ID.farmsPool1}/addLiquidity`,
   },
   addOneToken: {
-    farms: `${MAINNET_POOL_ID.farmsPool1}/addOneToken`,
+    // farms: `${MAINNET_POOL_ID.farmsPool1}/addOneToken`,
   },
   invest: {
-    farms: `${MAINNET_POOL_ID.farmsPool1}/invest`,
+    // farms: `${MAINNET_POOL_ID.farmsPool1}/invest`,
   },
 };
 
