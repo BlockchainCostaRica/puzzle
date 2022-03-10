@@ -113,8 +113,7 @@ class AddLiquidityInterfaceVM {
 
   get minBalanceAsset(): Balance | null {
     const { accountStore } = this.rootStore;
-    if (this.pool == null || accountStore.assetBalances.length === 0)
-      return null;
+    if (this.pool == null || accountStore.assetBalances == null) return null;
     const balances = accountStore.assetBalances.filter((balance) =>
       this.pool!.tokens.some((t) => t.assetId === balance.assetId)
     );
@@ -125,8 +124,7 @@ class AddLiquidityInterfaceVM {
 
   get zeroAssetBalances(): number | null {
     const { accountStore } = this.rootStore;
-    if (this.pool == null || accountStore.assetBalances.length === 0)
-      return null;
+    if (this.pool == null || accountStore.assetBalances == null) return null;
     const balances = accountStore.assetBalances.filter((balance) =>
       this.pool!.tokens.some((t) => t.assetId === balance.assetId)
     );

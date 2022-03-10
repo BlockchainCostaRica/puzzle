@@ -9,7 +9,7 @@ interface IProps extends HTMLAttributes<HTMLDivElement> {
   type: LOGIN_TYPE;
 }
 
-const Root = styled.div`
+const Root = styled.div<{ disable?: boolean }>`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -18,7 +18,7 @@ const Root = styled.div`
   box-sizing: border-box;
   border-radius: 12px;
   margin: 4px 0;
-  cursor: pointer;
+  cursor: ${({ disable }) => (disable ? "not-allowed" : "pointer")};
 `;
 const Icon = styled.img`
   width: 24px;
@@ -29,7 +29,7 @@ const Icon = styled.img`
 
 const LoginType: React.FC<IProps> = ({ title, icon, type, ...rest }) => {
   return (
-    <Root {...rest}>
+    <Root {...rest} disable={rest.onClick == null}>
       <Text size="medium" weight={500}>
         {title}
       </Text>

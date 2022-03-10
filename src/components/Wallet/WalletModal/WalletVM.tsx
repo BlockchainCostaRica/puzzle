@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useVM } from "@src/hooks/useVM";
-import { makeAutoObservable, reaction, when } from "mobx";
+import { makeAutoObservable } from "mobx";
 import { RootStore, useStores } from "@stores";
 import copy from "copy-to-clipboard";
 import Balance from "@src/entities/Balance";
@@ -35,12 +35,12 @@ class WalletVM {
     this.rootStore = rootStore;
     this.getAssetsStats();
     makeAutoObservable(this);
-    when(
-      () => this.rootStore.accountStore.assetBalances.length > 0,
-      this.getAssetsStats
-    );
-    reaction(() => this.rootStore.accountStore?.address, this.getAssetsStats);
-    setInterval(this.getAssetsStats, 15 * 1000);
+    // when(
+    //   () => this.rootStore.accountStore.assetBalances != null,
+    //   this.getAssetsStats
+    // );
+    // reaction(() => this.rootStore.accountStore?.address, this.getAssetsStats);
+    // setInterval(this.getAssetsStats, 15 * 1000);
   }
 
   handleCopyAddress = () => {
@@ -55,6 +55,16 @@ class WalletVM {
       notificationStore.notify("There is no address", { type: "error" });
     }
   };
+
+  handleLogOut = async () =>
+    Promise.all([
+      this.rootStore.accountStore.setWalletModalOpened(false),
+      this.rootStore.accountStore.setAssetBalances(null),
+      this.rootStore.accountStore.setAddress(null),
+      this.rootStore.accountStore.setLoginType(null),
+      this.rootStore.poolsStore.setAccountPoolsLiquidity(null),
+      this.rootStore.stakeStore.setStakedAccountPuzzle(null),
+    ]);
 
   get signInInfo() {
     const { loginType, address } = this.rootStore.accountStore;

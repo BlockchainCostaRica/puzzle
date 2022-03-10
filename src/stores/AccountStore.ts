@@ -16,11 +16,11 @@ import {
 } from "@src/constants";
 import { action, autorun, makeAutoObservable, reaction } from "mobx";
 import Balance from "@src/entities/Balance";
-import axios from "axios";
 import { getCurrentBrowser } from "@src/utils/getCurrentBrowser";
 import BN from "@src/utils/BN";
 import { waitForTx } from "@waves/waves-transactions";
 import tokenLogos from "@src/assets/tokens/tokenLogos";
+import nodeService from "@src/services/nodeService";
 
 export enum LOGIN_TYPE {
   SIGNER_SEED = "SIGNER_SEED",
@@ -68,7 +68,7 @@ class AccountStore {
       }
       this.setAddress(initState.address);
     }
-
+    this.updateAccountAssets().then();
     setInterval(this.updateAccountAssets, 5 * 1000);
     reaction(
       () => this.address,
@@ -104,11 +104,12 @@ class AccountStore {
   @action.bound setChangePoolModalOpened = (state: boolean) =>
     (this.changePoolModalOpened = state);
 
-  public assetBalances: Balance[] = [];
-  @action.bound setAssetBalances = (assetBalances: Balance[]) =>
+  public assetBalances: Balance[] | null = null;
+  @action.bound setAssetBalances = (assetBalances: Balance[] | null) =>
     (this.assetBalances = assetBalances);
 
   findBalanceByAssetId = (assetId: string) =>
+    this.assetBalances &&
     this.assetBalances.find((balance) => balance.assetId === assetId);
 
   public address: string | null = null;
@@ -199,7 +200,7 @@ class AccountStore {
 
   subscribeToKeeperUpdate = () =>
     window["WavesKeeper"].on("update", (publicState) => {
-      this.rootStore.accountStore.setAssetBalances([]);
+      this.rootStore.accountStore.setAssetBalances(null);
       this.rootStore.stakeStore.setStakedAccountPuzzle(null);
       this.rootStore.poolsStore.setAccountPoolsLiquidity([]);
       this.setAddress(publicState.account?.address ?? null);
@@ -218,42 +219,25 @@ class AccountStore {
     if (!force && this.assetsBalancesLoading) return;
     this.setAssetsBalancesLoading(true);
 
-    const address = this.address;
     const tokens = this.TOKENS;
-    const ids = Object.values(tokens).map(({ assetId }) => assetId);
-    const assetsUrl = `${NODE_URL_MAP[this.chainId]}/assets/balance/${address}`;
-    const wavesUrl = `${
-      NODE_URL_MAP[this.chainId]
-    }/addresses/balance/details/${address}`;
-    const data = (
-      await Promise.all([
-        axios.post(assetsUrl, { ids }).then(({ data }) => data),
-        axios.get(wavesUrl).then(({ data }) => ({
-          balances: [{ balance: data.regular, assetId: "WAVES" }],
-        })),
-      ])
-    ).reduce<{ assetId: string; balance: number }[]>(
-      (acc, { balances }) => [...acc, ...balances],
-      []
+    const address = this.address;
+    const data = await nodeService.getAddressBalances(
+      NODE_URL_MAP[this.chainId],
+      address
     );
-    const assetBalances = data
-      .map(({ balance: numberBalance, assetId }) => {
-        const balance = new BN(numberBalance ?? 0);
-        const asset: Omit<IToken, "logo"> = Object.values(tokens).find(
-          (t) => t.assetId === assetId
-        )!;
-        const rate = this.rootStore.poolsStore.usdnRate(assetId, 1) ?? BN.ZERO;
-        const usdnEquivalent = rate
-          ? rate.times(BN.formatUnits(balance, asset.decimals))
-          : BN.ZERO;
-        return new Balance({ balance, usdnEquivalent, ...asset });
-      })
-      .sort((a, b) => {
-        if (a.usdnEquivalent == null && b.usdnEquivalent == null) return 0;
-        if (a.usdnEquivalent == null && b.usdnEquivalent != null) return 1;
-        if (a.usdnEquivalent == null && b.usdnEquivalent == null) return -1;
-        return a.usdnEquivalent!.lt(b.usdnEquivalent!) ? 1 : -1;
-      });
+    const assetBalances = Object.entries(tokens).map(([_, asset]) => {
+      const t = data.find(({ assetId }) => assetId === asset.assetId);
+      const balance = new BN(t != null ? t.balance : 0);
+      const rate =
+        this.rootStore.poolsStore.usdnRate(asset.assetId, 1) ?? BN.ZERO;
+      const usdnEquivalent = rate
+        ? rate.times(BN.formatUnits(balance, asset.decimals))
+        : BN.ZERO;
+      return new Balance({ balance, usdnEquivalent, ...asset });
+    });
+    const newAddress = this.address;
+    if (address !== newAddress) return;
+
     this.setAssetBalances(assetBalances);
     this.setAssetsBalancesLoading(false);
   };

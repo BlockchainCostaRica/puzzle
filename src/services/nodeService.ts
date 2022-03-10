@@ -16,15 +16,6 @@ export interface IStatsByPoolAndPeriodResponse extends IStatsPoolItemResponse {
   volume: IPoolVolume[];
 }
 
-export interface IArtWork {
-  floorPrice?: number;
-  name: string;
-  imageLink: string;
-  marketLink: string;
-  typeId: string;
-  apy?: number;
-}
-
 export interface IStakingStatsResponse {
   classic: { apy: number };
   ultra: { apy: number };
@@ -46,10 +37,35 @@ export interface INFT {
   scripted: boolean;
 }
 
+interface IBalance {
+  assetId: string;
+  balance: number;
+}
+
 const nodeService = {
   getAddressNfts: async (address: string): Promise<INFT[]> => {
     const url = `https://nodes.wavesnodes.com/assets/nft/${address}/limit/1000`;
     const { data } = await axios.get(url);
+    return data;
+  },
+  getAddressBalances: async (
+    node: string,
+    address: string | null
+  ): Promise<IBalance[]> => {
+    if (address == null) return [];
+    const assetsUrl = `${node}/assets/balance/${address}`;
+    const wavesUrl = `${node}/addresses/balance/details/${address}`;
+    const data = (
+      await Promise.all([
+        axios.get(assetsUrl).then(({ data }) => data),
+        axios.get(wavesUrl).then(({ data }) => ({
+          balances: [{ balance: data.regular, assetId: "WAVES" }],
+        })),
+      ])
+    ).reduce<{ assetId: string; balance: number }[]>(
+      (acc, { balances }) => [...acc, ...balances],
+      []
+    );
     return data;
   },
 };

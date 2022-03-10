@@ -10,6 +10,7 @@ import Button from "@components/Button";
 import { Column } from "@components/Flex";
 import { useStores } from "@stores";
 import { Link } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
 
 const Root = styled.div`
   display: flex;
@@ -18,10 +19,18 @@ const Root = styled.div`
 `;
 
 const Investments: React.FC = () => {
-  const { accountStore } = useStores();
+  const { accountStore, poolsStore, stakeStore } = useStores();
   const vm = useWalletVM();
   const { stakedNfts, investments } = vm;
-
+  if (
+    poolsStore.accountPoolsLiquidity == null ||
+    stakeStore.stakedAccountPuzzle == null
+  )
+    return (
+      <Root style={{ padding: "0 24px" }}>
+        <Skeleton height={56} style={{ marginBottom: 8 }} count={3} />
+      </Root>
+    );
   return (
     <Root>
       {investments != null || stakedNfts == null

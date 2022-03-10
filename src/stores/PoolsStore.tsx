@@ -20,6 +20,19 @@ export interface IPoolStats30Days extends IStatsPoolItem {
 }
 
 export default class PoolsStore {
+  constructor(rootStore: RootStore) {
+    this.rootStore = rootStore;
+    makeAutoObservable(this);
+    this.syncPools();
+    this.getAccountPoolsLiquidityInfo().then();
+    setInterval(this.getAccountPoolsLiquidityInfo, 15 * 1000);
+    reaction(
+      () => this.rootStore.accountStore.address,
+      () => this.getAccountPoolsLiquidityInfo()
+    );
+    reaction(() => this.rootStore.accountStore.chainId, this.syncPools);
+  }
+
   public rootStore: RootStore;
   pools: Pool[] = [];
   @action.bound setPools = (pools: Pool[]) => (this.pools = pools);
@@ -62,19 +75,6 @@ export default class PoolsStore {
     const tokens = this.rootStore.accountStore.TOKENS;
     return pool.currentPrice(assetId, tokens.USDN.assetId, coefficient);
   };
-
-  constructor(rootStore: RootStore) {
-    this.rootStore = rootStore;
-    makeAutoObservable(this);
-    this.syncPools();
-    setInterval(this.syncPoolsStats, 5 * 1000);
-    reaction(() => this.rootStore.accountStore.chainId, this.syncPools);
-    reaction(
-      () => this.rootStore.accountStore.address,
-      () => this.getAccountPoolsLiquidityInfo(true)
-    );
-    setInterval(this.getAccountPoolsLiquidityInfo, 5 * 1000);
-  }
 
   syncPools = () => {
     const accountStore = this.rootStore.accountStore;
@@ -129,6 +129,8 @@ export default class PoolsStore {
     const poolsInfo = await Promise.all(
       this.pools.map((p) => p.getAccountLiquidityInfo(address))
     );
+    const newAddress = this.rootStore.accountStore.address;
+    if (address !== newAddress) return;
     this.setAccountPoolsLiquidity(poolsInfo);
     this.setAccountPoolsLiquidityLoading(false);
   };
