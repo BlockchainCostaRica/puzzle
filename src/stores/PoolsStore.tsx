@@ -25,7 +25,7 @@ export default class PoolsStore {
     makeAutoObservable(this);
     this.syncPools();
     this.getAccountPoolsLiquidityInfo().then();
-    setInterval(this.getAccountPoolsLiquidityInfo, 10 * 1000);
+    setInterval(this.getAccountPoolsLiquidityInfo, 15 * 1000);
     reaction(
       () => this.rootStore.accountStore.address,
       () => this.getAccountPoolsLiquidityInfo()
@@ -129,6 +129,8 @@ export default class PoolsStore {
     const poolsInfo = await Promise.all(
       this.pools.map((p) => p.getAccountLiquidityInfo(address))
     );
+    const newAddress = this.rootStore.accountStore.address;
+    if (address !== newAddress) return;
     this.setAccountPoolsLiquidity(poolsInfo);
     this.setAccountPoolsLiquidityLoading(false);
   };
