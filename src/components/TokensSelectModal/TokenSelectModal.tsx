@@ -7,16 +7,17 @@ import SizedBox from "@components/SizedBox";
 import { observer } from "mobx-react-lite";
 import Text from "@components/Text";
 import Balance from "@src/entities/Balance";
-import TokenInfo from "@screens/TradeInterface/TokenSelectModal/TokenInfo";
 import Input from "@components/Input";
 import ButtonsGroup from "@components/ButtonsGroup";
 import styled from "@emotion/styled";
+import TokenInfo from "./TokenInfo";
 
 interface IProps {
   onClose: () => void;
   balances: Balance[];
   onSelect: (assetId: string) => void;
   visible: boolean;
+  selectedTokenId?: string;
 }
 
 const tokenCategories = [
@@ -46,6 +47,7 @@ const Scroll = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+
   border-bottom: 1px solid #f1f2fe;
 `;
 const TokenSelectModal: React.FC<IProps> = ({
@@ -53,6 +55,7 @@ const TokenSelectModal: React.FC<IProps> = ({
   balances,
   onSelect,
   visible,
+  selectedTokenId,
 }) => {
   const [searchValue, setSearchValue] = useState<string>("");
   const [activeFilter, setActiveFilter] = useState<number>(0);
@@ -66,15 +69,20 @@ const TokenSelectModal: React.FC<IProps> = ({
     onSelect(assetId);
     onClose();
   };
-  const filteredTokens = balances.filter((v) => {
-    if (!v || !v.symbol || !v.name) {
-      return false;
-    }
-    return (
-      v.symbol.toLowerCase().includes(searchValue.toLowerCase()) ||
-      v.name.toLowerCase().includes(searchValue.toLowerCase())
-    );
-  });
+  const filteredTokens = balances
+    .filter((v) => {
+      if (!v || !v.symbol || !v.name) {
+        return false;
+      }
+      return (
+        v.symbol.toLowerCase().includes(searchValue.toLowerCase()) ||
+        v.name.toLowerCase().includes(searchValue.toLowerCase())
+      );
+    })
+    .filter((balance) => {
+      if (activeFilter === 0) return true;
+      return balance.category?.includes(tokenCategoriesEnum[activeFilter]);
+    });
 
   return (
     <Dialog
@@ -104,9 +112,7 @@ const TokenSelectModal: React.FC<IProps> = ({
         <Column crossAxisSize="max" style={{ maxHeight: 352 }}>
           {filteredTokens && filteredTokens.length > 0 ? (
             filteredTokens.map((t) => {
-              const disabled =
-                activeFilter !== 0 &&
-                !t.category?.includes(tokenCategoriesEnum[activeFilter]);
+              const disabled = selectedTokenId === t.assetId;
               return (
                 <TokenInfo
                   hidden={disabled}

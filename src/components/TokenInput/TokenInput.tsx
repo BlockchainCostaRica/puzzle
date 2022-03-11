@@ -9,7 +9,7 @@ import BigNumberInput from "@components/BigNumberInput";
 import AmountInput from "@components/AmountInput";
 import _ from "lodash";
 import TokenSelect from "@components/TokenInput/TokenSelect";
-import TokenSelectModal from "@screens/TradeInterface/TokenSelectModal/TokenSelectModal";
+import TokenSelectModal from "../TokensSelectModal";
 interface IProps {
   balances: Balance[];
 
@@ -149,6 +149,7 @@ const TokenInput: React.FC<IProps> = (props) => {
       </InputContainer>
       {props.setAssetId && (
         <TokenSelectModal
+          selectedTokenId={props.assetId}
           visible={openModal}
           onSelect={props.setAssetId}
           balances={props.balances}
