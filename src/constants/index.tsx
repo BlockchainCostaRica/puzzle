@@ -52,13 +52,14 @@ export const EXPLORER_URL_MAP: Record<TChainId, string> = {
 
 export const SLIPPAGE = 0.95; //if puzzle slippage = 0
 export const TRADE_FEE = 0.95;
-
+export type TTokenCategory = "global" | "stable" | "defi" | "ducks";
 export interface IToken {
   assetId: string;
   name: string;
   symbol: string;
   decimals: number;
   logo: string;
+  category?: string[];
 }
 
 export interface IPoolConfig {

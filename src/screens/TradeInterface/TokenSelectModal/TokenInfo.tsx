@@ -9,9 +9,11 @@ import SquareTokenIcon from "@components/SquareTokenIcon";
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   token: Balance;
   withClickLogic?: boolean;
+  hidden?: boolean;
 }
 
 const Root = styled.div<{ withClickLogic?: boolean }>`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -46,9 +48,21 @@ const Symbol = styled.div`
   color: #8082c5;
   text-transform: uppercase;
 `;
-const TokenInfo: React.FC<IProps> = ({ token, ...rest }) => {
+const Gradient = styled.div`
+  display: flex;
+  bottom: 0;
+  left: 0;
+  top: 0;
+  width: 100%;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.5);
+  z-index: 10;
+  cursor: not-allowed;
+`;
+const TokenInfo: React.FC<IProps> = ({ token, hidden, ...rest }) => {
   return (
     <Root {...rest}>
+      {hidden && <Gradient />}
       <Row>
         {token.logo ? (
           <SquareTokenIcon size="small" src={token.logo} />

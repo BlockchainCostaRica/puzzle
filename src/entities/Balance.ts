@@ -16,6 +16,7 @@ class Balance implements IAssetBalance {
   private readonly _logo?: string;
   public readonly balance?: BN;
   public readonly usdnEquivalent?: BN;
+  public readonly category?: string[];
 
   constructor(props: IAssetBalance) {
     this.name = props.name;
@@ -25,6 +26,7 @@ class Balance implements IAssetBalance {
     this._logo = props.logo;
     this.balance = props.balance;
     this.usdnEquivalent = props.usdnEquivalent;
+    this.category = props.category;
   }
 
   get logo() {
@@ -34,6 +36,7 @@ class Balance implements IAssetBalance {
   get formatBalance() {
     if (this.balance == null) return "—";
     const value = BN.formatUnits(this.balance ?? 0, this.decimals);
+    if (value.eq(0)) return value.toFormat(2);
     return value.gt(0.01) ? value.toFormat(2) : value.toFormat(6);
   }
 
@@ -41,6 +44,7 @@ class Balance implements IAssetBalance {
     if (this.usdnEquivalent == null) {
       return "—";
     }
+    if (this.usdnEquivalent.eq(0)) return `~ 0.00 $`;
     const v = this.usdnEquivalent.gt(0.01)
       ? this.usdnEquivalent.toFormat(2)
       : this.usdnEquivalent.toFormat(6);

@@ -1,7 +1,6 @@
 import testnetTokens from "./testnetTokens.json";
 import tokenLogos from "@src/assets/tokens/tokenLogos";
 import { IPoolConfig } from "@src/constants/index";
-import { MAINNET_POOL_ID } from "@src/constants/mainnetConfig";
 
 export { testnetTokens };
 
@@ -27,10 +26,10 @@ export const TESTNET_ROUTES = {
     farms: `${TESTNET_POOL_ID.farmsPool1}/addLiquidity`,
   },
   addOneToken: {
-    farms: `${MAINNET_POOL_ID.farmsPool1}/addOneToken`,
+    // farms: `${MAINNET_POOL_ID.farmsPool1}/addOneToken`,
   },
   invest: {
-    farms: `${MAINNET_POOL_ID.farmsPool1}/invest`,
+    // farms: `${MAINNET_POOL_ID.farmsPool1}/invest`,
   },
 };
 
