@@ -3,61 +3,93 @@
     "assetId": "WAVES",
     "name": "WAVES",
     "symbol": "WAVES",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "global"
+    ]
   },
   "USDN": {
     "assetId": "DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p",
     "name": "Neutrino USD",
     "symbol": "USDN",
-    "decimals": 6
+    "decimals": 6,
+    "category": [
+      "global",
+      "stable"
+    ]
   },
   "EGG": {
     "assetId": "C1iWsKGqLwjHUndiQ7iXpdmPum9PeCDFfyXBdJJosDRS",
     "name": "Waves Ducks",
     "symbol": "EGG",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "duck"
+    ]
   },
   "SWOP": {
     "assetId": "Ehie5xYpeN8op1Cctc6aGUrqx8jq3jtf1DSjXDbfm7aT",
     "name": "SWOP",
     "symbol": "SWOP",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "defi"
+    ]
   },
   "VIRES": {
     "assetId": "DSbbhLsSTeDg5Lsiufk2Aneh3DjVqJuPr2M9uU1gwy5p",
     "name": "VIRES",
     "symbol": "VIRES",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "defi"
+    ]
   },
   "BTC": {
     "assetId": "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS",
     "name": "BTC",
     "symbol": "BTC",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "global"
+    ]
   },
   "ETH": {
     "assetId": "474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu",
     "name": "ETH",
     "symbol": "ETH",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "global"
+    ]
   },
   "LTC": {
     "assetId": "HZk1mbfuJpmxU1Fs4AX5MWLVYtctsNcg6e2C6VKqK8zk",
     "name": "LTC",
     "symbol": "LTC",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "global"
+    ]
   },
   "USDC": {
     "assetId": "6XtHjpXbs9RRJP2Sr9GUyVqzACcby9TkThHXnjVC5CDJ",
     "name": "USD Coin",
     "symbol": "USDC",
-    "decimals": 6
+    "decimals": 6,
+    "category": [
+      "global",
+      "stable"
+    ]
   },
   "BNB": {
     "assetId": "5UYBPpq4WoU5n4MwpFkgJnW3Fq4B1u3ukpK33ik4QerR",
     "name": "Binance Coin",
     "symbol": "BNB",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "global"
+    ]
   },
   "MUNA": {
     "assetId": "eCNH1aqUnocub8PbNsxLNvZWGeVE98L2Crw3cGY6Gq2",
@@ -69,13 +101,20 @@
     "assetId": "DUk2YTxhRoAqMJLus4G2b3fR8hMHVh6eiyFx5r29VR6t",
     "name": "Neutrino EUR",
     "symbol": "EURN",
-    "decimals": 6
+    "decimals": 6,
+    "category": [
+      "global",
+      "stable"
+    ]
   },
   "WX": {
     "assetId": "Atqv59EYzjFGuitKVnMRk6H8FukjoV3ktPorbEys25on",
     "name": "Waves Exchange",
     "symbol": "WX",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "defi"
+    ]
   },
   "WCT": {
     "assetId": "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
@@ -99,13 +138,19 @@
     "assetId": "7LMV3s1J4dKpMQZqge5sKYoFkZRLojnnU49aerqos4yg",
     "name": "ENNO",
     "symbol": "ENNO",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "ducks"
+    ]
   },
   "SIGN": {
     "assetId": "9sQutD5HnRvjM1uui5cVC4w9xkMPAfYEV8ymug3Mon2Y",
     "name": "SIGN",
     "symbol": "SIGN",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "ducks"
+    ]
   },
   "PUZZLE": {
     "assetId": "HEB8Qaw9xrWpWs8tHsiATYGBWDBtP2S7kcPALrMu43AS",
@@ -117,7 +162,11 @@
     "assetId": "34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ",
     "name": "USDT",
     "symbol": "USDT",
-    "decimals": 6
+    "decimals": 6,
+    "category": [
+      "global",
+      "stable"
+    ]
   },
   "RACE": {
     "assetId": "D4TPjtzpsDEJFS1pUAkvh1tJJJMNWGcSrds9sveBoQka",
@@ -129,90 +178,135 @@
     "assetId": "usUeJwSpvghP5FR6jE9X4fUJbgXyxXnAezSgbzoMA8K",
     "name": "DUXPLORER",
     "symbol": "DUXPLORER",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "ducks"
+    ]
   },
   "MATH": {
     "assetId": "FPzcaiEjyG6syoXLY1aghWdPwExvRezGbPXjmL3Gcofw",
     "name": "MATH",
     "symbol": "MATH",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "ducks"
+    ]
   },
   "TURTLE": {
     "assetId": "9mFbBseP3RSC2veLrBgiLJMXDjahwBiH44WnqMfdkgid",
     "name": "TURTLE",
     "symbol": "TURTLE",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "ducks"
+    ]
   },
   "EGGSEGGS": {
     "assetId": "E4cL4MDRTPz9Wo1hHkxQv4ZzpxVL5136JVaki4wGz2QZ",
     "name": "EGGSEGGS",
     "symbol": "EGGSEGGS",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "ducks"
+    ]
   },
   "PESOLATINO": {
     "assetId": "5JQ8yUY4vnB19s4bXSGVYsNEyA9Bag6jbMtVEgFHvYM7",
     "name": "TEAM LATAM",
     "symbol": "PESOLATINO",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "ducks"
+    ]
   },
   "FOMO": {
     "assetId": "J4iWJS2kGmAqLC4dYFuHvmqXK1E6rBJaRTA6nd1VmFkj",
     "name": "FOMO",
     "symbol": "FOMO",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "ducks"
+    ]
   },
   "MUNDO": {
     "assetId": "2x8vsNgrBgLq9GWpnTNSVXTGq3cMLSvWWepR8CX36fVZ",
     "name": "MUNDO",
     "symbol": "MUNDO",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "ducks"
+    ]
   },
   "EGGPOINT": {
     "assetId": "6pHc1PyBcXyS74eBEo95V3ecQvhAypL9RfsUUKtHDUq2",
     "name": "EGGPOINT",
     "symbol": "EGGPOINT",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "ducks"
+    ]
   },
   "ENDO": {
     "assetId": "6muMrLavuvuSZXgy1cQrvYm92rGbprNXGdj6Bg7HAtTV",
     "name": "ENDO",
     "symbol": "ENDO",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "ducks"
+    ]
   },
   "MARVIN": {
     "assetId": "6xxMPcvHneBvZk7p82oUdQw4J3F9bsFgtm7YYXQSEDxb",
     "name": "MARVIN",
     "symbol": "MARVIN",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "ducks"
+    ]
   },
   "EGGMOON": {
     "assetId": "J3dRSWWyRoX55YuuXQhBa2uZ4bUczkqSFC94VZeCoWKA",
     "name": "EGGMOON",
     "symbol": "EGGMOON",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "ducks"
+    ]
   },
   "STREET": {
     "assetId": "DAGQvqQg4F5YTQCQ5JFaVJdZEVoTvecuw2W9ybL5P1hR",
     "name": "STREET",
     "symbol": "STREET",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "ducks"
+    ]
   },
   "KOLKHOZ": {
     "assetId": "BwCk5zUMTuYtFFu3euo3g6Fwdk7TALrr5C8wvdzps8R5",
     "name": "KOLKHOZ",
     "symbol": "KOLKHOZ",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "ducks"
+    ]
   },
   "FORKLOG": {
     "assetId": "4q9KXJCi9ZbmhttXuLRabd9epgpvowVuyKDuuNdkahdC",
     "name": "FORKLOG",
     "symbol": "FORKLOG",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "ducks"
+    ]
   },
   "CGU": {
     "assetId": "HK72uehJjkM22phZ5wHhBYxprP3r41eYtk9fYu5uetne",
     "name": "CGU",
     "symbol": "CGU",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "ducks"
+    ]
   }
 }

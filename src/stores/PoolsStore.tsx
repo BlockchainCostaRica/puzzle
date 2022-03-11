@@ -23,6 +23,7 @@ export default class PoolsStore {
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
+    this.syncPoolsStats().then();
     this.syncPools();
     this.updateAccountPoolsLiquidityInfo().then();
     setInterval(this.updateAccountPoolsLiquidityInfo, 15 * 1000);

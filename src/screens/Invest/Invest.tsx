@@ -10,7 +10,7 @@ import { useStores } from "@stores";
 import PoolNotFound from "@screens/Invest/PoolNotFound";
 import GridTable from "@components/GridTable";
 import InvestPoolRow from "@screens/Invest/InvestPoolRow";
-import { ReactComponent as Group } from "@src/assets/icons/group.svg";
+import group from "@src/assets/icons/group.svg";
 import Input from "@components/Input";
 
 interface IProps {}
@@ -33,6 +33,8 @@ const Root = styled.div<{ desc?: boolean }>`
   }
 
   .group {
+    width: 20px;
+    height: 20px;
     transform: ${({ desc }) => (desc ? "scale(1)" : "scale(1, -1)")};
   }
 `;
@@ -41,7 +43,8 @@ const Invest: React.FC<IProps> = () => {
   const { poolsStore, accountStore } = useStores();
   const [searchValue, setSearchValue] = useState<string>("");
   const [sortApy, setSortApy] = useState<boolean>(true);
-  const filteredPools = poolsStore.poolDataWithApy
+  const data = poolsStore.poolDataWithApy;
+  const filteredPools = data
     .sort((a, b) => {
       if (a.apy != null && b.apy != null) {
         if (a.apy.lt(b.apy)) {
@@ -103,7 +106,9 @@ const Invest: React.FC<IProps> = () => {
                   <div className="desktop">Liquidity</div>
                   <div className="mobile" style={{ cursor: "pointer" }}>
                     <Text size="medium">APY</Text>
-                    <Group
+                    <img
+                      src={group}
+                      alt="group"
                       className="group"
                       onClick={() => setSortApy(!sortApy)}
                     />
@@ -112,7 +117,9 @@ const Invest: React.FC<IProps> = () => {
                 <AdaptiveRow>
                   <div className="desktop" style={{ cursor: "pointer" }}>
                     <Text size="medium">APY</Text>
-                    <Group
+                    <img
+                      src={group}
+                      alt="group"
                       className="group"
                       onClick={() => setSortApy(!sortApy)}
                     />

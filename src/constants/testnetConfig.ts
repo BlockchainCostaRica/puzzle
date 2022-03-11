@@ -1,7 +1,6 @@
 import testnetTokens from "./testnetTokens.json";
 import tokenLogos from "@src/assets/tokens/tokenLogos";
 import { IPoolConfig } from "@src/constants/index";
-import { MAINNET_POOL_ID } from "@src/constants/mainnetConfig";
 
 export { testnetTokens };
 
