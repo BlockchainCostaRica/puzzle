@@ -12,7 +12,6 @@ import GridTable from "@components/GridTable";
 import InvestPoolRow from "@screens/Invest/InvestPoolRow";
 import group from "@src/assets/icons/group.svg";
 import Input from "@components/Input";
-import BN from "@src/utils/BN";
 
 interface IProps {}
 
