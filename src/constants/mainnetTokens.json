@@ -5,7 +5,8 @@
     "symbol": "WAVES",
     "decimals": 8,
     "category": [
-      "global"
+      "global",
+      "defi"
     ]
   },
   "USDN": {
@@ -15,7 +16,8 @@
     "decimals": 6,
     "category": [
       "global",
-      "stable"
+      "stable",
+      "defi"
     ]
   },
   "EGG": {
@@ -24,7 +26,7 @@
     "symbol": "EGG",
     "decimals": 8,
     "category": [
-      "duck"
+      "ducks"
     ]
   },
   "SWOP": {
@@ -132,31 +134,32 @@
     "assetId": "6nSpVyNH7yM69eg446wrQR94ipbbcmZMU1ENPwanC97g",
     "name": "NSBT",
     "symbol": "NSBT",
-    "decimals": 6
+    "decimals": 6,
+    "category": [
+      "defi"
+    ]
   },
   "ENNO": {
     "assetId": "7LMV3s1J4dKpMQZqge5sKYoFkZRLojnnU49aerqos4yg",
     "name": "ENNO",
     "symbol": "ENNO",
-    "decimals": 8,
-    "category": [
-      "ducks"
-    ]
+    "decimals": 8
   },
   "SIGN": {
     "assetId": "9sQutD5HnRvjM1uui5cVC4w9xkMPAfYEV8ymug3Mon2Y",
     "name": "SIGN",
     "symbol": "SIGN",
-    "decimals": 8,
-    "category": [
-      "ducks"
-    ]
+    "decimals": 8
   },
   "PUZZLE": {
     "assetId": "HEB8Qaw9xrWpWs8tHsiATYGBWDBtP2S7kcPALrMu43AS",
     "name": "PUZZLE",
     "symbol": "PUZZLE",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "defi",
+      "global"
+    ]
   },
   "USDT": {
     "assetId": "34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ",
@@ -172,7 +175,10 @@
     "assetId": "D4TPjtzpsDEJFS1pUAkvh1tJJJMNWGcSrds9sveBoQka",
     "name": "RACE",
     "symbol": "RACE",
-    "decimals": 8
+    "decimals": 8,
+    "category": [
+      "ducks"
+    ]
   },
   "DUXPLORER": {
     "assetId": "usUeJwSpvghP5FR6jE9X4fUJbgXyxXnAezSgbzoMA8K",

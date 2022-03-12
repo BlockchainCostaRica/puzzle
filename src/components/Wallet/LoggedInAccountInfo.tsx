@@ -10,7 +10,7 @@ import * as identityImg from "identity-img";
 import { useStores } from "@stores";
 import Tooltip from "@components/Tooltip";
 import { observer } from "mobx-react-lite";
-import WalletActionsTooltip from "@src/screens/TradeInterface/TokenSelectModal/WalletActionsTooltip";
+import WalletActionsTooltip from "../WalletActionsTooltip";
 
 interface IProps {}
 

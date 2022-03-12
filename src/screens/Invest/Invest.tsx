@@ -15,7 +15,7 @@ import Input from "@components/Input";
 
 interface IProps {}
 
-const Root = styled.div<{ desc?: boolean }>`
+const Root = styled.div<{ apySort?: boolean; liquiditySort?: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -32,25 +32,44 @@ const Root = styled.div<{ desc?: boolean }>`
     margin-top: 56px;
   }
 
-  .group {
+  .apy-group {
     width: 20px;
     height: 20px;
-    transform: ${({ desc }) => (desc ? "scale(1)" : "scale(1, -1)")};
+    transform: ${({ apySort }) => (apySort ? "scale(1)" : "scale(1, -1)")};
+  }
+
+  .liquidity-group {
+    width: 20px;
+    height: 20px;
+    transform: ${({ liquiditySort }) =>
+      liquiditySort ? "scale(1)" : "scale(1, -1)"};
   }
 `;
 
 const Invest: React.FC<IProps> = () => {
   const { poolsStore, accountStore } = useStores();
   const [searchValue, setSearchValue] = useState<string>("");
+  const [activeSort, setActiveSort] = useState<0 | 1>(1);
   const [sortApy, setSortApy] = useState<boolean>(true);
+  const [sortLiquidity, setSortLiquidity] = useState<boolean>(true);
   const data = poolsStore.poolDataWithApy;
   const filteredPools = data
     .sort((a, b) => {
-      if (a.apy != null && b.apy != null) {
-        if (a.apy.lt(b.apy)) {
-          return sortApy ? 1 : -1;
-        } else {
-          return sortApy ? -1 : 1;
+      if (activeSort === 0) {
+        if (a.globalLiquidity != null && b.globalLiquidity != null) {
+          if (a.globalLiquidity.lt(b.globalLiquidity)) {
+            return sortLiquidity ? 1 : -1;
+          } else {
+            return sortLiquidity ? -1 : 1;
+          }
+        }
+      } else if (activeSort === 1) {
+        if (a.apy != null && b.apy != null) {
+          if (a.apy.lt(b.apy)) {
+            return sortApy ? 1 : -1;
+          } else {
+            return sortApy ? -1 : 1;
+          }
         }
       }
       return 1;
@@ -68,7 +87,7 @@ const Invest: React.FC<IProps> = () => {
 
   return (
     <Layout>
-      <Root desc={sortApy}>
+      <Root apySort={sortApy} liquiditySort={sortLiquidity}>
         <Text weight={500} size="large">
           Invest in Puzzle Mega Pools
         </Text>
@@ -103,14 +122,28 @@ const Invest: React.FC<IProps> = () => {
               <div className="gridTitle">
                 <div>Pool name</div>
                 <AdaptiveRow>
-                  <div className="desktop">Liquidity</div>
+                  <div className="desktop">
+                    <Text size="medium">Liquidity</Text>
+                    <img
+                      src={group}
+                      alt="group"
+                      className="liquidity-group"
+                      onClick={() => {
+                        setActiveSort(0);
+                        setSortLiquidity(!sortLiquidity);
+                      }}
+                    />
+                  </div>
                   <div className="mobile" style={{ cursor: "pointer" }}>
                     <Text size="medium">APY</Text>
                     <img
                       src={group}
                       alt="group"
-                      className="group"
-                      onClick={() => setSortApy(!sortApy)}
+                      className="apy-group"
+                      onClick={() => {
+                        setActiveSort(1);
+                        setSortApy(!sortApy);
+                      }}
                     />
                   </div>
                 </AdaptiveRow>
@@ -120,8 +153,11 @@ const Invest: React.FC<IProps> = () => {
                     <img
                       src={group}
                       alt="group"
-                      className="group"
-                      onClick={() => setSortApy(!sortApy)}
+                      className="apy-group"
+                      onClick={() => {
+                        setActiveSort(1);
+                        setSortApy(!sortApy);
+                      }}
                     />
                   </div>
                 </AdaptiveRow>
