@@ -1,21 +1,15 @@
 import styled from "@emotion/styled";
 import React, { ChangeEvent, HTMLAttributes, useState } from "react";
 import Text from "@components/Text";
-import { ReactComponent as SearchIcon } from "@src/assets/icons/search.svg";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
-  icon?: string;
-  value?: string;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-  suffix?: JSX.Element;
-  suffixCondition?: boolean;
+  value: number;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   error?: boolean;
-  errorText?: string;
-  description?: string;
 }
 
 const Root = styled.div<{ focused?: boolean; error?: boolean }>`
-  width: 100%;
+  position: relative;
   background: ${({ focused }) => (focused ? "#fffff" : "#f1f2fe")};
   border: 1px solid
     ${({ focused, error }) =>
@@ -29,15 +23,18 @@ const Root = styled.div<{ focused?: boolean; error?: boolean }>`
   border-radius: 12px;
   justify-content: space-between;
   display: flex;
-  padding: 12px;
+  padding: 8px 27px 8px 12px;
   font-size: 16px;
   line-height: 24px;
   box-sizing: border-box;
-  height: 48px;
+  height: 40px;
+  width: 80px;
 
   input {
+    text-align: right;
     padding: 0;
-    width: 100%;
+    width: 41px;
+    height: 22px;
     color: ${({ focused }) => (focused ? "#363870" : "#8082c5")};
     outline: none;
     border: none;
@@ -49,44 +46,35 @@ const Root = styled.div<{ focused?: boolean; error?: boolean }>`
   }
 `;
 
-const Input: React.FC<IProps> = ({
+const ShareTokenInput: React.FC<IProps> = ({
   value,
-  onChange,
-  suffix,
-  suffixCondition,
-  placeholder,
   error,
-  errorText,
-  description,
-  icon,
+  onChange,
   ...rest
 }) => {
   const [focused, setFocused] = useState(false);
   return (
     <>
       <Root focused={focused} error={error} {...rest}>
-        {icon === "search" && <SearchIcon style={{ marginRight: 16 }} />}
         <input
+          type="number"
+          max="100"
+          min="0"
           onChange={onChange}
           value={value}
-          placeholder={placeholder}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
         />
-        {suffixCondition && suffix}
-      </Root>
-      {error ? (
-        <Text size="small" type="error" style={{ paddingTop: 4 }}>
-          {errorText}
+        <Text
+          type="secondary"
+          size="medium"
+          fitContent
+          style={{ position: "absolute", right: 12, top: 10 }}
+        >
+          %
         </Text>
-      ) : (
-        description && (
-          <Text size="small" type="secondary" style={{ paddingTop: 4 }}>
-            {description}
-          </Text>
-        )
-      )}
+      </Root>
     </>
   );
 };
-export default Input;
+export default ShareTokenInput;

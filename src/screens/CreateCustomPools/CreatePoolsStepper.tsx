@@ -4,7 +4,6 @@ import Card from "@components/Card";
 import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
 import Stepper from "@src/components/Stepper";
-import Button from "@components/Button";
 import { useCreateCustomPoolsVM } from "@screens/CreateCustomPools/CreateCustomPoolsVm";
 import { observer } from "mobx-react-lite";
 

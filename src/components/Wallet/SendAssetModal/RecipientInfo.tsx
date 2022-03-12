@@ -20,7 +20,7 @@ const FixedBlock = styled.div`
   bottom: 24px;
   @media (min-width: calc(560px)) {
     width: 320px;
-    bottom: 185px;
+    bottom: 200px;
   }
 `;
 
