@@ -18,6 +18,7 @@ import MultiSwapInterface from "@screens/MultiSwapInterface";
 import { TPoolId } from "@src/constants";
 import WalletModal from "@components/Wallet/WalletModal";
 import SendAssetModal from "@components/Wallet/SendAssetModal";
+import CreateCustomPools from "./screens/CreateCustomPools";
 
 const Root = styled(Column)`
   width: 100%;
@@ -84,6 +85,8 @@ const App: React.FC = () => {
         ))}
 
         <Route path={ROUTES.ULTRASTAKE} element={<NFTStaking />} />
+
+        <Route path={ROUTES.POOLS_CREATE} element={<CreateCustomPools />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

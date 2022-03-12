@@ -16,6 +16,10 @@ export const TESTNET_ROUTES = {
   ULTRASTAKE: "/ultrastake",
   WALLET: "/wallet",
   TRANSFER: "/transfer",
+  POOLS: "pools/:poolId",
+  POOLS_CREATE: "pools/create",
+  POOLS_WITHDRAW: "/pools/withdraw/:cardId",
+  POOLS_ADD_LIQUIDITY: "/pools/addLiquidity/:cardId",
   withdraw: {
     farms: `${TESTNET_POOL_ID.farmsPool1}/withdraw`,
   },
