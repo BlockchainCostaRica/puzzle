@@ -1,4 +1,13 @@
 {
+  "SHEG": {
+    "assetId": "A2hcw6RV23Fc8Y8FNfV35Sq5QeS9Tgp6n8hbrESiRvXX",
+    "name": "Ducklization",
+    "symbol": "SHEG",
+    "decimals": 8,
+    "category": [
+      "ducks"
+    ]
+  },
   "DUXPLORER": {
     "assetId": "usUeJwSpvghP5FR6jE9X4fUJbgXyxXnAezSgbzoMA8K",
     "name": "DUXPLORER",
