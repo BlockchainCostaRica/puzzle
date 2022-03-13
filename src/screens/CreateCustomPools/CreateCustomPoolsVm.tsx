@@ -26,7 +26,7 @@ class CreateCustomPoolsVm {
   loading: boolean = false;
   private _setLoading = (l: boolean) => (this.loading = l);
 
-  step: number = 0;
+  step: number = 1;
   setStep = (s: number) => (this.step = s);
 
   poolsAssets: IPoolToken[] = [];
@@ -75,6 +75,9 @@ class CreateCustomPoolsVm {
 
   swapFee: number = 0.5;
   setSwapFee = (v: number) => (this.swapFee = v);
+
+  logo: string | null = null;
+  setLogo = (v: any) => (this.logo = v);
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;

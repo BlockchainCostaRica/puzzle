@@ -6,7 +6,7 @@ import RoundTokenIcon from "@components/RoundTokenIcon";
 import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
 import TokenSelectModal from "@components/TokensSelectModal/TokenSelectModal";
-import { ReactComponent as ArrowDownIcon } from "@src/assets/icons/arrowDown.svg";
+import { ReactComponent as ArrowDownIcon } from "@src/assets/icons/thingArrowDown.svg";
 import { ReactComponent as Lock } from "@src/assets/icons/lock.svg";
 import { ReactComponent as Unlock } from "@src/assets/icons/unlock.svg";
 import { ReactComponent as Close } from "@src/assets/icons/smallClose.svg";
@@ -64,19 +64,22 @@ const TokenCompositionRow: React.FC<IProps> = ({
         <Text>{asset.symbol}</Text>
         <ArrowDownIcon
           onClick={() => setOpenModal(true)}
-          style={{ rotate: "90deg" }}
+          style={{ cursor: "pointer" }}
         />
       </AssetContainer>
       <Row mainAxisSize="fit-content" alignItems="center">
         <ShareTokenInput value={share} onChange={setShare} />
         <SizedBox width={10} />
         {locked ? (
-          <Lock onClick={onLockClick} />
+          <Lock onClick={onLockClick} style={{ cursor: "pointer" }} />
         ) : (
-          <Unlock onClick={onLockClick} />
+          <Unlock onClick={onLockClick} style={{ cursor: "pointer" }} />
         )}
         <SizedBox width={10} />
-        <Close style={{ width: 16, height: 16 }} onClick={onDelete} />
+        <Close
+          style={{ width: 16, height: 16, cursor: "pointer" }}
+          onClick={onDelete}
+        />
       </Row>
       <TokenSelectModal
         selectedTokenId={asset.assetId}

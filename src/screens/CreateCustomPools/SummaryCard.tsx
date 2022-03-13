@@ -52,13 +52,13 @@ const SummaryCard: React.FC<IProps> = () => {
         paddingDesktop="0px"
         paddingMobile="0px"
       >
-        <PieChart width={110} height={150}>
+        <PieChart width={100} height={150}>
           <Pie
             data={data}
             innerRadius={40}
             outerRadius={50}
             fill="#C6C9F4"
-            paddingAngle={4}
+            paddingAngle={2}
             dataKey="value"
           >
             {data.map((entry, index) => (
