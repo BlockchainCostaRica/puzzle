@@ -14,6 +14,7 @@ export enum MAINNET_POOL_ID {
   winter = "winter",
   www = "www",
   muna = "muna",
+  sheg = "sheg",
   //   btc = "btc",
 }
 
@@ -34,6 +35,7 @@ export const MAINNET_ROUTES = {
     winter: `${MAINNET_POOL_ID.winter}/withdraw`,
     www: `${MAINNET_POOL_ID.www}/withdraw`,
     muna: `${MAINNET_POOL_ID.muna}/withdraw`,
+    sheg: `${MAINNET_POOL_ID.sheg}/withdraw`,
     //     btc: `${MAINNET_POOL_ID.btc}/withdraw`,
   },
   pools: {
@@ -46,6 +48,7 @@ export const MAINNET_ROUTES = {
     winter: MAINNET_POOL_ID.winter,    
     www: MAINNET_POOL_ID.www,
     muna: MAINNET_POOL_ID.muna,
+    sheg: MAINNET_POOL_ID.sheg,
     //     btc: MAINNET_POOL_ID.btc,
   },
   addLiquidity: {
@@ -57,6 +60,7 @@ export const MAINNET_ROUTES = {
     winter: `${MAINNET_POOL_ID.winter}/addLiquidity`,
     www: `${MAINNET_POOL_ID.www}/addLiquidity`,
     muna: `${MAINNET_POOL_ID.muna}/addLiquidity`,
+    sheg: `${MAINNET_POOL_ID.sheg}/addLiquidity`,
     //     btc: `${MAINNET_POOL_ID.btc}/addLiquidity`,
   },
   addOneToken: {
@@ -68,6 +72,7 @@ export const MAINNET_ROUTES = {
     winter: `${MAINNET_POOL_ID.winter}/addOneToken`,
     www: `${MAINNET_POOL_ID.www}/addOneToken`,
     muna: `${MAINNET_POOL_ID.muna}/addOneToken`,
+    sheg: `${MAINNET_POOL_ID.sheg}/addOneToken`,
     //     btc: `${MAINNET_POOL_ID.btc}/addOneToken`,
   },
   invest: {
@@ -79,6 +84,7 @@ export const MAINNET_ROUTES = {
     winter: `${MAINNET_POOL_ID.winter}/invest`,
     www: `${MAINNET_POOL_ID.www}/invest`,
     muna: `${MAINNET_POOL_ID.muna}/invest`,
+    sheg: `${MAINNET_POOL_ID.sheg}/invest`,
     //     btc: `${MAINNET_POOL_ID.btc}/invest`,
   },
 };
@@ -114,6 +120,21 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
       { ...mainnetTokens.WCT, shareAmount: 0.1, logo: tokenLogos.WCT },
       { ...mainnetTokens.WEST, shareAmount: 0.1, logo: tokenLogos.WEST },
       { ...mainnetTokens.USDN, shareAmount: 0.2, logo: tokenLogos.USDN },
+    ],
+  },
+  [MAINNET_POOL_ID.sheg]: {
+    contractAddress: "3PC87Z4vUzet6tTrTQmzJmW1UtouKjLhBJi",
+    layer2Address: "3PJvGRBaL5FrK5tHax6cJvkZWrHtDUmiDdF",
+    baseTokenId: mainnetTokens.SHEG.assetId,
+    name: "Ducklization IDO Pool",
+    logo: tokenLogos.SHEG,
+    defaultAssetId0: mainnetTokens.SHEG.assetId,
+    defaultAssetId1: mainnetTokens.USDN.assetId,
+    tokens: [
+      { ...mainnetTokens.SHEG, shareAmount: 0.5, logo: tokenLogos.SHEG },
+      { ...mainnetTokens.USDN, shareAmount: 0.25, logo: tokenLogos.USDN },
+      { ...mainnetTokens.WAVES, shareAmount: 0.13, logo: tokenLogos.WAVES },
+      { ...mainnetTokens.EGG, shareAmount: 0.12, logo: tokenLogos.EGG },
     ],
   },
   [MAINNET_POOL_ID.muna]: {
