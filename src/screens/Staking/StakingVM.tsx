@@ -82,14 +82,13 @@ class StakingVM {
 
   get shareOfTotalStake() {
     const { addressStaked, globalStaked } = this;
-    if (addressStaked == null || globalStaked == null) return BN.ZERO;
+    if (addressStaked == null || globalStaked == null) return null;
     return addressStaked.div(globalStaked).times(100);
   }
 
   private updateAddressStakingInfo = async () => {
     const { chainId, address, TOKENS } = this.rootStore.accountStore;
     const { stakingContractAddress } = this;
-
     const [globalValues, addressValues] = await Promise.all([
       nodeRequest(chainId, stakingContractAddress, `global_(.*)`),
       nodeRequest(chainId, stakingContractAddress, `${address}_(.*)`),

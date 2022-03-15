@@ -9,7 +9,6 @@ interface IProps {
 
 const Root = styled.div`
   display: flex;
-  
 `;
 const Btn = styled.div<{ active?: boolean }>`
   background: ${({ active }) => (active ? "#7075E9" : "#ffffff")};
@@ -28,7 +27,11 @@ const ButtonsGroup: React.FC<IProps> = ({ values, active, onClick }) => {
   return (
     <Root>
       {values.map((v, index) => (
-        <Btn onClick={() => onClick(index)} active={active === index}>
+        <Btn
+          key={index}
+          onClick={() => onClick(index)}
+          active={active === index}
+        >
           {v}
         </Btn>
       ))}

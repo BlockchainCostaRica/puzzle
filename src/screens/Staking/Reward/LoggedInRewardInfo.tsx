@@ -13,6 +13,7 @@ import BN from "@src/utils/BN";
 import { useStores } from "@stores";
 import dayjs from "dayjs";
 import { Loading } from "@components/Loading";
+import Skeleton from "react-loading-skeleton";
 
 const Root = styled.div`
   display: flex;
@@ -29,14 +30,12 @@ const LoggedInRewardInfo: React.FC = () => {
   const vm = useStakingVM();
   const availableToClaim =
     vm.availableToClaim != null
-      ? BN.formatUnits(vm.availableToClaim, 18).toFormat(2).concat(" USDN")
-      : "—";
+      ? BN.formatUnits(vm.availableToClaim, 18)
+      : null;
   const claimedReward =
     vm.claimedReward != null
       ? BN.formatUnits(vm.claimedReward, TOKENS.USDN.decimals)
-          .toFormat(2)
-          .concat(" USDN")
-      : "—";
+      : null;
   const date = dayjs(vm.lastClaimDate?.toNumber() ?? 0);
   const format = date.format("D MMM YYYY");
   return (
@@ -45,11 +44,19 @@ const LoggedInRewardInfo: React.FC = () => {
         <Row>
           <Icon src={income} alt="income" />
           <SizedBox width={8} />
-          <Column>
+          <Column justifyContent="space-between">
             <Text type="secondary" size="medium">
               Claimed reward
             </Text>
-            <Text weight={500}>{claimedReward}</Text>
+            <Text weight={500}>
+              {claimedReward != null ? (
+                claimedReward
+                  .toFormat(claimedReward.gte(0.01) ? 2 : 6)
+                  .concat(" USDN")
+              ) : (
+                <Skeleton height={16} width={110} />
+              )}
+            </Text>
           </Column>
         </Row>
         <Text type="secondary" textAlign="right" size="medium">
@@ -62,11 +69,19 @@ const LoggedInRewardInfo: React.FC = () => {
       <Row>
         <Icon src={wallet} alt="wallet" />
         <SizedBox width={8} />
-        <Column>
+        <Column justifyContent="space-between">
           <Text type="secondary" size="medium">
             Available to claim
           </Text>
-          <Text weight={500}>{availableToClaim}</Text>
+          <Text weight={500}>
+            {availableToClaim != null ? (
+              availableToClaim
+                .toFormat(availableToClaim.gte(0.01) ? 2 : 6)
+                .concat(" USDN")
+            ) : (
+              <Skeleton height={16} width={110} />
+            )}
+          </Text>
         </Column>
       </Row>
       <SizedBox height={18} />

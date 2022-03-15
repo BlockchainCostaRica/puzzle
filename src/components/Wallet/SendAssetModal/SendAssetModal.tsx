@@ -43,6 +43,7 @@ const SendAssetModal: React.FC<IProps> = ({ ...rest }) => {
               justifyContent="center"
               alignItems="center"
               crossAxisSize="max"
+              mainAxisSize="stretch"
               style={{ position: "relative" }}
             >
               <SizedBox height={24} />
