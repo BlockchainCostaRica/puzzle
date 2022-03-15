@@ -4,6 +4,7 @@ import { action, makeAutoObservable } from "mobx";
 import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import centerEllipsis from "@src/utils/centerEllipsis";
+import { isValidAddress } from "@waves/waves-transactions/dist/validators";
 
 const ctx = React.createContext<SendAssetVM | null>(null);
 
@@ -59,7 +60,9 @@ class SendAssetVM {
     return (
       this.amount.lte(assetToSend?.balance ?? 0) &&
       !this.amount.eq(0) &&
-      !this.loading
+      !this.loading &&
+      this.recipientAddress.length > 0 &&
+      isValidAddress(this.recipientAddress)
     );
   }
 

@@ -10,6 +10,7 @@ import puzzleLogo from "@src/assets/tokens/PUZZLE.svg";
 import { useStakingVM } from "@screens/Staking/StakingVM";
 import { observer } from "mobx-react-lite";
 import BN from "@src/utils/BN";
+import Skeleton from "react-loading-skeleton";
 
 const Root = styled.div`
   display: flex;
@@ -28,10 +29,9 @@ const Container = styled(Card)`
 `;
 const MyBalances: React.FC = () => {
   const vm = useStakingVM();
-  const staked = BN.formatUnits(
-    vm.addressStaked ?? BN.ZERO,
-    vm.puzzleToken.decimals
-  );
+  const staked = vm.addressStaked
+    ? BN.formatUnits(vm.addressStaked, vm.puzzleToken.decimals).toFormat(2)
+    : null;
   const available = BN.formatUnits(
     vm.puzzleBalance.balance ?? BN.ZERO,
     vm.puzzleToken.decimals
@@ -46,26 +46,28 @@ const MyBalances: React.FC = () => {
         <Row>
           <SquareTokenIcon src={puzzleLogo} size="small" />
           <SizedBox width={8} />
-          <Column>
+          <Column justifyContent="space-between">
             <Text type="secondary" size="small">
               Available to stake
             </Text>
             <Text weight={500}>
-              {vm.puzzleBalance.balance == null
-                ? "—"
-                : `${available.toFormat(2)} PUZZLE`}
+              {vm.puzzleBalance.balance == null ? (
+                <Skeleton height={16} width={110} />
+              ) : (
+                `${available.toFormat(2)} PUZZLE`
+              )}
             </Text>
           </Column>
         </Row>
         <Row>
           <SquareTokenIcon src={stakedPuzzle} size="small" />
           <SizedBox width={8} />
-          <Column>
-            <Text type="secondary" size="small">
+          <Column justifyContent="space-between">
+            <Text type="secondary" size="small" style={{ marginBottom: 2 }}>
               Staked balance
             </Text>
             <Text weight={500}>
-              {staked.eq(0) ? "—" : `${staked.toFormat(2)} PUZZLE`}
+              {staked != null ? staked : <Skeleton height={16} width={110} />}
             </Text>
           </Column>
         </Row>
