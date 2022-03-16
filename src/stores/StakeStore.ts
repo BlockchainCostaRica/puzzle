@@ -18,7 +18,7 @@ export default class StakeStore {
     this.rootStore = rootStore;
     makeAutoObservable(this);
     this.updateStakedInvestments().then();
-    setInterval(this.updateStakedInvestments, 5 * 1000);
+    setInterval(this.updateStakedInvestments, 15 * 1000);
     reaction(
       () => this.rootStore.accountStore.address,
       () => this.updateStakedInvestments(true)

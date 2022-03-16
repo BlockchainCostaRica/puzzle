@@ -106,10 +106,8 @@ class Pool implements IPoolConfig {
       this.setGlobalPoolTokenAmount(new BN(globalPoolTokenAmount.value));
     }
 
-    // Math.floor(this.state.data.get("global_volume") / 1000000);
     const globalVolumeValue = data.find((v) => v.key === "global_volume");
     if (globalVolumeValue?.value != null) {
-      // const globalVolume = new BN(globalVolumeValue.value).div(1e6).toFormat(2);
       const globalVolume = new BN(globalVolumeValue.value).div(1e6);
       this.setGlobalVolume(globalVolume);
     }
@@ -147,7 +145,10 @@ class Pool implements IPoolConfig {
   ): Promise<IShortPoolInfo> => {
     const [globalValues, addressValues, staticPoolDomainValue] =
       await Promise.all([
-        this.contractRequest(`global_(.*)`),
+        this.contractRequest(`global_(.*)`, [
+          "global_indexStaked",
+          "global_poolToken_amount",
+        ]),
         this.contractRequest(`${address}_indexStaked`),
         this.contractRequest(`static_poolDomain`),
       ]);
@@ -207,10 +208,13 @@ class Pool implements IPoolConfig {
     };
   };
 
-  public contractRequest = async (match: string) => {
+  public contractRequest = async (match: string, keysArray?: string[]) => {
+    const arr = keysArray != null ? keysArray : [match];
+    const search = new URLSearchParams(arr?.map((s) => ["key", s]));
+    const keys = search.toString();
     const url = `${NODE_URL_MAP[this.chainId]}/addresses/data/${
       this.contractAddress
-    }?matches=${match}`;
+    }?matches=${match}&${keys}`;
     const response: { data: IData[] } = await axios.get(url);
     if (response.data) {
       return response.data;
