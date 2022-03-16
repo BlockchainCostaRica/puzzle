@@ -3,6 +3,7 @@ import RootStore from "@stores/RootStore";
 import nodeService, { INFT } from "@src/services/nodeService";
 import nodeRequest from "@src/utils/nodeRequest";
 import { makeAutoObservable, reaction } from "mobx";
+import { NODE_URL_MAP } from "@src/constants";
 
 export default class NftStore {
   public rootStore: RootStore;
@@ -29,15 +30,18 @@ export default class NftStore {
     setInterval(
       () =>
         Promise.all([this.getAccountNFTs(), this.getAccountNFTsOnStaking()]),
-      10 * 1000
+      20 * 1000
     );
   }
 
   getAccountNFTs = async () => {
-    const { address } = this.rootStore.accountStore;
+    const { address, chainId } = this.rootStore.accountStore;
     const { artworks } = this;
     if (address == null || artworks == null) return;
-    const nfts = await nodeService.getAddressNfts(address);
+    const nfts = await nodeService.getAddressNfts(
+      NODE_URL_MAP[chainId],
+      address
+    );
     const supportedPuzzleNft = nfts
       .filter(({ description }) =>
         artworks.some(({ typeId }) => typeId && description.includes(typeId))
@@ -65,7 +69,10 @@ export default class NftStore {
     const ultra = rootStore.accountStore.CONTRACT_ADDRESSES.ultraStaking;
     const match = `address_${address}_nft_(.*)`;
 
-    const allNftOnStaking = await nodeService.getAddressNfts(ultra);
+    const allNftOnStaking = await nodeService.getAddressNfts(
+      NODE_URL_MAP[chainId],
+      ultra
+    );
     const addressStakingNft = await nodeRequest(chainId, ultra, match);
 
     if (addressStakingNft == null) return;

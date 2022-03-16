@@ -59,12 +59,10 @@ class NFTStakingVM {
   private updateAddressStakingInfo = async () => {
     const { chainId, address, TOKENS } = this.rootStore.accountStore;
     const { contractAddress } = this;
-
     const [globalValues, addressValues] = await Promise.all([
       nodeRequest(chainId, contractAddress, `global_(.*)`),
       nodeRequest(chainId, contractAddress, `${address}_(.*)`),
     ]);
-
     const keysArray = {
       globalStaked: "global_staked",
       addressStaked: `${address}_staked`,
