@@ -110,10 +110,12 @@ class InvestToPoolInterfaceVM {
     );
     const realBalance = assetBalance?.balance ?? BN.ZERO;
 
+    console.log("start getTokenRewardInfo");
     const [globalValues, addressValues] = await Promise.all([
       this.pool.contractRequest(`global_(.*)`),
       this.pool.contractRequest(`${address}_(.*)`),
     ]);
+    console.log("getTokenRewardInfo", globalValues, addressValues);
 
     const keysArray = {
       globalTokenBalance: `global_${token.assetId}_balance`,
