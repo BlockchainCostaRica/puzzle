@@ -18,7 +18,7 @@ import { action, autorun, makeAutoObservable, reaction } from "mobx";
 import Balance from "@src/entities/Balance";
 import { getCurrentBrowser } from "@src/utils/getCurrentBrowser";
 import BN from "@src/utils/BN";
-import { waitForTx } from "@waves/waves-transactions";
+import { nodeInteraction, waitForTx } from "@waves/waves-transactions";
 import tokenLogos from "@src/assets/tokens/tokenLogos";
 import nodeService from "@src/services/nodeService";
 
@@ -68,13 +68,16 @@ class AccountStore {
       }
       this.setAddress(initState.address);
     }
-    this.updateAccountAssets().then();
+    Promise.all([this.checkScriptedAccount(), this.updateAccountAssets()]);
     setInterval(this.updateAccountAssets, 5 * 1000);
     reaction(
       () => this.address,
       () => this.updateAccountAssets(true)
     );
   }
+
+  isAccScripted = false;
+  setIsAccScripted = (v: boolean) => (this.isAccScripted = v);
 
   isWavesKeeperInstalled = false;
   @action.bound setWavesKeeperInstalled = (state: boolean) =>
@@ -149,6 +152,16 @@ class AccountStore {
         resolve(result);
       }, 500);
     });
+
+  checkScriptedAccount = async () => {
+    const { address, chainId } = this;
+    if (address == null) return;
+    const res = await nodeInteraction.scriptInfo(
+      address,
+      NODE_URL_MAP[chainId]
+    );
+    this.setIsAccScripted(res.script != null);
+  };
 
   login = async (loginType: LOGIN_TYPE) => {
     this.setLoginType(loginType);
@@ -323,7 +336,7 @@ class AccountStore {
     }
     const ttx = this.signer.invoke({
       dApp: txParams.dApp,
-      fee: 500000,
+      fee: this.isAccScripted ? 900000 : 500000,
       payment: txParams.payment,
       call: txParams.call,
     });
@@ -339,7 +352,7 @@ class AccountStore {
     txParams: IInvokeTxParams
   ): Promise<string | null> => {
     const data = {
-      fee: { assetId: "WAVES", amount: 500000 },
+      fee: { assetId: "WAVES", amount: this.isAccScripted ? 900000 : 500000 },
       dApp: txParams.dApp,
       call: txParams.call,
       payment: txParams.payment,

@@ -26,7 +26,7 @@ export default class PoolsStore {
     this.syncPoolsStats().then();
     this.syncPools();
     this.updateAccountPoolsLiquidityInfo().then();
-    setInterval(this.updateAccountPoolsLiquidityInfo, 15 * 1000);
+    setInterval(this.updateAccountPoolsLiquidityInfo, 60 * 1000);
     reaction(
       () => this.rootStore.accountStore.address,
       () => this.updateAccountPoolsLiquidityInfo(true)

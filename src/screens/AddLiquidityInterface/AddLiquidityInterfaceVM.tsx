@@ -305,7 +305,7 @@ class AddLiquidityInterfaceVM {
       .catch((e) => {
         this.setNotificationParams(
           buildErrorLiquidityDialogParams({
-            title: "Transaction is not completed хуета",
+            title: "Transaction is not completed",
             description: e.message + ` ${e.data}` ?? JSON.stringify(e),
             onTryAgain: this.depositBaseToken,
           })
