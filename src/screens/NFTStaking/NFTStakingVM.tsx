@@ -3,8 +3,9 @@ import { useVM } from "@src/hooks/useVM";
 import { action, makeAutoObservable, reaction, when } from "mobx";
 import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
-import statsService, { IArtWork } from "@src/services/statsService";
-import nodeRequest from "@src/utils/nodeRequest";
+import statsService from "@src/services/statsService";
+import nodeService from "@src/services/nodeService";
+import { NODE_URL_MAP } from "@src/constants";
 
 const ctx = React.createContext<NFTStakingVM | null>(null);
 
@@ -17,18 +18,15 @@ export const NFTStakingVMProvider: React.FC = ({ children }) => {
 export const useNFTStakingVM = () => useVM(ctx);
 
 class NFTStakingVM {
-  private contractAddress: string = "";
-  private _setContractAddress = (v: string) => (this.contractAddress = v);
+  private contractAddress =
+    this.rootStore.accountStore.CONTRACT_ADDRESSES.ultraStaking;
 
   loading: boolean = false;
   private _setLoading = (l: boolean) => (this.loading = l);
 
   constructor(private rootStore: RootStore) {
     makeAutoObservable(this);
-    const { accountStore } = this.rootStore;
-    this._setContractAddress(accountStore.CONTRACT_ADDRESSES.ultraStaking);
     statsService.getStakingStats().then((d) => this._setStats(d));
-    statsService.getArtworks().then((d) => this._setArtworks(d));
     when(
       () => rootStore.accountStore.address != null,
       this.updateAddressStakingInfo
@@ -49,9 +47,6 @@ class NFTStakingVM {
   public stats: any = null;
   private _setStats = (v: any) => (this.stats = v);
 
-  public artworks: IArtWork[] | null = null;
-  private _setArtworks = (v: IArtWork[] | null) => (this.artworks = v);
-
   private _setClaimedReward = (v: BN) => (this.claimedReward = v);
   private _setAvailableToClaim = (v: BN) => (this.availableToClaim = v);
   private _setLastClaimDate = (v: BN) => (this.lastClaimDate = v);
@@ -59,10 +54,6 @@ class NFTStakingVM {
   private updateAddressStakingInfo = async () => {
     const { chainId, address, TOKENS } = this.rootStore.accountStore;
     const { contractAddress } = this;
-    const [globalValues, addressValues] = await Promise.all([
-      nodeRequest(chainId, contractAddress, `global_(.*)`),
-      nodeRequest(chainId, contractAddress, `${address}_(.*)`),
-    ]);
     const keysArray = {
       globalStaked: "global_staked",
       addressStaked: `${address}_staked`,
@@ -71,18 +62,23 @@ class NFTStakingVM {
       addressLastCheckInterest: `${address}_lastCheck_${TOKENS.USDN.assetId}_interest`,
       lastClaimDate: `${address}_${TOKENS.USDN.assetId}_lastClaim`,
     };
-    const parsedNodeResponse = [
-      ...(globalValues ?? []),
-      ...(addressValues ?? []),
-    ].reduce<Record<string, BN>>((acc, { key, value }) => {
-      Object.entries(keysArray).forEach(([regName, regValue]) => {
-        const regexp = new RegExp(regValue);
-        if (regexp.test(key)) {
-          acc[regName] = new BN(value);
-        }
-      });
-      return acc;
-    }, {});
+    const response = await nodeService.nodeKeysRequest(
+      NODE_URL_MAP[chainId],
+      contractAddress,
+      Object.values(keysArray)
+    );
+    const parsedNodeResponse = [...(response ?? [])].reduce<Record<string, BN>>(
+      (acc, { key, value }) => {
+        Object.entries(keysArray).forEach(([regName, regValue]) => {
+          const regexp = new RegExp(regValue);
+          if (regexp.test(key)) {
+            acc[regName] = new BN(value);
+          }
+        });
+        return acc;
+      },
+      {}
+    );
 
     const addressStaked = parsedNodeResponse["addressStaked"];
     const claimedReward = parsedNodeResponse["claimedReward"];
