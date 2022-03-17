@@ -273,7 +273,10 @@ class AccountStore {
       return null;
     }
     try {
-      const ttx = this.signer.transfer(data);
+      const ttx = this.signer.transfer({
+        ...data,
+        fee: this.isAccScripted ? "0.005" : "0.001",
+      });
       const txId = await ttx.broadcast().then((tx: any) => tx.id);
       await waitForTx(txId, {
         apiBase: NODE_URL_MAP[this.chainId],
@@ -300,7 +303,10 @@ class AccountStore {
       type: 4,
       data: {
         amount: { tokens: tokenAmount, assetId: data.assetId },
-        fee: { tokens: "0.001", assetId: "WAVES" },
+        fee: {
+          tokens: this.isAccScripted ? "0.005" : "0.001",
+          assetId: "WAVES",
+        },
         recipient: data.recipient,
       },
     } as any);
