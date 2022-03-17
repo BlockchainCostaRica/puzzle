@@ -11,6 +11,7 @@ import { useStakingVM } from "@screens/Staking/StakingVM";
 import { observer } from "mobx-react-lite";
 import BN from "@src/utils/BN";
 import Skeleton from "react-loading-skeleton";
+import { useStores } from "@stores";
 
 const Root = styled.div`
   display: flex;
@@ -28,6 +29,7 @@ const Container = styled(Card)`
   }
 `;
 const MyBalances: React.FC = () => {
+  const { accountStore } = useStores();
   const vm = useStakingVM();
   const staked = vm.addressStaked
     ? BN.formatUnits(vm.addressStaked, vm.puzzleToken.decimals).toFormat(2)
@@ -51,10 +53,11 @@ const MyBalances: React.FC = () => {
               Available to stake
             </Text>
             <Text weight={500}>
-              {vm.puzzleBalance.balance == null ? (
+              {vm.puzzleBalance.balance == null &&
+              accountStore.address != null ? (
                 <Skeleton height={16} width={110} />
               ) : (
-                `${available.toFormat(2)} PUZZLE`
+                `${available.toFormat(2)}`
               )}
             </Text>
           </Column>

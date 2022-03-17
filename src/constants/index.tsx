@@ -42,7 +42,7 @@ export const CONTRACT_ADDRESSES_MAP = {
 export type TChainId = "W" | "T";
 
 export const NODE_URL_MAP: Record<TChainId, string> = {
-  W: "https://wavesducks.wavesnodes.com",
+  W: "https://nodes-puzzle.wavesnodes.com",
   T: "https://nodes-testnet.wavesnodes.com",
 };
 export const EXPLORER_URL_MAP: Record<TChainId, string> = {

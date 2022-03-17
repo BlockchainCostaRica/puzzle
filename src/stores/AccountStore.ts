@@ -69,10 +69,11 @@ class AccountStore {
       this.setAddress(initState.address);
     }
     Promise.all([this.checkScriptedAccount(), this.updateAccountAssets()]);
-    setInterval(this.updateAccountAssets, 5 * 1000);
+    setInterval(this.updateAccountAssets, 10 * 1000);
     reaction(
       () => this.address,
-      () => this.updateAccountAssets(true)
+      () =>
+        Promise.all([this.checkScriptedAccount(), this.updateAccountAssets()])
     );
   }
 
@@ -212,12 +213,9 @@ class AccountStore {
   };
 
   subscribeToKeeperUpdate = () =>
-    window["WavesKeeper"].on("update", (publicState) => {
-      this.rootStore.accountStore.setAssetBalances(null);
-      this.rootStore.stakeStore.setStakedAccountPuzzle(null);
-      this.rootStore.poolsStore.setAccountPoolsLiquidity([]);
-      this.setAddress(publicState.account?.address ?? null);
-    });
+    window["WavesKeeper"].on("update", (publicState) =>
+      this.setAddress(publicState.account?.address ?? null)
+    );
 
   serialize = (): ISerializedAccountStore => ({
     address: this.address,

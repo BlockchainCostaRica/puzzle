@@ -110,11 +110,6 @@ class InvestToPoolInterfaceVM {
     );
     const realBalance = assetBalance?.balance ?? BN.ZERO;
 
-    const [globalValues, addressValues] = await Promise.all([
-      this.pool.contractRequest(`global_(.*)`),
-      this.pool.contractRequest(`${address}_(.*)`),
-    ]);
-
     const keysArray = {
       globalTokenBalance: `global_${token.assetId}_balance`,
       globalLastCheckTokenEarnings: `global_lastCheck_${token.assetId}_earnings`,
@@ -123,19 +118,22 @@ class InvestToPoolInterfaceVM {
       userLastCheckTokenInterest: `${address}_lastCheck_${token.assetId}_interest`,
       userIndexStaked: `${address}_indexStaked`,
     };
+    const response = await this.pool.contractKeysRequest(
+      Object.values(keysArray)
+    );
 
-    const parsedNodeResponse = [
-      ...(globalValues ?? []),
-      ...(addressValues ?? []),
-    ].reduce<Record<string, BN>>((acc, { key, value }) => {
-      Object.entries(keysArray).forEach(([regName, regValue]) => {
-        const regexp = new RegExp(regValue);
-        if (regexp.test(key)) {
-          acc[regName] = new BN(value);
-        }
-      });
-      return acc;
-    }, {});
+    const parsedNodeResponse = [...(response ?? [])].reduce<Record<string, BN>>(
+      (acc, { key, value }) => {
+        Object.entries(keysArray).forEach(([regName, regValue]) => {
+          const regexp = new RegExp(regValue);
+          if (regexp.test(key)) {
+            acc[regName] = new BN(value);
+          }
+        });
+        return acc;
+      },
+      {}
+    );
 
     const globalTokenBalance = parsedNodeResponse["globalTokenBalance"];
     const globalLastCheckTokenEarnings =

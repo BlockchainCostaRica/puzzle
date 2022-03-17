@@ -143,37 +143,29 @@ class Pool implements IPoolConfig {
   @action.bound public getAccountLiquidityInfo = async (
     address: string
   ): Promise<IShortPoolInfo> => {
-    const [globalValues, addressValues, staticPoolDomainValue] =
-      await Promise.all([
-        this.contractRequest(`global_(.*)`, [
-          "global_indexStaked",
-          "global_poolToken_amount",
-        ]),
-        this.contractRequest(`${address}_indexStaked`),
-        this.contractRequest(`static_poolDomain`),
-      ]);
-
-    const staticPoolDomain =
-      staticPoolDomainValue?.length === 1 ? staticPoolDomainValue[0].value : "";
-
     const keysArray = {
       addressIndexStaked: `${address}_indexStaked`,
       globalIndexStaked: `global_indexStaked`,
       globalPoolTokenAmount: "global_poolToken_amount",
     };
-
-    const parsedNodeResponse = [
-      ...(globalValues ?? []),
-      ...(addressValues ?? []),
-    ].reduce<Record<string, BN>>((acc, { key, value }) => {
-      Object.entries(keysArray).forEach(([regName, regValue]) => {
-        const regexp = new RegExp(regValue);
-        if (regexp.test(key)) {
-          acc[regName] = new BN(value);
-        }
-      });
-      return acc;
-    }, {});
+    const [values, staticPoolDomainValue] = await Promise.all([
+      this.contractKeysRequest(Object.values(keysArray)),
+      this.contractKeysRequest([`static_poolDomain`]),
+    ]);
+    const staticPoolDomain =
+      staticPoolDomainValue?.length === 1 ? staticPoolDomainValue[0].value : "";
+    const parsedNodeResponse = [...(values ?? [])].reduce<Record<string, BN>>(
+      (acc, { key, value }) => {
+        Object.entries(keysArray).forEach(([regName, regValue]) => {
+          const regexp = new RegExp(regValue);
+          if (regexp.test(key)) {
+            acc[regName] = new BN(value);
+          }
+        });
+        return acc;
+      },
+      {}
+    );
     const addressIndexStaked = parsedNodeResponse["addressIndexStaked"];
     const globalIndexStaked = parsedNodeResponse["globalIndexStaked"];
     const globalPoolTokenAmount = parsedNodeResponse["globalPoolTokenAmount"];
@@ -208,13 +200,24 @@ class Pool implements IPoolConfig {
     };
   };
 
-  public contractRequest = async (match: string, keysArray?: string[]) => {
-    const arr = keysArray != null ? keysArray : [match];
-    const search = new URLSearchParams(arr?.map((s) => ["key", s]));
+  public contractMatchRequest = async (match: string) => {
+    const url = `${NODE_URL_MAP[this.chainId]}/addresses/data/${
+      this.contractAddress
+    }?matches=${match}`;
+    const response: { data: IData[] } = await axios.get(url);
+    if (response.data) {
+      return response.data;
+    } else {
+      return null;
+    }
+  };
+  public contractKeysRequest = async (keysArray: string[] | string) => {
+    const searchKeys = typeof keysArray === "string" ? [keysArray] : keysArray;
+    const search = new URLSearchParams(searchKeys?.map((s) => ["key", s]));
     const keys = search.toString();
     const url = `${NODE_URL_MAP[this.chainId]}/addresses/data/${
       this.contractAddress
-    }?matches=${match}&${keys}`;
+    }?${keys}`;
     const response: { data: IData[] } = await axios.get(url);
     if (response.data) {
       return response.data;
