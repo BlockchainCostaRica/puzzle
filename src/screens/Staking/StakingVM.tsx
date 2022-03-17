@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useVM } from "@src/hooks/useVM";
-import { action, makeAutoObservable, reaction, when } from "mobx";
+import { action, makeAutoObservable, reaction } from "mobx";
 import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import Balance from "@src/entities/Balance";
@@ -54,7 +54,8 @@ class StakingVM {
     this.syncStats().then();
     this._setStakingAddress(accountStore.CONTRACT_ADDRESSES.staking);
     makeAutoObservable(this);
-    when(() => accountStore.address !== null, this.updateAddressStakingInfo);
+    this.updateAddressStakingInfo();
+    // when(() => accountStore.address !== null, this.updateAddressStakingInfo);
     reaction(
       () => this.rootStore.accountStore?.address,
       this.updateAddressStakingInfo
@@ -82,7 +83,8 @@ class StakingVM {
   }
 
   get shareOfTotalStake() {
-    const { addressStaked, globalStaked } = this;
+    const { addressStaked, globalStaked, rootStore } = this;
+    if (rootStore.accountStore.address == null) return BN.ZERO;
     if (addressStaked == null || globalStaked == null) return null;
     return addressStaked.div(globalStaked).times(100);
   }
@@ -90,6 +92,15 @@ class StakingVM {
   private updateAddressStakingInfo = async () => {
     const { chainId, address, TOKENS } = this.rootStore.accountStore;
     const { stakingContractAddress } = this;
+    if (address == null) {
+      this._setGlobalStaked(BN.ZERO);
+      this._setAddressStaked(BN.ZERO);
+      this._setClaimedReward(BN.ZERO);
+      this._setClaimedReward(BN.ZERO);
+      this._setAvailableToClaim(BN.ZERO);
+      this._setLastClaimDate(BN.ZERO);
+      return;
+    }
     const keysArray = {
       globalStaked: "global_staked",
       addressStaked: `${address}_staked`,

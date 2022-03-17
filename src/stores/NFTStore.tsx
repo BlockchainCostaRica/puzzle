@@ -21,7 +21,13 @@ export default class NftStore {
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
-    statsService.getArtworks().then((d) => this._setArtworks(d));
+    statsService
+      .getArtworks()
+      .then((d) => this._setArtworks(d))
+      .then(() =>
+        Promise.all([this.getAccountNFTs(), this.getAccountNFTsOnStaking()])
+      );
+
     reaction(
       () => this.rootStore.accountStore.address,
       () => Promise.all([this.getAccountNFTs(), this.getAccountNFTsOnStaking()])
@@ -29,7 +35,7 @@ export default class NftStore {
     setInterval(
       () =>
         Promise.all([this.getAccountNFTs(), this.getAccountNFTsOnStaking()]),
-      20 * 1000
+      40 * 1000
     );
   }
 
@@ -64,18 +70,17 @@ export default class NftStore {
   getAccountNFTsOnStaking = async () => {
     const { artworks, rootStore } = this;
     const { address, chainId } = this.rootStore.accountStore;
-    if (address == null) return;
+    if (address == null || artworks == null) return;
     const ultra = rootStore.accountStore.CONTRACT_ADDRESSES.ultraStaking;
-    const match = `address_${address}_nft_(.*)`;
 
     const allNftOnStaking = await nodeService.getAddressNfts(
       NODE_URL_MAP[chainId],
       ultra
     );
-    const addressStakingNft = await nodeService.nodeKeysRequest(
+    const addressStakingNft = await nodeService.nodeMatchRequest(
       NODE_URL_MAP[chainId],
       ultra,
-      match
+      `address_${address}_nft_(.*)`
     );
 
     if (addressStakingNft == null) return;

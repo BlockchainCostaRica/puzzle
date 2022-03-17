@@ -3,7 +3,7 @@ import { useVM } from "@src/hooks/useVM";
 import { action, makeAutoObservable, reaction, when } from "mobx";
 import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
-import statsService, { IArtWork } from "@src/services/statsService";
+import statsService from "@src/services/statsService";
 import nodeService from "@src/services/nodeService";
 import { NODE_URL_MAP } from "@src/constants";
 
@@ -18,18 +18,15 @@ export const NFTStakingVMProvider: React.FC = ({ children }) => {
 export const useNFTStakingVM = () => useVM(ctx);
 
 class NFTStakingVM {
-  private contractAddress: string = "";
-  private _setContractAddress = (v: string) => (this.contractAddress = v);
+  private contractAddress =
+    this.rootStore.accountStore.CONTRACT_ADDRESSES.ultraStaking;
 
   loading: boolean = false;
   private _setLoading = (l: boolean) => (this.loading = l);
 
   constructor(private rootStore: RootStore) {
     makeAutoObservable(this);
-    const { accountStore } = this.rootStore;
-    this._setContractAddress(accountStore.CONTRACT_ADDRESSES.ultraStaking);
     statsService.getStakingStats().then((d) => this._setStats(d));
-    statsService.getArtworks().then((d) => this._setArtworks(d));
     when(
       () => rootStore.accountStore.address != null,
       this.updateAddressStakingInfo
@@ -49,9 +46,6 @@ class NFTStakingVM {
 
   public stats: any = null;
   private _setStats = (v: any) => (this.stats = v);
-
-  public artworks: IArtWork[] | null = null;
-  private _setArtworks = (v: IArtWork[] | null) => (this.artworks = v);
 
   private _setClaimedReward = (v: BN) => (this.claimedReward = v);
   private _setAvailableToClaim = (v: BN) => (this.availableToClaim = v);
