@@ -78,6 +78,15 @@ class SendAssetVM {
     }`;
   }
 
+  get assetToSendUsdnEquivalent() {
+    const { accountStore, poolsStore } = this.rootStore;
+    const { assetToSend } = accountStore;
+    if (assetToSend == null) return "";
+    const amount = BN.formatUnits(this.amount, assetToSend?.decimals);
+    const rate = poolsStore.usdnRate(assetToSend.assetId, 1) ?? BN.ZERO;
+    return "$ " + rate?.times(amount)?.toFormat(2);
+  }
+
   sendAssets = async () => {
     if (!this.canTransfer) return;
     const { accountStore, notificationStore } = this.rootStore;

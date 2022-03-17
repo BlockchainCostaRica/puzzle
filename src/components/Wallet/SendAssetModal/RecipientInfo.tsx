@@ -41,7 +41,7 @@ const RecipientInfo: React.FC<IProps> = () => {
           amount={vm.amount}
           setAmount={vm.setAmount}
           onMaxClick={vm.onMaxClick}
-          usdnEquivalent={"$ " + assetToSend?.usdnEquivalent?.toFormat(2)}
+          usdnEquivalent={vm.assetToSendUsdnEquivalent}
           error={vm.amountError}
         />
         <SizedBox height={16} />
