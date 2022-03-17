@@ -1,7 +1,6 @@
 import statsService, { IArtWork } from "@src/services/statsService";
 import RootStore from "@stores/RootStore";
 import nodeService, { INFT } from "@src/services/nodeService";
-import nodeRequest from "@src/utils/nodeRequest";
 import { makeAutoObservable, reaction } from "mobx";
 import { NODE_URL_MAP } from "@src/constants";
 
@@ -73,7 +72,11 @@ export default class NftStore {
       NODE_URL_MAP[chainId],
       ultra
     );
-    const addressStakingNft = await nodeRequest(chainId, ultra, match);
+    const addressStakingNft = await nodeService.nodeKeysRequest(
+      NODE_URL_MAP[chainId],
+      ultra,
+      match
+    );
 
     if (addressStakingNft == null) return;
     const stakedNftIds = addressStakingNft?.reduce<string[]>(

@@ -1,8 +1,9 @@
 import RootStore from "@stores/RootStore";
-import nodeRequest from "@src/utils/nodeRequest";
 import { makeAutoObservable, reaction } from "mobx";
 import BN from "@src/utils/BN";
 import stakedPuzzleLogo from "@src/assets/tokens/staked-puzzle.svg";
+import nodeService from "@src/services/nodeService";
+import { NODE_URL_MAP } from "@src/constants";
 
 export default class StakeStore {
   public rootStore: RootStore;
@@ -18,7 +19,7 @@ export default class StakeStore {
     this.rootStore = rootStore;
     makeAutoObservable(this);
     this.updateStakedInvestments().then();
-    setInterval(this.updateStakedInvestments, 15 * 1000);
+    setInterval(this.updateStakedInvestments, 30 * 1000);
     reaction(
       () => this.rootStore.accountStore.address,
       () => this.updateStakedInvestments(true)
@@ -37,12 +38,11 @@ export default class StakeStore {
     if (this.stakedAccountPuzzle != null) {
       this.setLoading(true);
     }
-    const addressStakedValue = await nodeRequest(
-      chainId,
+    const addressStakedValue = await nodeService.nodeKeysRequest(
+      NODE_URL_MAP[chainId],
       CONTRACT_ADDRESSES.staking,
       `${address}_staked`
     );
-
     const addressStaked =
       addressStakedValue && addressStakedValue?.length > 0
         ? new BN(addressStakedValue[0].value)

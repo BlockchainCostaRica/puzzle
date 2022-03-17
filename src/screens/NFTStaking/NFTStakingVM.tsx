@@ -4,7 +4,8 @@ import { action, makeAutoObservable, reaction, when } from "mobx";
 import { RootStore, useStores } from "@stores";
 import BN from "@src/utils/BN";
 import statsService, { IArtWork } from "@src/services/statsService";
-import nodeRequest from "@src/utils/nodeRequest";
+import nodeService from "@src/services/nodeService";
+import { NODE_URL_MAP } from "@src/constants";
 
 const ctx = React.createContext<NFTStakingVM | null>(null);
 
@@ -59,10 +60,6 @@ class NFTStakingVM {
   private updateAddressStakingInfo = async () => {
     const { chainId, address, TOKENS } = this.rootStore.accountStore;
     const { contractAddress } = this;
-    const [globalValues, addressValues] = await Promise.all([
-      nodeRequest(chainId, contractAddress, `global_(.*)`),
-      nodeRequest(chainId, contractAddress, `${address}_(.*)`),
-    ]);
     const keysArray = {
       globalStaked: "global_staked",
       addressStaked: `${address}_staked`,
@@ -71,18 +68,23 @@ class NFTStakingVM {
       addressLastCheckInterest: `${address}_lastCheck_${TOKENS.USDN.assetId}_interest`,
       lastClaimDate: `${address}_${TOKENS.USDN.assetId}_lastClaim`,
     };
-    const parsedNodeResponse = [
-      ...(globalValues ?? []),
-      ...(addressValues ?? []),
-    ].reduce<Record<string, BN>>((acc, { key, value }) => {
-      Object.entries(keysArray).forEach(([regName, regValue]) => {
-        const regexp = new RegExp(regValue);
-        if (regexp.test(key)) {
-          acc[regName] = new BN(value);
-        }
-      });
-      return acc;
-    }, {});
+    const response = await nodeService.nodeKeysRequest(
+      NODE_URL_MAP[chainId],
+      contractAddress,
+      Object.values(keysArray)
+    );
+    const parsedNodeResponse = [...(response ?? [])].reduce<Record<string, BN>>(
+      (acc, { key, value }) => {
+        Object.entries(keysArray).forEach(([regName, regValue]) => {
+          const regexp = new RegExp(regValue);
+          if (regexp.test(key)) {
+            acc[regName] = new BN(value);
+          }
+        });
+        return acc;
+      },
+      {}
+    );
 
     const addressStaked = parsedNodeResponse["addressStaked"];
     const claimedReward = parsedNodeResponse["claimedReward"];
