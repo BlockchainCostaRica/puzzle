@@ -47,7 +47,7 @@ const RecipientInfo: React.FC<IProps> = () => {
         <SizedBox height={16} />
         <Row justifyContent="space-between">
           <Text type="secondary">Transaction fee</Text>
-          <Text textAlign="right">0.005 WAVES</Text>
+          <Text textAlign="right">0.001 WAVES</Text>
         </Row>
       </Column>
       <Button fixed disabled={!vm.canTransfer} onClick={vm.sendAssets}>

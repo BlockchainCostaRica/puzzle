@@ -138,13 +138,12 @@ class StakingVM {
     const lastClaimDate = parsedNodeResponse["lastClaimDate"];
 
     this._setGlobalStaked(globalStaked);
-    this._setAddressStaked(addressStaked);
-    this._setClaimedReward(claimedReward);
-    this._setClaimedReward(claimedReward);
+    this._setAddressStaked(addressStaked ?? BN.ZERO);
+    this._setClaimedReward(claimedReward ?? BN.ZERO);
     const availableToClaim = globalLastCheckInterest
       .minus(addressLastCheckInterest)
       .times(addressStaked);
-    addressStaked && this._setAvailableToClaim(availableToClaim);
+    this._setAvailableToClaim(addressStaked ? availableToClaim : BN.ZERO);
     lastClaimDate && this._setLastClaimDate(lastClaimDate);
   };
 
