@@ -21,6 +21,12 @@ export interface IStakingStatsResponse {
   ultra: { apy: number };
 }
 
+interface INodeData {
+  key: string;
+  type: "integer" | "string";
+  value: number | string;
+}
+
 export interface INFT {
   assetId: string;
   decimals: number;
@@ -66,6 +72,35 @@ const nodeService = {
       (acc, { balances }) => [...acc, ...balances],
       []
     );
+  },
+  nodeKeysRequest: async (
+    node: string,
+    contract: string,
+    keys: string[] | string
+  ): Promise<INodeData[]> => {
+    const searchKeys = typeof keys === "string" ? [keys] : keys;
+    const search = new URLSearchParams(searchKeys?.map((s) => ["key", s]));
+    const keysArray = search.toString();
+    const url = `${node}/addresses/data/${contract}?${keysArray}`;
+    const response: { data: INodeData[] } = await axios.get(url);
+    if (response.data) {
+      return response.data;
+    } else {
+      return [];
+    }
+  },
+  nodeMatchRequest: async (
+    node: string,
+    contract: string,
+    match: string
+  ): Promise<INodeData[]> => {
+    const url = `${node}/addresses/data/${contract}?matches=${match}`;
+    const response: { data: INodeData[] } = await axios.get(url);
+    if (response.data) {
+      return response.data;
+    } else {
+      return [];
+    }
   },
 };
 

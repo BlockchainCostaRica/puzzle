@@ -69,10 +69,11 @@ class AccountStore {
       this.setAddress(initState.address);
     }
     Promise.all([this.checkScriptedAccount(), this.updateAccountAssets()]);
-    setInterval(this.updateAccountAssets, 5 * 1000);
+    setInterval(this.updateAccountAssets, 10 * 1000);
     reaction(
       () => this.address,
-      () => this.updateAccountAssets(true)
+      () =>
+        Promise.all([this.checkScriptedAccount(), this.updateAccountAssets()])
     );
   }
 
@@ -212,12 +213,9 @@ class AccountStore {
   };
 
   subscribeToKeeperUpdate = () =>
-    window["WavesKeeper"].on("update", (publicState) => {
-      this.rootStore.accountStore.setAssetBalances(null);
-      this.rootStore.stakeStore.setStakedAccountPuzzle(null);
-      this.rootStore.poolsStore.setAccountPoolsLiquidity([]);
-      this.setAddress(publicState.account?.address ?? null);
-    });
+    window["WavesKeeper"].on("update", (publicState) =>
+      this.setAddress(publicState.account?.address ?? null)
+    );
 
   serialize = (): ISerializedAccountStore => ({
     address: this.address,
@@ -275,7 +273,10 @@ class AccountStore {
       return null;
     }
     try {
-      const ttx = this.signer.transfer(data);
+      const ttx = this.signer.transfer({
+        ...data,
+        fee: this.isAccScripted ? "0.005" : "0.001",
+      });
       const txId = await ttx.broadcast().then((tx: any) => tx.id);
       await waitForTx(txId, {
         apiBase: NODE_URL_MAP[this.chainId],
@@ -302,7 +303,10 @@ class AccountStore {
       type: 4,
       data: {
         amount: { tokens: tokenAmount, assetId: data.assetId },
-        fee: { tokens: "0.001", assetId: "WAVES" },
+        fee: {
+          tokens: this.isAccScripted ? "0.005" : "0.001",
+          assetId: "WAVES",
+        },
         recipient: data.recipient,
       },
     } as any);

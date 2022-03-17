@@ -51,10 +51,12 @@ const Overview: React.FC = () => {
           <Text style={{ fontSize: 20 }}>
             {vm.shareOfTotalStake == null ? (
               <Skeleton height={20} width={110} />
-            ) : vm.shareOfTotalStake.gte(0.01) ? (
-              vm.shareOfTotalStake.toFormat(2).concat(" %")
+            ) : vm.shareOfTotalStake.eq(0) ? (
+              "0.00 %"
             ) : (
-              vm.shareOfTotalStake.toFormat(6).concat(" %")
+              vm.shareOfTotalStake
+                .toFormat(vm.shareOfTotalStake.lte(0.01) ? 6 : 2)
+                .concat(" %")
             )}
           </Text>
         </Column>

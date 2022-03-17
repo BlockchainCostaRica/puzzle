@@ -75,9 +75,13 @@ const LoggedInRewardInfo: React.FC = () => {
           </Text>
           <Text weight={500}>
             {availableToClaim != null ? (
-              availableToClaim
-                .toFormat(availableToClaim.gte(0.01) ? 2 : 6)
-                .concat(" USDN")
+              availableToClaim.eq(0) ? (
+                "0.00 USDN"
+              ) : (
+                availableToClaim
+                  .toFormat(availableToClaim.gte(0.01) ? 2 : 6)
+                  .concat(" USDN")
+              )
             ) : (
               <Skeleton height={16} width={110} />
             )}

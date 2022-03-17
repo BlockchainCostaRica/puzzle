@@ -41,13 +41,13 @@ const RecipientInfo: React.FC<IProps> = () => {
           amount={vm.amount}
           setAmount={vm.setAmount}
           onMaxClick={vm.onMaxClick}
-          usdnEquivalent={"$ " + assetToSend?.usdnEquivalent?.toFormat(2)}
+          usdnEquivalent={vm.assetToSendUsdnEquivalent}
           error={vm.amountError}
         />
         <SizedBox height={16} />
         <Row justifyContent="space-between">
           <Text type="secondary">Transaction fee</Text>
-          <Text textAlign="right">0.005 WAVES</Text>
+          <Text textAlign="right">0.001 WAVES</Text>
         </Row>
       </Column>
       <Button fixed disabled={!vm.canTransfer} onClick={vm.sendAssets}>

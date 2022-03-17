@@ -68,7 +68,7 @@ class WithdrawLiquidityVM {
 
   updateUserIndexStaked = async () => {
     if (this.rootStore.accountStore.address == null) return;
-    const response = await this.pool.contractRequest(
+    const response = await this.pool.contractKeysRequest(
       `${this.rootStore.accountStore.address}_indexStaked`
     );
     if (response != null && response.length > 0) {
