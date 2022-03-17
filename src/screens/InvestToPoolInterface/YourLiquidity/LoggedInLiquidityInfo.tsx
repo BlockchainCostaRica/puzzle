@@ -23,9 +23,9 @@ const Root = styled.div`
 const LoggedInLiquidityInfo: React.FC<IProps> = () => {
   const vm = useInvestToPoolInterfaceVM();
   const liquidity = vm.accountLiquidity?.toFormat(2);
-  const shareOfPool = vm.accountShareOfPool?.toFormat(
-    vm.accountShareOfPool?.lt(0.01) ? 6 : 2
-  );
+  const shareOfPool = vm.accountShareOfPool?.eq(0)
+    ? "0.00"
+    : vm.accountShareOfPool?.toFormat(vm.accountShareOfPool?.lt(0.01) ? 6 : 2);
 
   return (
     <Root>
