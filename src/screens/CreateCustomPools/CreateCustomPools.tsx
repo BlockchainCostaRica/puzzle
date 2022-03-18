@@ -22,17 +22,17 @@ const Root = styled.div`
   margin-bottom: 24px;
   margin-top: 56px;
   text-align: left;
-
-  @media (min-width: 880px) {
-    margin-top: 56px;
-  }
 `;
 const Grid = styled.div`
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  row-gap: 24px;
+  @media (min-width: 1056px) {
+    grid-template-columns: 1fr 2fr 1fr;
+    row-gap: 0;
+    column-gap: 40px;
+  }
 `;
 const CreateCustomPoolsImpl: React.FC = () => {
-  // const vm = useCreateCustomPoolsVM();
   return (
     <Layout>
       <Observer>

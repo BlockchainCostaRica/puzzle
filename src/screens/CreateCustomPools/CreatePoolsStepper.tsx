@@ -3,27 +3,24 @@ import React from "react";
 import Card from "@components/Card";
 import Text from "@components/Text";
 import SizedBox from "@components/SizedBox";
-import Stepper from "@src/components/Stepper";
 import { useCreateCustomPoolsVM } from "@screens/CreateCustomPools/CreateCustomPoolsVm";
 import { observer } from "mobx-react-lite";
+import DesktopStepper from "@src/components/Stepper/DesktopStepper";
+import MobileStepper from "@components/Stepper/MobileStepper";
 
 interface IProps {}
 
 const Root = styled.div`
-  display: none;
-  @media (min-width: calc(880px + 40px)) {
-    display: flex;
-  }
+  display: flex;
   flex-direction: column;
-  margin-right: 40px;
+  max-width: calc(100vw - 32px);
 `;
-
 const CreatePoolsStepper: React.FC<IProps> = () => {
   const steps = [
     "Select the composition",
-    "Set up a title and an icon",
+    "Set up a title \nand an icon",
     "Confirm pool creation",
-    "Add your liquidity",
+    "Add your \nliquidity",
   ];
   const vm = useCreateCustomPoolsVM();
 
@@ -33,8 +30,9 @@ const CreatePoolsStepper: React.FC<IProps> = () => {
         Steps
       </Text>
       <SizedBox height={8} />
-      <Card style={{ width: 260, height: 180 }}>
-        <Stepper activeStep={vm.step} steps={steps} />
+      <Card style={{ overflowX: "auto" }}>
+        <DesktopStepper activeStep={vm.step} steps={steps} />
+        <MobileStepper activeStep={vm.step} steps={steps} />
       </Card>
     </Root>
   );

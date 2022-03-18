@@ -12,15 +12,23 @@ import { Cell, Pie, PieChart } from "recharts";
 interface IProps {}
 
 const Root = styled.div`
-  display: none;
-  @media (min-width: calc(880px + 40px)) {
-    display: flex;
-  }
+  width: 100%;
+  display: flex;
   flex-direction: column;
-  margin-left: 40px;
 `;
 
-const COLORS = ["#00FEB5", "#C6C9F4", "#FFBB28", "#FF8042"];
+const COLORS = [
+  "#669900",
+  "#99CC33",
+  "#CCEE66",
+  "#006699",
+  "#3399CC",
+  "#990066",
+  "#CC3399",
+  "#FF6600",
+  "#FF9900",
+  "#FFCC00",
+];
 
 const Legend = styled.div`
   display: flex;
@@ -46,7 +54,6 @@ const SummaryCard: React.FC<IProps> = () => {
       </Text>
       <SizedBox height={8} />
       <Card
-        style={{ width: 258 }}
         justifyContent="center"
         alignItems="center"
         paddingDesktop="0px"

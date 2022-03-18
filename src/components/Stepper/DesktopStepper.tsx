@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import React from "react";
-import Step from "@components/Stepper/Step";
+import DesktopStep from "./DesktopStep";
 
 interface IProps {
   steps: string[];
@@ -8,7 +8,10 @@ interface IProps {
 }
 
 const Root = styled.div`
-  display: flex;
+  display: none;
+  @media (min-width: 880px) {
+    display: flex;
+  }
   flex-direction: column;
   transition: all 0.3s ease;
 `;
@@ -37,7 +40,7 @@ const Stepper: React.FC<IProps> = ({ steps, activeStep }) => {
             : "previous";
         return (
           <>
-            <Step
+            <DesktopStep
               title={name}
               state={state}
               index={index}

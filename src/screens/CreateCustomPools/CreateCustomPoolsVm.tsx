@@ -23,10 +23,10 @@ interface IPoolToken {
 class CreateCustomPoolsVm {
   public rootStore: RootStore;
 
-  loading: boolean = false;
-  private _setLoading = (l: boolean) => (this.loading = l);
+  // loading: boolean = false;
+  // private _setLoading = (l: boolean) => (this.loading = l);
 
-  step: number = 1;
+  step: number = 2;
   setStep = (s: number) => (this.step = s);
 
   poolsAssets: IPoolToken[] = [];
@@ -85,6 +85,12 @@ class CreateCustomPoolsVm {
       { asset: rootStore.accountStore.TOKENS.USDN, share: 50, locked: false },
       { asset: rootStore.accountStore.TOKENS.PUZZLE, share: 30, locked: false },
       { asset: rootStore.accountStore.TOKENS.USDT, share: 10, locked: false },
+      { asset: rootStore.accountStore.TOKENS.EURN, share: 10, locked: false },
+      { asset: rootStore.accountStore.TOKENS.EURN, share: 10, locked: false },
+      { asset: rootStore.accountStore.TOKENS.EURN, share: 10, locked: false },
+      { asset: rootStore.accountStore.TOKENS.EURN, share: 10, locked: false },
+      { asset: rootStore.accountStore.TOKENS.EURN, share: 10, locked: false },
+      { asset: rootStore.accountStore.TOKENS.EURN, share: 10, locked: false },
       { asset: rootStore.accountStore.TOKENS.EURN, share: 10, locked: false },
     ];
     makeAutoObservable(this);
