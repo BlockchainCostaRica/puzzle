@@ -275,7 +275,7 @@ class AccountStore {
     try {
       const ttx = this.signer.transfer({
         ...data,
-        fee: this.isAccScripted ? "0.005" : "0.001",
+        fee: this.isAccScripted ? 500000 : 100000,
       });
       const txId = await ttx.broadcast().then((tx: any) => tx.id);
       await waitForTx(txId, {
