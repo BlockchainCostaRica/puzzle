@@ -15,7 +15,7 @@ export enum MAINNET_POOL_ID {
   www = "www",
   muna = "muna",
   sheg = "sheg",
-  pool10 = "10",
+  pool10 = "pool10",
   //   btc = "btc",
 }
 
