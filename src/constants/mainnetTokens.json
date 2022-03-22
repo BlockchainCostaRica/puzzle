@@ -1,4 +1,176 @@
 {
+  "NSBT": {
+    "assetId": "6nSpVyNH7yM69eg446wrQR94ipbbcmZMU1ENPwanC97g",
+    "name": "NSBT",
+    "symbol": "NSBT",
+    "decimals": 6,
+    "category": [
+      "defi"
+    ]
+  },
+    "PUZZLE": {
+    "assetId": "HEB8Qaw9xrWpWs8tHsiATYGBWDBtP2S7kcPALrMu43AS",
+    "name": "PUZZLE",
+    "symbol": "PUZZLE",
+    "decimals": 8,
+    "category": [
+      "defi",
+      "global"
+    ]
+  },
+  "USDT": {
+    "assetId": "34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ",
+    "name": "USDT",
+    "symbol": "USDT",
+    "decimals": 6,
+    "category": [
+      "global",
+      "stable"
+    ]
+  },
+  "WAVES": {
+    "assetId": "WAVES",
+    "name": "WAVES",
+    "symbol": "WAVES",
+    "decimals": 8,
+    "category": [
+      "global",
+      "defi"
+    ]
+  },
+  "USDN": {
+    "assetId": "DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p",
+    "name": "Neutrino USD",
+    "symbol": "USDN",
+    "decimals": 6,
+    "category": [
+      "global",
+      "stable",
+      "defi"
+    ]
+  },
+  "EGG": {
+    "assetId": "C1iWsKGqLwjHUndiQ7iXpdmPum9PeCDFfyXBdJJosDRS",
+    "name": "Waves Ducks",
+    "symbol": "EGG",
+    "decimals": 8,
+    "category": [
+      "ducks"
+    ]
+  },
+  "LTC": {
+    "assetId": "HZk1mbfuJpmxU1Fs4AX5MWLVYtctsNcg6e2C6VKqK8zk",
+    "name": "LTC",
+    "symbol": "LTC",
+    "decimals": 8,
+    "category": [
+      "global"
+    ]
+  },
+  "USDC": {
+    "assetId": "6XtHjpXbs9RRJP2Sr9GUyVqzACcby9TkThHXnjVC5CDJ",
+    "name": "USD Coin",
+    "symbol": "USDC",
+    "decimals": 6,
+    "category": [
+      "global",
+      "stable"
+    ]
+  },
+  "BNB": {
+    "assetId": "5UYBPpq4WoU5n4MwpFkgJnW3Fq4B1u3ukpK33ik4QerR",
+    "name": "Binance Coin",
+    "symbol": "BNB",
+    "decimals": 8,
+    "category": [
+      "global"
+    ]
+  },
+  "MUNA": {
+    "assetId": "eCNH1aqUnocub8PbNsxLNvZWGeVE98L2Crw3cGY6Gq2",
+    "name": "MUNA",
+    "symbol": "MUNA",
+    "decimals": 8
+  },
+  "EURN": {
+    "assetId": "DUk2YTxhRoAqMJLus4G2b3fR8hMHVh6eiyFx5r29VR6t",
+    "name": "Neutrino EUR",
+    "symbol": "EURN",
+    "decimals": 6,
+    "category": [
+      "global",
+      "stable"
+    ]
+  },
+  "WX": {
+    "assetId": "Atqv59EYzjFGuitKVnMRk6H8FukjoV3ktPorbEys25on",
+    "name": "Waves Exchange",
+    "symbol": "WX",
+    "decimals": 8,
+    "category": [
+      "defi"
+    ]
+  },
+  "WCT": {
+    "assetId": "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
+    "name": "Waves Community",
+    "symbol": "WCT",
+    "decimals": 2
+  },
+  "WEST": {
+    "assetId": "4LHHvYGNKJUg5hj65aGD5vgScvCBmLpdRFtjokvCjSL8",
+    "name": "Waves Enterprise",
+    "symbol": "WEST",
+    "decimals": 8
+  },
+  "ENNO": {
+    "assetId": "7LMV3s1J4dKpMQZqge5sKYoFkZRLojnnU49aerqos4yg",
+    "name": "ENNO",
+    "symbol": "ENNO",
+    "decimals": 8
+  },
+  "SIGN": {
+    "assetId": "9sQutD5HnRvjM1uui5cVC4w9xkMPAfYEV8ymug3Mon2Y",
+    "name": "SIGN",
+    "symbol": "SIGN",
+    "decimals": 8
+  },
+  "SWOP": {
+    "assetId": "Ehie5xYpeN8op1Cctc6aGUrqx8jq3jtf1DSjXDbfm7aT",
+    "name": "SWOP",
+    "symbol": "SWOP",
+    "decimals": 8,
+    "category": [
+      "defi"
+    ]
+  },
+  "VIRES": {
+    "assetId": "DSbbhLsSTeDg5Lsiufk2Aneh3DjVqJuPr2M9uU1gwy5p",
+    "name": "VIRES",
+    "symbol": "VIRES",
+    "decimals": 8,
+    "category": [
+      "defi"
+    ]
+  },
+  "BTC": {
+    "assetId": "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS",
+    "name": "BTC",
+    "symbol": "BTC",
+    "decimals": 8,
+    "category": [
+      "global"
+    ]
+  },
+  "ETH": {
+    "assetId": "474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu",
+    "name": "ETH",
+    "symbol": "ETH",
+    "decimals": 8,
+    "category": [
+      "global"
+    ]
+  },
   "SHEG": {
     "assetId": "A2hcw6RV23Fc8Y8FNfV35Sq5QeS9Tgp6n8hbrESiRvXX",
     "name": "Ducklization",
@@ -150,178 +322,6 @@
     "decimals": 8,
     "category": [
       "ducks"
-    ]
-  },
-  "LTC": {
-    "assetId": "HZk1mbfuJpmxU1Fs4AX5MWLVYtctsNcg6e2C6VKqK8zk",
-    "name": "LTC",
-    "symbol": "LTC",
-    "decimals": 8,
-    "category": [
-      "global"
-    ]
-  },
-  "USDC": {
-    "assetId": "6XtHjpXbs9RRJP2Sr9GUyVqzACcby9TkThHXnjVC5CDJ",
-    "name": "USD Coin",
-    "symbol": "USDC",
-    "decimals": 6,
-    "category": [
-      "global",
-      "stable"
-    ]
-  },
-  "BNB": {
-    "assetId": "5UYBPpq4WoU5n4MwpFkgJnW3Fq4B1u3ukpK33ik4QerR",
-    "name": "Binance Coin",
-    "symbol": "BNB",
-    "decimals": 8,
-    "category": [
-      "global"
-    ]
-  },
-  "MUNA": {
-    "assetId": "eCNH1aqUnocub8PbNsxLNvZWGeVE98L2Crw3cGY6Gq2",
-    "name": "MUNA",
-    "symbol": "MUNA",
-    "decimals": 8
-  },
-  "EURN": {
-    "assetId": "DUk2YTxhRoAqMJLus4G2b3fR8hMHVh6eiyFx5r29VR6t",
-    "name": "Neutrino EUR",
-    "symbol": "EURN",
-    "decimals": 6,
-    "category": [
-      "global",
-      "stable"
-    ]
-  },
-  "WX": {
-    "assetId": "Atqv59EYzjFGuitKVnMRk6H8FukjoV3ktPorbEys25on",
-    "name": "Waves Exchange",
-    "symbol": "WX",
-    "decimals": 8,
-    "category": [
-      "defi"
-    ]
-  },
-  "WCT": {
-    "assetId": "DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J",
-    "name": "Waves Community",
-    "symbol": "WCT",
-    "decimals": 2
-  },
-  "WEST": {
-    "assetId": "4LHHvYGNKJUg5hj65aGD5vgScvCBmLpdRFtjokvCjSL8",
-    "name": "Waves Enterprise",
-    "symbol": "WEST",
-    "decimals": 8
-  },
-  "NSBT": {
-    "assetId": "6nSpVyNH7yM69eg446wrQR94ipbbcmZMU1ENPwanC97g",
-    "name": "NSBT",
-    "symbol": "NSBT",
-    "decimals": 6,
-    "category": [
-      "defi"
-    ]
-  },
-  "ENNO": {
-    "assetId": "7LMV3s1J4dKpMQZqge5sKYoFkZRLojnnU49aerqos4yg",
-    "name": "ENNO",
-    "symbol": "ENNO",
-    "decimals": 8
-  },
-  "SIGN": {
-    "assetId": "9sQutD5HnRvjM1uui5cVC4w9xkMPAfYEV8ymug3Mon2Y",
-    "name": "SIGN",
-    "symbol": "SIGN",
-    "decimals": 8
-  },
-  "PUZZLE": {
-    "assetId": "HEB8Qaw9xrWpWs8tHsiATYGBWDBtP2S7kcPALrMu43AS",
-    "name": "PUZZLE",
-    "symbol": "PUZZLE",
-    "decimals": 8,
-    "category": [
-      "defi",
-      "global"
-    ]
-  },
-  "USDT": {
-    "assetId": "34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ",
-    "name": "USDT",
-    "symbol": "USDT",
-    "decimals": 6,
-    "category": [
-      "global",
-      "stable"
-    ]
-  },
-  "WAVES": {
-    "assetId": "WAVES",
-    "name": "WAVES",
-    "symbol": "WAVES",
-    "decimals": 8,
-    "category": [
-      "global",
-      "defi"
-    ]
-  },
-  "USDN": {
-    "assetId": "DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p",
-    "name": "Neutrino USD",
-    "symbol": "USDN",
-    "decimals": 6,
-    "category": [
-      "global",
-      "stable",
-      "defi"
-    ]
-  },
-  "EGG": {
-    "assetId": "C1iWsKGqLwjHUndiQ7iXpdmPum9PeCDFfyXBdJJosDRS",
-    "name": "Waves Ducks",
-    "symbol": "EGG",
-    "decimals": 8,
-    "category": [
-      "ducks"
-    ]
-  },
-  "SWOP": {
-    "assetId": "Ehie5xYpeN8op1Cctc6aGUrqx8jq3jtf1DSjXDbfm7aT",
-    "name": "SWOP",
-    "symbol": "SWOP",
-    "decimals": 8,
-    "category": [
-      "defi"
-    ]
-  },
-  "VIRES": {
-    "assetId": "DSbbhLsSTeDg5Lsiufk2Aneh3DjVqJuPr2M9uU1gwy5p",
-    "name": "VIRES",
-    "symbol": "VIRES",
-    "decimals": 8,
-    "category": [
-      "defi"
-    ]
-  },
-  "BTC": {
-    "assetId": "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS",
-    "name": "BTC",
-    "symbol": "BTC",
-    "decimals": 8,
-    "category": [
-      "global"
-    ]
-  },
-  "ETH": {
-    "assetId": "474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu",
-    "name": "ETH",
-    "symbol": "ETH",
-    "decimals": 8,
-    "category": [
-      "global"
     ]
   }
 }
