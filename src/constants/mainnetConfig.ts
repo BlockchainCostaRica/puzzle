@@ -15,6 +15,7 @@ export enum MAINNET_POOL_ID {
   www = "www",
   muna = "muna",
   sheg = "sheg",
+  pool10 = "pool10",
   //   btc = "btc",
 }
 
@@ -36,6 +37,7 @@ export const MAINNET_ROUTES = {
     www: `${MAINNET_POOL_ID.www}/withdraw`,
     muna: `${MAINNET_POOL_ID.muna}/withdraw`,
     sheg: `${MAINNET_POOL_ID.sheg}/withdraw`,
+    pool10: `${MAINNET_POOL_ID.pool10}/withdraw`,
     //     btc: `${MAINNET_POOL_ID.btc}/withdraw`,
   },
   pools: {
@@ -49,6 +51,7 @@ export const MAINNET_ROUTES = {
     www: MAINNET_POOL_ID.www,
     muna: MAINNET_POOL_ID.muna,
     sheg: MAINNET_POOL_ID.sheg,
+    pool10: MAINNET_POOL_ID.pool10,
     //     btc: MAINNET_POOL_ID.btc,
   },
   addLiquidity: {
@@ -61,6 +64,7 @@ export const MAINNET_ROUTES = {
     www: `${MAINNET_POOL_ID.www}/addLiquidity`,
     muna: `${MAINNET_POOL_ID.muna}/addLiquidity`,
     sheg: `${MAINNET_POOL_ID.sheg}/addLiquidity`,
+    pool10: `${MAINNET_POOL_ID.pool10}/addLiquidity`,
     //     btc: `${MAINNET_POOL_ID.btc}/addLiquidity`,
   },
   addOneToken: {
@@ -73,6 +77,7 @@ export const MAINNET_ROUTES = {
     www: `${MAINNET_POOL_ID.www}/addOneToken`,
     muna: `${MAINNET_POOL_ID.muna}/addOneToken`,
     sheg: `${MAINNET_POOL_ID.sheg}/addOneToken`,
+    pool10: `${MAINNET_POOL_ID.pool10}/addOneToken`,
     //     btc: `${MAINNET_POOL_ID.btc}/addOneToken`,
   },
   invest: {
@@ -85,6 +90,7 @@ export const MAINNET_ROUTES = {
     www: `${MAINNET_POOL_ID.www}/invest`,
     muna: `${MAINNET_POOL_ID.muna}/invest`,
     sheg: `${MAINNET_POOL_ID.sheg}/invest`,
+    pool10: `${MAINNET_POOL_ID.pool10}/invest`,
     //     btc: `${MAINNET_POOL_ID.btc}/invest`,
   },
 };
@@ -106,7 +112,22 @@ export const MAINNET_POOL_CONFIG: Record<MAINNET_POOL_ID, IPoolConfig> = {
   //       { ...mainnetTokens.USDT, shareAmount: 0.2, logo: tokenLogos.USDT },
   //       { ...mainnetTokens.USDN, shareAmount: 0.2, logo: tokenLogos.USDN },
   //     ],
-  //   },
+  //   },  
+  [MAINNET_POOL_ID.pool10]: {
+    contractAddress: "3PLiXyywNThdvf3vVEUxwc7TJTucjZvuegh",
+    layer2Address: "3P4oa7KAvocZhPXQ1B6ncAopzLEZUtMwbHF",
+    baseTokenId: mainnetTokens.BTC.assetId,
+    name: "Pool 10",
+    logo: tokenLogos.BTC,
+    defaultAssetId0: mainnetTokens.BTC.assetId,
+    defaultAssetId1: mainnetTokens.USDN.assetId,
+    tokens: [
+      { ...mainnetTokens.WAVES, shareAmount: 0.25, logo: tokenLogos.WAVES },
+      { ...mainnetTokens.BTC, shareAmount: 0.25, logo: tokenLogos.BTC },
+      { ...mainnetTokens.ETH, shareAmount: 0.25, logo: tokenLogos.ETH },
+      { ...mainnetTokens.USDN, shareAmount: 0.25, logo: tokenLogos.USDN },
+    ],
+  },
   [MAINNET_POOL_ID.www]: {
     contractAddress: "3PAviuHPCX8fD7M5fGpFTQZb4HchWCJb3ct",
     layer2Address: "3PFF8UuNfvAGk6KvgyeD4HfZ4TRmHgtgt5W",
